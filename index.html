@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIU Sanatani Vidyarthi Samsad (SVS)</title>
+    <!-- Favicon -->
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Lucide Icons for aesthetic appeal -->
@@ -101,8 +103,10 @@
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
 
-        /* Pulse Animation for Nav Button */
+
+        /* Keyframe for Pulse effect on header button */
         @keyframes pulse-soft {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255, 192, 76, 0.4); }
             50% { box-shadow: 0 0 0 8px rgba(255, 192, 76, 0); }
@@ -114,10 +118,12 @@
         /* Responsive Iframe Container for Google Form */
         .responsive-iframe-container {
             position: relative;
+            /* Default large padding for mobile vertical scroll */
             padding-bottom: 200%; 
             height: 0;
             overflow: hidden;
         }
+        /* Adjusted for better desktop viewing */
         @media (min-width: 768px) {
             .responsive-iframe-container {
                 padding-bottom: 100%; 
@@ -144,8 +150,9 @@
     <!-- Header / Navigation -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2 group cursor-pointer">
-                <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">🕉️</span>
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <!-- Replaced emoji with logo.jpg -->
+                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain group-hover:rotate-12 transition-transform duration-300 rounded-full">
                 <span class="text-xl font-extrabold tracking-tight text-gray-900">UIU SVS</span>
             </div>
             
@@ -406,7 +413,7 @@
             </div>
         </section>
 
-        <!-- Join SVS Custom Form Section -->
+        <!-- Join SVS Google Form Section (External) -->
         <section id="join" class="py-20 bg-gray-900 text-white relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             <div class="container mx-auto px-6 relative z-10">
@@ -425,37 +432,17 @@
                     </div>
                     
                     <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
-                        <div class="bg-white text-gray-800 rounded-3xl p-8 shadow-2xl">
-                            <form id="membership-form" class="space-y-5">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name</label>
-                                        <input type="text" id="member-name" required class="form-input" placeholder="John Doe">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">UIU ID</label>
-                                        <input type="text" id="member-id" required class="form-input" placeholder="011-231-XXX">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Department</label>
-                                        <input type="text" id="member-dept" required class="form-input" placeholder="CSE">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone</label>
-                                        <input type="tel" id="member-phone" required class="form-input" placeholder="017XXXXXXXX">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Why do you want to join?</label>
-                                    <textarea id="member-reason" rows="3" required class="form-input resize-none" placeholder="I want to connect with..."></textarea>
-                                </div>
-                                <button type="submit" id="join-submit-btn" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-black transition-colors flex justify-center items-center">
-                                    Submit Application
-                                </button>
-                                <div id="form-message" class="text-center text-sm font-semibold hidden"></div>
-                            </form>
+                        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden p-2 md:p-4 animate-on-scroll delay-200">
+                            <!-- EMBEDDED GOOGLE FORM IFRAME: UPDATED SRC -->
+                            <div class="responsive-iframe-container">
+                                <iframe 
+                                    src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true"
+                                    frameborder="0" 
+                                    marginheight="0" 
+                                    marginwidth="0">
+                                    Loading…
+                                </iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -469,8 +456,9 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                         <span class="text-2xl">🕉️</span>
-                         <span class="text-xl font-extrabold text-gray-900">UIU SVS</span>
+                         <!-- Replaced emoji with logo.jpg -->
+                        <img src="logo.jpg" alt="SVS Logo" class="h-8 w-8 object-contain">
+                        <span class="text-xl font-extrabold text-gray-900">UIU SVS</span>
                     </div>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
                         United International University<br>
