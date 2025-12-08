@@ -50,25 +50,28 @@
             border-bottom: 1px solid rgba(255, 200, 100, 0.2);
         }
 
-        /* --- BUTTON REDESIGN (UPDATED) --- */
+        /* --- BUTTON REDESIGN (UPDATED & FIXED) --- */
         .btn-base {
-            @apply inline-flex items-center justify-center text-center rounded-full px-8 py-4 text-base font-bold transition-all duration-300 ease-out tracking-wide shadow-lg uppercase tracking-wider;
+            @apply inline-flex items-center justify-center text-center rounded-full transition-all duration-300 ease-out tracking-wide shadow-md font-bold;
+            /* Optimized Sizing */
+            padding: 0.875rem 2.5rem; /* px-10 py-3.5 equivalent */
+            font-size: 1rem;
         }
 
         /* Primary Button: Vibrant Saffron Gradient */
         .btn-super {
             background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
             color: #ffffff;
-            border: none;
+            border: 2px solid transparent; /* Keeps sizing consistent with outline button */
             box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
         }
         .btn-super:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.45);
             background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
         }
         .btn-super:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
 
         /* Secondary Button: Dark Outline */
@@ -81,8 +84,8 @@
         .btn-explore:hover {
             background: #431407;
             color: #ffffff;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(67, 20, 7, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 20, 7, 0.15);
         }
 
         /* Cards */
@@ -115,10 +118,10 @@
         /* Pulse Animation */
         @keyframes pulse-soft {
             0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.6); }
-            50% { box-shadow: 0 0 0 8px rgba(234, 88, 12, 0); }
+            50% { box-shadow: 0 0 0 6px rgba(234, 88, 12, 0); }
         }
         .btn-pulse {
-            animation: pulse-soft 2s infinite;
+            animation: pulse-soft 2.5s infinite;
         }
 
         /* Hero Pattern Background */
@@ -183,7 +186,7 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#join" class="hidden md:inline-flex btn-super rounded-full px-6 py-2.5 font-bold text-sm btn-pulse shadow-lg">
+                <a href="#join" class="hidden md:inline-flex btn-super rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">
                     Join SVS
                 </a>
                 <!-- Mobile Menu Button -->
@@ -228,8 +231,8 @@
                     </p>
                 </div>
                 
-                <!-- Upgraded Action Buttons (Fixed Padding & Centering) -->
-                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-md mx-auto sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
+                <!-- Upgraded Action Buttons (Revised Padding & Sizing) -->
+                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
                     <a href="#join" class="btn-base btn-super w-full sm:w-auto btn-pulse">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         Become a Member
@@ -360,7 +363,7 @@
                     </article>
 
                     <!-- Blog Card 2 -->
-                     <article class="card group cursor-pointer animate-on-scroll delay-200 hover:border-yellow-200">
+                      <article class="card group cursor-pointer animate-on-scroll delay-200 hover:border-yellow-200">
                         <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-700 shadow-sm z-10">Article</div>
                             <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
@@ -374,7 +377,7 @@
                     </article>
 
                     <!-- Blog Card 3 -->
-                     <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-yellow-200">
+                      <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-yellow-200">
                         <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
                              <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-green-700 shadow-sm z-10">Recap</div>
                             <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
@@ -401,6 +404,7 @@
                         <p class="text-gray-600 text-lg mb-8 leading-relaxed">
                             UIU Sanatani Vidyarthi Samsad (SVS) isn't just a club; it's a family. We provide a platform for students to stay connected with their roots while excelling in their modern academic pursuits.
                         </p>
+
                         <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
                                 <span class="block text-4xl font-bold text-gray-900 mb-1">500+</span>
@@ -687,9 +691,25 @@
             { text: "সত্যের জন্য সব কিছু ত্যাগ করা যায়, কিন্তু সব কিছুর জন্য সত্যকে ত্যাগ করা যায় না।", author: "স্বামী বিবেকানন্দ" },
             { text: "বীরের মতো সাহস অবলম্বন করো। সদম্ভে বলো—আমি ভারতবাসী, ভারতবাসী আমার ভাই।", author: "স্বামী বিবেকানন্দ" },
             { text: "মনকে সর্বদা উচ্চ চিন্তায় এবং উচ্চ আদর্শে পূর্ণ রাখো।", author: "স্বামী বিবেকানন্দ" },
-            { text: "তোমার কর্মে অধিকার আছে, কিন্তু ফলে অধিকার নেই।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "নিজের উপর বিশ্বাস রাখো, তবেই তুমি জগত জয় করতে পারবে।", author: "স্বামী বিবেকানন্দ" },
+            { text: "দুর্বলতাই পাপ, দুর্বলতাই মৃত্যু।", author: "স্বামী বিবেকানন্দ" },
+            { text: "শক্তি ও সাহসই জীবন, দুর্বলতাই মৃত্যু।", author: "স্বামী বিবেকানন্দ" },
+            { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" },
+            { text: "চরিত্রই মানুষের আসল সম্পদ।", author: "স্বামী বিবেকানন্দ" },
+            { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "টাকা মাটি, মাটি টাকা।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "শিবজ্ঞানে জীবসেবা।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "ভগবান ভক্তের দাস।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "আন্তরিক হলে তিনি শুনবেনই শুনবেন।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "আমি মা, সৎ-এরও মা, অসৎ-এরও মা।", author: "মা সারদা দেবী" },
+            { text: "ভুল তো মানুষেরই হয়। মানুষকে কি ফেলনা ভাবা উচিত?", author: "মা সারদা দেবী" },
+            { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" },
+            { text: "কর্মণ্যেবাধিকারস্তে মা ফলেষু কদাচন।", author: "শ্রীমদ্ভগবদ্গীতা" },
             { text: "যদা যদা হি ধর্মস্য গ্লানির্ভবতি ভারত। অভ্যুত্থানমধর্মস্য তদাত্মানং সৃজাম্যহম্।।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "নয়নং ছিন্দন্তি শস্ত্রাণি ন এনং দহতি পাবকঃ। ন চ এনং ক্লেদয়ন্তি আপঃ ন শোষয়তি মারুতঃ।।", author: "শ্রীমদ্ভগবদ্গীতা" }
+            { text: "নয়নং ছিন্দন্তি শস্ত্রাণি ন এনং দহতি পাবকঃ। ন চ এনং ক্লেদয়ন্তি আপঃ ন শোষয়তি মারুতঃ।।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "উদ্ধরেদাত্মনাত্মানং নাত্মানমবসাদয়েৎ।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "শ্রদ্ধাবান্ লভতে জ্ঞানং তৎপরঃ সংযতেন্দ্রিয়ঃ।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "বাসাংসি জীর্ণানি যথা বিহায় নবানি গৃহ্ণাতি নরোঽপরাণি।", author: "শ্রীমদ্ভগবদ্গীতা" }
         ];
 
         function displayRandomQuote() {
