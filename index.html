@@ -128,13 +128,19 @@
             animation: pulse-soft 2.5s infinite;
         }
 
-        /* Quote Top Bar */
+        /* Quote Top Bar - UPDATED for Scroll Behavior */
         .top-quote-bar {
             background-color: #7f1d1d; /* Deep Red */
             color: #fef3c7; /* Pale Gold */
             border-bottom: 1px solid #d97706;
-            position: relative;
-            overflow: hidden;
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100; /* Highest Z-index to sit on top */
+            transform: translateY(-100%); /* Hidden initially */
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smooth slide in */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         .top-quote-bar::before {
             content: '';
@@ -144,6 +150,9 @@
             right: 0;
             height: 2px;
             background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+        }
+        .top-quote-bar.visible {
+            transform: translateY(0); /* Slide down */
         }
 
         /* Responsive Iframe Container for Google Form */
@@ -176,7 +185,7 @@
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern">
 
     <!-- Top Quote Bar -->
-    <div class="top-quote-bar py-2 px-4 text-center z-50">
+    <div class="top-quote-bar py-2 px-4 text-center">
         <div class="container mx-auto flex justify-center items-center">
             <span class="text-xs md:text-sm font-bold uppercase text-yellow-500 mr-2 tracking-widest hidden sm:inline">Daily Wisdom:</span>
             <p id="top-bar-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
@@ -743,6 +752,20 @@
             const mobileMenu = document.getElementById('mobile-menu');
             menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
             mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+            // --- Scroll Logic for Quote Bar ---
+            window.addEventListener('scroll', () => {
+                const quoteBar = document.querySelector('.top-quote-bar');
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                
+                if (scrollPercent > 2) {
+                    quoteBar.classList.add('visible');
+                } else {
+                    quoteBar.classList.remove('visible');
+                }
+            });
         });
     </script>
 </body>
