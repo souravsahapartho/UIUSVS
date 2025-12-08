@@ -11,7 +11,7 @@
     <!-- Load Lucide Icons for aesthetic appeal -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* General Setup and Colors */
         body {
@@ -19,8 +19,12 @@
             background-color: #fffbeb; /* Very light warm background */
             color: #1e293b;
         }
-        h1, h2, h3, .quote-font {
+        h1, h2, h3 {
             font-family: 'Playfair Display', serif;
+        }
+        /* Bengali Font Class */
+        .quote-font {
+            font-family: 'Hind Siliguri', sans-serif;
         }
         .text-vasant-yellow {
             color: #FFD700; /* Gold */
@@ -46,40 +50,39 @@
             border-bottom: 1px solid rgba(255, 200, 100, 0.2);
         }
 
-        /* --- BUTTON REDESIGN (FIXED) --- */
+        /* --- BUTTON REDESIGN (UPDATED) --- */
         .btn-base {
-            /* Flex center ensures text is centered. Added text-center explicitly. */
-            @apply inline-flex items-center justify-center text-center rounded-full px-10 py-4 text-base font-bold transition-all duration-300 ease-out tracking-wide shadow-md;
+            @apply inline-flex items-center justify-center text-center rounded-full px-8 py-4 text-base font-bold transition-all duration-300 ease-out tracking-wide shadow-lg uppercase tracking-wider;
         }
 
-        /* Primary Button: Cleaner, impactful */
+        /* Primary Button: Vibrant Saffron Gradient */
         .btn-super {
-            background-color: #fbbf24; /* Amber-400 base */
-            background-image: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #451a03; /* Dark brown text for contrast */
-            border: 1px solid rgba(251, 191, 36, 0.5);
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
         }
         .btn-super:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.4), 0 4px 6px -2px rgba(245, 158, 11, 0.2);
-            background-image: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%); /* Lighter on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.5);
+            background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
         }
         .btn-super:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
-        /* Secondary Button: Elegant Outline */
+        /* Secondary Button: Dark Outline */
         .btn-explore {
-            background: rgba(255, 255, 255, 0.5);
-            color: #92400e; /* Amber-800 */
-            border: 2px solid #f59e0b; /* Amber-500 */
+            background: transparent;
+            color: #431407; /* Dark brown */
+            border: 2px solid #431407;
+            box-shadow: none;
         }
         .btn-explore:hover {
-            background: #fff7ed; /* Orange-50 */
-            border-color: #d97706; /* Amber-600 */
-            color: #78350f; /* Amber-900 */
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
-            transform: translateY(-2px);
+            background: #431407;
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 20, 7, 0.2);
         }
 
         /* Cards */
@@ -111,8 +114,8 @@
 
         /* Pulse Animation */
         @keyframes pulse-soft {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.6); }
-            50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.6); }
+            50% { box-shadow: 0 0 0 8px rgba(234, 88, 12, 0); }
         }
         .btn-pulse {
             animation: pulse-soft 2s infinite;
@@ -180,7 +183,7 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#join" class="hidden md:inline-flex btn-super rounded-full px-5 py-2 font-bold text-sm btn-pulse">
+                <a href="#join" class="hidden md:inline-flex btn-super rounded-full px-6 py-2.5 font-bold text-sm btn-pulse shadow-lg">
                     Join SVS
                 </a>
                 <!-- Mobile Menu Button -->
@@ -227,7 +230,7 @@
                 
                 <!-- Upgraded Action Buttons (Fixed Padding & Centering) -->
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-md mx-auto sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-super w-full sm:w-auto">
+                    <a href="#join" class="btn-base btn-super w-full sm:w-auto btn-pulse">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         Become a Member
                     </a>
@@ -236,18 +239,18 @@
                     </a>
                 </div>
 
-                <!-- Integrated Spiritual Wisdom Card -->
+                <!-- Integrated Spiritual Wisdom Card (Bengali) -->
                 <div class="w-full max-w-3xl animate-on-scroll delay-200 is-visible">
-                    <div class="quote-card rounded-2xl p-8 relative">
+                    <div class="quote-card rounded-2xl p-8 relative hover:shadow-2xl transition duration-500 transform hover:-translate-y-1">
                         <div class="absolute -top-4 -left-2 text-6xl text-orange-300 opacity-50 font-serif leading-none">“</div>
                         <blockquote class="relative z-10">
-                             <p id="daily-quote-text" class="quote-font text-2xl md:text-3xl text-gray-800 font-medium italic leading-normal mb-4">
-                                "Arise, awake, and stop not till the goal is reached."
+                             <p id="daily-quote-text" class="quote-font text-xl md:text-3xl text-gray-800 font-semibold leading-loose mb-6">
+                                <!-- Quote loads here -->
                              </p>
                              <div class="flex items-center justify-center gap-2">
                                  <div class="h-px w-8 bg-orange-300"></div>
-                                 <cite id="daily-quote-author" class="text-sm font-bold text-orange-700 uppercase tracking-widest not-italic">
-                                    Swami Vivekananda
+                                 <cite id="daily-quote-author" class="text-sm font-bold text-orange-700 uppercase tracking-widest not-italic quote-font">
+                                    <!-- Author loads here -->
                                  </cite>
                                  <div class="h-px w-8 bg-orange-300"></div>
                              </div>
@@ -679,14 +682,14 @@
 
         // --- Quotes Logic ---
         const spiritualQuotes = [
-            { text: "Arise, awake, and stop not till the goal is reached.", author: "Swami Vivekananda" },
-            { text: "You have the right to work, but for the work's sake only. You have no right to the fruits of work.", author: "The Bhagavad Gita" },
-            { text: "Knowledge leads to unity, but ignorance to diversity.", author: "Sri Ramakrishna Paramahamsa" },
-            { text: "Fill the brain with high thoughts, highest ideals, place them day and night before you, and out of that will come great work.", author: "Swami Vivekananda" },
-            { text: "We are what our thoughts have made us; so take care about what you think.", author: "Swami Vivekananda" },
-            { text: "The power of concentration is the only key to the treasure-house of knowledge.", author: "Swami Vivekananda" },
-            { text: "Whatever happened, happened for the good. Whatever is happening, is happening for the good. Whatever will happen, will also happen for the good.", author: "The Bhagavad Gita" },
-            { text: "Education is the best friend. An educated person is respected everywhere.", author: "Chanakya" }
+            { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
+            { text: "জীবের প্রেম করে যেই জন, সেই জন সেবিছে ঈশ্বর।", author: "স্বামী বিবেকানন্দ" },
+            { text: "সত্যের জন্য সব কিছু ত্যাগ করা যায়, কিন্তু সব কিছুর জন্য সত্যকে ত্যাগ করা যায় না।", author: "স্বামী বিবেকানন্দ" },
+            { text: "বীরের মতো সাহস অবলম্বন করো। সদম্ভে বলো—আমি ভারতবাসী, ভারতবাসী আমার ভাই।", author: "স্বামী বিবেকানন্দ" },
+            { text: "মনকে সর্বদা উচ্চ চিন্তায় এবং উচ্চ আদর্শে পূর্ণ রাখো।", author: "স্বামী বিবেকানন্দ" },
+            { text: "তোমার কর্মে অধিকার আছে, কিন্তু ফলে অধিকার নেই।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "যদা যদা হি ধর্মস্য গ্লানির্ভবতি ভারত। অভ্যুত্থানমধর্মস্য তদাত্মানং সৃজাম্যহম্।।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "নয়নং ছিন্দন্তি শস্ত্রাণি ন এনং দহতি পাবকঃ। ন চ এনং ক্লেদয়ন্তি আপঃ ন শোষয়তি মারুতঃ।।", author: "শ্রীমদ্ভগবদ্গীতা" }
         ];
 
         function displayRandomQuote() {
