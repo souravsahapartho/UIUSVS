@@ -187,7 +187,7 @@
     <!-- Top Quote Bar -->
     <div class="top-quote-bar py-2 px-4 text-center">
         <div class="container mx-auto flex justify-center items-center">
-
+            <span class="text-xs md:text-sm font-bold uppercase text-yellow-500 mr-2 tracking-widest hidden sm:inline">Daily Wisdom:</span>
             <p id="top-bar-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
         </div>
     </div>
@@ -291,13 +291,11 @@
                     <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 
-                <div id="upcoming-events-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Events will be dynamically injected here -->
-                    <div class="md:col-span-3 text-center py-12">
-                        <div id="events-loading" class="text-gray-500 inline-flex items-center">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            Syncing Calendar...
-                        </div>
+                <!-- Changed to flexbox for better centering of 2 items -->
+                <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
+                    <!-- Events will be injected here statically -->
+                    <div class="w-full text-center py-12">
+                         <!-- Placeholder removed via JS, but initial state hidden -->
                     </div>
                 </div>
             </div>
@@ -590,8 +588,6 @@
                         userId = user.uid;
                         // Removed debug text update
                         console.log("Auth Ready");
-                        checkAndPopulateDefaultEvents();
-                        setupEventsListener();
                     } else {
                         userId = crypto.randomUUID(); 
                     }
@@ -604,90 +600,105 @@
 
         // --- Dynamic Content Functions ---
         function renderEventCard(event) {
-            const imageSrc = event.image_url || 'https://placehold.co/400x250/FFC04C/FFFFFF?text=SVS+Event';
             const dateObj = new Date(event.date);
-            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const now = new Date();
+            // Normalize to midnight for comparison
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const eventDate = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
             
+            let status = 'upcoming';
+            if (eventDate < today) status = 'completed';
+            else if (eventDate.getTime() === today.getTime()) status = 'today';
+            
+            // Formatting
+            const day = dateObj.toLocaleDateString('en-US', { day: 'numeric' });
+            const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
+            const year = dateObj.toLocaleDateString('en-US', { year: 'numeric' });
+            
+            // Status Badge & Styles
+            let badge = '';
+            let cardStyle = 'border-l-4 border-red-600 bg-white hover:shadow-xl hover:-translate-y-1';
+            let titleColor = 'text-gray-900';
+            let dateColor = 'text-red-700';
+            
+            if (status === 'completed') {
+                badge = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-500 text-xs font-bold uppercase tracking-wide">Completed</span>';
+                cardStyle = 'border-l-4 border-gray-300 bg-gray-50 grayscale opacity-80';
+                titleColor = 'text-gray-600';
+                dateColor = 'text-gray-500';
+            } else if (status === 'today') {
+                badge = '<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide animate-pulse">Happening Today</span>';
+                cardStyle = 'border-l-4 border-green-500 bg-white shadow-lg ring-2 ring-green-100';
+            } else {
+                badge = '<span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide">Upcoming</span>';
+            }
+
+            // Minimalist layout without image or location
             return `
-                <div class="card group border-l-4 border-red-600 animate-on-scroll hover:border-l-8 transition-all">
-                    <div class="overflow-hidden rounded-t-lg h-48 mb-4">
-                        <img src="${imageSrc}" alt="${event.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x250/FFC04C/FFFFFF?text=Image+Loading+Error';">
+                <div class="card relative ${cardStyle} transition-all duration-300 w-full md:w-[48%] p-8 flex flex-col justify-between min-h-[200px] animate-on-scroll">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex flex-col">
+                            <span class="text-5xl font-bold ${dateColor} font-serif leading-none mb-1">${day}</span>
+                            <span class="text-lg font-medium text-red-900 uppercase tracking-widest">${month}</span>
+                            <span class="text-xs text-gray-400 font-medium">${year}</span>
+                        </div>
+                        ${badge}
                     </div>
-                    <div class="flex items-center text-xs font-bold text-red-600 uppercase tracking-wider mb-2">
-                        <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> ${formattedDate}
+                    
+                    <div class="mt-4 border-t border-gray-100 pt-4">
+                        <h3 class="font-bold text-3xl ${titleColor} font-serif leading-tight">${event.name}</h3>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-900 mb-2 leading-snug">${event.name}</h3>
-                    <p class="text-sm font-medium text-gray-500 mb-4 flex items-center">
-                        <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${event.location}
-                    </p>
-                    <p class="text-gray-600 text-sm leading-relaxed">${event.details}</p>
                 </div>
             `;
         }
         
-        function setupEventsListener() {
-            if (!isAuthReady || !db) return;
-            const q = query(collection(db, EVENTS_COLLECTION_PATH), orderBy("date", "asc"), limit(3)); 
+        // --- Static Events Logic (As requested) ---
+        const upcomingEventsData = [
+            {
+                name: "Saraswati Puja 2026",
+                date: "2026-01-23",
+                location: "UIU Campus", // Data kept but not rendered
+                details: "Join us in seeking the blessings of Devi Saraswati."
+            },
+            {
+                name: "Holi Festival 2026",
+                date: "2026-03-04",
+                location: "UIU Open Ground",
+                details: "Celebrate the vibrant festival of colors."
+            },
+             {
+                name: "Kali Puja 2026",
+                date: "2026-11-08",
+                location: "UIU Temple Area",
+                details: "Celebrating strength and victory."
+            }
+        ];
+
+        function renderStaticUpcomingEvents() {
             const eventsListEl = document.getElementById('upcoming-events-list');
-            const loadingEl = document.getElementById('events-loading');
+            
+            // Filter and Sort: Get top 2 events from today onwards
+            // Note: If you want to test the "Completed" sign, change one of the dates in upcomingEventsData to a past date (e.g., "2024-01-01")
+            const now = new Date();
+            const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-            onSnapshot(q, (snapshot) => {
-                const events = [];
-                snapshot.forEach(doc => events.push({ id: doc.id, ...doc.data() }));
+            const futureEvents = upcomingEventsData
+                .filter(e => new Date(e.date) >= todayMidnight) // Show events from today + future
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 2); 
 
-                if(eventsListEl) {
-                    eventsListEl.innerHTML = '';
-                    if (events.length > 0) {
-                        events.forEach(event => eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event)));
-                    } else {
-                        eventsListEl.innerHTML = '<div class="md:col-span-3 text-center p-8 text-gray-500">No upcoming events found.</div>';
-                    }
-                }
+            if(eventsListEl) {
+                eventsListEl.innerHTML = '';
+                futureEvents.forEach(event => {
+                    eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event));
+                });
                 
-                if (loadingEl) loadingEl.classList.add('hidden');
-                lucide.createIcons();
-                if (observer) { observer.disconnect(); setupIntersectionObserver(); }
-            });
-        }
-        
-        async function checkAndPopulateDefaultEvents() {
-             if (!isAuthReady || !db) return;
-             const eventsRef = collection(db, EVENTS_COLLECTION_PATH);
-             try {
-                const snapshot = await getDocs(query(eventsRef, limit(1)));
-                if (snapshot.empty) {
-                    const defaultEvents = [
-                        {
-                            name: "Saraswati Puja 2026",
-                            date: "2026-02-15", 
-                            type: "Upcoming",
-                            details: "The most anticipated annual festival. Join us for Anjali, Prasad, and cultural programs.",
-                            location: "UIU Auditorium",
-                            image_url: "https://placehold.co/400x250/FFD700/000000?text=Saraswati+Puja",
-                            order: 1
-                        },
-                        {
-                            name: "Bijaya Dashami Gathering",
-                            date: "2025-10-20", 
-                            type: "Upcoming",
-                            details: "Celebrate the victory of good over evil with music and sweets.",
-                            location: "UIU Open Ground",
-                            image_url: "https://placehold.co/400x250/FFC04C/000000?text=Bijaya+Dashami",
-                            order: 2
-                        },
-                        {
-                            name: "Spiritual Seminar",
-                            date: "2025-12-18", 
-                            type: "Upcoming",
-                            details: "Discussion on Vedanta and student life balance.",
-                            location: "Seminar Hall 101",
-                            image_url: "https://placehold.co/400x250/F8F8FF/333333?text=Seminar",
-                            order: 3
-                        }
-                    ];
-                    for (const event of defaultEvents) await addDoc(eventsRef, event);
+                if (futureEvents.length === 0) {
+                     eventsListEl.innerHTML = '<div class="w-full text-center p-8 text-gray-500">No upcoming events scheduled at the moment.</div>';
                 }
-            } catch (error) { console.error("Error populating:", error); }
+            }
+             lucide.createIcons();
+             setupIntersectionObserver();
         }
         
         // --- Intersection Observer ---
@@ -747,6 +758,7 @@
             initializeFirebase();
             setupIntersectionObserver();
             displayRandomQuote(); // Show quote on load
+            renderStaticUpcomingEvents(); // Render specific events immediately
 
             const menuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
