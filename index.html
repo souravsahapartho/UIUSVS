@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIU Sanatani Vidyarthi Samsad (SVS)</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic appeal -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* General Setup and Colors */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Very light cool gray */
+            color: #1e293b;
+        }
+        .text-vasant-yellow {
+            color: #FFD700; /* Gold */
+        }
+        .bg-vasant-yellow-light {
+            background-color: #FFFACD; /* Lemon chiffon */
+        }
+        .bg-vasant-yellow-dark {
+            background-color: #FFC04C; /* Deep yellow/orange accent */
+        }
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #d97706, #b45309);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Smooth Glass Navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Base Button Styles */
+        .btn-base {
+            @apply inline-flex items-center justify-center rounded-full px-8 py-4 text-lg font-bold transition-all duration-300 ease-out;
+        }
+
+        /* Eye-Catching Primary Button */
+        .btn-super {
+            background: linear-gradient(135deg, #FFC04C 0%, #f59e0b 100%);
+            color: #1a202c;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            border: 2px solid transparent;
+        }
+        .btn-super:hover {
+            background: linear-gradient(135deg, #FFD700 0%, #FFC04C 100%);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
+            transform: translateY(-3px) scale(1.05);
+        }
+        .btn-super:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Responsive Secondary Button */
+        .btn-explore {
+            background: rgba(255, 255, 255, 0.6);
+            color: #374151;
+            border: 2px solid #d1d5db;
+            backdrop-filter: blur(4px);
+        }
+        .btn-explore:hover {
+            border-color: #f59e0b;
+            color: #b45309;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Cards */
+        .card {
+            @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+        }
+
+        /* Form Inputs */
+        .form-input {
+            @apply w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-vasant-yellow-dark focus:border-transparent outline-none transition-all duration-200;
+        }
+
+        /* --- Scroll Reveal Animations --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* Pulse Animation for Nav Button */
+        @keyframes pulse-soft {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 192, 76, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 192, 76, 0); }
+        }
+        .btn-pulse {
+            animation: pulse-soft 2s infinite;
+        }
+
+        /* Responsive Iframe Container for Google Form */
+        .responsive-iframe-container {
+            position: relative;
+            padding-bottom: 200%; 
+            height: 0;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .responsive-iframe-container {
+                padding-bottom: 100%; 
+            }
+        }
+        .responsive-iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Icon animation on hover */
+        .about-card:hover .about-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-vasant-yellow-dark selection:text-white">
+
+    <!-- Header / Navigation -->
+    <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">🕉️</span>
+                <span class="text-xl font-extrabold tracking-tight text-gray-900">UIU SVS</span>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-sm font-medium text-gray-600 hover:text-yellow-600 transition-colors">Home</a>
+                <a href="#events" class="text-sm font-medium text-gray-600 hover:text-yellow-600 transition-colors">Events</a>
+                <a href="#gallery" class="text-sm font-medium text-gray-600 hover:text-yellow-600 transition-colors">Gallery</a>
+                <a href="#blogs" class="text-sm font-medium text-gray-600 hover:text-yellow-600 transition-colors">Blog</a>
+                <a href="#about" class="text-sm font-medium text-gray-600 hover:text-yellow-600 transition-colors">About</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="#join" class="hidden md:inline-flex bg-vasant-yellow-dark text-gray-900 rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-yellow-400 transition-colors btn-pulse">
+                    Join SVS
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-lg md:hidden">
+            <nav class="flex flex-col p-4 space-y-3 text-center">
+                <a href="#home" class="block py-2 text-gray-700 font-medium hover:bg-gray-50 rounded-lg">Home</a>
+                <a href="#events" class="block py-2 text-gray-700 font-medium hover:bg-gray-50 rounded-lg">Events</a>
+                <a href="#gallery" class="block py-2 text-gray-700 font-medium hover:bg-gray-50 rounded-lg">Gallery</a>
+                <a href="#about" class="block py-2 text-gray-700 font-medium hover:bg-gray-50 rounded-lg">About</a>
+                <a href="#join" class="block py-3 mt-2 bg-vasant-yellow-dark text-gray-900 font-bold rounded-xl">Join SVS</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative overflow-hidden pt-24 pb-32 lg:pt-36 lg:pb-48">
+            <!-- Background Gradient Blob -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl z-0 pointer-events-none">
+                <div class="absolute top-0 left-1/4 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+                <div class="absolute top-0 right-1/4 w-96 h-96 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 text-center animate-on-scroll is-visible">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-semibold uppercase tracking-wide mb-6">
+                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span> Est. 2003
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
+                    UIU Sanatani <br class="hidden md:block" /> 
+                    <span class="text-gradient">Vidyarthi Samsad</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    A home for culture, knowledge, and spiritual growth. Connecting students through the timeless values of Sanatana Dharma.
+                </p>
+                
+                <!-- UPGRADED BUTTONS -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center w-full max-w-md mx-auto sm:max-w-none">
+                    <a href="#join" class="btn-base btn-super group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-3 group-hover:animate-bounce"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        Become a Member
+                    </a>
+                    <a href="#events" class="btn-base btn-explore">
+                        Explore Events
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Upcoming Events Section -->
+        <section id="events" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Upcoming Events</h2>
+                    <div class="h-1 w-20 bg-vasant-yellow-dark mx-auto rounded-full"></div>
+                </div>
+                
+                <div id="upcoming-events-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Events will be dynamically injected here -->
+                    <div class="md:col-span-3 text-center py-12">
+                        <div id="events-loading" class="text-gray-500 inline-flex items-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-vasant-yellow-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            Syncing Calendar...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Previous Events Gallery Section -->
+        <section id="gallery" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Memories & Moments</h2>
+                    <p class="text-gray-500">Glimpses from our past celebrations.</p>
+                </div>
+                
+                <div id="past-events-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Gallery Item 1 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 animate-on-scroll delay-100 cursor-pointer">
+                        <div class="aspect-w-4 aspect-h-3 bg-gray-200">
+                             <img src="https://placehold.co/400x300/FFC04C/FFFFFF?text=Durga+Puja+25" alt="Durga Puja" class="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div>
+                                <h4 class="text-white font-bold">Durga Puja</h4>
+                                <p class="text-white/80 text-xs">Oct 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 2 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 animate-on-scroll delay-200 cursor-pointer">
+                        <div class="aspect-w-4 aspect-h-3 bg-gray-200">
+                             <img src="https://placehold.co/400x300/FFD700/000000?text=Saraswati+Puja+24" alt="Saraswati Puja" class="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div>
+                                <h4 class="text-white font-bold">Saraswati Puja</h4>
+                                <p class="text-white/80 text-xs">Feb 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 3 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 animate-on-scroll delay-300 cursor-pointer">
+                        <div class="aspect-w-4 aspect-h-3 bg-gray-200">
+                             <img src="https://placehold.co/400x300/F97316/FFFFFF?text=Holi+Fest" alt="Holi" class="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div>
+                                <h4 class="text-white font-bold">Holi Festival</h4>
+                                <p class="text-white/80 text-xs">Mar 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 4 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 animate-on-scroll delay-400 cursor-pointer">
+                         <div class="aspect-w-4 aspect-h-3 bg-gray-200">
+                             <img src="https://placehold.co/400x300/10B981/FFFFFF?text=Freshers+23" alt="Freshers" class="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div>
+                                <h4 class="text-white font-bold">Freshers Reception</h4>
+                                <p class="text-white/80 text-xs">Dec 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog / News Section -->
+        <section id="blogs" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-end mb-12 animate-on-scroll">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Latest Updates</h2>
+                        <p class="text-gray-500 mt-2">Stories and announcements from our community.</p>
+                    </div>
+                    <a href="#" class="hidden md:inline-flex items-center text-vasant-yellow-dark font-semibold hover:text-yellow-600 transition-colors">
+                        View All <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Blog Card 1 -->
+                    <article class="card group cursor-pointer animate-on-scroll delay-100">
+                        <div class="mb-4 overflow-hidden rounded-lg bg-gray-100 h-48">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
+                        </div>
+                        <span class="inline-block px-3 py-1 text-xs font-bold text-yellow-700 bg-yellow-100 rounded-full mb-3">Announcement</span>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                            New Executive Committee 2025-26
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                            We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
+                        </p>
+                    </article>
+
+                    <!-- Blog Card 2 -->
+                     <article class="card group cursor-pointer animate-on-scroll delay-200">
+                        <div class="mb-4 overflow-hidden rounded-lg bg-gray-100 h-48">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
+                        </div>
+                        <span class="inline-block px-3 py-1 text-xs font-bold text-blue-700 bg-blue-100 rounded-full mb-3">Article</span>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                            Significance of Saraswati Puja
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                            Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
+                        </p>
+                    </article>
+
+                    <!-- Blog Card 3 -->
+                     <article class="card group cursor-pointer animate-on-scroll delay-300">
+                        <div class="mb-4 overflow-hidden rounded-lg bg-gray-100 h-48">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
+                        </div>
+                        <span class="inline-block px-3 py-1 text-xs font-bold text-green-700 bg-green-100 rounded-full mb-3">Event Recap</span>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                            Alumni Reunion Night
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                            A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2 animate-on-scroll">
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                            Building a Community of <span class="text-vasant-yellow-dark">Unity & Wisdom</span>
+                        </h2>
+                        <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                            UIU Sanatani Vidyarthi Samsad (SVS) isn't just a club; it's a family. We provide a platform for students to stay connected with their roots while excelling in their modern academic pursuits.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                                <span class="block text-3xl font-bold text-gray-900">500+</span>
+                                <span class="text-xs text-gray-500 uppercase font-semibold">Members</span>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                                <span class="block text-3xl font-bold text-gray-900">10+</span>
+                                <span class="text-xs text-gray-500 uppercase font-semibold">Annual Events</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 grid gap-6 grid-cols-2 animate-on-scroll delay-200">
+                        <div class="space-y-6 mt-8">
+                             <div class="p-6 bg-white rounded-2xl shadow-md border border-gray-100 about-card">
+                                <i data-lucide="book-open" class="w-8 h-8 text-vasant-yellow-dark mb-4 about-icon transition-transform"></i>
+                                <h4 class="font-bold text-lg mb-1">Study Circles</h4>
+                                <p class="text-sm text-gray-500">Weekly discussions on Gita and moral ethics.</p>
+                            </div>
+                            <div class="p-6 bg-vasant-yellow-dark rounded-2xl shadow-md text-white transform hover:-translate-y-1 transition duration-300">
+                                <i data-lucide="heart" class="w-8 h-8 mb-4"></i>
+                                <h4 class="font-bold text-lg mb-1">Charity</h4>
+                                <p class="text-sm opacity-90">Winter clothing drives and food distribution.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="p-6 bg-white rounded-2xl shadow-md border border-gray-100 about-card">
+                                <i data-lucide="music" class="w-8 h-8 text-vasant-yellow-dark mb-4 about-icon transition-transform"></i>
+                                <h4 class="font-bold text-lg mb-1">Cultural Arts</h4>
+                                <p class="text-sm text-gray-500">Dance, music, and drama workshops.</p>
+                            </div>
+                             <div class="p-6 bg-white rounded-2xl shadow-md border border-gray-100 about-card">
+                                <i data-lucide="users" class="w-8 h-8 text-vasant-yellow-dark mb-4 about-icon transition-transform"></i>
+                                <h4 class="font-bold text-lg mb-1">Networking</h4>
+                                <p class="text-sm text-gray-500">Connecting seniors and juniors.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join SVS Custom Form Section -->
+        <section id="join" class="py-20 bg-gray-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col lg:flex-row gap-16 items-center">
+                    <div class="lg:w-1/2 animate-on-scroll">
+                        <span class="text-vasant-yellow font-bold uppercase tracking-widest text-sm">Membership</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6">Become part of the Legacy.</h2>
+                        <p class="text-gray-400 text-lg mb-8">
+                            Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly.
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Access to all events</li>
+                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Networking with alumni</li>
+                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Volunteer certificate</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
+                        <div class="bg-white text-gray-800 rounded-3xl p-8 shadow-2xl">
+                            <form id="membership-form" class="space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name</label>
+                                        <input type="text" id="member-name" required class="form-input" placeholder="John Doe">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">UIU ID</label>
+                                        <input type="text" id="member-id" required class="form-input" placeholder="011-231-XXX">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Department</label>
+                                        <input type="text" id="member-dept" required class="form-input" placeholder="CSE">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone</label>
+                                        <input type="tel" id="member-phone" required class="form-input" placeholder="017XXXXXXXX">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Why do you want to join?</label>
+                                    <textarea id="member-reason" rows="3" required class="form-input resize-none" placeholder="I want to connect with..."></textarea>
+                                </div>
+                                <button type="submit" id="join-submit-btn" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-black transition-colors flex justify-center items-center">
+                                    Submit Application
+                                </button>
+                                <div id="form-message" class="text-center text-sm font-semibold hidden"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-white border-t border-gray-200 pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                         <span class="text-2xl">🕉️</span>
+                         <span class="text-xl font-extrabold text-gray-900">UIU SVS</span>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+                        United International University<br>
+                        Sanatani Vidyarthi Samsad.<br>
+                        United City, Madani Avenue, Dhaka.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#home" class="hover:text-vasant-yellow-dark">Home</a></li>
+                        <li><a href="#events" class="hover:text-vasant-yellow-dark">Events</a></li>
+                        <li><a href="#about" class="hover:text-vasant-yellow-dark">About Us</a></li>
+                        <li><a href="#join" class="hover:text-vasant-yellow-dark">Join Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Connect</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="flex items-center hover:text-blue-600"><i data-lucide="facebook" class="w-4 h-4 mr-2"></i> Facebook</a></li>
+                        <li><a href="#" class="flex items-center hover:text-pink-600"><i data-lucide="instagram" class="w-4 h-4 mr-2"></i> Instagram</a></li>
+                        <li><a href="mailto:svs@uiu.ac.bd" class="flex items-center hover:text-red-600"><i data-lucide="mail" class="w-4 h-4 mr-2"></i> Email Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-8 text-center text-sm text-gray-400">
+                &copy; 2025 UIU Sanatani Vidyarthi Samsad. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK Imports (Module) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, addDoc, onSnapshot, collection, query, getDocs, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Global Variables ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app, db, auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        const EVENTS_COLLECTION_PATH = `artifacts/${appId}/public/data/uiu-svs-events`;
+        const APPLICATIONS_COLLECTION_PATH = `artifacts/${appId}/public/data/uiu-svs-applications`;
+
+        // --- Core Firebase Initialization ---
+        async function initializeFirebase() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    isAuthReady = true;
+                    if (user) {
+                        userId = user.uid;
+                        // Removed debug text update
+                        console.log("Auth Ready");
+                        checkAndPopulateDefaultEvents();
+                        setupEventsListener();
+                    } else {
+                        userId = crypto.randomUUID(); 
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase Auth failed:", error);
+            }
+        }
+
+        // --- Dynamic Content Functions ---
+        function renderEventCard(event) {
+            const imageSrc = event.image_url || 'https://placehold.co/400x250/FFC04C/FFFFFF?text=SVS+Event';
+            const dateObj = new Date(event.date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            return `
+                <div class="card group border-l-4 border-vasant-yellow-dark animate-on-scroll hover:border-l-8 transition-all">
+                    <div class="overflow-hidden rounded-t-lg h-48 mb-4">
+                        <img src="${imageSrc}" alt="${event.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x250/FFC04C/FFFFFF?text=Image+Loading+Error';">
+                    </div>
+                    <div class="flex items-center text-xs font-bold text-vasant-yellow-dark uppercase tracking-wider mb-2">
+                        <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> ${formattedDate}
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-900 mb-2 leading-snug">${event.name}</h3>
+                    <p class="text-sm font-medium text-gray-500 mb-4 flex items-center">
+                        <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${event.location}
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">${event.details}</p>
+                </div>
+            `;
+        }
+        
+        function setupEventsListener() {
+            if (!isAuthReady || !db) return;
+            const q = query(collection(db, EVENTS_COLLECTION_PATH), orderBy("date", "asc"), limit(3)); 
+            const eventsListEl = document.getElementById('upcoming-events-list');
+            const loadingEl = document.getElementById('events-loading');
+
+            onSnapshot(q, (snapshot) => {
+                const events = [];
+                snapshot.forEach(doc => events.push({ id: doc.id, ...doc.data() }));
+
+                if(eventsListEl) {
+                    eventsListEl.innerHTML = '';
+                    if (events.length > 0) {
+                        events.forEach(event => eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event)));
+                    } else {
+                        eventsListEl.innerHTML = '<div class="md:col-span-3 text-center p-8 text-gray-500">No upcoming events found.</div>';
+                    }
+                }
+                
+                if (loadingEl) loadingEl.classList.add('hidden');
+                lucide.createIcons();
+                if (observer) { observer.disconnect(); setupIntersectionObserver(); }
+            });
+        }
+        
+        async function checkAndPopulateDefaultEvents() {
+             if (!isAuthReady || !db) return;
+             const eventsRef = collection(db, EVENTS_COLLECTION_PATH);
+             try {
+                const snapshot = await getDocs(query(eventsRef, limit(1)));
+                if (snapshot.empty) {
+                    const defaultEvents = [
+                        {
+                            name: "Saraswati Puja 2026",
+                            date: "2026-02-15", 
+                            type: "Upcoming",
+                            details: "The most anticipated annual festival. Join us for Anjali, Prasad, and cultural programs.",
+                            location: "UIU Auditorium",
+                            image_url: "https://placehold.co/400x250/FFD700/000000?text=Saraswati+Puja",
+                            order: 1
+                        },
+                        {
+                            name: "Bijaya Dashami Gathering",
+                            date: "2025-10-20", 
+                            type: "Upcoming",
+                            details: "Celebrate the victory of good over evil with music and sweets.",
+                            location: "UIU Open Ground",
+                            image_url: "https://placehold.co/400x250/FFC04C/000000?text=Bijaya+Dashami",
+                            order: 2
+                        },
+                        {
+                            name: "Spiritual Seminar",
+                            date: "2025-12-18", 
+                            type: "Upcoming",
+                            details: "Discussion on Vedanta and student life balance.",
+                            location: "Seminar Hall 101",
+                            image_url: "https://placehold.co/400x250/F8F8FF/333333?text=Seminar",
+                            order: 3
+                        }
+                    ];
+                    for (const event of defaultEvents) await addDoc(eventsRef, event);
+                }
+            } catch (error) { console.error("Error populating:", error); }
+        }
+        
+        // --- Intersection Observer ---
+        let observer;
+        function setupIntersectionObserver() {
+            const elements = document.querySelectorAll('.animate-on-scroll:not(.is-visible)');
+            if (elements.length === 0) return;
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+            elements.forEach(el => observer.observe(el));
+        }
+        
+        // --- Form Submission ---
+        function setupFormSubmission() {
+            const membershipForm = document.getElementById('membership-form');
+            if (!membershipForm) return;
+
+            membershipForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('join-submit-btn');
+                const messageEl = document.getElementById('form-message');
+                
+                if (!isAuthReady) return;
+
+                const originalBtnContent = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                messageEl.classList.add('hidden');
+
+                try {
+                    await addDoc(collection(db, APPLICATIONS_COLLECTION_PATH), {
+                        name: document.getElementById('member-name').value,
+                        studentId: document.getElementById('member-id').value,
+                        department: document.getElementById('member-dept').value,
+                        phone: document.getElementById('member-phone').value,
+                        reason: document.getElementById('member-reason').value,
+                        submittedAt: new Date().toISOString(),
+                        userId: userId
+                    });
+
+                    messageEl.classList.remove('hidden', 'text-red-500');
+                    messageEl.classList.add('text-green-400');
+                    messageEl.textContent = 'Application Received! We will contact you soon.';
+                    membershipForm.reset();
+                } catch (error) {
+                    console.error(error);
+                    messageEl.classList.remove('hidden', 'text-green-400');
+                    messageEl.classList.add('text-red-500');
+                    messageEl.textContent = 'Something went wrong. Please try again.';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+                }
+            });
+        }
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initializeFirebase();
+            setupIntersectionObserver();
+            setupFormSubmission();
+
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+        });
+    </script>
+</body>
+</html>
