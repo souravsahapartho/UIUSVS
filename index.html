@@ -42,8 +42,16 @@
             user-select: none;
             pointer-events: none; /* Disables click interactions like save-as on mobile touch & hold, but allows scroll */
         }
-        /* Restore pointer events for logos/interactive images if needed, but keeping off for protection per request */
         
+        /* Utility to Hide Scrollbar for Horizontal Scroll */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         /* Puja Theme Colors */
         .text-puja-red { color: #b91c1c; } /* Deep Red */
         .text-puja-gold { color: #d97706; } /* Gold */
@@ -318,53 +326,148 @@
             </div>
         </section>
 
-        <!-- Previous Events Gallery Section -->
+        <!-- Previous Events Gallery Section (Redesigned) -->
         <section id="gallery" class="py-20 bg-orange-50/50">
             <div class="container mx-auto px-6">
                  <div class="text-center mb-16 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Gallery</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">Memories & Moments</h2>
-                    <p class="text-gray-600 text-lg">Cherished glimpses from our past celebrations.</p>
+                    <p class="text-gray-600 text-lg">Relive the joy and devotion from our recent gatherings.</p>
                 </div>
                 
-                <div id="past-events-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Gallery Item 1 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-100 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
-                         <img src="https://placehold.co/400x300/FFC04C/FFFFFF?text=Durga+Puja+25" alt="Durga Puja" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFC04C/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                        <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            <h4 class="text-white font-bold text-xl">Durga Puja</h4>
-                            <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">October 2025</p>
-                        </div>
+                <!-- 1. Saraswati Puja 2025 -->
+                <div class="mb-12 animate-on-scroll">
+                    <div class="flex items-center mb-4">
+                        <div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3>
                     </div>
-                    <!-- Gallery Item 2 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-200 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
-                         <img src="https://placehold.co/400x300/FFD700/000000?text=Saraswati+Puja+24" alt="Saraswati Puja" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFD700/000000?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                        <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            <h4 class="text-white font-bold text-xl">Saraswati Puja</h4>
-                            <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">February 2024</p>
+                    <!-- Horizontal Scroll Container -->
+                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                        <!-- Image 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100 relative group">
+                            <img src="https://placehold.co/400x300/FFD700/000000?text=Saraswati+Idol" alt="Idol" class="w-full h-full object-cover">
                         </div>
-                    </div>
-                    <!-- Gallery Item 3 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-300 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
-                         <img src="https://placehold.co/400x300/F97316/FFFFFF?text=Holi+Fest" alt="Holi" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/F97316/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                        <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            <h4 class="text-white font-bold text-xl">Holi Festival</h4>
-                            <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">March 2024</p>
+                        <!-- Video 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100 bg-black relative">
+                            <video poster="https://placehold.co/400x300/000000/FFFFFF?text=Anjali+Video" class="w-full h-full object-cover opacity-80">
+                                <source src="#" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                    <i data-lucide="play" class="w-5 h-5 text-white fill-current"></i>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Gallery Item 4 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-400 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
-                         <img src="https://placehold.co/400x300/10B981/FFFFFF?text=Freshers+23" alt="Freshers" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/10B981/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                        <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            <h4 class="text-white font-bold text-xl">Freshers Reception</h4>
-                            <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">Dec 2023</p>
+                        <!-- Image 2 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100">
+                            <img src="https://placehold.co/400x300/FFC04C/FFFFFF?text=Students+Prayer" alt="Prayer" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Image 3 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100">
+                            <img src="https://placehold.co/400x300/F97316/FFFFFF?text=Prasad+Distribution" alt="Prasad" class="w-full h-full object-cover">
+                        </div>
+                         <!-- Image 4 -->
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100">
+                            <img src="https://placehold.co/400x300/FFD700/000000?text=Cultural+Event" alt="Cultural" class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
+
+                <!-- 2. Kali Puja 2025 -->
+                <div class="mb-12 animate-on-scroll delay-100">
+                    <div class="flex items-center mb-4">
+                        <div class="h-8 w-1 bg-red-800 rounded-full mr-3"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3>
+                    </div>
+                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                        <!-- Image 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-red-100">
+                            <img src="https://placehold.co/400x300/991b1b/FFFFFF?text=Kali+Maa" alt="Kali Maa" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Image 2 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-red-100">
+                            <img src="https://placehold.co/400x300/7f1d1d/FFFFFF?text=Evening+Aarti" alt="Aarti" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Video 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-red-100 bg-black relative">
+                            <video poster="https://placehold.co/400x300/000000/FFFFFF?text=Deep+Daan+Video" class="w-full h-full object-cover opacity-80">
+                                <source src="#" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                    <i data-lucide="play" class="w-5 h-5 text-white fill-current"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Image 3 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-red-100">
+                            <img src="https://placehold.co/400x300/b91c1c/FFFFFF?text=Decorations" alt="Decor" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Holi 2025 -->
+                <div class="mb-12 animate-on-scroll delay-200">
+                    <div class="flex items-center mb-4">
+                        <div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3>
+                    </div>
+                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                        <!-- Image 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-pink-100">
+                            <img src="https://placehold.co/400x300/ec4899/FFFFFF?text=Colors+Splash" alt="Colors" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Image 2 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-pink-100">
+                            <img src="https://placehold.co/400x300/f472b6/FFFFFF?text=Group+Photo" alt="Group" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Video 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-pink-100 bg-black relative">
+                            <video poster="https://placehold.co/400x300/000000/FFFFFF?text=Celebration+Video" class="w-full h-full object-cover opacity-80">
+                                <source src="#" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                    <i data-lucide="play" class="w-5 h-5 text-white fill-current"></i>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- Image 3 -->
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-pink-100">
+                            <img src="https://placehold.co/400x300/db2777/FFFFFF?text=Sweets" alt="Sweets" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Monthly Prayer -->
+                <div class="animate-on-scroll delay-300">
+                    <div class="flex items-center mb-4">
+                        <div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3>
+                    </div>
+                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                        <!-- Image 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-yellow-100">
+                            <img src="https://placehold.co/400x300/fbbf24/000000?text=Gita+Path" alt="Gita" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Video 1 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-yellow-100 bg-black relative">
+                            <video poster="https://placehold.co/400x300/000000/FFFFFF?text=Kirtan+Video" class="w-full h-full object-cover opacity-80">
+                                <source src="#" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                    <i data-lucide="play" class="w-5 h-5 text-white fill-current"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Image 2 -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-yellow-100">
+                            <img src="https://placehold.co/400x300/f59e0b/FFFFFF?text=Discussion" alt="Discussion" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
