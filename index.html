@@ -18,6 +18,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #fff8e1; /* Warm cream background */
             color: #4a0404; /* Deep brownish red text */
+            /* Prevent text selection for basic content protection if desired, mostly for images though */
         }
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
@@ -26,6 +27,22 @@
         .quote-font {
             font-family: 'Hind Siliguri', sans-serif;
         }
+        
+        /* Content Protection CSS */
+        img, video {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+            pointer-events: none; /* Disables click interactions like save-as on mobile touch & hold, but allows scroll */
+        }
+        /* Restore pointer events for logos/interactive images if needed, but keeping off for protection per request */
         
         /* Puja Theme Colors */
         .text-puja-red { color: #b91c1c; } /* Deep Red */
@@ -182,7 +199,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern">
+<body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
 
     <!-- Top Quote Bar -->
     <div class="top-quote-bar py-2 px-4 text-center">
@@ -248,7 +265,7 @@
                 <div class="mb-6 animate-on-scroll is-visible">
                      <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
                         <!-- Updated to saraswati.png -->
-                        <img src="saraswati.png" alt="Saraswati" class="w-full h-full object-contain">
+                        <img src="saraswati.png" alt="Saraswati" class="w-full h-full object-contain pointer-events-none">
                      </div>
                 </div>
 
@@ -785,6 +802,26 @@
                 } else {
                     quoteBar.classList.remove('visible');
                 }
+            });
+
+            // --- Disable Right Click & Save Protections ---
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
+
+            // Prevent standard keyboard shortcuts for saving/inspecting (optional but good for "disable download")
+            document.addEventListener('keydown', (e) => {
+                // Prevent Ctrl+S, Ctrl+U, Ctrl+Shift+I (DevTools) - basic deterrents
+                if ((e.ctrlKey && (e.key === 's' || e.key === 'u')) || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'i')) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Disable drag and drop for images specifically via JS as fallback
+            document.querySelectorAll('img, video').forEach(el => {
+                el.addEventListener('dragstart', (e) => e.preventDefault());
             });
         });
     </script>
