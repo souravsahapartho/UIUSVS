@@ -16,86 +16,90 @@
         /* General Setup and Colors */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fffbeb; /* Very light warm background */
-            color: #1e293b;
+            background-color: #fff8e1; /* Warm cream background */
+            color: #4a0404; /* Deep brownish red text */
         }
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
         }
         /* Bengali Font Class */
         .quote-font {
             font-family: 'Hind Siliguri', sans-serif;
         }
-        .text-vasant-yellow {
-            color: #FFD700; /* Gold */
+        
+        /* Puja Theme Colors */
+        .text-puja-red { color: #b91c1c; } /* Deep Red */
+        .text-puja-gold { color: #d97706; } /* Gold */
+        .bg-puja-red { background-color: #991b1b; }
+        
+        /* Mandala/Alpana Pattern Background */
+        .mandala-pattern {
+            background-color: #fff8e1;
+            background-image: 
+                radial-gradient(circle at 100% 50%, transparent 20%, rgba(234, 88, 12, 0.05) 21%, rgba(234, 88, 12, 0.05) 34%, transparent 35%, transparent),
+                radial-gradient(circle at 0% 50%, transparent 20%, rgba(234, 88, 12, 0.05) 21%, rgba(234, 88, 12, 0.05) 34%, transparent 35%, transparent),
+                radial-gradient(#fca5a5 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px;
         }
-        .bg-vasant-yellow-light {
-            background-color: #FFFACD; /* Lemon chiffon */
-        }
-        .bg-vasant-yellow-dark {
-            background-color: #FFC04C; /* Deep yellow/orange accent */
-        }
+
         /* Gradient Text */
         .text-gradient {
-            background: linear-gradient(to right, #d97706, #b45309);
+            background: linear-gradient(to right, #b91c1c, #ea580c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         /* Smooth Glass Navbar */
         .glass-nav {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 252, 240, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 200, 100, 0.2);
+            border-bottom: 2px solid #fbbf24; /* Gold border */
         }
 
-        /* --- BUTTON REDESIGN (UPDATED & FIXED) --- */
+        /* --- BUTTON REDESIGN (PUJA THEME) --- */
         .btn-base {
             @apply inline-flex items-center justify-center text-center rounded-full transition-all duration-300 ease-out tracking-wide shadow-md font-bold;
-            /* Optimized Sizing */
-            padding: 0.875rem 2.5rem; /* px-10 py-3.5 equivalent */
+            padding: 0.875rem 2.5rem;
             font-size: 1rem;
         }
 
-        /* Primary Button: Vibrant Saffron Gradient */
-        .btn-super {
-            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        /* Primary Button: Red & Gold Gradient */
+        .btn-puja {
+            background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
             color: #ffffff;
-            border: 2px solid transparent; /* Keeps sizing consistent with outline button */
-            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+            border: 1px solid #fca5a5;
+            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.3);
         }
-        .btn-super:hover {
+        .btn-puja:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.45);
-            background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
-        }
-        .btn-super:active {
-            transform: translateY(0);
+            box-shadow: 0 8px 25px rgba(185, 28, 28, 0.45);
+            background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
         }
 
-        /* Secondary Button: Dark Outline */
+        /* Secondary Button: Gold Outline */
         .btn-explore {
             background: transparent;
-            color: #431407; /* Dark brown */
-            border: 2px solid #431407;
+            color: #7c2d12;
+            border: 2px solid #d97706;
             box-shadow: none;
         }
         .btn-explore:hover {
-            background: #431407;
-            color: #ffffff;
+            background: #fff7ed;
+            color: #9a3412;
+            border-color: #ea580c;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(67, 20, 7, 0.15);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.15);
         }
 
         /* Cards */
         .card {
-            @apply bg-white p-6 rounded-2xl shadow-sm border border-orange-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+            @apply bg-white p-6 rounded-2xl shadow-sm border border-orange-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
         }
 
         /* Form Inputs */
         .form-input {
-            @apply w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-vasant-yellow-dark focus:border-transparent outline-none transition-all duration-200 shadow-sm;
+            @apply w-full px-4 py-3 bg-white border border-red-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all duration-200 shadow-sm;
         }
 
         /* --- Scroll Reveal Animations --- */
@@ -117,26 +121,29 @@
 
         /* Pulse Animation */
         @keyframes pulse-soft {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.6); }
-            50% { box-shadow: 0 0 0 6px rgba(234, 88, 12, 0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+            50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
         }
         .btn-pulse {
             animation: pulse-soft 2.5s infinite;
         }
 
-        /* Hero Pattern Background */
-        .hero-pattern {
-            background-color: #fffbeb;
-            background-image: radial-gradient(#fde68a 1px, transparent 1px);
-            background-size: 32px 32px;
+        /* Quote Top Bar */
+        .top-quote-bar {
+            background-color: #7f1d1d; /* Deep Red */
+            color: #fef3c7; /* Pale Gold */
+            border-bottom: 1px solid #d97706;
+            position: relative;
+            overflow: hidden;
         }
-
-        /* Quote Card Glass Effect */
-        .quote-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            box-shadow: 0 8px 32px rgba(251, 191, 36, 0.1);
+        .top-quote-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
         }
 
         /* Responsive Iframe Container for Google Form */
@@ -162,78 +169,94 @@
 
         .about-card:hover .about-icon {
             transform: scale(1.1) rotate(5deg);
-            color: #d97706;
+            color: #b91c1c;
         }
     </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-orange-200 selection:text-orange-900">
+<body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern">
+
+    <!-- Top Quote Bar -->
+    <div class="top-quote-bar py-2 px-4 text-center z-50">
+        <div class="container mx-auto flex justify-center items-center">
+            <span class="text-xs md:text-sm font-bold uppercase text-yellow-500 mr-2 tracking-widest hidden sm:inline">Daily Wisdom:</span>
+            <p id="top-bar-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
+        </div>
+    </div>
 
     <!-- Header / Navigation -->
-    <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer">
                 <!-- Logo Image -->
-                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain group-hover:rotate-12 transition-transform duration-300 rounded-full shadow-md border border-orange-200">
-                <span class="text-xl font-extrabold tracking-tight text-gray-900">UIU SVS</span>
+                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain group-hover:rotate-12 transition-transform duration-300 rounded-full shadow-md border-2 border-red-200">
+                <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </div>
             
             <nav class="hidden md:flex items-center space-x-8 font-sans">
-                <a href="#home" class="text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors">Home</a>
-                <a href="#events" class="text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors">Events</a>
-                <a href="#gallery" class="text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors">Gallery</a>
-                <a href="#blogs" class="text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors">Blog</a>
-                <a href="#about" class="text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors">About</a>
+                <a href="#home" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
+                <a href="#events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
+                <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
+                <a href="#blogs" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Blog</a>
+                <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#join" class="hidden md:inline-flex btn-super rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">
+                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">
                     Join SVS
                 </a>
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden p-2 text-gray-600 hover:bg-orange-100 rounded-lg transition-colors">
+                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
             </div>
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-lg md:hidden z-50">
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
-                <a href="#home" class="block py-3 text-gray-800 font-semibold text-lg hover:bg-orange-50 rounded-xl">Home</a>
-                <a href="#events" class="block py-3 text-gray-800 font-semibold text-lg hover:bg-orange-50 rounded-xl">Events</a>
-                <a href="#gallery" class="block py-3 text-gray-800 font-semibold text-lg hover:bg-orange-50 rounded-xl">Gallery</a>
-                <a href="#about" class="block py-3 text-gray-800 font-semibold text-lg hover:bg-orange-50 rounded-xl">About</a>
-                <a href="#join" class="block py-3 mt-4 bg-vasant-yellow-dark text-gray-900 font-bold rounded-xl shadow-md">Join SVS</a>
+                <a href="#home" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Home</a>
+                <a href="#events" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Events</a>
+                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Gallery</a>
+                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">About</a>
+                <a href="#join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md">Join SVS</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- Hero Section with Integrated Quotes -->
-        <section id="home" class="relative overflow-hidden hero-pattern pt-20 pb-28 md:pt-32 md:pb-40">
-            <!-- Background Orbs -->
+        <!-- Hero Section with Decorative Elements -->
+        <section id="home" class="relative overflow-hidden pt-16 pb-24 md:pt-28 md:pb-36">
+            <!-- Background Orbs - Puja Colors -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl z-0 pointer-events-none">
-                <div class="absolute top-[-10%] left-0 w-[600px] h-[600px] bg-orange-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob"></div>
-                <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-yellow-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob animation-delay-2000"></div>
+                <div class="absolute top-[-10%] left-0 w-[600px] h-[600px] bg-red-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
+                <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-50 animate-blob animation-delay-2000"></div>
             </div>
 
             <div class="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
                 <div id="auth-info" class="hidden"></div>
                 
+                <!-- Decorative Icon -->
+                <div class="mb-6 animate-on-scroll is-visible">
+                     <!-- Simple Namaste/Prayer graphic representation or just an icon -->
+                     <div class="w-16 h-16 mx-auto bg-gradient-to-tr from-red-600 to-orange-500 rounded-full flex items-center justify-center shadow-lg text-white mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flower"><circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5"/><path d="M12 7.5A4.5 4.5 0 1 0 7.5 12 4.5 4.5 0 1 0 12 16.5 4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 1 0 12 7.5"/><path d="M7.5 12A4.5 4.5 0 1 1 12 7.5 4.5 4.5 0 1 1 16.5 12 4.5 4.5 0 1 1 12 16.5 4.5 4.5 0 1 1 7.5 12"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/></svg>
+                     </div>
+                </div>
+
                 <!-- Main Heading -->
                 <div class="animate-on-scroll is-visible">
                     <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight drop-shadow-sm">
                         UIU Sanatani <br class="hidden md:block" /> 
                         <span class="text-gradient">Vidyarthi Samsad</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+                    <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
                         Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.
                     </p>
                 </div>
                 
-                <!-- Upgraded Action Buttons (Revised Padding & Sizing) -->
+                <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-super w-full sm:w-auto btn-pulse">
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         Become a Member
                     </a>
@@ -242,41 +265,28 @@
                     </a>
                 </div>
 
-                <!-- Integrated Spiritual Wisdom Card (Bengali) -->
-                <div class="w-full max-w-3xl animate-on-scroll delay-200 is-visible">
-                    <div class="quote-card rounded-2xl p-8 relative hover:shadow-2xl transition duration-500 transform hover:-translate-y-1">
-                        <div class="absolute -top-4 -left-2 text-6xl text-orange-300 opacity-50 font-serif leading-none">“</div>
-                        <blockquote class="relative z-10">
-                             <p id="daily-quote-text" class="quote-font text-xl md:text-3xl text-gray-800 font-semibold leading-loose mb-6">
-                                <!-- Quote loads here -->
-                             </p>
-                             <div class="flex items-center justify-center gap-2">
-                                 <div class="h-px w-8 bg-orange-300"></div>
-                                 <cite id="daily-quote-author" class="text-sm font-bold text-orange-700 uppercase tracking-widest not-italic quote-font">
-                                    <!-- Author loads here -->
-                                 </cite>
-                                 <div class="h-px w-8 bg-orange-300"></div>
-                             </div>
-                        </blockquote>
-                    </div>
+                <!-- Removed the old Quote Card, as quotes are now in the top bar -->
+                <div class="animate-on-scroll delay-200">
+                     <p class="text-sm text-red-400 font-semibold tracking-widest uppercase">~ Satyam Shivam Sundaram ~</p>
                 </div>
 
             </div>
         </section>
 
         <!-- Dynamic Upcoming Events Section -->
-        <section id="events" class="py-20 bg-white relative">
+        <section id="events" class="py-20 relative bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16 animate-on-scroll">
-                    <span class="text-orange-600 font-bold uppercase tracking-widest text-xs bg-orange-50 px-3 py-1 rounded-full">Mark Your Calendar</span>
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Upcoming Events</h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 
                 <div id="upcoming-events-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Events will be dynamically injected here -->
                     <div class="md:col-span-3 text-center py-12">
                         <div id="events-loading" class="text-gray-500 inline-flex items-center">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-vasant-yellow-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             Syncing Calendar...
                         </div>
                     </div>
@@ -285,46 +295,46 @@
         </section>
 
         <!-- Previous Events Gallery Section -->
-        <section id="gallery" class="py-20 bg-gray-50">
+        <section id="gallery" class="py-20 bg-orange-50/50">
             <div class="container mx-auto px-6">
                  <div class="text-center mb-16 animate-on-scroll">
-                    <span class="text-orange-600 font-bold uppercase tracking-widest text-xs bg-orange-50 px-3 py-1 rounded-full">Gallery</span>
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Gallery</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">Memories & Moments</h2>
-                    <p class="text-gray-500 text-lg">Cherished glimpses from our past celebrations.</p>
+                    <p class="text-gray-600 text-lg">Cherished glimpses from our past celebrations.</p>
                 </div>
                 
                 <div id="past-events-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Gallery Item 1 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-100 cursor-pointer h-72">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-100 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
                          <img src="https://placehold.co/400x300/FFC04C/FFFFFF?text=Durga+Puja+25" alt="Durga Puja" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFC04C/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                         <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             <h4 class="text-white font-bold text-xl">Durga Puja</h4>
                             <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">October 2025</p>
                         </div>
                     </div>
                     <!-- Gallery Item 2 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-200 cursor-pointer h-72">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-200 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
                          <img src="https://placehold.co/400x300/FFD700/000000?text=Saraswati+Puja+24" alt="Saraswati Puja" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFD700/000000?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                         <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             <h4 class="text-white font-bold text-xl">Saraswati Puja</h4>
                             <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">February 2024</p>
                         </div>
                     </div>
                     <!-- Gallery Item 3 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-300 cursor-pointer h-72">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-300 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
                          <img src="https://placehold.co/400x300/F97316/FFFFFF?text=Holi+Fest" alt="Holi" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/F97316/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                         <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             <h4 class="text-white font-bold text-xl">Holi Festival</h4>
                             <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">March 2024</p>
                         </div>
                     </div>
                     <!-- Gallery Item 4 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-400 cursor-pointer h-72">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-on-scroll delay-400 cursor-pointer h-72 border-2 border-transparent hover:border-orange-300">
                          <img src="https://placehold.co/400x300/10B981/FFFFFF?text=Freshers+23" alt="Freshers" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/400x300/10B981/FFFFFF?text=Image+Loading+Error';">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                         <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             <h4 class="text-white font-bold text-xl">Freshers Reception</h4>
                             <p class="text-orange-200 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">Dec 2023</p>
@@ -335,26 +345,26 @@
         </section>
 
         <!-- Blog / News Section -->
-        <section id="blogs" class="py-20 bg-white">
+        <section id="blogs" class="py-20 bg-white/90 backdrop-blur">
             <div class="container mx-auto px-6">
                 <div class="flex justify-between items-end mb-12 animate-on-scroll">
                     <div>
                         <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Latest Updates</h2>
                         <p class="text-gray-500 mt-2">Stories and announcements from our community.</p>
                     </div>
-                    <a href="#" class="hidden md:inline-flex items-center text-vasant-yellow-dark font-semibold hover:text-yellow-600 transition-colors">
+                    <a href="#" class="hidden md:inline-flex items-center text-red-700 font-semibold hover:text-red-900 transition-colors">
                         View All <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
                     </a>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Blog Card 1 -->
-                    <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-yellow-200">
+                    <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
                         <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-yellow-700 shadow-sm z-10">Announcement</div>
+                            <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">Announcement</div>
                             <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
                             New Executive Committee 2025-26
                         </h3>
                         <p class="text-gray-600 text-sm line-clamp-2">
@@ -363,12 +373,12 @@
                     </article>
 
                     <!-- Blog Card 2 -->
-                      <article class="card group cursor-pointer animate-on-scroll delay-200 hover:border-yellow-200">
+                      <article class="card group cursor-pointer animate-on-scroll delay-200 hover:border-red-300">
                         <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-700 shadow-sm z-10">Article</div>
+                            <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-700 shadow-sm z-10 border border-orange-100">Article</div>
                             <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
                             Significance of Saraswati Puja
                         </h3>
                         <p class="text-gray-600 text-sm line-clamp-2">
@@ -377,12 +387,12 @@
                     </article>
 
                     <!-- Blog Card 3 -->
-                      <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-yellow-200">
+                      <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300">
                         <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-green-700 shadow-sm z-10">Recap</div>
+                             <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-green-700 shadow-sm z-10 border border-green-100">Recap</div>
                             <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-vasant-yellow-dark transition-colors mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
                             Alumni Reunion Night
                         </h3>
                         <p class="text-gray-600 text-sm line-clamp-2">
@@ -394,38 +404,38 @@
         </section>
 
         <!-- About Us Section -->
-        <section id="about" class="py-20 bg-gray-50">
+        <section id="about" class="py-20 bg-orange-50/30">
             <div class="container mx-auto px-6">
                 <div class="flex flex-col lg:flex-row items-center gap-16">
                     <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
                         <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-                            Building a Community of <br><span class="text-vasant-yellow-dark">Unity, Culture & Wisdom</span>
+                            Building a Community of <br><span class="text-red-700">Unity, Culture & Wisdom</span>
                         </h2>
-                        <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
                             UIU Sanatani Vidyarthi Samsad (SVS) isn't just a club; it's a family. We provide a platform for students to stay connected with their roots while excelling in their modern academic pursuits.
                         </p>
 
                         <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-gray-900 mb-1">500+</span>
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
+                                <span class="block text-4xl font-bold text-red-800 mb-1">500+</span>
                                 <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Active Members</span>
                             </div>
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-gray-900 mb-1">10+</span>
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
+                                <span class="block text-4xl font-bold text-red-800 mb-1">10+</span>
                                 <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Annual Events</span>
                             </div>
                         </div>
                     </div>
                     <div class="lg:w-1/2 grid gap-6 grid-cols-2 animate-on-scroll delay-200">
                         <div class="space-y-6 mt-12 lg:mt-16">
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 about-card">
-                                <div class="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="book-open" class="w-6 h-6 text-vasant-yellow-dark about-icon transition-transform"></i>
+                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
+                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i data-lucide="book-open" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
                                 </div>
-                                <h4 class="font-bold text-lg mb-1">Study Circles</h4>
+                                <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
                                 <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
                             </div>
-                            <div class="p-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
+                            <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
                                 <div class="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                                      <i data-lucide="heart" class="w-6 h-6 text-white"></i>
                                 </div>
@@ -434,18 +444,18 @@
                             </div>
                         </div>
                         <div class="space-y-6">
-                            <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 about-card">
-                                <div class="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="music" class="w-6 h-6 text-vasant-yellow-dark about-icon transition-transform"></i>
+                            <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
+                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i data-lucide="music" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
                                 </div>
-                                <h4 class="font-bold text-lg mb-1">Cultural Arts</h4>
+                                <h4 class="font-bold text-lg mb-1 text-red-900">Cultural Arts</h4>
                                 <p class="text-sm text-gray-500">Dance, music & drama.</p>
                             </div>
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 about-card">
-                                <div class="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="users" class="w-6 h-6 text-vasant-yellow-dark about-icon transition-transform"></i>
+                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
+                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i data-lucide="users" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
                                 </div>
-                                <h4 class="font-bold text-lg mb-1">Networking</h4>
+                                <h4 class="font-bold text-lg mb-1 text-red-900">Networking</h4>
                                 <p class="text-sm text-gray-500">Strong alumni connections.</p>
                             </div>
                         </div>
@@ -457,23 +467,26 @@
         <!-- Join SVS Google Form Section (External) -->
         <section id="join" class="py-20 bg-gray-900 text-white relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            <!-- Red Overlay -->
+            <div class="absolute inset-0 bg-red-900/30 mix-blend-overlay"></div>
+
             <div class="container mx-auto px-6 relative z-10">
                 <div class="flex flex-col lg:flex-row gap-16 items-center">
                     <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
-                        <span class="text-vasant-yellow font-bold uppercase tracking-widest text-sm">Membership</span>
-                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif">Become part of the Legacy.</h2>
-                        <p class="text-gray-400 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">Membership</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy.</h2>
+                        <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
                             Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly by the committee.
                         </p>
                         <ul class="space-y-4 inline-block text-left">
-                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Access to all exclusive events</li>
-                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Networking with successful alumni</li>
-                            <li class="flex items-center text-gray-300"><i data-lucide="check-circle" class="text-vasant-yellow w-5 h-5 mr-3"></i> Volunteer certification & skills</li>
+                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Access to all exclusive events</li>
+                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Networking with successful alumni</li>
+                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Volunteer certification & skills</li>
                         </ul>
                     </div>
                     
                     <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
-                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 md:p-3 animate-on-scroll delay-200">
+                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 md:p-3 animate-on-scroll delay-200 border-4 border-yellow-500/30">
                             <!-- EMBEDDED GOOGLE FORM IFRAME: UPDATED SRC -->
                             <div class="responsive-iframe-container bg-white">
                                 <iframe 
@@ -492,32 +505,32 @@
     </main>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-white border-t border-gray-200 pt-16 pb-8">
+    <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-8">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
                          <!-- Replaced emoji with logo.jpg -->
-                        <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full">
-                        <span class="text-xl font-extrabold text-gray-900">UIU SVS</span>
+                        <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
+                        <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
-                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
                         United International University<br>
                         Sanatani Vidyarthi Samsad.<br>
                         United City, Madani Avenue, Dhaka.
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-gray-900 mb-4">Quick Links</h4>
+                    <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#home" class="hover:text-vasant-yellow-dark">Home</a></li>
-                        <li><a href="#events" class="hover:text-vasant-yellow-dark">Events</a></li>
-                        <li><a href="#about" class="hover:text-vasant-yellow-dark">About Us</a></li>
-                        <li><a href="#join" class="hover:text-vasant-yellow-dark">Join Now</a></li>
+                        <li><a href="#home" class="hover:text-red-600">Home</a></li>
+                        <li><a href="#events" class="hover:text-red-600">Events</a></li>
+                        <li><a href="#about" class="hover:text-red-600">About Us</a></li>
+                        <li><a href="#join" class="hover:text-red-600">Join Now</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-gray-900 mb-4">Connect</h4>
+                    <h4 class="font-bold text-red-900 mb-4">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="#" class="flex items-center hover:text-blue-600"><i data-lucide="facebook" class="w-4 h-4 mr-2"></i> Facebook</a></li>
                         <li><a href="#" class="flex items-center hover:text-pink-600"><i data-lucide="instagram" class="w-4 h-4 mr-2"></i> Instagram</a></li>
@@ -525,7 +538,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-100 pt-8 text-center text-sm text-gray-400">
+            <div class="border-t border-red-100 pt-8 text-center text-sm text-gray-400">
                 &copy; 2025 UIU Sanatani Vidyarthi Samsad. All rights reserved.
             </div>
         </div>
@@ -587,11 +600,11 @@
             const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             
             return `
-                <div class="card group border-l-4 border-vasant-yellow-dark animate-on-scroll hover:border-l-8 transition-all">
+                <div class="card group border-l-4 border-red-600 animate-on-scroll hover:border-l-8 transition-all">
                     <div class="overflow-hidden rounded-t-lg h-48 mb-4">
                         <img src="${imageSrc}" alt="${event.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x250/FFC04C/FFFFFF?text=Image+Loading+Error';">
                     </div>
-                    <div class="flex items-center text-xs font-bold text-vasant-yellow-dark uppercase tracking-wider mb-2">
+                    <div class="flex items-center text-xs font-bold text-red-600 uppercase tracking-wider mb-2">
                         <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> ${formattedDate}
                     </div>
                     <h3 class="font-bold text-xl text-gray-900 mb-2 leading-snug">${event.name}</h3>
@@ -715,8 +728,8 @@
         function displayRandomQuote() {
             const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
             const quote = spiritualQuotes[randomIndex];
-            document.getElementById('daily-quote-text').textContent = `"${quote.text}"`;
-            document.getElementById('daily-quote-author').textContent = `— ${quote.author}`;
+            // Updated to target the top bar elements
+            document.getElementById('top-bar-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
         }
 
         // --- Init ---
