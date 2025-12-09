@@ -357,13 +357,20 @@
                 </div>
                 
                 <!-- 1. Saraswati Puja 2025 -->
-                <div class="mb-12 animate-on-scroll">
+                <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4">
                         <div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div>
                         <h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3>
                     </div>
+                    <!-- Navigation Buttons -->
+                    <button onclick="scrollGallery('gallery-saraswati', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="scrollGallery('gallery-saraswati', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
                     <!-- Horizontal Scroll Container -->
-                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                    <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
                         <!-- Video 1 (Updated YouTube Embed) - MOVED FIRST -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-orange-100 bg-black relative">
                             <iframe 
@@ -398,12 +405,19 @@
                 </div>
 
                 <!-- 2. Kali Puja 2025 -->
-                <div class="mb-12 animate-on-scroll delay-100">
+                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4">
                         <div class="h-8 w-1 bg-red-800 rounded-full mr-3"></div>
                         <h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3>
                     </div>
-                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                    <!-- Navigation Buttons -->
+                    <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="scrollGallery('gallery-kali', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                    <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
                         <!-- Image 1 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-red-100">
                             <img src="https://placehold.co/400x300/991b1b/FFFFFF?text=Kali+Maa" alt="Kali Maa" class="w-full h-full object-cover">
@@ -431,12 +445,19 @@
                 </div>
 
                 <!-- 3. Holi 2025 -->
-                <div class="mb-12 animate-on-scroll delay-200">
+                <div class="mb-12 animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4">
                         <div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div>
                         <h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3>
                     </div>
-                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                    <!-- Navigation Buttons -->
+                    <button onclick="scrollGallery('gallery-holi', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-pink-100">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="scrollGallery('gallery-holi', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-pink-100">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                    <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
                         <!-- Image 1 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-pink-100">
                             <img src="https://placehold.co/400x300/ec4899/FFFFFF?text=Colors+Splash" alt="Colors" class="w-full h-full object-cover">
@@ -464,12 +485,19 @@
                 </div>
 
                 <!-- 4. Monthly Prayer -->
-                <div class="animate-on-scroll delay-300">
+                <div class="animate-on-scroll delay-300 relative group/section">
                     <div class="flex items-center mb-4">
                         <div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div>
                         <h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3>
                     </div>
-                    <div class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide">
+                    <!-- Navigation Buttons -->
+                    <button onclick="scrollGallery('gallery-prayer', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-yellow-100">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="scrollGallery('gallery-prayer', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-yellow-100">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                    <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
                         <!-- Image 1 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md snap-center border border-yellow-100">
                             <img src="https://placehold.co/400x300/fbbf24/000000?text=Gita+Path" alt="Gita" class="w-full h-full object-cover">
@@ -950,6 +978,13 @@
             document.querySelectorAll('img, video').forEach(el => {
                 el.addEventListener('dragstart', (e) => e.preventDefault());
             });
+
+            // --- Scroll Gallery Function ---
+            window.scrollGallery = (id, direction) => {
+                const container = document.getElementById(id);
+                const scrollAmount = direction === 'left' ? -320 : 320; // Approx card width + gap
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            };
         });
     </script>
 </body>
