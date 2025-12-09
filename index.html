@@ -1010,6 +1010,18 @@
                 const scrollAmount = direction === 'left' ? -320 : 320; // Approx card width + gap
                 container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             };
+
+            // --- Single Video Play Logic ---
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.addEventListener('play', () => {
+                    videos.forEach(otherVideo => {
+                        if (otherVideo !== video) {
+                            otherVideo.pause();
+                        }
+                    });
+                });
+            });
         });
     </script>
 </body>
