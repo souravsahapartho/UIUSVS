@@ -27,10 +27,14 @@
 
     <!-- Favicon -->
     <link rel="icon" href="logo.jpg" type="image/jpeg">
+    
+    <!-- Preconnect for Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons for aesthetic appeal -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -332,7 +336,7 @@
     <main>
         <!-- Scroll Up Button -->
         <button id="scroll-to-top" class="fixed bottom-6 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 hover:bg-red-700 transition-all duration-300 opacity-0 invisible translate-y-4" aria-label="Scroll to top">
-            <i data-lucide="arrow-up" class="w-6 h-6"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
 
         <!-- Hero Section with Decorative Elements -->
@@ -422,10 +426,10 @@
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-saraswati', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
-                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <button onclick="scrollGallery('gallery-saraswati', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
-                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                     <!-- Horizontal Scroll Container -->
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
@@ -452,7 +456,7 @@
                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
                                 <source src="Saraswati_Puja_2025/2.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -481,10 +485,10 @@
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
-                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <button onclick="scrollGallery('gallery-kali', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
-                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <!-- Video 1: Kali Maa - CHANGED TO VIDEO -->
@@ -495,7 +499,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
                                 <source src="Kali_Puja_2025/6.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -524,10 +528,10 @@
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-holi', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-pink-100">
-                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <button onclick="scrollGallery('gallery-holi', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-pink-100">
-                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                          <!-- Video 1: Colors Splash - CHANGED TO VIDEO -->
@@ -538,7 +542,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
                                 <source src="Holi_2025/1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -553,7 +557,7 @@
                             </video>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
-                                    <i data-lucide="play" class="w-5 h-5 text-white fill-current"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white fill-current"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -574,10 +578,10 @@
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-prayer', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-yellow-100">
-                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <button onclick="scrollGallery('gallery-prayer', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-yellow-100">
-                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <!-- Image 1: Gita Path - CHANGED TO VIDEO -->
@@ -588,7 +592,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
                                 <source src="Prayer/2.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -600,7 +604,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
                                 <source src="Prayer/1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -623,7 +627,7 @@
                         <p class="text-gray-500 mt-2">Stories and announcements from our community.</p>
                     </div>
                     <a href="#" class="hidden md:inline-flex items-center text-red-700 font-semibold hover:text-red-900 transition-colors">
-                        View All <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                        View All <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
                 </div>
 
@@ -700,14 +704,14 @@
                         <div class="space-y-6 mt-12 lg:mt-16">
                              <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
                                 <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="book-open" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                                 </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
                                 <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
                             </div>
                             <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
                                 <div class="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                     <i data-lucide="heart" class="w-6 h-6 text-white"></i>
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-white"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                                 </div>
                                 <h4 class="font-bold text-lg mb-1">Charity</h4>
                                 <p class="text-sm opacity-90">Serving humanity through drives.</p>
@@ -716,14 +720,14 @@
                         <div class="space-y-6">
                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
                                 <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="music" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
                                 </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Cultural Arts</h4>
                                 <p class="text-sm text-gray-500">Dance, music & drama.</p>
                             </div>
                              <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
                                 <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <i data-lucide="users" class="w-6 h-6 text-red-600 about-icon transition-transform"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                                 </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Networking</h4>
                                 <p class="text-sm text-gray-500">Strong alumni connections.</p>
@@ -749,9 +753,9 @@
                             Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly by the committee.
                         </p>
                         <ul class="space-y-4 inline-block text-left">
-                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Access to all exclusive events</li>
-                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Networking with successful alumni</li>
-                            <li class="flex items-center text-gray-200"><i data-lucide="check-circle" class="text-yellow-500 w-5 h-5 mr-3"></i> Volunteer certification & skills</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Access to all exclusive events</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Networking with successful alumni</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Volunteer certification & skills</li>
                         </ul>
                     </div>
                     
@@ -802,9 +806,9 @@
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#" class="flex items-center hover:text-blue-600"><i data-lucide="facebook" class="w-4 h-4 mr-2"></i> Facebook</a></li>
-                        <li><a href="#" class="flex items-center hover:text-green-600"><i data-lucide="message-circle" class="w-4 h-4 mr-2"></i> WhatsApp</a></li>
-                        <li><a href="mailto:svs@uiu.ac.bd" class="flex items-center hover:text-red-600"><i data-lucide="mail" class="w-4 h-4 mr-2"></i> Email Us</a></li>
+                        <li><a href="#" class="flex items-center hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
+                        <li><a href="#" class="flex items-center hover:text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
+                        <li><a href="mailto:svs@uiu.ac.bd" class="flex items-center hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -968,7 +972,7 @@
                      eventsListEl.innerHTML = '<div class="w-full text-center p-8 text-gray-500">No upcoming events scheduled at the moment.</div>';
                 }
             }
-             lucide.createIcons();
+             // lucide.createIcons(); // Removed because we are using inline SVGs now
              setupIntersectionObserver();
         }
         
@@ -1097,7 +1101,7 @@
                 }
             };
 
-            lucide.createIcons();
+            // lucide.createIcons(); // Removed because we are using inline SVGs now
             initializeFirebase();
             setupIntersectionObserver();
             displayRandomQuote(); // Show quote on load
