@@ -76,6 +76,22 @@
             scrollbar-width: none;
         }
 
+        /* Video Loader Animation */
+        .video-loader {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #b91c1c; /* Puja Red */
+            width: 40px;
+            height: 40px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Puja Theme Colors */
         .text-puja-red { color: #b91c1c; } /* Deep Red */
         .text-puja-gold { color: #d97706; } /* Gold */
@@ -396,10 +412,15 @@
                             </iframe>
                         </div>
                         <!-- Video 2: Saraswati Idol - CHANGED TO VIDEO -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative video-wrapper">
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
+                                <div class="video-loader"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
+                                Media Unavailable
+                            </div>
                             <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
                                 <source src="Saraswati_Puja_2025/2.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
                             </video>
                         </div>
                         <!-- Image 2 -->
@@ -434,10 +455,15 @@
                     </button>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <!-- Video 1: Kali Maa - CHANGED TO VIDEO -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative video-wrapper">
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
+                                <div class="video-loader"></div>
+                            </div>
+                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
+                                Media Unavailable
+                            </div>
                             <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
                                 <source src="Kali_Puja_2025/6.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
                             </video>
                         </div>
                         <!-- Image 2 -->
@@ -472,10 +498,15 @@
                     </button>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                          <!-- Video 1: Colors Splash - CHANGED TO VIDEO -->
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative">
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative video-wrapper">
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
+                                <div class="video-loader"></div>
+                            </div>
+                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
+                                Media Unavailable
+                            </div>
                             <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
                                 <source src="Holi_2025/1.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
                             </video>
                         </div>
                         <!-- Image 2 -->
@@ -517,17 +548,27 @@
                     </button>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <!-- Image 1: Gita Path - CHANGED TO VIDEO -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
+                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
+                                <div class="video-loader"></div>
+                            </div>
+                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
+                                Media Unavailable
+                            </div>
                             <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
                                 <source src="Prayer/2.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
                             </video>
                         </div>
                         <!-- Video 1: Kirtan Video - EXISTING -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
+                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
+                                <div class="video-loader"></div>
+                            </div>
+                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
+                                Media Unavailable
+                            </div>
                             <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
                                 <source src="Prayer/1.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
                             </video>
                         </div>
                         <!-- Image 2: Discussion - CHANGED IMAGE SOURCE -->
@@ -976,13 +1017,14 @@
                     v.addEventListener('play', () => {
                        this.isPaused = true;
                        cancelAnimationFrame(this.animationId);
-                       clearTimeout(this.resumeTimeout); // Don't resume automatically if video is playing
+                       // No resume timeout if video is playing
                     });
                     v.addEventListener('pause', () => {
-                        this.pause(); // Treat pause as an interaction -> resume after 5s
+                         // When video paused, don't auto resume, wait for user interaction or reload
+                         // Or we can resume.. let's just keep paused as per latest instruction "remove auto scrolling when clicked"
                     });
                      v.addEventListener('ended', () => {
-                        this.pause(); // Treat end as interaction -> resume after 5s
+                         // End of video, maybe resume? No, stick to instruction: stop permanently on interaction
                     });
                 });
             }
@@ -1013,15 +1055,7 @@
             pause() {
                 this.isPaused = true;
                 cancelAnimationFrame(this.animationId);
-                clearTimeout(this.resumeTimeout);
-                
-                // Check if a video is actually playing, if so, don't set a resume timer
-                const videos = this.container.querySelectorAll('video');
-                let isVideoPlaying = false;
-                videos.forEach(v => {
-                    if (!v.paused && !v.ended && v.readyState > 2) isVideoPlaying = true;
-                });
-                // No resumeTimeout set here, effectively pausing indefinitely upon interaction
+                // Removed resumeTimeout as requested: "remove auto scrolling when someone clicked or touch"
             }
         }
 
@@ -1103,6 +1137,23 @@
             // --- Single Video Play Logic ---
             const videos = document.querySelectorAll('video');
             videos.forEach(video => {
+                // Handle loading state UI for each video
+                video.addEventListener('waiting', () => {
+                     const wrapper = video.closest('.video-wrapper');
+                     if(wrapper) wrapper.querySelector('.loading-overlay').style.display = 'flex';
+                });
+                video.addEventListener('canplay', () => {
+                     const wrapper = video.closest('.video-wrapper');
+                     if(wrapper) wrapper.querySelector('.loading-overlay').style.display = 'none';
+                });
+                video.addEventListener('error', () => {
+                     const wrapper = video.closest('.video-wrapper');
+                     if(wrapper) {
+                         wrapper.querySelector('.loading-overlay').style.display = 'none';
+                         wrapper.querySelector('.error-overlay').classList.remove('hidden');
+                     }
+                });
+
                 video.addEventListener('play', () => {
                     videos.forEach(otherVideo => {
                         if (otherVideo !== video) {
