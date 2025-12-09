@@ -282,6 +282,11 @@
     </header>
 
     <main>
+        <!-- Scroll Up Button -->
+        <button id="scroll-to-top" class="fixed bottom-6 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 hover:bg-red-700 transition-all duration-300 opacity-0 invisible translate-y-4" aria-label="Scroll to top">
+            <i data-lucide="arrow-up" class="w-6 h-6"></i>
+        </button>
+
         <!-- Hero Section with Decorative Elements -->
         <section id="home" class="relative overflow-hidden pt-16 pb-24 md:pt-28 md:pb-36">
             <!-- Background Orbs - Puja Colors -->
@@ -366,9 +371,6 @@
                             <div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div>
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3>
                         </div>
-                        <div class="md:hidden flex items-center text-xs text-red-400 font-medium animate-pulse">
-                            Swipe <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
-                        </div>
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-saraswati', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
@@ -422,9 +424,6 @@
                             <div class="h-8 w-1 bg-red-800 rounded-full mr-3"></div>
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3>
                         </div>
-                        <div class="md:hidden flex items-center text-xs text-red-400 font-medium animate-pulse">
-                            Swipe <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
-                        </div>
                     </div>
                     <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
@@ -459,9 +458,6 @@
                         <div class="flex items-center">
                             <div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div>
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3>
-                        </div>
-                        <div class="md:hidden flex items-center text-xs text-red-400 font-medium animate-pulse">
-                            Swipe <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
                         </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -504,9 +500,6 @@
                         <div class="flex items-center">
                             <div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div>
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3>
-                        </div>
-                        <div class="md:hidden flex items-center text-xs text-red-400 font-medium animate-pulse">
-                            Swipe <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
                         </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -1055,15 +1048,29 @@
             // --- Scroll Logic for Quote Bar ---
             window.addEventListener('scroll', () => {
                 const quoteBar = document.querySelector('.top-quote-bar');
+                const scrollButton = document.getElementById('scroll-to-top');
                 const scrollTop = window.scrollY;
                 const docHeight = document.documentElement.scrollHeight - window.innerHeight;
                 const scrollPercent = (scrollTop / docHeight) * 100;
                 
+                // Quote Bar Logic (> 2%)
                 if (scrollPercent > 2) {
                     quoteBar.classList.add('visible');
                 } else {
                     quoteBar.classList.remove('visible');
                 }
+
+                // Scroll To Top Button Logic (> 25%)
+                if (scrollPercent > 25) {
+                    scrollButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                } else {
+                    scrollButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                }
+            });
+
+            // Scroll to Top Click Handler
+            document.getElementById('scroll-to-top').addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
             // --- Disable Right Click & Save Protections ---
