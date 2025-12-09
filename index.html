@@ -956,6 +956,8 @@
                 this.animationId = null;
                 this.isPaused = false;
                 this.resumeTimeout = null;
+                this.scrollPos = this.container.scrollLeft; // Track float position
+                this.speed = 0.5; // Slower speed (pixels per frame)
                 
                 this.init();
             }
@@ -988,17 +990,23 @@
 
             startScrolling() {
                 if (this.isPaused) return;
+                
+                // Sync position on start
+                this.scrollPos = this.container.scrollLeft;
 
                 const step = () => {
+                    if (this.isPaused) return; // Guard
+
+                    this.scrollPos += this.speed;
+                    this.container.scrollLeft = this.scrollPos;
+
+                    // Reset if end reached
                     if (this.container.scrollLeft + this.container.clientWidth >= this.container.scrollWidth - 1) {
-                        this.container.scrollLeft = 0; // Reset to start
-                    } else {
-                        this.container.scrollLeft += 1; // Scroll speed
+                         this.scrollPos = 0;
+                         this.container.scrollLeft = 0;
                     }
-                    
-                    if (!this.isPaused) {
-                        this.animationId = requestAnimationFrame(step);
-                    }
+
+                    this.animationId = requestAnimationFrame(step);
                 };
                 this.animationId = requestAnimationFrame(step);
             }
