@@ -433,9 +433,12 @@
                         <i data-lucide="chevron-right" class="w-6 h-6"></i>
                     </button>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <!-- Image 1 -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100">
-                            <img src="https://placehold.co/400x300/991b1b/FFFFFF?text=Kali+Maa" alt="Kali Maa" class="w-full h-full object-cover">
+                        <!-- Video 1: Kali Maa - CHANGED TO VIDEO -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative">
+                            <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
+                                <source src="Kali_Puja_2025/6.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                         <!-- Image 2 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100">
@@ -445,9 +448,9 @@
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100">
                             <img src="Kali_Puja_2025/5.jpg" alt="Deep Daan" class="w-full h-full object-cover">
                         </div>
-                        <!-- Image 4 -->
+                        <!-- Image 4 - CHANGED IMAGE SOURCE -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100">
-                            <img src="https://placehold.co/400x300/b91c1c/FFFFFF?text=Decorations" alt="Decor" class="w-full h-full object-cover">
+                            <img src="Kali_Puja_2025/8.jpg" alt="Decor" class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
@@ -468,15 +471,18 @@
                         <i data-lucide="chevron-right" class="w-6 h-6"></i>
                     </button>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <!-- Image 1 -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100">
-                            <img src="https://placehold.co/400x300/ec4899/FFFFFF?text=Colors+Splash" alt="Colors" class="w-full h-full object-cover">
+                         <!-- Video 1: Colors Splash - CHANGED TO VIDEO -->
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative">
+                            <video class="w-full h-full object-cover" controls style="pointer-events: auto;">
+                                <source src="Holi_2025/1.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                         <!-- Image 2 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100">
                             <img src="https://placehold.co/400x300/f472b6/FFFFFF?text=Group+Photo" alt="Group" class="w-full h-full object-cover">
                         </div>
-                        <!-- Video 1 -->
+                        <!-- Video 1 (Original video position - keeping as it was in structure but replacing with placeholder or keeping) -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative">
                             <video poster="https://placehold.co/400x300/000000/FFFFFF?text=Celebration+Video" class="w-full h-full object-cover opacity-80">
                                 <source src="#" type="video/mp4">
@@ -1015,13 +1021,7 @@
                 videos.forEach(v => {
                     if (!v.paused && !v.ended && v.readyState > 2) isVideoPlaying = true;
                 });
-
-                if (!isVideoPlaying) {
-                    this.resumeTimeout = setTimeout(() => {
-                        this.isPaused = false;
-                        this.startScrolling();
-                    }, 5000);
-                }
+                // No resumeTimeout set here, effectively pausing indefinitely upon interaction
             }
         }
 
