@@ -118,6 +118,15 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Dhaki Animation (Rhythmic Beat) */
+        @keyframes dhakBeat {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.02) translateY(-1px); }
+        }
+        .animate-dhak-beat {
+            animation: dhakBeat 0.6s ease-in-out infinite;
+        }
+
         /* Puja Theme Colors */
         .text-puja-red { color: #b91c1c; } /* Deep Red */
         .text-puja-gold { color: #d97706; } /* Gold */
@@ -449,11 +458,11 @@
                         </div>
                         <!-- Image 2 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
-                            <img src="https://placehold.co/400x300/FFC04C/FFFFFF?text=Students+Prayer" alt="Prayer" class="w-full h-full object-cover">
+                            <img src="Saraswati_Puja_2025/13.jpg" alt="Prayer" class="w-full h-full object-cover">
                         </div>
                         <!-- Image 3 -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
-                            <img src="https://placehold.co/400x300/F97316/FFFFFF?text=Prasad+Distribution" alt="Prasad" class="w-full h-full object-cover">
+                            <img src="Saraswati_Puja_2025/14.jpg" alt="Prasad" class="w-full h-full object-cover">
                         </div>
                          <!-- Image 4 - CHANGED IMAGE SOURCE -->
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
@@ -615,116 +624,93 @@
                     <p class="text-gray-500 mt-2 text-lg">Stories and announcements from our community.</p>
                 </div>
 
-                <!-- Horizontal Scrolling Container -->
-                <div id="blog-grid" class="flex overflow-x-auto gap-6 pb-8 px-4 -mx-4 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
+                <!-- Grid Layout (Restored) -->
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                      <!-- Fallback content pre-filled for immediate display -->
                      <!-- Fallback Blog Card 1 -->
-                    <div class="flex-shrink-0 w-80 md:w-96 snap-center">
-                        <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('#', '_blank')">
-                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
-                                
-                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                                New Executive Committee 2025-26
-                            </h3>
-                            <p class="text-gray-600 text-sm line-clamp-2">
-                                We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
-                            </p>
-                        </article>
-                    </div>
-                     <!-- Fallback Blog Card 2 -->
-                    <div class="flex-shrink-0 w-80 md:w-96 snap-center">
-                        <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300 h-full flex flex-col items-center text-center">
-                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
-                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                                 Significance of Saraswati Puja
-                            </h3>
-                            <p class="text-gray-600 text-sm line-clamp-2">
-                                 Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
-                            </p>
-                        </article>
-                    </div>
-                     <!-- Fallback Blog Card 3 -->
-                    <div class="flex-shrink-0 w-80 md:w-96 snap-center">
-                        <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300 h-full flex flex-col items-center text-center">
-                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
-                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                                Alumni Reunion Night
-                            </h3>
-                            <p class="text-gray-600 text-sm line-clamp-2">
-                                A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.
-                            </p>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Us Section -->
-        <section id="about" class="py-20 bg-orange-50/30">
-            <div class="container mx-auto px-6">
-                <div class="flex flex-col lg:flex-row items-center gap-16">
-                    <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
-                        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-                            Building a Community of <br><span class="text-red-700">Unity, Culture & Wisdom</span>
-                        </h2>
-                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
-                            UIU Sanatani Vidyarthi Samsad (SVS) isn't just a club; it's a family. We provide a platform for students to stay connected with their roots while excelling in their modern academic pursuits.
+                    <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('#', '_blank')">
+                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                            New Executive Committee 2025-26
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                            We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
                         </p>
+                    </article>
+                     <!-- Fallback Blog Card 2 -->
+                    <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300 h-full flex flex-col items-center text-center">
+                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                                Significance of Saraswati Puja
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                                Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
+                        </p>
+                    </article>
+                     <!-- Fallback Blog Card 3 -->
+                    <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300 h-full flex flex-col items-center text-center">
+                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
+                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                            Alumni Reunion Night
+                        </h3>
+                        <p class="text-gray-600 text-sm line-clamp-2">
+                            A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-                        <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">500+</span>
-                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Active Members</span>
-                            </div>
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">10+</span>
-                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Annual Events</span>
-                            </div>
-                        </div>
+        <!-- Join SVS Google Form Section (External) -->
+        <section id="join" class="py-20 bg-gray-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            <!-- Red Overlay -->
+            <div class="absolute inset-0 bg-red-900/30 mix-blend-overlay"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col lg:flex-row gap-16 items-center">
+                    <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">Membership</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy.</h2>
+                        <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
+                            Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly by the committee.
+                        </p>
+                        <ul class="space-y-4 inline-block text-left">
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Access to all exclusive events</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Networking with successful alumni</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Volunteer certification & skills</li>
+                        </ul>
                     </div>
-                    <div class="lg:w-1/2 grid gap-6 grid-cols-2 animate-on-scroll delay-200">
-                        <div class="space-y-6 mt-12 lg:mt-16">
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                                </div>
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
-                                <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
-                            </div>
-                            <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
-                                <div class="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-white"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                </div>
-                                <h4 class="font-bold text-lg mb-1">Charity</h4>
-                                <p class="text-sm opacity-90">Serving humanity through drives.</p>
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                </div>
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Cultural Arts</h4>
-                                <p class="text-sm text-gray-500">Dance, music & drama.</p>
-                            </div>
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                </div>
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Networking</h4>
-                                <p class="text-sm text-gray-500">Strong alumni connections.</p>
+                    
+                    <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
+                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 md:p-3 animate-on-scroll delay-200 border-4 border-yellow-500/30">
+                            <!-- EMBEDDED GOOGLE FORM IFRAME: UPDATED SRC -->
+                            <div class="responsive-iframe-container bg-white">
+                                <iframe 
+                                    src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true"
+                                    frameborder="0" 
+                                    marginheight="0" 
+                                    marginwidth="0">
+                                    Loading…
+                                </iframe>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Decorative Dhaki Section (Before Footer) -->
+        <div class="w-full h-10 bg-orange-50 overflow-hidden relative border-t-2 border-yellow-500 flex justify-center items-center">
+            <!-- Dhaki Image with Animation -->
+             <img src="dhaki.png" alt="Dhaki" class="h-full w-auto object-cover animate-dhak-beat">
+        </div>
 
     </main>
 
@@ -1026,21 +1012,19 @@
                         const pubDate = new Date(item.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
                         const articleHTML = `
-                            <div class="flex-shrink-0 w-80 md:w-96 snap-center">
-                                <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${item.link}', '_blank')">
-                                    <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
-                                        
-                                        <img src="${imgUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${item.title}">
-                                    </div>
-                                    <div class="text-xs text-gray-500 mb-2">${pubDate}</div>
-                                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">
-                                        ${item.title}
-                                    </h3>
-                                    <p class="text-gray-600 text-sm line-clamp-2">
-                                        ${cleanDesc}
-                                    </p>
-                                </article>
-                            </div>
+                            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${item.link}', '_blank')">
+                                <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative w-full">
+                                    <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">News</div>
+                                    <img src="${imgUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${item.title}">
+                                </div>
+                                <div class="text-xs text-gray-500 mb-2">${pubDate}</div>
+                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">
+                                    ${item.title}
+                                </h3>
+                                <p class="text-gray-600 text-sm line-clamp-2">
+                                    ${cleanDesc}
+                                </p>
+                            </article>
                         `;
                         blogGrid.insertAdjacentHTML('beforeend', articleHTML);
                     });
@@ -1160,8 +1144,7 @@
             // Prayer (Right -> Left)
             new AutoScroller('gallery-prayer', 'left');
             
-            // Blog Auto Scroller (Very Slow)
-            new AutoScroller('blog-grid', 'right', 0.2); 
+            // Blog Auto Scroller Removed (Standard Grid Layout)
 
 
             const menuButton = document.getElementById('mobile-menu-button');
