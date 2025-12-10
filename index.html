@@ -27,14 +27,10 @@
 
     <!-- Favicon -->
     <link rel="icon" href="logo.jpg" type="image/jpeg">
-    
-    <!-- Preconnect for Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- Load Lucide Icons for aesthetic appeal -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -223,31 +219,22 @@
             animation: pulse-soft 2.5s infinite;
         }
 
-        /* Quote Top Bar - UPDATED for Scroll Behavior */
-        .top-quote-bar {
+        /* Quote Bottom Bar - UPDATED (Moved to Bottom) */
+        .bottom-quote-bar {
             background-color: #7f1d1d; /* Deep Red */
             color: #fef3c7; /* Pale Gold */
-            border-bottom: 1px solid #d97706;
+            border-top: 2px solid #d97706; /* Gold border top */
             position: fixed; /* Fixed position */
-            top: 0;
+            bottom: 0; /* Align to bottom */
             left: 0;
             width: 100%;
             z-index: 100; /* Highest Z-index to sit on top */
-            transform: translateY(-100%); /* Hidden initially */
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smooth slide in */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: translateY(100%); /* Hidden initially (below screen) */
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smooth slide up */
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
         }
-        .top-quote-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
-        }
-        .top-quote-bar.visible {
-            transform: translateY(0); /* Slide down */
+        .bottom-quote-bar.visible {
+            transform: translateY(0); /* Slide up */
         }
 
         /* Responsive Iframe Container for Google Form */
@@ -285,11 +272,11 @@
         <div class="text-xl font-bold text-red-800 font-serif tracking-wider animate-pulse">UIU SVS</div>
     </div>
 
-    <!-- Top Quote Bar -->
-    <div class="top-quote-bar py-2 px-4 text-center">
+    <!-- Bottom Quote Bar (Moved from Top) -->
+    <div class="bottom-quote-bar py-2 px-4 text-center">
         <div class="container mx-auto flex justify-center items-center">
             <span class="text-xs md:text-sm font-bold uppercase text-yellow-500 mr-2 tracking-widest hidden sm:inline">Daily Wisdom:</span>
-            <p id="top-bar-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
+            <p id="daily-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
         </div>
     </div>
 
@@ -335,7 +322,7 @@
 
     <main>
         <!-- Scroll Up Button -->
-        <button id="scroll-to-top" class="fixed bottom-6 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 hover:bg-red-700 transition-all duration-300 opacity-0 invisible translate-y-4" aria-label="Scroll to top">
+        <button id="scroll-to-top" class="fixed bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 hover:bg-red-700 transition-all duration-300 opacity-0 invisible translate-y-4" aria-label="Scroll to top">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
 
@@ -416,7 +403,7 @@
                     <p class="text-gray-600 text-lg">Relive the joy and devotion from our recent gatherings.</p>
                 </div>
                 
-                <!-- 1. Saraswati Puja 2025 -->
+                <!-- 1. Saraswati Puja 2025 (Left -> Right) -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
@@ -475,7 +462,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Kali Puja 2025 -->
+                <!-- 2. Kali Puja 2025 (Right -> Left) -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
@@ -518,7 +505,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Holi 2025 -->
+                <!-- 3. Holi 2025 (Left -> Right) -->
                 <div class="mb-12 animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
@@ -542,7 +529,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
+                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
                                 <source src="Holi_2025/1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -568,7 +555,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Monthly Prayer -->
+                <!-- 4. Monthly Prayer (Right -> Left) -->
                 <div class="animate-on-scroll delay-300 relative group/section">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
@@ -592,7 +579,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
+                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
                                 <source src="Prayer/2.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -604,7 +591,7 @@
                              <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
                                 Media Unavailable
                             </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
+                            <video class="w-full h-full object-cover" controls playsinline preload="auto">
                                 <source src="Prayer/1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -626,53 +613,49 @@
                         <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Latest Updates</h2>
                         <p class="text-gray-500 mt-2">Stories and announcements from our community.</p>
                     </div>
-                    <a href="#" class="hidden md:inline-flex items-center text-red-700 font-semibold hover:text-red-900 transition-colors">
-                        View All <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Blog Card 1 -->
-                    <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                            <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">Announcement</div>
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                            New Executive Committee 2025-26
-                        </h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">
-                            We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
-                        </p>
-                    </article>
-
-                    <!-- Blog Card 2 -->
-                      <article class="card group cursor-pointer animate-on-scroll delay-200 hover:border-red-300">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                            <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-700 shadow-sm z-10 border border-orange-100">Article</div>
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                            Significance of Saraswati Puja
-                        </h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">
-                            Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
-                        </p>
-                    </article>
-
-                    <!-- Blog Card 3 -->
-                      <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
-                             <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-green-700 shadow-sm z-10 border border-green-100">Recap</div>
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
-                            Alumni Reunion Night
-                        </h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">
-                            A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.
-                        </p>
-                    </article>
+                    <!-- Dynamically populated container -->
+                    <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                         <!-- Fallback content pre-filled for immediate display -->
+                         <!-- Fallback Blog Card 1 -->
+                        <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
+                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                                <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">Announcement</div>
+                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                                New Executive Committee 2025-26
+                            </h3>
+                            <p class="text-gray-600 text-sm line-clamp-2">
+                                We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
+                            </p>
+                        </article>
+                         <!-- Fallback Blog Card 2 -->
+                        <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
+                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                                <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-700 shadow-sm z-10 border border-orange-100">Article</div>
+                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                                 Significance of Saraswati Puja
+                            </h3>
+                            <p class="text-gray-600 text-sm line-clamp-2">
+                                 Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
+                            </p>
+                        </article>
+                         <!-- Fallback Blog Card 3 -->
+                         <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300">
+                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                                 <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-green-700 shadow-sm z-10 border border-green-100">Recap</div>
+                                <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                                Alumni Reunion Night
+                            </h3>
+                            <p class="text-gray-600 text-sm line-clamp-2">
+                                A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.
+                            </p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>
@@ -691,11 +674,11 @@
 
                         <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">250+</span>
+                                <span class="block text-4xl font-bold text-red-800 mb-1">500+</span>
                                 <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Active Members</span>
                             </div>
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">7+</span>
+                                <span class="block text-4xl font-bold text-red-800 mb-1">10+</span>
                                 <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Annual Events</span>
                             </div>
                         </div>
@@ -707,7 +690,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                                 </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
-                                <p class="text-sm text-gray-500">Monthly Gita & moral discussions.</p>
+                                <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
                             </div>
                             <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
                                 <div class="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-4">
@@ -748,13 +731,14 @@
                 <div class="flex flex-col lg:flex-row gap-16 items-center">
                     <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
                         <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">Membership</span>
-                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy</h2>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy.</h2>
                         <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
-                            Join the SVS family today. Fill out the form to register as a general member.
+                            Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly by the committee.
                         </p>
                         <ul class="space-y-4 inline-block text-left">
                             <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Access to all exclusive events</li>
                             <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Networking with successful alumni</li>
+                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Volunteer certification & skills</li>
                         </ul>
                     </div>
                     
@@ -789,7 +773,8 @@
                     </div>
                     <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
                         United International University<br>
-                        United City, Madani Avenue, Dhaka 1212
+                        Sanatani Vidyarthi Samsad.<br>
+                        United City, Madani Avenue, Dhaka.
                     </p>
                 </div>
                 <div>
@@ -804,14 +789,14 @@
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
-                        <li><a href="https://wa.me/+8801747596847" class="flex items-center hover:text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
-                        <li><a href="mailto:svs@uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
+                        <li><a href="#" class="flex items-center hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
+                        <li><a href="#" class="flex items-center hover:text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
+                        <li><a href="mailto:svs@uiu.ac.bd" class="flex items-center hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-red-100 pt-8 text-center text-sm text-gray-400">
-                &copy; 2025 UIUSVS. All rights reserved.
+                &copy; 2025 UIU Sanatani Vidyarthi Samsad. All rights reserved.
             </div>
         </div>
     </footer>
@@ -1022,58 +1007,156 @@
             const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
             const quote = spiritualQuotes[randomIndex];
             // Updated to target the top bar elements
-            document.getElementById('top-bar-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
+            document.getElementById('daily-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
+        }
+
+        // --- Substack Feed Fetcher (Client-side via RSS-to-JSON) ---
+        async function fetchSubstackPosts() {
+            const blogGrid = document.getElementById('blog-grid');
+            const rssUrl = 'https://uiusvs.substack.com/feed';
+            // Using rss2json service to convert XML to JSON for client-side use
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.items.length > 0) {
+                    blogGrid.innerHTML = ''; // Clear loading state
+                    
+                    // Take first 3 posts
+                    data.items.slice(0, 3).forEach(item => {
+                        // Extract image from content or use default
+                        let imgUrl = 'https://placehold.co/400x200/f3f4f6/9ca3af?text=SVS+Blog';
+                        const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
+                        if(item.thumbnail && item.thumbnail.length > 0) {
+                            imgUrl = item.thumbnail;
+                        } else if (imgMatch) {
+                            imgUrl = imgMatch[1];
+                        }
+
+                        // Clean up description (remove HTML tags)
+                        const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
+                        const pubDate = new Date(item.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                        const articleHTML = `
+                            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300" onclick="window.open('${item.link}', '_blank')">
+                                <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                                    <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">News</div>
+                                    <img src="${imgUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${item.title}">
+                                </div>
+                                <div class="text-xs text-gray-500 mb-2">${pubDate}</div>
+                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">
+                                    ${item.title}
+                                </h3>
+                                <p class="text-gray-600 text-sm line-clamp-2">
+                                    ${cleanDesc}
+                                </p>
+                            </article>
+                        `;
+                        blogGrid.insertAdjacentHTML('beforeend', articleHTML);
+                    });
+                } else {
+                     // Fallback content if fetch fails or no items
+                     renderFallbackBlog(blogGrid);
+                }
+            } catch (error) {
+                console.error('Error fetching Substack feed:', error);
+                renderFallbackBlog(blogGrid);
+            }
+        }
+
+        function renderFallbackBlog(container) {
+            container.innerHTML = `
+                 <!-- Fallback Blog Card 1 -->
+                <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
+                    <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                        <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-red-700 shadow-sm z-10 border border-red-100">Announcement</div>
+                        <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                        New Executive Committee 2025-26
+                    </h3>
+                    <p class="text-gray-600 text-sm line-clamp-2">
+                        We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.
+                    </p>
+                </article>
+                 <!-- Fallback Blog Card 2 -->
+                <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300">
+                    <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 h-48 relative">
+                        <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-700 shadow-sm z-10 border border-orange-100">Article</div>
+                        <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">
+                         Significance of Saraswati Puja
+                    </h3>
+                    <p class="text-gray-600 text-sm line-clamp-2">
+                         Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.
+                    </p>
+                </article>
+            `;
+            // Trigger animations for fallback content
+            setupIntersectionObserver();
         }
 
         class AutoScroller {
-            constructor(elementId) {
+            constructor(elementId, direction = 'right') {
                 this.container = document.getElementById(elementId);
                 this.animationId = null;
                 this.isPaused = false;
-                // this.resumeTimeout = null; // Removed as per request
-                this.scrollPos = this.container.scrollLeft; // Track float position
-                this.speed = 0.5; // Slower speed (pixels per frame)
+                this.scrollPos = (direction === 'left') ? this.container.scrollWidth - this.container.clientWidth : 0; 
+                this.speed = 0.5; 
+                this.direction = direction; // 'right' (L->R) or 'left' (R->L)
                 
+                // Set initial scroll if direction is left (start at end)
+                 if (this.direction === 'left') {
+                    this.container.scrollLeft = this.scrollPos;
+                } else {
+                    this.scrollPos = this.container.scrollLeft;
+                }
+
                 this.init();
             }
 
             init() {
-                // Start scrolling
                 this.startScrolling();
 
-                // Event Listeners for interaction
                 ['mousedown', 'touchstart', 'click'].forEach(evt => {
                     this.container.addEventListener(evt, () => this.pause());
                 });
 
-                // Specific logic for videos: stop scrolling if a video is playing
                 const videos = this.container.querySelectorAll('video');
                 videos.forEach(v => {
                     v.addEventListener('play', () => {
-                       this.pause(); // Pause scrolling permanently on video play
+                       this.pause(); 
                     });
-                    // Other listeners not needed as main interaction listener handles the permanent pause
                 });
             }
 
             startScrolling() {
                 if (this.isPaused) return;
                 
-                // Sync position on start
-                this.scrollPos = this.container.scrollLeft;
+                // Sync current position in case of manual scroll disruption before auto start
+                // this.scrollPos = this.container.scrollLeft; 
 
                 const step = () => {
-                    if (this.isPaused) return; // Guard
+                    if (this.isPaused) return; 
 
-                    this.scrollPos += this.speed;
-                    this.container.scrollLeft = this.scrollPos;
-
-                    // Reset if end reached
-                    if (this.container.scrollLeft + this.container.clientWidth >= this.container.scrollWidth - 1) {
-                         this.scrollPos = 0;
-                         this.container.scrollLeft = 0;
+                    if (this.direction === 'right') {
+                        // Standard Left -> Right
+                        this.scrollPos += this.speed;
+                        if (this.scrollPos >= this.container.scrollWidth - this.container.clientWidth) {
+                             this.scrollPos = 0; // Reset to start
+                        }
+                    } else {
+                        // Reverse Right -> Left
+                        this.scrollPos -= this.speed;
+                        if (this.scrollPos <= 0) {
+                            this.scrollPos = this.container.scrollWidth - this.container.clientWidth; // Reset to end
+                        }
                     }
-
+                    
+                    this.container.scrollLeft = this.scrollPos;
                     this.animationId = requestAnimationFrame(step);
                 };
                 this.animationId = requestAnimationFrame(step);
@@ -1082,7 +1165,7 @@
             pause() {
                 this.isPaused = true;
                 cancelAnimationFrame(this.animationId);
-                // Removed resumeTimeout logic - scrolling stops permanently after interaction
+                // Permanently paused on interaction
             }
         }
 
@@ -1104,12 +1187,17 @@
             setupIntersectionObserver();
             displayRandomQuote(); // Show quote on load
             renderStaticUpcomingEvents(); // Render specific events immediately
+            fetchSubstackPosts(); // Fetch dynamic blog posts
 
-            // Initialize auto-scrollers for each gallery
-            new AutoScroller('gallery-saraswati');
-            new AutoScroller('gallery-kali');
-            new AutoScroller('gallery-holi');
-            new AutoScroller('gallery-prayer');
+            // Initialize auto-scrollers with alternating directions
+            // Saraswati (Left -> Right)
+            new AutoScroller('gallery-saraswati', 'right');
+            // Kali (Right -> Left)
+            new AutoScroller('gallery-kali', 'left');
+            // Holi (Left -> Right)
+            new AutoScroller('gallery-holi', 'right');
+            // Prayer (Right -> Left)
+            new AutoScroller('gallery-prayer', 'left');
 
 
             const menuButton = document.getElementById('mobile-menu-button');
@@ -1119,7 +1207,7 @@
 
             // --- Scroll Logic for Quote Bar ---
             window.addEventListener('scroll', () => {
-                const quoteBar = document.querySelector('.top-quote-bar');
+                const quoteBar = document.querySelector('.bottom-quote-bar');
                 const scrollButton = document.getElementById('scroll-to-top');
                 const scrollTop = window.scrollY;
                 const docHeight = document.documentElement.scrollHeight - window.innerHeight;
