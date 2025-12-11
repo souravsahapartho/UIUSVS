@@ -262,16 +262,6 @@
             transform: scale(1.1) rotate(5deg);
             color: #b91c1c;
         }
-        
-        /* Countdown Box Styles */
-        .countdown-box {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            min-width: 3.5rem;
-            text-align: center;
-        }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
@@ -853,7 +843,7 @@
         }
 
         // --- Dynamic Content Functions ---
-        function renderEventCard(event, index) {
+        function renderEventCard(event) {
             const dateObj = new Date(event.date);
             const now = new Date();
             // Normalize to midnight for comparison
@@ -875,9 +865,6 @@
             let titleColor = 'text-gray-900';
             let dateColor = 'text-red-700';
             
-            // Countdown HTML Container
-            let countdownHTML = '';
-
             if (status === 'completed') {
                 badge = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-500 text-xs font-bold uppercase tracking-wide">Completed</span>';
                 cardStyle = 'border-l-4 border-gray-300 bg-gray-50 grayscale opacity-80';
@@ -888,51 +875,26 @@
                 cardStyle = 'border-l-4 border-green-500 bg-white shadow-lg ring-2 ring-green-100';
             } else {
                 badge = '<span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide">Upcoming</span>';
-                
-                // Add Countdown Structure for upcoming events
-                countdownHTML = `
-                    <div class="flex gap-2 mt-4" id="countdown-container-${index}">
-                        <div class="countdown-box">
-                            <div class="text-lg font-bold text-red-800" id="days-${index}">00</div>
-                            <div class="text-[10px] text-red-600 uppercase font-bold">Days</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="text-lg font-bold text-red-800" id="hours-${index}">00</div>
-                            <div class="text-[10px] text-red-600 uppercase font-bold">Hrs</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="text-lg font-bold text-red-800" id="minutes-${index}">00</div>
-                            <div class="text-[10px] text-red-600 uppercase font-bold">Min</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="text-lg font-bold text-red-800" id="seconds-${index}">00</div>
-                            <div class="text-[10px] text-red-600 uppercase font-bold">Sec</div>
-                        </div>
-                    </div>
-                `;
             }
 
             // Updated layout with small image on right
             return `
                 <div class="card relative ${cardStyle} transition-all duration-300 w-full md:w-[48%] p-6 flex items-center justify-between min-h-[180px] animate-on-scroll">
                     <!-- Left Content -->
-                    <div class="flex flex-col justify-between h-full pr-4 text-left items-start w-full">
-                        <div class="mb-2">
+                    <div class="flex flex-col justify-between h-full pr-4">
+                        <div class="mb-4">
                             ${badge}
-                            <div class="mt-2 flex items-baseline gap-2">
+                            <div class="mt-2">
                                 <span class="text-4xl font-bold ${dateColor} font-serif leading-none">${day}</span>
-                                <div>
-                                    <span class="text-sm font-medium text-red-900 uppercase tracking-widest block">${month}</span>
-                                    <span class="text-xs text-gray-400 font-medium block">${year}</span>
-                                </div>
+                                <span class="text-sm font-medium text-red-900 uppercase tracking-widest ml-1">${month}</span>
+                                <span class="text-xs text-gray-400 font-medium block mt-1">${year}</span>
                             </div>
                         </div>
-                        <h3 class="font-bold text-xl ${titleColor} font-serif leading-tight mb-2">${event.name}</h3>
-                        ${countdownHTML}
+                        <h3 class="font-bold text-xl ${titleColor} font-serif leading-tight">${event.name}</h3>
                     </div>
                     
-                    <!-- Right Image (Hidden on very small screens if needed, but keeping for now) -->
-                    <div class="hidden sm:block w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100 ml-2">
+                    <!-- Right Image -->
+                    <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100">
                         <img src="${event.image_url}" alt="${event.name}" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -964,47 +926,6 @@
             }
         ];
 
-        // --- Countdown Logic ---
-        function startEventCountdowns(events) {
-            // Update counts every 1 second
-            setInterval(() => {
-                const now = new Date().getTime();
-
-                events.forEach((event, index) => {
-                    const eventDate = new Date(event.date + "T00:00:00").getTime(); // Assuming midnight start
-                    const distance = eventDate - now;
-
-                    // Only update if the element exists (i.e., renderEventCard created it)
-                    const container = document.getElementById(`countdown-container-${index}`);
-                    
-                    if (container) {
-                        if (distance < 0) {
-                            // Event has passed or is today (handled by 'today' status mostly, but safety check)
-                            container.innerHTML = '<span class="text-red-700 font-bold text-sm">Event Started</span>';
-                        } else {
-                            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                            // Helper to add leading zero
-                            const format = (num) => num < 10 ? `0${num}` : num;
-
-                            const dEl = document.getElementById(`days-${index}`);
-                            const hEl = document.getElementById(`hours-${index}`);
-                            const mEl = document.getElementById(`minutes-${index}`);
-                            const sEl = document.getElementById(`seconds-${index}`);
-
-                            if(dEl) dEl.innerText = format(days);
-                            if(hEl) hEl.innerText = format(hours);
-                            if(mEl) mEl.innerText = format(minutes);
-                            if(sEl) sEl.innerText = format(seconds);
-                        }
-                    }
-                });
-            }, 1000);
-        }
-
         function renderStaticUpcomingEvents() {
             const eventsListEl = document.getElementById('upcoming-events-list');
             
@@ -1020,17 +941,13 @@
 
             if(eventsListEl) {
                 eventsListEl.innerHTML = '';
-                futureEvents.forEach((event, index) => {
-                    // Pass index to create unique IDs for countdowns
-                    eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event, index));
+                futureEvents.forEach(event => {
+                    eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event));
                 });
                 
                 if (futureEvents.length === 0) {
                      eventsListEl.innerHTML = '<div class="w-full text-center p-8 text-gray-500">No upcoming events scheduled at the moment.</div>';
                 }
-
-                // Start the countdown timer for these specific events
-                startEventCountdowns(futureEvents);
             }
              // lucide.createIcons(); // Removed because we are using inline SVGs now
              setupIntersectionObserver();
