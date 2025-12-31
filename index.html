@@ -176,13 +176,9 @@
 
     <!-- Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
-        <!-- Top Left: Bell -->
         <svg class="puja-decoration w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
-        <!-- Top Right: Lotus -->
         <svg class="puja-decoration w-32 h-32 top-32 right-12" viewBox="0 0 100 100"><path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" /><path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" /></svg>
-        <!-- Bottom Left: Diya -->
         <svg class="puja-decoration w-28 h-28 bottom-32 left-12" viewBox="0 0 100 100"><path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/><path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/></svg>
-        <!-- Bottom Right: Shankha -->
         <svg class="puja-decoration w-24 h-24 bottom-24 right-10" viewBox="0 0 100 100"><path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" /><path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" /></svg>
     </div>
 
@@ -207,7 +203,6 @@
                 <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </div>
-            
             <nav class="hidden md:flex items-center space-x-8 font-sans">
                 <a href="#home" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
                 <a href="#events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
@@ -216,7 +211,6 @@
                 <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
                 <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
-
             <div class="flex items-center gap-4">
                 <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg">
@@ -237,11 +231,12 @@
     </header>
 
     <main>
+        <!-- Scroll Up Button -->
         <button id="scroll-to-top" class="fixed bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 transition-all duration-300 opacity-0 invisible" aria-label="Scroll to top">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
 
-        <!-- Hero -->
+        <!-- Hero Section -->
         <section id="home" class="relative pt-12 pb-16 md:pt-24 md:pb-24">
             <div class="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
                 <div class="mb-6 animate-on-scroll is-visible">
@@ -250,18 +245,18 @@
                       </div>
                 </div>
                 <div class="animate-on-scroll is-visible">
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6">UIU <br><span class="text-gradient">Sanatani Vidyarthi Samsad</span></h1>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">UIU <br><span class="text-gradient">Sanatani Vidyarthi Samsad</span></h1>
                     <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 font-medium">Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto">Become a Member</a>
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
                     <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
 
         <!-- Upcoming Events -->
-        <section id="events" class="py-16 bg-white/80 backdrop-blur-sm">
+        <section id="events" class="py-16 relative bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
@@ -274,7 +269,7 @@
             </div>
         </section>
 
-        <!-- Gallery Sections -->
+        <!-- Gallery Section -->
         <section id="gallery" class="py-16 bg-orange-50/50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
@@ -357,7 +352,7 @@
                 </div>
 
                 <!-- 6. Bhai Phota -->
-                <div class="mb-12 animate-on-scroll relative group/section">
+                <div class="animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 bg-gray-100 relative video-wrapper">
@@ -371,7 +366,7 @@
             </div>
         </section>
 
-        <!-- Advisor Panel Section (Below Gallery) -->
+        <!-- Advisor Panel Section (Hierarchical Tree) -->
         <section id="advisors" class="py-12 bg-white/80">
             <div class="container mx-auto px-6 max-w-4xl text-center">
                 <div class="mb-8 animate-on-scroll">
@@ -380,27 +375,39 @@
                     <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
                 </div>
                 <div class="relative flex flex-col items-center">
+                    <!-- Top: Chief Advisor -->
                     <div class="relative z-10 animate-on-scroll">
                         <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group">
-                            <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Chief+Advisor" class="w-full h-full object-cover"></div>
-                            <h3 class="text-base font-bold text-red-900">Dr. Placeholder Name</h3>
+                            <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform">
+                                <img src="Advisor/jashodhan_sir.jpg" class="w-full h-full object-cover" alt="Jashodhan Sir" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Jashodhan+Sir'">
+                            </div>
+                            <h3 class="text-base font-bold text-red-900">Jashodhan Sir</h3>
                             <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
                         </div>
                     </div>
+                    <!-- Connector Lines -->
                     <div class="w-full max-w-[400px] h-12 flex justify-center">
                         <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
-                            <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" /><line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" /><line x1="50" y1="30" x2="50" y2="60" stroke="#fde68a" stroke-width="3" /><line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
+                            <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
+                            <line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" />
+                            <line x1="50" y1="30" x2="50" y2="60" stroke="#fde68a" stroke-width="3" />
+                            <line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
                         </svg>
                     </div>
+                    <!-- Bottom: Senior Advisors -->
                     <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover"></div>
-                            <h3 class="text-sm font-bold text-red-900">Prof. Placeholder Name</h3>
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                                <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Mam" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Mam'">
+                            </div>
+                            <h3 class="text-sm font-bold text-red-900">Mallika Mam</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover"></div>
-                            <h3 class="text-sm font-bold text-red-900">Mr. Placeholder Name</h3>
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                                <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Sir" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Sir'">
+                            </div>
+                            <h3 class="text-sm font-bold text-red-900">Rajib Sir</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                     </div>
@@ -408,7 +415,7 @@
             </div>
         </section>
 
-        <!-- Blogs -->
+        <!-- Blogs Section -->
         <section id="blogs" class="py-16 bg-white/90 backdrop-blur">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
@@ -419,7 +426,7 @@
             </div>
         </section>
 
-        <!-- YouTube -->
+        <!-- YouTube Highlights Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
             <div class="container mx-auto px-6 relative z-10 text-center">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
@@ -427,9 +434,9 @@
             </div>
         </section>
 
-        <!-- Join SVS -->
-        <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden">
-            <div class="container mx-auto px-6 relative z-10 text-center">
+        <!-- Join SVS Section -->
+        <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center">
+            <div class="container mx-auto px-6 relative z-10">
                 <h2 class="text-4xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
                 <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 border-4 border-yellow-500/30">
                     <div class="responsive-iframe-container"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe></div>
@@ -438,11 +445,42 @@
         </section>
     </main>
 
-    <footer class="bg-white border-t-4 border-red-700 pt-12 pb-8 text-center">
+    <!-- Detailed Footer Section -->
+    <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
         <div class="container mx-auto px-6">
-            <div class="flex items-center justify-center gap-2 mb-6"><img src="logo.jpg" class="h-10 w-10 rounded-full shadow-sm"><span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span></div>
-            <p class="text-gray-500 text-sm mb-6">United International University, Dhaka</p>
-            <div class="border-t pt-8 text-xs text-gray-400">© 2025 UIUSVS. All rights reserved. Developed by Sourav Saha.</div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
+                        <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
+                        United International University<br><br>
+                        United City, Madani Avenue, Dhaka-1212
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#home" class="hover:text-red-600 transition-colors">Home</a></li>
+                        <li><a href="#events" class="hover:text-red-600 transition-colors">Events</a></li>
+                        <li><a href="#about" class="hover:text-red-600 transition-colors">About Us</a></li>
+                        <li><a href="#join" class="hover:text-red-600 transition-colors">Join Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-red-900 mb-4">Connect</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
+                        <li><a href="https://wa.me/+8801747596847" class="flex items-center hover:text-green-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
+                        <li><a href="mailto:uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-red-100 pt-8 pb-10 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-2">
+                <span>&copy; 2025 UIUSVS. All rights reserved.</span>
+                <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700 hover:text-red-900 transition-colors">Sourav Saha</a></span>
+            </div>
         </div>
     </footer>
 
@@ -456,23 +494,53 @@
         const spiritualQuotes = [
             { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
             { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" }
+            { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" },
+            { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
-        function renderEvents() {
-            const list = document.getElementById('upcoming-events-list'); if(!list) return;
+        // Ensure global functions for inline handlers
+        window.loadVideo = (container, id) => {
+            const videoId = id.includes('&') ? id.split('&')[0] : id;
+            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            container.onclick = null;
+        };
+
+        window.scrollGallery = (id, direction) => {
+            const container = document.getElementById(id);
+            if(container) container.scrollBy({ left: direction === 'left' ? -320 : 320, behavior: 'smooth' });
+        };
+
+        const displayRandomQuote = () => {
+            const quoteTextEl = document.getElementById('daily-quote-text');
+            if(quoteTextEl) {
+                const quote = spiritualQuotes[Math.floor(Math.random() * spiritualQuotes.length)];
+                quoteTextEl.textContent = `"${quote.text}" — ${quote.author}`;
+            }
+        };
+
+        const renderEvents = () => {
+            const list = document.getElementById('upcoming-events-list');
+            if(!list) return;
             const today = new Date(); today.setHours(0,0,0,0);
             const active = upcomingEventsData.filter(e => new Date(e.date) >= today).sort((a,b) => new Date(a.date)-new Date(b.date)).slice(0, 2);
             list.innerHTML = active.map(e => {
                 const d = new Date(e.date);
                 return `<div class="card border-l-4 border-red-600 w-full md:w-[48%] p-6 flex justify-between animate-on-scroll">
-                    <div class="text-left flex flex-col justify-between"><div><span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">Upcoming</span><div class="mt-2"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold">${d.toLocaleDateString('en-US',{month:'short'})}</span></div><h3 class="font-bold text-lg mt-3">${e.name}</h3></div></div>
-                    <img src="${e.image_url}" class="w-20 h-20 rounded-lg object-cover"></div>`;
+                    <div class="text-left flex flex-col justify-between">
+                        <div>
+                            <span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">Upcoming</span>
+                            <div class="mt-2"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold">${d.toLocaleDateString('en-US',{month:'short'})}</span></div>
+                            <h3 class="font-bold text-lg mt-3">${e.name}</h3>
+                        </div>
+                    </div>
+                    <img src="${e.image_url}" class="w-20 h-20 rounded-lg object-cover">
+                </div>`;
             }).join('');
-        }
+        };
 
         async function fetchYouTube() {
             const grid = document.getElementById('youtube-video-grid');
+            if(!grid) return;
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
                 const data = await res.json();
@@ -480,14 +548,15 @@
                     grid.innerHTML = data.items.slice(0, 4).map(v => `
                         <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${v.link.split('v=')[1]}')">
                             <div class="aspect-video relative overflow-hidden"><img src="${v.thumbnail}" class="w-full h-full object-cover"></div>
-                            <div class="p-4"><h3 class="text-xs font-bold line-clamp-2">${v.title}</h3></div>
+                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2">${v.title}</h3></div>
                         </div>`).join('');
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-red-200">Videos currently unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-red-200">Videos unavailable at the moment.</p>'; }
         }
 
         async function fetchBlogs() {
             const grid = document.getElementById('blog-grid');
+            if(!grid) return;
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
                 const data = await res.json();
@@ -496,14 +565,11 @@
                         <article class="card animate-on-scroll cursor-pointer" onclick="window.open('${b.link}', '_blank')">
                             <img src="${b.thumbnail || 'https://placehold.co/400x200?text=SVS+Blog'}" class="rounded-lg mb-4 aspect-video object-cover">
                             <h3 class="font-bold text-sm">${b.title}</h3>
-                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-2">${b.description.replace(/<[^>]*>?/gm, '')}</p>
+                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-2 text-center">${b.description.replace(/<[^>]*>?/gm, '')}</p>
                         </article>`).join('');
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full">Blogs currently unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full">Blogs unavailable at the moment.</p>'; }
         }
-
-        window.loadVideo = (c, id) => { c.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" class="w-full h-full absolute top-0 left-0"></iframe>`; c.onclick = null; };
-        window.scrollGallery = (id, dir) => { document.getElementById(id).scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' }); };
 
         class Scroller {
             constructor(id, dir = 'right') {
@@ -523,27 +589,35 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const pre = document.getElementById('page-preloader');
-            const hide = () => { if(pre){ pre.style.opacity='0'; setTimeout(()=>pre.style.display='none',500); } };
-            window.addEventListener('load', hide); setTimeout(hide, 5000);
+            const preloader = document.getElementById('page-preloader');
+            const hide = () => { if(preloader && preloader.style.display !== 'none') { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } };
+            window.addEventListener('load', hide);
+            setTimeout(hide, 5000); // 5s safety timeout
+
+            displayRandomQuote();
+            renderEvents();
+            fetchYouTube();
+            fetchBlogs();
             
-            const q = spiritualQuotes[Math.floor(Math.random()*spiritualQuotes.length)];
-            document.getElementById('daily-quote-text').textContent = `"${q.text}" — ${q.author}`;
-            
-            renderEvents(); fetchYouTube(); fetchBlogs();
-            
-            ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'].forEach((id, i) => {
+            const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
+            galleryIds.forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
-            document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+            document.getElementById('mobile-menu-button')?.addEventListener('click', () => document.getElementById('mobile-menu')?.classList.toggle('hidden'));
+            
             window.addEventListener('scroll', () => {
                 const perc = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-                document.querySelector('.bottom-quote-bar').classList.toggle('visible', perc > 2);
+                document.querySelector('.bottom-quote-bar')?.classList.toggle('visible', perc > 2);
                 const btn = document.getElementById('scroll-to-top');
-                btn.classList.toggle('opacity-0', perc < 25); btn.classList.toggle('invisible', perc < 25);
+                if(btn) {
+                    btn.classList.toggle('opacity-0', perc < 25);
+                    btn.classList.toggle('invisible', perc < 25);
+                }
             });
-            document.getElementById('scroll-to-top').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+            
+            document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+            
             const obs = new IntersectionObserver((ents) => ents.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); }), {threshold:0.1});
             document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
         });
