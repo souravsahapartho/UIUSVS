@@ -85,10 +85,12 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .text-puja-red { color: #b91c1c; }
-        .text-puja-gold { color: #d97706; }
-        .bg-puja-red { background-color: #991b1b; }
-        
+        .text-gradient {
+            background: linear-gradient(to right, #b91c1c, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .mandala-pattern {
             background-color: #fffaf0;
             background-image: 
@@ -97,19 +99,12 @@
             background-attachment: fixed;
         }
 
-        /* Decorative background elements */
         .puja-decoration {
             position: fixed;
             z-index: -1;
-            opacity: 0.07;
+            opacity: 0.08;
             pointer-events: none;
-            filter: grayscale(0.2) sepia(0.3);
-        }
-
-        .text-gradient {
-            background: linear-gradient(to right, #b91c1c, #ea580c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(234, 88, 12, 0.2));
         }
 
         .glass-nav {
@@ -139,14 +134,6 @@
             background: transparent;
             color: #7c2d12;
             border: 2px solid #d97706;
-            box-shadow: none;
-        }
-        .btn-explore:hover {
-            background: #fff7ed;
-            color: #9a3412;
-            border-color: #ea580c;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.15);
         }
 
         .card {
@@ -157,19 +144,12 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: opacity, transform;
         }
         .animate-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
         
-        @keyframes pulse-soft {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
-            50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
-        }
-        .btn-pulse { animation: pulse-soft 2.5s infinite; }
-
         .bottom-quote-bar {
             background-color: #7f1d1d;
             color: #fef3c7;
@@ -177,7 +157,6 @@
             position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
         }
         .bottom-quote-bar.visible { transform: translateY(0); }
 
@@ -187,38 +166,24 @@
         .responsive-iframe-container iframe {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
         }
-        .about-card:hover .about-icon { transform: scale(1.1) rotate(5deg); color: #b91c1c; }
-
-        .play-overlay { background: rgba(0, 0, 0, 0.3); transition: background 0.3s; }
-        .video-card-group:hover .play-overlay { background: rgba(0, 0, 0, 0.1); }
-        .play-icon { transition: transform 0.3s, background 0.3s; }
-        .video-card-group:hover .play-icon { transform: scale(1.15); background-color: #dc2626; border-color: white; }
+        
+        .play-overlay { background: rgba(0, 0, 0, 0.3); transition: background 0.3s; cursor: pointer; }
+        .play-icon { transition: transform 0.3s; font-size: 2rem; color: white; }
+        .video-card-group:hover .play-icon { transform: scale(1.2); }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
 
-    <!-- Background Puja Equipment Decorations (SVGs) -->
+    <!-- Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
-        <!-- Diya Bottom Left -->
-        <svg class="pu_decoration w-32 h-32 bottom-20 left-10 puja-decoration" viewBox="0 0 100 100">
-            <path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/>
-            <path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/>
-        </svg>
-        <!-- Temple Bell Top Right -->
-        <svg class="puja-decoration w-24 h-24 top-40 right-10" viewBox="0 0 100 100">
-            <path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" />
-            <circle cx="50" cy="80" r="5" fill="#4a0404" />
-        </svg>
-        <!-- Lotus Middle Left -->
-        <svg class="puja-decoration w-40 h-40 top-1/2 left-[-20px]" viewBox="0 0 100 100">
-            <path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" />
-            <path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" />
-        </svg>
-        <!-- Shankha (Conch) Bottom Right -->
-        <svg class="puja-decoration w-28 h-28 bottom-40 right-20" viewBox="0 0 100 100">
-            <path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" />
-            <path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" />
-        </svg>
+        <!-- Top Left: Bell -->
+        <svg class="puja-decoration w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
+        <!-- Top Right: Lotus -->
+        <svg class="puja-decoration w-32 h-32 top-32 right-12" viewBox="0 0 100 100"><path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" /><path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" /></svg>
+        <!-- Bottom Left: Diya -->
+        <svg class="puja-decoration w-28 h-28 bottom-32 left-12" viewBox="0 0 100 100"><path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/><path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/></svg>
+        <!-- Bottom Right: Shankha -->
+        <svg class="puja-decoration w-24 h-24 bottom-24 right-10" viewBox="0 0 100 100"><path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" /><path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" /></svg>
     </div>
 
     <!-- Page Preloader -->
@@ -239,7 +204,7 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain group-hover:rotate-12 transition-transform duration-300 rounded-full shadow-md border-2 border-red-200">
+                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </div>
             
@@ -254,71 +219,49 @@
 
             <div class="flex items-center gap-4">
                 <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">Join SVS</a>
-                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors">
+                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
             </div>
         </div>
-        
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
-                <a href="#home" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Home</a>
-                <a href="#events" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Events</a>
-                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Gallery</a>
-                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">About</a>
-                <a href="#latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-xl">Videos</a>
+                <a href="#home" class="block py-3 text-red-900 font-semibold text-lg">Home</a>
+                <a href="#events" class="block py-3 text-red-900 font-semibold text-lg">Events</a>
+                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg">Gallery</a>
+                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg">About</a>
+                <a href="#latest-videos" class="block py-3 text-red-900 font-semibold text-lg">Videos</a>
                 <a href="#join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md">Join SVS</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- Scroll Up Button -->
-        <button id="scroll-to-top" class="fixed bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 hover:bg-red-700 transition-all duration-300 opacity-0 invisible translate-y-4" aria-label="Scroll to top">
+        <button id="scroll-to-top" class="fixed bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 transition-all duration-300 opacity-0 invisible" aria-label="Scroll to top">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
 
-        <!-- Hero Section -->
-        <section id="home" class="relative overflow-hidden pt-12 pb-16 md:pt-24 md:pb-24">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl z-0 pointer-events-none">
-                <div class="absolute top-[-10%] left-0 w-[600px] h-[600px] bg-red-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
-                <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-50 animate-blob animation-delay-2000"></div>
-            </div>
-
+        <!-- Hero -->
+        <section id="home" class="relative pt-12 pb-16 md:pt-24 md:pb-24">
             <div class="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
                 <div class="mb-6 animate-on-scroll is-visible">
                       <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
                         <img src="saraswati.png" alt="Saraswati" class="w-full h-full object-contain pointer-events-none">
                       </div>
                 </div>
-
                 <div class="animate-on-scroll is-visible">
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight drop-shadow-sm">
-                        UIU <br class="hidden md:block" />
-                        <span class="text-gradient">Sanatani Vidyarthi Samsad</span>
-                    </h1>
-                    <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-                        Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.
-                    </p>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6">UIU <br><span class="text-gradient">Sanatani Vidyarthi Samsad</span></h1>
+                    <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 font-medium">Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.</p>
                 </div>
-                
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                        Become a Member
-                    </a>
-                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto">Explore Events</a>
-                </div>
-
-                <div class="animate-on-scroll delay-200">
-                      <p class="text-sm text-red-400 font-semibold tracking-widest uppercase">~ Satyam Shivam Sundaram ~</p>
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto">Become a Member</a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
 
-        <!-- Upcoming Events Section -->
-        <section id="events" class="py-16 relative bg-white/80 backdrop-blur-sm">
+        <!-- Upcoming Events -->
+        <section id="events" class="py-16 bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
@@ -326,529 +269,283 @@
                     <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
-                    <div class="w-full text-center py-12">
-                         <div class="video-loader mx-auto"></div>
-                    </div>
+                    <div class="w-full text-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- Advisor Panel Section (Tree/Triangle Layout) -->
-        <section id="advisors" class="py-8 bg-orange-50/20">
-            <div class="container mx-auto px-6 max-w-4xl">
-                <div class="text-center mb-6 animate-on-scroll">
-                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Advisor Panel</h2>
-                    <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
-                </div>
-
-                <div class="relative flex flex-col items-center">
-                    <!-- Root Node: Chief Advisor -->
-                    <div class="relative z-10 animate-on-scroll">
-                        <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group hover:shadow-xl transition-all duration-300">
-                            <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
-                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Chief+Advisor" class="w-full h-full object-cover" alt="Chief Advisor">
-                            </div>
-                            <h3 class="text-base font-bold text-red-900 leading-tight">Dr. Placeholder Name</h3>
-                            <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
-                        </div>
-                    </div>
-
-                    <!-- Visual Connectors (Inverted Y Tree Branch) -->
-                    <div class="w-full max-w-[400px] h-12 flex justify-center animate-on-scroll">
-                        <svg class="w-full h-full overflow-visible" viewBox="0 0 200 60" preserveAspectRatio="none">
-                            <!-- Stem coming down from top -->
-                            <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
-                            <!-- Horizontal cross bar -->
-                            <line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" />
-                            <!-- Left leaf line -->
-                            <line x1="50" y1="30" x2="50" y2="60" stroke="#fde68a" stroke-width="3" />
-                            <!-- Right leaf line -->
-                            <line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
-                        </svg>
-                    </div>
-
-                    <!-- Leaf Nodes: Senior Advisors in same row -->
-                    <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
-                        <!-- Left Child -->
-                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group hover:shadow-xl transition-all duration-300">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto transition-transform group-hover:scale-105">
-                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover" alt="Advisor 2">
-                            </div>
-                            <h3 class="text-sm font-bold text-red-900 leading-tight">Prof. Placeholder Name</h3>
-                            <p class="text-[8px] font-semibold uppercase tracking-wide mt-1 text-gray-500">Senior Advisor</p>
-                        </div>
-
-                        <!-- Right Child -->
-                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group hover:shadow-xl transition-all duration-300">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto transition-transform group-hover:scale-105">
-                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover" alt="Advisor 3">
-                            </div>
-                            <h3 class="text-sm font-bold text-red-900 leading-tight">Mr. Placeholder Name</h3>
-                            <p class="text-[8px] font-semibold uppercase tracking-wide mt-1 text-gray-500">Senior Advisor</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Gallery Section -->
+        <!-- Gallery Sections -->
         <section id="gallery" class="py-16 bg-orange-50/50">
             <div class="container mx-auto px-6">
-                 <div class="text-center mb-12 animate-on-scroll">
+                <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Gallery</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">Memories & Moments</h2>
-                    <p class="text-gray-600 text-lg">Relive the joy and devotion from our recent gatherings.</p>
                 </div>
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-saraswati', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
-                    </button>
-                    <button onclick="scrollGallery('gallery-saraswati', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
-                    </button>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
-                            <div class="aspect-video w-full h-full relative bg-black/50 overflow-hidden">
-                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center">
-                                    <div class="play-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/60 shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" class="ml-1"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Saraswati_Puja_2025/2.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Saraswati_Puja_2025/2.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/13.jpg" alt="Prayer" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/14.jpg" alt="Prasad" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/3.jpg" alt="Cultural" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
                 <!-- 2. Kali Puja 2025 -->
-                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-red-800 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-kali', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" alt="Aarti" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/5.jpg" alt="Deep Daan" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/8.jpg" alt="Decor" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
                 <!-- 3. Holi 2025 -->
-                <div class="mb-12 animate-on-scroll delay-200 relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-holi', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-holi', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/11.jpg" alt="Group" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/17.jpg" alt="Celebration" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/12.jpg" alt="Sweets" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/11.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/17.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/12.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
                 <!-- 4. Monthly Prayer -->
-                <div class="mb-12 animate-on-scroll delay-300 relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-prayer', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-prayer', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100"><img src="Prayer/4.jpg" alt="Discussion" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100"><img src="Prayer/4.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
                 <!-- 5. Shiv Ratri -->
-                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-shivratri', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-purple-50 text-purple-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-purple-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-shivratri', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-purple-50 text-purple-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-purple-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
                     <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Shiv_Ratri/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Shiv_Ratri/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" alt="Pooja" class="text-center w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" alt="Devotion" class="text-center w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
-                <!-- 6. Bhai Phonta -->
-                <div class="animate-on-scroll delay-200 relative group/section">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div>
-                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phonta</h3>
-                        </div>
-                    </div>
-                    <button onclick="scrollGallery('gallery-bhaiphonta', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-teal-50 text-teal-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-teal-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-bhaiphonta', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-teal-50 text-teal-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-teal-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
-                    <div id="gallery-bhaiphonta" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                <!-- 6. Bhai Phota -->
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
+                    <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Bhai_Phonta/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Bhai_Phota/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/1.jpg" alt="Ritual" class="text-center w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/2.jpg" alt="Celebration" class="text-center w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/1.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/2.jpg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Blog Section -->
+        <!-- Advisor Panel Section (Below Gallery) -->
+        <section id="advisors" class="py-12 bg-white/80">
+            <div class="container mx-auto px-6 max-w-4xl text-center">
+                <div class="mb-8 animate-on-scroll">
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Advisor Panel</h2>
+                    <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
+                </div>
+                <div class="relative flex flex-col items-center">
+                    <div class="relative z-10 animate-on-scroll">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group">
+                            <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Chief+Advisor" class="w-full h-full object-cover"></div>
+                            <h3 class="text-base font-bold text-red-900">Dr. Placeholder Name</h3>
+                            <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
+                        </div>
+                    </div>
+                    <div class="w-full max-w-[400px] h-12 flex justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
+                            <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" /><line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" /><line x1="50" y1="30" x2="50" y2="60" stroke="#fde68a" stroke-width="3" /><line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover"></div>
+                            <h3 class="text-sm font-bold text-red-900">Prof. Placeholder Name</h3>
+                            <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform"><img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover"></div>
+                            <h3 class="text-sm font-bold text-red-900">Mr. Placeholder Name</h3>
+                            <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blogs -->
         <section id="blogs" class="py-16 bg-white/90 backdrop-blur">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Latest Updates</h2>
                 </div>
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                    <!-- Dynamic posts injected here -->
-                </div>
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"><div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div></div>
             </div>
         </section>
 
-        <!-- About Us Section -->
-        <section id="about" class="py-16 bg-orange-50/30">
-            <div class="container mx-auto px-6">
-                <div class="flex flex-col lg:flex-row items-center gap-16">
-                    <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
-                        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-                            Building a Community of <br><span class="text-red-700">Unity, Culture & Wisdom</span>
-                        </h2>
-                        <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">250+</span>
-                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Members</span>
-                            </div>
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center">
-                                <span class="block text-4xl font-bold text-red-800 mb-1">7+</span>
-                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Annual Events</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 grid gap-6 grid-cols-2 animate-on-scroll delay-200">
-                        <div class="space-y-6 mt-12 lg:mt-16">
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
-                                <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
-                            </div>
-                            <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white">
-                                <h4 class="font-bold text-lg mb-1">Charity</h4>
-                                <p class="text-sm opacity-90">Serving humanity through drives.</p>
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Cultural Arts</h4>
-                                <p class="text-sm text-gray-500">Dance, music & drama.</p>
-                            </div>
-                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <h4 class="font-bold text-lg mb-1 text-red-900">Networking</h4>
-                                <p class="text-sm text-gray-500">Strong alumni connections.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- YouTube Section -->
+        <!-- YouTube -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="text-center mb-12 animate-on-scroll">
-                    <h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2>
-                </div>
-                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                     <div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div>
-                </div>
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
+                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div></div>
             </div>
         </section>
 
-        <!-- Join SVS Section -->
+        <!-- Join SVS -->
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden">
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="flex flex-col lg:flex-row gap-16 items-center">
-                    <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
-                        <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy</h2>
-                        <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">Join the SVS family today. Applications are reviewed weekly by the committee.</p>
-                    </div>
-                    <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
-                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 border-4 border-yellow-500/30">
-                            <div class="responsive-iframe-container bg-white">
-                                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe>
-                            </div>
-                        </div>
-                    </div>
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <h2 class="text-4xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
+                <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 border-4 border-yellow-500/30">
+                    <div class="responsive-iframe-container"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe></div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
+    <footer class="bg-white border-t-4 border-red-700 pt-12 pb-8 text-center">
         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
-                        <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
-                    </div>
-                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br>United City, Madani Avenue, Dhaka-1212</p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="#home" class="hover:text-red-600">Home</a></li>
-                        <li><a href="#events" class="hover:text-red-600">Events</a></li>
-                        <li><a href="#gallery" class="hover:text-red-600">Gallery</a></li>
-                        <li><a href="#join" class="hover:text-red-600">Join Now</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-red-900 mb-4">Connect</h4>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600">Facebook</a></li>
-                        <li><a href="mailto:uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600">Email Us</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-red-100 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between">
-                <span>&copy; 2025 UIUSVS. All rights reserved.</span>
-                <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700">Sourav Saha</a></span>
-            </div>
+            <div class="flex items-center justify-center gap-2 mb-6"><img src="logo.jpg" class="h-10 w-10 rounded-full shadow-sm"><span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span></div>
+            <p class="text-gray-500 text-sm mb-6">United International University, Dhaka</p>
+            <div class="border-t pt-8 text-xs text-gray-400">© 2025 UIUSVS. All rights reserved. Developed by Sourav Saha.</div>
         </div>
     </footer>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
-        // Upcoming Events Data
         const upcomingEventsData = [
-            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "https://placehold.co/400x400/fffaf0/b91c1c?text=Saraswati+Puja" },
-            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "https://placehold.co/400x400/fffaf0/ea580c?text=Holi+2026" },
-            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "https://placehold.co/400x400/fffaf0/7f1d1d?text=Kali+Puja" }
+            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "https://placehold.co/400x400?text=Saraswati+Puja" },
+            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "https://placehold.co/400x400?text=Holi+2026" },
+            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "https://placehold.co/400x400?text=Kali+Puja" }
         ];
 
-        // Quotes
         const spiritualQuotes = [
             { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
             { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" },
-            { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
+            { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" }
         ];
 
-        function displayRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
-            const quote = spiritualQuotes[randomIndex];
-            document.getElementById('daily-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
-        }
-
-        // Render Events
         function renderEvents() {
-            const listEl = document.getElementById('upcoming-events-list');
-            if(!listEl) return;
-            listEl.innerHTML = '';
-            
-            const today = new Date();
-            today.setHours(0,0,0,0);
-
-            const activeEvents = upcomingEventsData
-                .filter(e => new Date(e.date) >= today)
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, 2);
-
-            if(activeEvents.length === 0) {
-                listEl.innerHTML = '<p class="text-gray-500">No upcoming events scheduled.</p>';
-                return;
-            }
-
-            activeEvents.forEach(event => {
-                const dateObj = new Date(event.date);
-                const day = dateObj.toLocaleDateString('en-US', { day: 'numeric' });
-                const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
-                const year = dateObj.toLocaleDateString('en-US', { year: 'numeric' });
-
-                const card = `
-                    <div class="card relative border-l-4 border-red-600 w-full md:w-[48%] p-6 flex items-center justify-between min-h-[180px] animate-on-scroll">
-                        <div class="flex flex-col justify-between h-full pr-4 text-left">
-                            <div>
-                                <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide">Upcoming</span>
-                                <div class="mt-2">
-                                    <span class="text-4xl font-bold text-red-700 font-serif leading-none">${day}</span>
-                                    <span class="text-sm font-medium text-red-900 uppercase tracking-widest ml-1">${month}</span>
-                                    <span class="text-xs text-gray-400 font-medium block mt-1">${year}</span>
-                                </div>
-                            </div>
-                            <h3 class="font-bold text-xl text-gray-900 font-serif leading-tight mt-4">${event.name}</h3>
-                        </div>
-                        <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100">
-                            <img src="${event.image_url}" alt="${event.name}" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                `;
-                listEl.insertAdjacentHTML('beforeend', card);
-            });
+            const list = document.getElementById('upcoming-events-list'); if(!list) return;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const active = upcomingEventsData.filter(e => new Date(e.date) >= today).sort((a,b) => new Date(a.date)-new Date(b.date)).slice(0, 2);
+            list.innerHTML = active.map(e => {
+                const d = new Date(e.date);
+                return `<div class="card border-l-4 border-red-600 w-full md:w-[48%] p-6 flex justify-between animate-on-scroll">
+                    <div class="text-left flex flex-col justify-between"><div><span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">Upcoming</span><div class="mt-2"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold">${d.toLocaleDateString('en-US',{month:'short'})}</span></div><h3 class="font-bold text-lg mt-3">${e.name}</h3></div></div>
+                    <img src="${e.image_url}" class="w-20 h-20 rounded-lg object-cover"></div>`;
+            }).join('');
         }
 
-        class AutoScroller {
-            constructor(elementId, direction = 'right', speed = 0.5) {
-                this.container = document.getElementById(elementId);
-                if(!this.container) return;
-                this.animationId = null;
-                this.isPaused = false;
-                this.scrollPos = (direction === 'left') ? this.container.scrollWidth - this.container.clientWidth : 0; 
-                this.speed = speed; 
-                this.direction = direction;
-                this.init();
-            }
-            init() {
-                this.startScrolling();
-                ['mousedown', 'touchstart', 'click'].forEach(evt => {
-                    this.container.addEventListener(evt, () => this.pause());
-                });
-            }
-            startScrolling() {
-                if (this.isPaused) return;
+        async function fetchYouTube() {
+            const grid = document.getElementById('youtube-video-grid');
+            try {
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    grid.innerHTML = data.items.slice(0, 4).map(v => `
+                        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${v.link.split('v=')[1]}')">
+                            <div class="aspect-video relative overflow-hidden"><img src="${v.thumbnail}" class="w-full h-full object-cover"></div>
+                            <div class="p-4"><h3 class="text-xs font-bold line-clamp-2">${v.title}</h3></div>
+                        </div>`).join('');
+                }
+            } catch (e) { grid.innerHTML = '<p class="text-red-200">Videos currently unavailable.</p>'; }
+        }
+
+        async function fetchBlogs() {
+            const grid = document.getElementById('blog-grid');
+            try {
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    grid.innerHTML = data.items.slice(0, 3).map(b => `
+                        <article class="card animate-on-scroll cursor-pointer" onclick="window.open('${b.link}', '_blank')">
+                            <img src="${b.thumbnail || 'https://placehold.co/400x200?text=SVS+Blog'}" class="rounded-lg mb-4 aspect-video object-cover">
+                            <h3 class="font-bold text-sm">${b.title}</h3>
+                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-2">${b.description.replace(/<[^>]*>?/gm, '')}</p>
+                        </article>`).join('');
+                }
+            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full">Blogs currently unavailable.</p>'; }
+        }
+
+        window.loadVideo = (c, id) => { c.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" class="w-full h-full absolute top-0 left-0"></iframe>`; c.onclick = null; };
+        window.scrollGallery = (id, dir) => { document.getElementById(id).scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' }); };
+
+        class Scroller {
+            constructor(id, dir = 'right') {
+                this.c = document.getElementById(id); if(!this.c) return;
+                this.dir = dir; this.pos = (dir === 'left') ? this.c.scrollWidth - this.c.clientWidth : 0;
+                this.paused = false;
                 const step = () => {
-                    if (this.isPaused) return; 
-                    if (this.direction === 'right') {
-                        this.scrollPos += this.speed;
-                        if (this.scrollPos >= this.container.scrollWidth - this.container.clientWidth) this.scrollPos = 0;
-                    } else {
-                        this.scrollPos -= this.speed;
-                        if (this.scrollPos <= 0) this.scrollPos = this.container.scrollWidth - this.container.clientWidth;
-                    }
-                    this.container.scrollLeft = this.scrollPos;
-                    this.animationId = requestAnimationFrame(step);
+                    if (this.paused) return;
+                    if (this.dir === 'right') { this.pos += 0.4; if (this.pos >= this.c.scrollWidth - this.c.clientWidth) this.pos = 0; }
+                    else { this.pos -= 0.4; if (this.pos <= 0) this.pos = this.c.scrollWidth - this.c.clientWidth; }
+                    this.c.scrollLeft = this.pos; requestAnimationFrame(step);
                 };
-                this.animationId = requestAnimationFrame(step);
+                requestAnimationFrame(step);
+                this.c.addEventListener('mousedown', () => this.paused = true);
+                this.c.addEventListener('touchstart', () => this.paused = true);
             }
-            pause() { this.isPaused = true; cancelAnimationFrame(this.animationId); }
-        }
-
-        window.scrollGallery = (id, direction) => {
-            const container = document.getElementById(id);
-            const scrollAmount = direction === 'left' ? -320 : 320;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        };
-
-        window.loadVideo = function(container, videoId) {
-            const iframe = document.createElement('iframe');
-            iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
-            iframe.className = 'w-full h-full absolute top-0 left-0';
-            const mediaContainer = container.querySelector('.aspect-video');
-            mediaContainer.innerHTML = '';
-            mediaContainer.appendChild(iframe);
-            container.onclick = null;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const preloader = document.getElementById('page-preloader');
-            const hidePreloader = () => {
-                if (preloader && preloader.style.display !== 'none') {
-                    preloader.style.opacity = '0';
-                    setTimeout(() => { preloader.style.display = 'none'; }, 500);
-                }
-            };
+            const pre = document.getElementById('page-preloader');
+            const hide = () => { if(pre){ pre.style.opacity='0'; setTimeout(()=>pre.style.display='none',500); } };
+            window.addEventListener('load', hide); setTimeout(hide, 5000);
+            
+            const q = spiritualQuotes[Math.floor(Math.random()*spiritualQuotes.length)];
+            document.getElementById('daily-quote-text').textContent = `"${q.text}" — ${q.author}`;
+            
+            renderEvents(); fetchYouTube(); fetchBlogs();
+            
+            ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'].forEach((id, i) => {
+                new Scroller(id, i % 2 === 0 ? 'right' : 'left');
+            });
 
-            // Hide when page is fully loaded
-            window.addEventListener('load', hidePreloader);
-
-            // Safety timeout: hide after 5 seconds even if things are still loading
-            setTimeout(hidePreloader, 5000);
-
-            displayRandomQuote();
-            renderEvents(); // Initialize the events list
-            new AutoScroller('gallery-saraswati', 'right');
-            new AutoScroller('gallery-kali', 'left');
-            new AutoScroller('gallery-holi', 'right');
-            new AutoScroller('gallery-prayer', 'left');
-            new AutoScroller('gallery-shivratri', 'right');
-            new AutoScroller('gallery-bhaiphonta', 'left');
-
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
+            document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
             window.addEventListener('scroll', () => {
-                const quoteBar = document.querySelector('.bottom-quote-bar');
-                const scrollButton = document.getElementById('scroll-to-top');
-                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-                
-                if (scrollPercent > 2) quoteBar.classList.add('visible');
-                else quoteBar.classList.remove('visible');
-
-                if (scrollPercent > 25) scrollButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
-                else scrollButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                const perc = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                document.querySelector('.bottom-quote-bar').classList.toggle('visible', perc > 2);
+                const btn = document.getElementById('scroll-to-top');
+                btn.classList.toggle('opacity-0', perc < 25); btn.classList.toggle('invisible', perc < 25);
             });
-
-            document.getElementById('scroll-to-top').addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            // Intersection Observer
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+            document.getElementById('scroll-to-top').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+            const obs = new IntersectionObserver((ents) => ents.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); }), {threshold:0.1});
+            document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
         });
     </script>
 </body>
