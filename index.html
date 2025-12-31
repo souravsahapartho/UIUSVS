@@ -13,14 +13,14 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://svs.uiu.ac.bd/"> <!-- Replace with actual URL -->
+    <meta property="og:url" content="https://svs.uiu.ac.bd/"> 
     <meta property="og:title" content="UIU Sanatani Vidyarthi Samsad (SVS)">
     <meta property="og:description" content="Join the SVS family. Celebrating culture, spirituality, and unity at United International University.">
     <meta property="og:image" content="logo.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://svs.uiu.ac.bd/"> <!-- Replace with actual URL -->
+    <meta property="twitter:url" content="https://svs.uiu.ac.bd/">
     <meta property="twitter:title" content="UIU Sanatani Vidyarthi Samsad (SVS)">
     <meta property="twitter:description" content="Uniting hearts through culture, enlightening minds through wisdom. Official SVS community website.">
     <meta property="twitter:image" content="logo.jpg">
@@ -29,29 +29,23 @@
     <link rel="icon" href="logo.jpg" type="image/jpeg">
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons for aesthetic appeal -->
+    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* General Setup and Colors */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fffaf0; /* Warm spiritual cream */
-            color: #4a0404; /* Deep brownish red text */
+            background-color: #fffaf0;
+            color: #4a0404;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
         }
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-        }
-        .quote-font {
-            font-family: 'Hind Siliguri', sans-serif;
-        }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        .quote-font { font-family: 'Hind Siliguri', sans-serif; }
         
-        /* Content Protection CSS */
         img, video, iframe {
             -webkit-user-drag: none;
             -khtml-user-drag: none;
@@ -62,23 +56,13 @@
         img { pointer-events: none; }
         video[controls], iframe { pointer-events: auto; }
         
-        /* Utility to Hide Scrollbar */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Page Preloader */
         #page-preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fffaf0;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fffaf0; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
         }
         
@@ -100,18 +84,14 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Theme Colors */
         .text-puja-red { color: #b91c1c; }
         .text-puja-gold { color: #d97706; }
         .bg-puja-red { background-color: #991b1b; }
         
-        /* Standard Eyecatching Background (Puja Theme) */
         .mandala-pattern {
             background-color: #fffaf0;
             background-image: 
-                /* Subtle Radial Glow from top */
                 radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
-                /* Traditional Motif Pattern (Subtle) */
                 url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
         }
@@ -122,7 +102,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Glass Nav */
         .glass-nav {
             background: rgba(255, 250, 240, 0.95);
             backdrop-filter: blur(12px);
@@ -130,7 +109,6 @@
             border-bottom: 2px solid #fbbf24;
         }
 
-        /* Buttons */
         .btn-base {
             @apply inline-flex items-center justify-center text-center rounded-full transition-all duration-300 ease-out tracking-wide shadow-md font-bold;
             padding: 0.75rem 2rem;
@@ -164,11 +142,7 @@
         .card {
             @apply bg-white p-6 rounded-2xl shadow-sm border border-orange-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col items-center text-center;
         }
-        .form-input {
-            @apply w-full px-4 py-3 bg-white border border-red-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all duration-200 shadow-sm;
-        }
 
-        /* Animations */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -179,9 +153,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
         
         @keyframes pulse-soft {
             0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
@@ -189,7 +160,6 @@
         }
         .btn-pulse { animation: pulse-soft 2.5s infinite; }
 
-        /* Quote Bar */
         .bottom-quote-bar {
             background-color: #7f1d1d;
             color: #fef3c7;
@@ -209,7 +179,6 @@
         }
         .about-card:hover .about-icon { transform: scale(1.1) rotate(5deg); color: #b91c1c; }
 
-        /* Video Section */
         .play-overlay { background: rgba(0, 0, 0, 0.3); transition: background 0.3s; }
         .video-card-group:hover .play-overlay { background: rgba(0, 0, 0, 0.1); }
         .play-icon { transition: transform 0.3s, background 0.3s; }
@@ -236,7 +205,6 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer">
-                <!-- Logo Image -->
                 <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain group-hover:rotate-12 transition-transform duration-300 rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </div>
@@ -251,10 +219,7 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">
-                    Join SVS
-                </a>
-                <!-- Mobile Menu Button -->
+                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
@@ -282,26 +247,21 @@
 
         <!-- Hero Section -->
         <section id="home" class="relative overflow-hidden pt-12 pb-16 md:pt-24 md:pb-24">
-            <!-- Background Orbs -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl z-0 pointer-events-none">
                 <div class="absolute top-[-10%] left-0 w-[600px] h-[600px] bg-red-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
                 <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-orange-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-50 animate-blob animation-delay-2000"></div>
             </div>
 
             <div class="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-                <div id="auth-info" class="hidden"></div>
-                
-                <!-- Decorative Icon -->
                 <div class="mb-6 animate-on-scroll is-visible">
                       <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
                         <img src="saraswati.png" alt="Saraswati" class="w-full h-full object-contain pointer-events-none">
                       </div>
                 </div>
 
-                <!-- Main Heading -->
                 <div class="animate-on-scroll is-visible">
                     <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight drop-shadow-sm">
-                        UIU <br class="hidden md:block" /> 
+                        UIU <br class="hidden md:block" />
                         <span class="text-gradient">Sanatani Vidyarthi Samsad</span>
                     </h1>
                     <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
@@ -309,15 +269,12 @@
                     </p>
                 </div>
                 
-                <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
                     <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         Become a Member
                     </a>
-                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto">
-                        Explore Events
-                    </a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto">Explore Events</a>
                 </div>
 
                 <div class="animate-on-scroll delay-200">
@@ -334,9 +291,7 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Upcoming Events</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
-                
                 <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
-                    <!-- Events will be injected here statically -->
                     <div class="w-full text-center py-12"></div>
                 </div>
             </div>
@@ -359,21 +314,16 @@
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3>
                         </div>
                     </div>
-                    <!-- Navigation Buttons -->
                     <button onclick="scrollGallery('gallery-saraswati', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg>
                     </button>
                     <button onclick="scrollGallery('gallery-saraswati', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
-                    <!-- Horizontal Scroll Container -->
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <!-- Updated YouTube Card Structure (Replacing direct iframe) -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
                             <div class="aspect-video w-full h-full relative bg-black/50 overflow-hidden">
-                                <!-- Standard YouTube Thumbnail URL -->
-                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="Saraswati Puja" loading="lazy" onerror="this.src='https://placehold.co/640x360/black/white?text=Video+Unavailable'">
-                                <!-- Play Button Overlay -->
+                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center">
                                     <div class="play-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/60 shadow-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" class="ml-1"><path d="M8 5v14l11-7z"/></svg>
@@ -381,31 +331,13 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Video 2: Saraswati Idol -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-gray-100 relative video-wrapper">
-                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay">
-                                <div class="video-loader"></div>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">
-                                Media Unavailable
-                            </div>
-                            <video class="w-full h-full object-cover" controls playsinline preload="metadata">
-                                <source src="Saraswati_Puja_2025/2.mp4" type="video/mp4">
-                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Saraswati_Puja_2025/2.mp4" type="video/mp4"></video>
                         </div>
-                        <!-- Image 2 -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
-                            <img src="Saraswati_Puja_2025/13.jpg" alt="Prayer" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Image 3 -->
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
-                            <img src="Saraswati_Puja_2025/14.jpg" alt="Prasad" class="w-full h-full object-cover">
-                        </div>
-                         <!-- Image 4 -->
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100">
-                            <img src="Saraswati_Puja_2025/3.jpg" alt="Cultural" class="w-full h-full object-cover">
-                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/13.jpg" alt="Prayer" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/14.jpg" alt="Prasad" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/3.jpg" alt="Cultural" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
@@ -417,12 +349,11 @@
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3>
                         </div>
                     </div>
-                    <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-kali', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-kali', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-kali', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-red-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-red-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">Media Unavailable</div>
                             <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" alt="Aarti" class="w-full h-full object-cover"></div>
@@ -439,12 +370,11 @@
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3>
                         </div>
                     </div>
-                    <button onclick="scrollGallery('gallery-holi', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-holi', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-holi', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-holi', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-pink-50 text-pink-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-pink-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">Media Unavailable</div>
                             <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/11.jpg" alt="Group" class="w-full h-full object-cover"></div>
@@ -454,62 +384,79 @@
                 </div>
 
                 <!-- 4. Monthly Prayer -->
-                <div class="animate-on-scroll delay-300 relative group/section">
+                <div class="mb-12 animate-on-scroll delay-300 relative group/section">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
                             <div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div>
                             <h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3>
                         </div>
                     </div>
-                    <button onclick="scrollGallery('gallery-prayer', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 hidden md:block border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
-                    <button onclick="scrollGallery('gallery-prayer', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 hidden md:block border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-prayer', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-prayer', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-yellow-50 text-yellow-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-yellow-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">Media Unavailable</div>
                             <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                             <div class="absolute inset-0 flex items-center justify-center z-20 error-overlay hidden bg-gray-900 text-white text-xs text-center p-2">Media Unavailable</div>
                             <video class="w-full h-full object-cover" controls playsinline preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100"><img src="Prayer/4.jpg" alt="Discussion" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
+
+                <!-- 5. Shiv Ratri -->
+                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div>
+                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3>
+                        </div>
+                    </div>
+                    <button onclick="scrollGallery('gallery-shivratri', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-purple-50 text-purple-700 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-purple-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-shivratri', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-purple-50 text-purple-700 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-purple-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                    <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-gray-100 relative video-wrapper">
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Shiv_Ratri/1.mp4" type="video/mp4"></video>
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" alt="Pooja" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" alt="Devotion" class="w-full h-full object-cover"></div>
+                    </div>
+                </div>
+
+                <!-- 6. Bhai Phonta -->
+                <div class="animate-on-scroll delay-200 relative group/section">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div>
+                            <h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phonta</h3>
+                        </div>
+                    </div>
+                    <button onclick="scrollGallery('gallery-bhaiphonta', 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-teal-50 text-teal-600 transition-all opacity-0 group-hover/section:opacity-100 -ml-4 md:-ml-6 border border-teal-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button onclick="scrollGallery('gallery-bhaiphonta', 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-lg hover:bg-teal-50 text-teal-600 transition-all opacity-0 group-hover/section:opacity-100 -mr-4 md:-mr-6 border border-teal-100"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m9 18 6-6-6-6"/></svg></button>
+                    <div id="gallery-bhaiphonta" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 bg-gray-100 relative video-wrapper">
+                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
+                            <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Bhai_Phonta/1.mp4" type="video/mp4"></video>
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/1.jpg" alt="Ritual" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/2.jpg" alt="Celebration" class="w-full h-full object-cover"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Blog / News Section -->
+        <!-- Blog Section -->
         <section id="blogs" class="py-16 bg-white/90 backdrop-blur">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Latest Updates</h2>
-                    <p class="text-gray-500 mt-2 text-lg">Stories and announcements from our community.</p>
                 </div>
                 <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                    <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('#', '_blank')">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=New+Committee" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 1">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">New Executive Committee 2025-26</h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">We are proud to announce the new panel of leaders who will guide SVS for the upcoming academic year.</p>
-                    </article>
-                    <article class="card group cursor-pointer animate-on-scroll delay-100 hover:border-red-300 h-full flex flex-col items-center text-center">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Vasant+Panchami" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 2">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">Significance of Saraswati Puja</h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">Exploring the spiritual symbolism behind the white saree, the Veena, and the Swan associated with Devi Saraswati.</p>
-                    </article>
-                    <article class="card group cursor-pointer animate-on-scroll delay-300 hover:border-red-300 h-full flex flex-col items-center text-center">
-                        <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
-                            <img src="https://placehold.co/400x200/f3f4f6/9ca3af?text=Alumni+Night" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Blog 3">
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2">Alumni Reunion Night</h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">A nostalgic evening where past graduates returned to campus to share their experiences and guide juniors.</p>
-                    </article>
+                    <!-- Dynamic posts injected here -->
                 </div>
             </div>
         </section>
@@ -522,15 +469,12 @@
                         <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
                             Building a Community of <br><span class="text-red-700">Unity, Culture & Wisdom</span>
                         </h2>
-                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
-                            UIU Sanatani Vidyarthi Samsad (SVS) isn't just a club; it's a family. We provide a platform for students to stay connected with their roots while excelling in their modern academic pursuits.
-                        </p>
                         <div class="grid grid-cols-2 gap-6 max-w-sm mx-auto lg:mx-0">
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center">
                                 <span class="block text-4xl font-bold text-red-800 mb-1">250+</span>
-                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Active Members</span>
+                                <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Members</span>
                             </div>
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center hover:shadow-md transition">
+                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-200 text-center">
                                 <span class="block text-4xl font-bold text-red-800 mb-1">7+</span>
                                 <span class="text-xs text-gray-500 uppercase font-bold tracking-wide">Annual Events</span>
                             </div>
@@ -539,32 +483,20 @@
                     <div class="lg:w-1/2 grid gap-6 grid-cols-2 animate-on-scroll delay-200">
                         <div class="space-y-6 mt-12 lg:mt-16">
                              <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                                </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Study Circles</h4>
                                 <p class="text-sm text-gray-500">Weekly Gita & moral discussions.</p>
                             </div>
-                            <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white transform hover:-translate-y-1 transition duration-300">
-                                <div class="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-white"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.5 1.02-4.5 2C10 4.02 8.24 3 6.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                </div>
+                            <div class="p-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl shadow-lg text-white">
                                 <h4 class="font-bold text-lg mb-1">Charity</h4>
                                 <p class="text-sm opacity-90">Serving humanity through drives.</p>
                             </div>
                         </div>
                         <div class="space-y-6">
                             <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Cultural Arts</h4>
                                 <p class="text-sm text-gray-500">Dance, music & drama.</p>
                             </div>
                              <div class="p-6 bg-white rounded-3xl shadow-sm border border-red-100 about-card">
-                                <div class="bg-orange-50 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-600 about-icon transition-transform"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                </div>
                                 <h4 class="font-bold text-lg mb-1 text-red-900">Networking</h4>
                                 <p class="text-sm text-gray-500">Strong alumni connections.</p>
                             </div>
@@ -574,62 +506,36 @@
             </div>
         </section>
 
-        <!-- YouTube Section (Updated Theme) -->
+        <!-- YouTube Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
-            <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-            
             <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-12 animate-on-scroll">
-                    <!-- Removed tag here -->
                     <h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2>
-                    <p class="text-red-100 mt-2 text-lg max-w-2xl mx-auto">Experience our spiritual discourses, cultural performances, and event highlights.</p>
                 </div>
-                
                 <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                     <div class="col-span-full flex justify-center py-12">
-                        <div class="video-loader border-t-yellow-500"></div>
-                     </div>
-                </div>
-                
-                <div class="text-center mt-12 animate-on-scroll delay-200">
-                     <a href="https://www.youtube.com/channel/UCM9lmJNjNUAGrLvKoHF9OWQ" target="_blank" class="inline-flex items-center px-8 py-3 rounded-full bg-red-700 hover:bg-red-600 text-white font-bold transition-all shadow-lg hover:shadow-red-900/50 transform hover:-translate-y-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                        Subscribe to Channel
-                     </a>
+                     <div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div>
                 </div>
             </div>
         </section>
 
         <!-- Join SVS Section -->
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-            <div class="absolute inset-0 bg-red-900/30 mix-blend-overlay"></div>
-
             <div class="container mx-auto px-6 relative z-10">
                 <div class="flex flex-col lg:flex-row gap-16 items-center">
                     <div class="lg:w-1/2 animate-on-scroll text-center lg:text-left">
-                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">Membership</span>
                         <h2 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 font-serif text-white">Become part of the Legacy</h2>
-                        <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">
-                            Join the SVS family today. Fill out the form to register as a general member. Applications are reviewed weekly by the committee.
-                        </p>
-                        <ul class="space-y-4 inline-block text-left">
-                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Access to all exclusive events</li>
-                            <li class="flex items-center text-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 w-5 h-5 mr-3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Networking with successful alumni</li>
-                        </ul>
+                        <p class="text-gray-300 text-lg mb-8 max-w-xl mx-auto lg:mx-0">Join the SVS family today. Applications are reviewed weekly by the committee.</p>
                     </div>
-                    
                     <div class="lg:w-1/2 w-full animate-on-scroll delay-200">
-                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 md:p-3 animate-on-scroll delay-200 border-4 border-yellow-500/30">
+                        <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-2 border-4 border-yellow-500/30">
                             <div class="responsive-iframe-container bg-white">
-                                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+                                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <!-- Footer -->
@@ -641,685 +547,152 @@
                         <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
                         <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
-                        United International University<br>
-                        United City, Madani Avenue, Dhaka-1212
-                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br>United City, Madani Avenue, Dhaka-1212</p>
                 </div>
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="#home" class="hover:text-red-600">Home</a></li>
                         <li><a href="#events" class="hover:text-red-600">Events</a></li>
-                        <li><a href="#about" class="hover:text-red-600">About Us</a></li>
+                        <li><a href="#gallery" class="hover:text-red-600">Gallery</a></li>
                         <li><a href="#join" class="hover:text-red-600">Join Now</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
-                        <li><a href="https://wa.me/+8801747596847" class="flex items-center hover:text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
-                        <li><a href="mailto:uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
+                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600">Facebook</a></li>
+                        <li><a href="mailto:uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600">Email Us</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-red-100 pt-8 pb-10 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="border-t border-red-100 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between">
                 <span>&copy; 2025 UIUSVS. All rights reserved.</span>
-                <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700 hover:text-red-900 no-underline transition-colors">Sourav Saha</a></span>
+                <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700">Sourav Saha</a></span>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase SDK Imports (Module) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, onSnapshot, collection, query, getDocs, limit, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- Global Variables ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        let app, db, auth;
-        let userId = null;
-        let isAuthReady = false;
-
-        const EVENTS_COLLECTION_PATH = `artifacts/${appId}/public/data/uiu-svs-events`;
-        const APPLICATIONS_COLLECTION_PATH = `artifacts/${appId}/public/data/uiu-svs-applications`;
-
-        // --- Core Firebase Initialization ---
-        async function initializeFirebase() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (user) => {
-                    isAuthReady = true;
-                    if (user) {
-                        userId = user.uid;
-                        // Removed debug text update
-                        console.log("Auth Ready");
-                    } else {
-                        userId = crypto.randomUUID(); 
-                    }
-                });
-
-            } catch (error) {
-                console.error("Firebase Auth failed:", error);
-            }
-        }
-
-        // --- Dynamic Content Functions ---
-        function renderEventCard(event) {
-            const dateObj = new Date(event.date);
-            const now = new Date();
-            // Normalize to midnight for comparison
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const eventDate = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-            
-            let status = 'upcoming';
-            if (eventDate < today) status = 'completed';
-            else if (eventDate.getTime() === today.getTime()) status = 'today';
-            
-            // Formatting
-            const day = dateObj.toLocaleDateString('en-US', { day: 'numeric' });
-            const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
-            const year = dateObj.toLocaleDateString('en-US', { year: 'numeric' });
-            
-            // Status Badge & Styles
-            let badge = '';
-            let cardStyle = 'border-l-4 border-red-600 bg-white hover:shadow-xl hover:-translate-y-1';
-            let titleColor = 'text-gray-900';
-            let dateColor = 'text-red-700';
-            
-            if (status === 'completed') {
-                badge = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-500 text-xs font-bold uppercase tracking-wide">Completed</span>';
-                cardStyle = 'border-l-4 border-gray-300 bg-gray-50 grayscale opacity-80';
-                titleColor = 'text-gray-600';
-                dateColor = 'text-gray-500';
-            } else if (status === 'today') {
-                badge = '<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide animate-pulse">Happening Today</span>';
-                cardStyle = 'border-l-4 border-green-500 bg-white shadow-lg ring-2 ring-green-100';
-            } else {
-                badge = '<span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide">Upcoming</span>';
-            }
-
-            // Updated layout with small image on right
-            return `
-                <div class="card relative ${cardStyle} transition-all duration-300 w-full md:w-[48%] p-6 flex items-center justify-between min-h-[180px] animate-on-scroll">
-                    <!-- Left Content -->
-                    <div class="flex flex-col justify-between h-full pr-4">
-                        <div class="mb-4">
-                            ${badge}
-                            <div class="mt-2">
-                                <span class="text-4xl font-bold ${dateColor} font-serif leading-none">${day}</span>
-                                <span class="text-sm font-medium text-red-900 uppercase tracking-widest ml-1">${month}</span>
-                                <span class="text-xs text-gray-400 font-medium block mt-1">${year}</span>
-                            </div>
-                        </div>
-                        <h3 class="font-bold text-xl ${titleColor} font-serif leading-tight">${event.name}</h3>
-                    </div>
-                    
-                    <!-- Right Image -->
-                    <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100">
-                        <img src="${event.image_url}" alt="${event.name}" class="w-full h-full object-cover">
-                    </div>
-                </div>
-            `;
-        }
-        
-        // --- Static Events Logic (As requested) ---
-        const upcomingEventsData = [
-            {
-                name: "Saraswati Puja 2026",
-                date: "2026-01-23",
-                location: "UIU Campus", // Data kept but not rendered
-                details: "Join us in seeking the blessings of Devi Saraswati.",
-                image_url: "saraswati_puja.png"
-            },
-            {
-                name: "Holi Festival 2026",
-                date: "2026-03-04",
-                location: "UIU Open Ground",
-                details: "Celebrate the vibrant festival of colors.",
-                image_url: "holi.png"
-            },
-             {
-                name: "Kali Puja 2026",
-                date: "2026-11-08",
-                location: "UIU Temple Area",
-                details: "Celebrating strength and victory.",
-                image_url: "kali_puja.png"
-            }
-        ];
-
-        function renderStaticUpcomingEvents() {
-            const eventsListEl = document.getElementById('upcoming-events-list');
-            
-            // Filter and Sort: Get top 2 events from today onwards
-            // Note: If you want to test the "Completed" sign, change one of the dates in upcomingEventsData to a past date (e.g., "2024-01-01")
-            const now = new Date();
-            const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-            const futureEvents = upcomingEventsData
-                .filter(e => new Date(e.date) >= todayMidnight) // Show events from today + future
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, 2); 
-
-            if(eventsListEl) {
-                eventsListEl.innerHTML = '';
-                futureEvents.forEach(event => {
-                    eventsListEl.insertAdjacentHTML('beforeend', renderEventCard(event));
-                });
-                
-                if (futureEvents.length === 0) {
-                     eventsListEl.innerHTML = '<div class="w-full text-center p-8 text-gray-500">No upcoming events scheduled at the moment.</div>';
-                }
-            }
-             // lucide.createIcons(); // Removed because we are using inline SVGs now
-             setupIntersectionObserver();
-        }
-        
-        // --- Static Fallback Data for YouTube ---
-        const staticYouTubeVideos = [
-            {
-                id: 'yCCJ9ojTZfk',
-                title: 'Saraswati Puja 2025 | UIU Sanatani Vidyarthi Samsad',
-                date: 'Jan 25, 2025',
-                thumbnail: 'https://i.ytimg.com/vi/yCCJ9ojTZfk/hqdefault.jpg'
-            },
-            {
-                id: '5_XDiDQZZ7w', // Placeholder ID - Replace with real if found
-                title: 'Grand Holi Celebration at UIU Campus',
-                date: 'Mar 12, 2024',
-                thumbnail: 'https://img.youtube.com/vi/5_XDiDQZZ7w/hqdefault.jpg' 
-            },
-            {
-                id: 'P8j7J6J5xK0', // Placeholder ID
-                title: 'Weekly Gita Path & Spiritual Discussion',
-                date: 'Nov 10, 2024',
-                thumbnail: 'https://img.youtube.com/vi/P8j7J6J5xK0/hqdefault.jpg'
-            },
-            {
-                id: 'M_J6J5xK0_1', // Placeholder ID
-                title: 'Bijaya Dashami Procession Highlights',
-                date: 'Oct 15, 2024',
-                thumbnail: 'https://placehold.co/640x360/800000/FFF?text=Bijaya+Dashami'
-            },
-             {
-                id: 'yCCJ9ojTZfk', // Repeating for demo
-                title: 'Distribution of Winter Clothes 2024',
-                date: 'Dec 20, 2024',
-                thumbnail: 'https://placehold.co/640x360/orange/white?text=Winter+Drive'
-            },
-            {
-                id: '5_XDiDQZZ7w', // Repeating for demo
-                title: 'Freshers Reception & Cultural Night',
-                date: 'Feb 10, 2025',
-                thumbnail: 'https://placehold.co/640x360/red/white?text=Cultural+Night'
-            },
-             {
-                id: 'P8j7J6J5xK0', // Repeating for demo
-                title: 'Krishna Janmashtami Celebration',
-                date: 'Aug 26, 2024',
-                thumbnail: 'https://placehold.co/640x360/yellow/black?text=Janmashtami'
-            },
-             {
-                id: 'M_J6J5xK0_1', // Repeating for demo
-                title: 'Annual General Meeting 2024',
-                date: 'July 05, 2024',
-                thumbnail: 'https://placehold.co/640x360/gray/white?text=AGM+2024'
-            }
-        ];
-
-        // --- Helper Function to Render Grid ---
-        function renderVideoGrid(videos) {
-            const container = document.getElementById('youtube-video-grid');
-            if(!container) return;
-            
-            container.innerHTML = ''; // Clear loader
-            
-            videos.forEach(item => {
-                 // Determine thumbnail source
-                 let thumbnail = item.thumbnail;
-                 // If using RSS item directly, item.thumbnail might be undefined or we check youtube thumb
-                 if (!thumbnail && item.id) {
-                     thumbnail = `https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`;
-                 }
-
-                 // Handle date format
-                 let pubDate = item.date;
-                 // If it's a date object from RSS
-                 if (item.pubDate) {
-                     pubDate = new Date(item.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                 }
-
-                 const card = `
-                    <div class="video-card-group bg-white/5 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 animate-on-scroll hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-900/20 transition-all duration-300 group flex flex-col h-full cursor-pointer" onclick="loadVideo(this, '${item.id}')">
-                        <div class="aspect-video w-full relative bg-black/50 overflow-hidden group">
-                            <!-- Thumbnail Image -->
-                            <img src="${thumbnail}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/640x360/black/white?text=Video+Thumbnail'">
-                            
-                            <!-- Play Button Overlay -->
-                            <div class="play-overlay absolute inset-0 flex items-center justify-center">
-                                <div class="play-icon w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/60 shadow-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" class="ml-1"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
-                            </div>
-                            
-                            <!-- Video Duration Badge -->
-                            <div class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                                WATCH
-                            </div>
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col">
-                            <h3 class="font-bold text-sm md:text-base text-gray-100 line-clamp-2 leading-snug group-hover:text-red-300 transition-colors mb-2">
-                                ${item.title}
-                            </h3>
-                            <div class="text-xs text-gray-400 mt-auto flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 text-red-500"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                                ${pubDate}
-                            </div>
-                        </div>
-                    </div>
-                 `;
-                 container.insertAdjacentHTML('beforeend', card);
-            });
-            
-            // Re-trigger animations for new elements
-            setupIntersectionObserver(); 
-        }
-
-        // --- YouTube Feed Fetcher ---
-        async function fetchYouTubeVideos() {
-            const channelId = 'UCM9lmJNjNUAGrLvKoHF9OWQ';
-            // Use rss2json to convert YouTube RSS XML to JSON
-            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-
-                if (data.status === 'ok' && data.items.length > 0) {
-                     // Normalize data to match static structure
-                     const videos = data.items.slice(0, 8).map(item => {
-                         let videoId = '';
-                         const urlParams = new URLSearchParams(new URL(item.link).search);
-                         videoId = urlParams.get('v');
-                         if (!videoId) {
-                            const segments = item.link.split('/');
-                            videoId = segments[segments.length - 1];
-                         }
-                         return {
-                             id: videoId,
-                             title: item.title,
-                             date: item.pubDate, // Will be formatted in render
-                             thumbnail: item.thumbnail
-                         };
-                     });
-                     renderVideoGrid(videos);
-                } else {
-                    // Fallback to static if no items found
-                    console.log('No items found in feed, using static fallback.');
-                    renderVideoGrid(staticYouTubeVideos);
-                }
-            } catch (error) {
-                console.warn('Error fetching YouTube videos, switching to static fallback:', error);
-                // Fallback content in case API fails
-                renderVideoGrid(staticYouTubeVideos);
-            }
-        }
-        
-        // Expose loadVideo to window for the onclick handler
-        window.loadVideo = function(container, videoId) {
-            const iframe = document.createElement('iframe');
-            iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
-            iframe.setAttribute('title', 'YouTube video player');
-            iframe.setAttribute('frameborder', '0');
-            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-            iframe.setAttribute('allowfullscreen', '');
-            iframe.className = 'w-full h-full absolute top-0 left-0 animate-fade-in';
-            
-            // Find the image container (first child div)
-            const mediaContainer = container.querySelector('.aspect-video');
-            mediaContainer.innerHTML = ''; // Clear image and play button
-            mediaContainer.appendChild(iframe);
-            
-            // Remove click handler to prevent reload
-            container.onclick = null;
-            container.classList.remove('cursor-pointer');
-        }
-
-        // --- Intersection Observer ---
-        let observer;
-        function setupIntersectionObserver() {
-            const elements = document.querySelectorAll('.animate-on-scroll:not(.is-visible)');
-            if (elements.length === 0) return;
-            observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target); 
-                    }
-                });
-            }, { root: null, rootMargin: '0px', threshold: 0.1 });
-            elements.forEach(el => observer.observe(el));
-        }
-
-        // --- Quotes Logic ---
+        // Initial Quotes
         const spiritualQuotes = [
             { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
-            { text: "জীবের প্রেম করে যেই জন, সেই জন সেবিছে ঈশ্বর।", author: "স্বামী বিবেকানন্দ" },
-            { text: "সত্যের জন্য সব কিছু ত্যাগ করা যায়, কিন্তু সব কিছুর জন্য সত্যকে ত্যাগ করা যায় না।", author: "স্বামী বিবেকানন্দ" },
-            { text: "বীরের মতো সাহস অবলম্বন করো। সদম্ভে বলো—আমি ভারতবাসী, ভারতবাসী আমার ভাই।", author: "স্বামী বিবেকানন্দ" },
-            { text: "মনকে সর্বদা উচ্চ চিন্তায় এবং উচ্চ আদর্শে পূর্ণ রাখো।", author: "স্বামী বিবেকানন্দ" },
-            { text: "নিজের উপর বিশ্বাস রাখো, তবেই তুমি জগত জয় করতে পারবে।", author: "স্বামী বিবেকানন্দ" },
-            { text: "দুর্বলতাই পাপ, দুর্বলতাই মৃত্যু।", author: "স্বামী বিবেকানন্দ" },
-            { text: "শক্তি ও সাহসই জীবন, দুর্বলতাই মৃত্যু।", author: "স্বামী বিবেকানন্দ" },
-            { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" },
-            { text: "চরিত্রই মানুষের আসল সম্পদ।", author: "স্বামী বিবেকানন্দ" },
             { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "টাকা মাটি, মাটি টাকা।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "শিবজ্ঞানে জীবসেবা।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "ভগবান ভক্তের দাস।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "আন্তরিক হলে তিনি শুনবেনই শুনবেন।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-            { text: "আমি মা, সৎ-এরও মা, অসৎ-এরও মা।", author: "মা সারদা দেবী" },
-            { text: "ভুল তো মানুষেরই হয়। মানুষকে কি ফেলনা ভাবা উচিত?", author: "মা সারদা দেবী" },
             { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" },
-            { text: "কর্মণ্যেবাধিকারস্তে মা ফলেষু কদাচন।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "যদা যদা হি ধর্মস্য গ্লানির্ভবতি ভারত। অভ্যুত্থানমধর্মস্য তদাত্মানং সৃজাম্যহম্।।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "নয়নং ছিন্দন্তি শস্ত্রাণি ন এনং দহতি পাবকঃ। ন চ এনং ক্লেদয়ন্তি আপঃ ন শোষয়তি মারুতঃ।।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "উদ্ধরেদাত্মনাত্মানং নাত্মানমবসাদয়েৎ।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "শ্রদ্ধাবান্ লভতে জ্ঞানং তৎপরঃ সংযতেন্দ্রিয়ঃ।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "বাসাংসি জীর্ণানি যথা বিহায় নবানি গৃহ্ণাতি নরোঽপরাণি।", author: "শ্রীমদ্ভগবদ্গীতা" }
+            { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
         function displayRandomQuote() {
             const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
             const quote = spiritualQuotes[randomIndex];
-            // Updated to target the top bar elements
             document.getElementById('daily-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
-        }
-
-        // --- Substack Feed Fetcher (Client-side via RSS-to-JSON) ---
-        async function fetchSubstackPosts() {
-            const blogGrid = document.getElementById('blog-grid');
-            // Use the specific feed URL provided
-            const rssUrl = 'https://uiusvs.substack.com/feed';
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-            
-            // No loading state needed, fallback is already there
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-
-                if (data.status === 'ok' && data.items.length > 0) {
-                    blogGrid.innerHTML = ''; // Clear fallback content ONLY on success
-                    
-                    data.items.slice(0, 3).forEach(item => {
-                        // Better image extraction for Substack
-                        let imgUrl = 'https://placehold.co/400x200/f3f4f6/9ca3af?text=SVS+Blog';
-                        
-                        // 1. Check enclosure (standard RSS media)
-                        if (item.enclosure && item.enclosure.link) {
-                            imgUrl = item.enclosure.link;
-                        } 
-                        // 2. Check thumbnail property
-                        else if (item.thumbnail && item.thumbnail.length > 0) {
-                            imgUrl = item.thumbnail;
-                        } 
-                        // 3. Regex search in content (Substack specific)
-                        else {
-                            const imgMatch = (item.content || item.description).match(/<img[^>]+src="([^">]+)"/);
-                            if (imgMatch) {
-                                imgUrl = imgMatch[1];
-                            }
-                        }
-
-                        // Clean up description
-                        // Substack descriptions can be short, or we use content snippet
-                        let cleanDesc = (item.description || item.content).replace(/<[^>]*>?/gm, '');
-                        cleanDesc = cleanDesc.substring(0, 100) + '...';
-                        
-                        const pubDate = new Date(item.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-                        const articleHTML = `
-                            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${item.link}', '_blank')">
-                                <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
-                                    <img src="${imgUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${item.title}">
-                                </div>
-                                <div class="text-xs text-gray-500 mb-2">${pubDate}</div>
-                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">
-                                    ${item.title}
-                                </h3>
-                                <p class="text-gray-600 text-sm line-clamp-2">
-                                    ${cleanDesc}
-                                </p>
-                            </article>
-                        `;
-                        blogGrid.insertAdjacentHTML('beforeend', articleHTML);
-                    });
-                    
-                    // Re-trigger scroll animations for new elements
-                    setupIntersectionObserver();
-                } 
-                // If data.status is not 'ok', we do nothing, so fallback remains visible
-            } catch (error) {
-                console.log('Using fallback blog content due to:', error); // Log but don't error out
-                // Do nothing, fallback is already there
-            }
-        }
-
-        function renderFallbackBlog(container) {
-            // Already handled by initial HTML content
-            // Only needed if we cleared content before fetch (which we are avoiding now)
         }
 
         class AutoScroller {
             constructor(elementId, direction = 'right', speed = 0.5) {
                 this.container = document.getElementById(elementId);
+                if(!this.container) return;
                 this.animationId = null;
                 this.isPaused = false;
                 this.scrollPos = (direction === 'left') ? this.container.scrollWidth - this.container.clientWidth : 0; 
                 this.speed = speed; 
-                this.direction = direction; // 'right' (L->R) or 'left' (R->L)
-                
-                // Set initial scroll if direction is left (start at end)
-                 if (this.direction === 'left') {
-                    this.container.scrollLeft = this.scrollPos;
-                } else {
-                    this.scrollPos = this.container.scrollLeft;
-                }
-
+                this.direction = direction;
                 this.init();
             }
-
             init() {
                 this.startScrolling();
-
                 ['mousedown', 'touchstart', 'click'].forEach(evt => {
                     this.container.addEventListener(evt, () => this.pause());
                 });
-
-                const videos = this.container.querySelectorAll('video');
-                videos.forEach(v => {
-                    v.addEventListener('play', () => {
-                       this.pause(); 
-                    });
-                });
             }
-
             startScrolling() {
                 if (this.isPaused) return;
-                
-                // Sync current position in case of manual scroll disruption before auto start
-                // this.scrollPos = this.container.scrollLeft; 
-
                 const step = () => {
                     if (this.isPaused) return; 
-
                     if (this.direction === 'right') {
-                        // Standard Left -> Right
                         this.scrollPos += this.speed;
-                        if (this.scrollPos >= this.container.scrollWidth - this.container.clientWidth) {
-                             this.scrollPos = 0; // Reset to start
-                        }
+                        if (this.scrollPos >= this.container.scrollWidth - this.container.clientWidth) this.scrollPos = 0;
                     } else {
-                        // Reverse Right -> Left
                         this.scrollPos -= this.speed;
-                        if (this.scrollPos <= 0) {
-                            this.scrollPos = this.container.scrollWidth - this.container.clientWidth; // Reset to end
-                        }
+                        if (this.scrollPos <= 0) this.scrollPos = this.container.scrollWidth - this.container.clientWidth;
                     }
-                    
                     this.container.scrollLeft = this.scrollPos;
                     this.animationId = requestAnimationFrame(step);
                 };
                 this.animationId = requestAnimationFrame(step);
             }
-
-            pause() {
-                this.isPaused = true;
-                cancelAnimationFrame(this.animationId);
-                // Permanently paused on interaction
-            }
+            pause() { this.isPaused = true; cancelAnimationFrame(this.animationId); }
         }
 
-        // --- Init ---
+        window.scrollGallery = (id, direction) => {
+            const container = document.getElementById(id);
+            const scrollAmount = direction === 'left' ? -320 : 320;
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        };
+
+        window.loadVideo = function(container, videoId) {
+            const iframe = document.createElement('iframe');
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
+            iframe.className = 'w-full h-full absolute top-0 left-0';
+            const mediaContainer = container.querySelector('.aspect-video');
+            mediaContainer.innerHTML = '';
+            mediaContainer.appendChild(iframe);
+            container.onclick = null;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Hide page preloader when loaded
             window.onload = () => {
                 const preloader = document.getElementById('page-preloader');
                 if (preloader) {
                     preloader.style.opacity = '0';
-                    setTimeout(() => {
-                        preloader.style.display = 'none';
-                    }, 500);
+                    setTimeout(() => preloader.style.display = 'none', 500);
                 }
             };
 
-            // lucide.createIcons(); // Removed because we are using inline SVGs now
-            initializeFirebase();
-            setupIntersectionObserver();
-            displayRandomQuote(); // Show quote on load
-            renderStaticUpcomingEvents(); // Render specific events immediately
-            fetchSubstackPosts(); // Fetch dynamic blog posts
-            fetchYouTubeVideos(); // NEW: Fetch YouTube Videos
-
-            // Initialize auto-scrollers with alternating directions
-            // Saraswati (Left -> Right)
+            displayRandomQuote();
             new AutoScroller('gallery-saraswati', 'right');
-            // Kali (Right -> Left)
             new AutoScroller('gallery-kali', 'left');
-            // Holi (Left -> Right)
             new AutoScroller('gallery-holi', 'right');
-            // Prayer (Right -> Left)
             new AutoScroller('gallery-prayer', 'left');
-            
-            // Blog Auto Scroller Removed (Standard Grid Layout)
-
+            new AutoScroller('gallery-shivratri', 'right');
+            new AutoScroller('gallery-bhaiphonta', 'left');
 
             const menuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-            mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
-            // --- Scroll Logic for Quote Bar ---
             window.addEventListener('scroll', () => {
                 const quoteBar = document.querySelector('.bottom-quote-bar');
                 const scrollButton = document.getElementById('scroll-to-top');
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = (scrollTop / docHeight) * 100;
+                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
                 
-                // Quote Bar Logic (> 2%)
-                if (scrollPercent > 2) {
-                    quoteBar.classList.add('visible');
-                } else {
-                    quoteBar.classList.remove('visible');
-                }
+                if (scrollPercent > 2) quoteBar.classList.add('visible');
+                else quoteBar.classList.remove('visible');
 
-                // Scroll To Top Button Logic (> 25%)
-                if (scrollPercent > 25) {
-                    scrollButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
-                } else {
-                    scrollButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
-                }
+                if (scrollPercent > 25) scrollButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                else scrollButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
             });
 
-            // Scroll to Top Click Handler
             document.getElementById('scroll-to-top').addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // --- Disable Right Click & Save Protections ---
-            document.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                return false;
-            });
-
-            // Prevent standard keyboard shortcuts for saving/inspecting (optional but good for "disable download")
-            document.addEventListener('keydown', (e) => {
-                // Prevent Ctrl+S, Ctrl+U, Ctrl+Shift+I (DevTools) - basic deterrents
-                if ((e.ctrlKey && (e.key === 's' || e.key === 'u')) || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'i')) {
-                    e.preventDefault();
-                }
-            });
-            
-            // Disable drag and drop for images specifically via JS as fallback
-            document.querySelectorAll('img, video').forEach(el => {
-                el.addEventListener('dragstart', (e) => e.preventDefault());
-            });
-
-            // --- Scroll Gallery Function ---
-            window.scrollGallery = (id, direction) => {
-                const container = document.getElementById(id);
-                const scrollAmount = direction === 'left' ? -320 : 320; // Approx card width + gap
-                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            };
-
-            // --- Single Video Play Logic ---
-            const videos = document.querySelectorAll('video');
-            videos.forEach(video => {
-                // Handle loading state UI for each video
-                video.addEventListener('waiting', () => {
-                      const wrapper = video.closest('.video-wrapper');
-                      if(wrapper) wrapper.querySelector('.loading-overlay').style.display = 'flex';
+            // Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
                 });
-                video.addEventListener('canplay', () => {
-                      const wrapper = video.closest('.video-wrapper');
-                      if(wrapper) wrapper.querySelector('.loading-overlay').style.display = 'none';
-                });
-                video.addEventListener('error', () => {
-                      const wrapper = video.closest('.video-wrapper');
-                      if(wrapper) {
-                          wrapper.querySelector('.loading-overlay').style.display = 'none';
-                          wrapper.querySelector('.error-overlay').classList.remove('hidden');
-                      }
-                });
-
-                video.addEventListener('play', () => {
-                    videos.forEach(otherVideo => {
-                        if (otherVideo !== video) {
-                            otherVideo.pause();
-                        }
-                    });
-                });
-            });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
         });
     </script>
 </body>
