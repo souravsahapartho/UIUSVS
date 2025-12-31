@@ -362,7 +362,7 @@
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/11.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/17.jpg" class="w-full h-full object-cover" loading="lazy"></div>
@@ -376,11 +376,11 @@
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Prayer/2.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Prayer/1.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100"><img src="Prayer/4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                     </div>
@@ -503,7 +503,7 @@
                         <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
                         <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br><br>United City, Madani Avenue, Dhaka-1212</p>
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br>United City, Madani Avenue, Dhaka-1212</p>
                 </div>
                 <div>
                     <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Quick Links</h4>
@@ -727,12 +727,10 @@
         }
 
         function initVideoSyncAndLoading() {
-            // This now includes both original and cloned videos
             document.querySelectorAll('video').forEach(v => {
                 const wrapper = v.closest('.video-wrapper');
                 const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
 
-                // Set preload to metadata for scrollers to prevent massive parallel downloads
                 v.preload = "metadata";
 
                 v.addEventListener('play', function() {
@@ -748,7 +746,6 @@
                 v.addEventListener('waiting', showOverlay);
                 v.addEventListener('loadstart', showOverlay);
 
-                // Immediate check for already loaded media
                 if (v.readyState >= 3) hideOverlay();
             });
         }
@@ -784,13 +781,11 @@
             fetchYouTube();
             fetchBlogs();
             
-            // 1. Initialize scrollers first so cloning happens
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
             galleryIds.forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
-            // 2. ONLY THEN initialize video sync so it finds clones too
             initVideoSyncAndLoading();
 
             document.getElementById('mobile-menu-button')?.addEventListener('click', () => document.getElementById('mobile-menu')?.classList.toggle('hidden'));
