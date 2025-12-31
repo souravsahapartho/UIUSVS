@@ -348,7 +348,7 @@
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover" loading="lazy"></div>
@@ -557,14 +557,11 @@
 
         /**
          * Helper to pause all currently playing media (videos and YouTube iframes)
-         * @param {HTMLElement} except - The element that is starting to play
          */
         function stopOtherMedia(except) {
-            // Pause all native HTML5 videos
             document.querySelectorAll('video').forEach(v => {
                 if (v !== except) v.pause();
             });
-            // Pause all YouTube iframes (requires enablejsapi=1 in the URL)
             document.querySelectorAll('iframe').forEach(f => {
                 if (f !== except) {
                     f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
@@ -573,11 +570,8 @@
         }
 
         window.loadVideo = (container, id) => {
-            // Pause any current media before loading the new YouTube video
             stopOtherMedia(null);
-            
             const videoId = id.includes('&') ? id.split('&')[0] : id;
-            // Append enablejsapi=1 to the URL so we can control it via postMessage later
             container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.onclick = null;
         };
@@ -736,11 +730,34 @@
         }
 
         // Initialize listeners for native videos to stop others when one starts
-        function initVideoSync() {
+        // Also handle the removal of the loading overlay
+        function initVideoSyncAndLoading() {
             document.querySelectorAll('video').forEach(v => {
+                const wrapper = v.closest('.video-wrapper');
+                const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
+
                 v.addEventListener('play', function() {
                     stopOtherMedia(this);
                 });
+
+                // Hide loader when video is ready to play
+                v.addEventListener('canplay', function() {
+                    if (overlay) overlay.style.display = 'none';
+                });
+
+                // Re-show loader if video starts buffering
+                v.addEventListener('waiting', function() {
+                    if (overlay) overlay.style.display = 'flex';
+                });
+
+                v.addEventListener('playing', function() {
+                    if (overlay) overlay.style.display = 'none';
+                });
+
+                // Fallback: If metadata is loaded and video isn't huge, it might already be ready
+                if (v.readyState >= 3) {
+                    if (overlay) overlay.style.display = 'none';
+                }
             });
         }
 
@@ -774,7 +791,7 @@
             renderEvents();
             fetchYouTube();
             fetchBlogs();
-            initVideoSync();
+            initVideoSyncAndLoading();
             
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
             galleryIds.forEach((id, i) => {
