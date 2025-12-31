@@ -170,19 +170,35 @@
         .play-overlay { background: rgba(0, 0, 0, 0.3); transition: background 0.3s; cursor: pointer; }
         .play-icon { transition: transform 0.3s; font-size: 2rem; color: white; }
         .video-card-group:hover .play-icon { transform: scale(1.2); }
+
+        /* Google Style Notification (Snackbar) */
+        #slow-internet-msg {
+            background-color: #323232;
+            color: #ffffff;
+            padding: 14px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateY(100px);
+            opacity: 0;
+        }
+        #slow-internet-msg.is-visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
 
     <!-- Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
-        <!-- Bell -->
         <svg class="puja-decoration w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
-        <!-- Lotus -->
         <svg class="puja-decoration w-32 h-32 top-32 right-12" viewBox="0 0 100 100"><path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" /><path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" /></svg>
-        <!-- Diya -->
         <svg class="puja-decoration w-28 h-28 bottom-32 left-12" viewBox="0 0 100 100"><path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/><path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/></svg>
-        <!-- Shankha -->
         <svg class="puja-decoration w-24 h-24 bottom-24 right-10" viewBox="0 0 100 100"><path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" /><path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" /></svg>
     </div>
 
@@ -192,9 +208,12 @@
         <div class="text-xl font-bold text-red-800 font-serif tracking-wider animate-pulse">UIU SVS</div>
     </div>
 
-    <!-- Slow Internet Notification (Small, Bottom-Right Toast) -->
-    <div id="slow-internet-msg" class="hidden fixed bottom-28 right-4 sm:right-6 z-[100] w-auto max-w-[220px] sm:max-w-xs bg-red-800 text-white px-4 py-2.5 rounded-xl shadow-2xl font-bold text-[10px] sm:text-xs border-l-4 border-yellow-500 animate-pulse">
-        Slow internet detected. Please enhance your connection and try again.
+    <!-- Google Style Notification (Hidden by default) -->
+    <div class="fixed bottom-24 right-4 sm:right-10 z-[100] flex justify-center w-auto pointer-events-none">
+        <div id="slow-internet-msg" class="pointer-events-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffb74d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="font-sans">Connection is slow. Content may take longer to load.</span>
+        </div>
     </div>
 
     <!-- Bottom Quote Bar -->
@@ -351,7 +370,6 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
                     <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <!-- Shivratri Video Card (First) -->
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Shivratri Video">
@@ -380,7 +398,7 @@
             </div>
         </section>
 
-        <!-- Advisor Panel Section -->
+        <!-- Advisor Panel Section (Hierarchical Tree) -->
         <section id="advisors" class="py-12 bg-white/80">
             <div class="container mx-auto px-6 max-w-4xl text-center">
                 <div class="mb-8 animate-on-scroll">
@@ -439,7 +457,7 @@
             </div>
         </section>
 
-        <!-- YouTube Highlights Section -->
+        <!-- YouTube Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
             <div class="container mx-auto px-6 relative z-10 text-center">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
@@ -510,7 +528,7 @@
             { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
-        let contentObserver = new IntersectionObserver((entries) => {
+        const contentObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
@@ -646,8 +664,8 @@
                 if (!isPageLoaded) {
                     hideLoader();
                     if(slowNetMsg) {
-                        slowNetMsg.classList.remove('hidden');
-                        setTimeout(() => { slowNetMsg.classList.add('hidden'); }, 6000);
+                        slowNetMsg.classList.add('is-visible');
+                        setTimeout(() => { slowNetMsg.classList.remove('is-visible'); }, 6000);
                     }
                 }
             }, 8000);
