@@ -184,6 +184,10 @@
         .play-icon { transition: transform 0.3s; font-size: 2rem; color: white; }
         .video-card-group:hover .play-icon { transform: scale(1.2); }
 
+        /* Success Animation Styles */
+        @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        
         /* Google Style Notification (Snackbar) */
         #slow-internet-msg {
             background-color: #323232;
@@ -207,6 +211,21 @@
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
+
+    <!-- Form Submission Success Overlay -->
+    <div id="form-success-overlay" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl relative overflow-hidden animate-scale-in">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full opacity-50"></div>
+            <div class="relative z-10">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2 font-serif">Jai Shree Krishna!</h3>
+                <p class="text-gray-600 mb-6">Thank you for joining UIU SVS. Your membership request has been submitted successfully!</p>
+                <button onclick="closeSuccessModal()" class="btn-base btn-puja w-full">Continue Browsing</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Enhanced Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
@@ -324,7 +343,7 @@
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
@@ -343,7 +362,7 @@
 
                 <!-- 2. Kali Puja 2025 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -357,7 +376,7 @@
 
                 <!-- 3. Holi 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -487,7 +506,7 @@
             <div class="container mx-auto relative z-10 flex flex-col items-center">
                 <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
                 <div class="max-w-3xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
-                    <div class="responsive-iframe-container"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe></div>
+                    <div class="responsive-iframe-container"><iframe id="membership-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLScccQbTZ-yELLvQKd0bi1sOJWW6HicVnJs1TUTGKC_TqjrIWw/viewform?embedded=true">Loading…</iframe></div>
                 </div>
             </div>
         </section>
@@ -570,6 +589,12 @@
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.onclick = null;
+        };
+
+        window.closeSuccessModal = () => {
+            const overlay = document.getElementById('form-success-overlay');
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
         };
 
         function displayRandomQuote() {
@@ -669,7 +694,7 @@
                 
                 this.direction = direction;
                 this.paused = false;
-                this.speed = 0.2; // Adjusted for noticeable auto-scrolling
+                this.speed = 0.2; 
                 this.lastTime = null;
                 this.pos = 0;
 
@@ -707,7 +732,6 @@
                         this.pos += moveAmount;
                         if (this.pos >= maxScroll) this.pos = 0;
                     } else {
-                        // For 'left', we start at end or move negative
                         this.pos -= moveAmount;
                         if (this.pos <= 0) this.pos = maxScroll;
                     }
@@ -737,6 +761,24 @@
 
                 if (v.readyState >= 3) hideOverlay();
             });
+        }
+
+        function initMembershipFormDetection() {
+            const formIframe = document.getElementById('membership-form-iframe');
+            let loadCount = 0;
+            if (formIframe) {
+                formIframe.onload = function() {
+                    loadCount++;
+                    // Google Forms reload the iframe once submitted
+                    if (loadCount > 1) {
+                        const overlay = document.getElementById('form-success-overlay');
+                        if (overlay) {
+                            overlay.classList.remove('hidden');
+                            overlay.classList.add('flex');
+                        }
+                    }
+                };
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -769,13 +811,13 @@
             renderEvents();
             fetchYouTube();
             fetchBlogs();
-            
+            initVideoSyncAndLoading();
+            initMembershipFormDetection();
+
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
             galleryIds.forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
-
-            initVideoSyncAndLoading();
 
             document.getElementById('mobile-menu-button')?.addEventListener('click', () => document.getElementById('mobile-menu')?.classList.toggle('hidden'));
             
