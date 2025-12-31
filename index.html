@@ -357,6 +357,8 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/1.jpg" class="w-full h-full object-cover"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/2.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/3.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/4.jpeg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
             </div>
@@ -416,7 +418,6 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Latest Updates</h2>
                 </div>
                 <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                    <!-- Fallback content in the "given style" while fetching -->
                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
             </div>
@@ -443,7 +444,7 @@
         </section>
     </main>
 
-    <!-- Footer Section -->
+    <!-- Footer -->
     <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -481,9 +482,9 @@
 
     <script type="module">
         const upcomingEventsData = [
-            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "https://placehold.co/400x400?text=Saraswati+Puja" },
-            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "https://placehold.co/400x400?text=Holi+2026" },
-            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "https://placehold.co/400x400?text=Kali+Puja" }
+            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "saraswati_puja.png" },
+            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "holi.png" },
+            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "kali_puja.png" }
         ];
 
         const spiritualQuotes = [
@@ -536,7 +537,9 @@
                             <h3 class="font-bold text-lg mt-3">${e.name}</h3>
                         </div>
                     </div>
-                    <img src="${e.image_url}" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50">
+                        <img src="${e.image_url}" class="w-full h-full object-cover" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'">
+                    </div>
                 </div>`;
             }).join('');
             list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
@@ -570,7 +573,6 @@
                 const data = await res.json();
                 if (data.status === 'ok' && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
-                        // Extract first image from description if thumbnail is missing
                         let thumb = b.thumbnail;
                         if(!thumb) {
                             const match = b.description.match(/<img[^>]+src="([^">]+)"/);
@@ -612,14 +614,15 @@
             const preloader = document.getElementById('page-preloader');
             const hide = () => { if(preloader && preloader.style.display !== 'none') { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } };
             window.addEventListener('load', hide);
-            setTimeout(hide, 5000); 
+            setTimeout(hide, 8000); // 8s safety timeout
 
             displayRandomQuote();
             renderEvents();
             fetchYouTube();
             fetchBlogs();
             
-            ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'].forEach((id, i) => {
+            const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
+            galleryIds.forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
