@@ -200,7 +200,7 @@
     <!-- Background Puja Equipment Decorations (SVGs) -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
         <!-- Diya Bottom Left -->
-        <svg class="puja-decoration w-32 h-32 bottom-20 left-10" viewBox="0 0 100 100">
+        <svg class="pu_decoration w-32 h-32 bottom-20 left-10 puja-decoration" viewBox="0 0 100 100">
             <path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/>
             <path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/>
         </svg>
@@ -797,13 +797,19 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            window.onload = () => {
-                const preloader = document.getElementById('page-preloader');
-                if (preloader) {
+            const preloader = document.getElementById('page-preloader');
+            const hidePreloader = () => {
+                if (preloader && preloader.style.display !== 'none') {
                     preloader.style.opacity = '0';
-                    setTimeout(() => preloader.style.display = 'none', 500);
+                    setTimeout(() => { preloader.style.display = 'none'; }, 500);
                 }
             };
+
+            // Hide when page is fully loaded
+            window.addEventListener('load', hidePreloader);
+
+            // Safety timeout: hide after 5 seconds even if things are still loading
+            setTimeout(hidePreloader, 5000);
 
             displayRandomQuote();
             renderEvents(); // Initialize the events list
