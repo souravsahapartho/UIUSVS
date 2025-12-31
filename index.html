@@ -325,14 +325,14 @@
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Saraswati_Puja_2025/2.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Saraswati_Puja_2025/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover" loading="lazy"></div>
@@ -342,7 +342,7 @@
 
                 <!-- 2. Kali Puja 2025 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -356,7 +356,7 @@
 
                 <!-- 3. Holi 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -553,9 +553,30 @@
             });
         }, { threshold: 0.1 });
 
+        /**
+         * Helper to pause all currently playing media (videos and YouTube iframes)
+         * @param {HTMLElement} except - The element that is starting to play
+         */
+        function stopOtherMedia(except) {
+            // Pause all native HTML5 videos
+            document.querySelectorAll('video').forEach(v => {
+                if (v !== except) v.pause();
+            });
+            // Pause all YouTube iframes (requires enablejsapi=1 in the URL)
+            document.querySelectorAll('iframe').forEach(f => {
+                if (f !== except) {
+                    f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            });
+        }
+
         window.loadVideo = (container, id) => {
+            // Pause any current media before loading the new YouTube video
+            stopOtherMedia(null);
+            
             const videoId = id.includes('&') ? id.split('&')[0] : id;
-            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            // Append enablejsapi=1 to the URL so we can control it via postMessage later
+            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.onclick = null;
         };
 
@@ -572,8 +593,6 @@
             if(!list) return;
             const today = new Date(); today.setHours(0,0,0,0);
             
-            // Filter events that haven't passed and sort them chronologically
-            // Always slice(0, 2) to show exactly the most 2 immediate upcoming events
             const active = upcomingEventsData
                 .filter(e => new Date(e.date) >= today)
                 .sort((a,b) => new Date(a.date) - new Date(b.date))
@@ -658,7 +677,7 @@
                 
                 this.direction = direction;
                 this.paused = false;
-                this.speed = 0.1; // Extremely slow "creeping" drift
+                this.speed = 0.1;
                 this.lastTime = null;
                 this.pos = (direction === 'right') ? 0 : this.container.scrollWidth / 2;
 
@@ -714,6 +733,15 @@
             }
         }
 
+        // Initialize listeners for native videos to stop others when one starts
+        function initVideoSync() {
+            document.querySelectorAll('video').forEach(v => {
+                v.addEventListener('play', function() {
+                    stopOtherMedia(this);
+                });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
@@ -744,6 +772,7 @@
             renderEvents();
             fetchYouTube();
             fetchBlogs();
+            initVideoSync();
             
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
             galleryIds.forEach((id, i) => {
