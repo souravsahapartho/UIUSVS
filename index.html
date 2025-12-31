@@ -42,6 +42,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            overflow-x: hidden;
         }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
         .quote-font { font-family: 'Hind Siliguri', sans-serif; }
@@ -91,9 +92,18 @@
         .mandala-pattern {
             background-color: #fffaf0;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
-                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+                radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.12) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
+        }
+
+        /* Decorative background elements */
+        .puja-decoration {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.07;
+            pointer-events: none;
+            filter: grayscale(0.2) sepia(0.3);
         }
 
         .text-gradient {
@@ -186,6 +196,30 @@
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
+
+    <!-- Background Puja Equipment Decorations (SVGs) -->
+    <div class="fixed inset-0 pointer-events-none z-[-1]">
+        <!-- Diya Bottom Left -->
+        <svg class="puja-decoration w-32 h-32 bottom-20 left-10" viewBox="0 0 100 100">
+            <path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/>
+            <path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/>
+        </svg>
+        <!-- Temple Bell Top Right -->
+        <svg class="puja-decoration w-24 h-24 top-40 right-10" viewBox="0 0 100 100">
+            <path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" />
+            <circle cx="50" cy="80" r="5" fill="#4a0404" />
+        </svg>
+        <!-- Lotus Middle Left -->
+        <svg class="puja-decoration w-40 h-40 top-1/2 left-[-20px]" viewBox="0 0 100 100">
+            <path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" />
+            <path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" />
+        </svg>
+        <!-- Shankha (Conch) Bottom Right -->
+        <svg class="puja-decoration w-28 h-28 bottom-40 right-20" viewBox="0 0 100 100">
+            <path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" />
+            <path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" />
+        </svg>
+    </div>
 
     <!-- Page Preloader -->
     <div id="page-preloader">
