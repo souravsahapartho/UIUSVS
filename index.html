@@ -176,9 +176,13 @@
 
     <!-- Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
+        <!-- Bell -->
         <svg class="puja-decoration w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
+        <!-- Lotus -->
         <svg class="puja-decoration w-32 h-32 top-32 right-12" viewBox="0 0 100 100"><path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" /><path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" /></svg>
+        <!-- Diya -->
         <svg class="puja-decoration w-28 h-28 bottom-32 left-12" viewBox="0 0 100 100"><path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/><path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/></svg>
+        <!-- Shankha -->
         <svg class="puja-decoration w-24 h-24 bottom-24 right-10" viewBox="0 0 100 100"><path d="M20,50 Q40,10 80,40 Q90,70 50,90 Q10,70 20,50 Z" fill="#fde68a" /><path d="M30,55 Q50,40 70,55" fill="none" stroke="#d97706" stroke-width="2" /></svg>
     </div>
 
@@ -201,7 +205,7 @@
         </div>
     </div>
 
-    <!-- Header -->
+    <!-- Header / Navigation -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer">
@@ -347,6 +351,13 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
                     <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                        <!-- Shivratri Video Card (First) -->
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Shivratri Video">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div>
+                            </div>
+                        </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/1.jpeg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/2.jpeg" class="w-full h-full object-cover" loading="lazy"></div>
                     </div>
@@ -428,10 +439,10 @@
             </div>
         </section>
 
-        <!-- YouTube Section -->
+        <!-- YouTube Highlights Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
             <div class="container mx-auto px-6 relative z-10 text-center">
-                <div class="mb-12 animate-on-scroll"><h2 class="text-3xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
+                <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
                 <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                      <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
@@ -499,7 +510,7 @@
             { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
-        const contentObserver = new IntersectionObserver((entries) => {
+        let contentObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
@@ -567,7 +578,7 @@
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs">YouTube feed temporarily unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4">YouTube feed temporarily unavailable.</p>'; }
         }
 
         async function fetchBlogs() {
@@ -595,7 +606,7 @@
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs">Substack feed temporarily unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4">Substack feed temporarily unavailable.</p>'; }
         }
 
         class Scroller {
