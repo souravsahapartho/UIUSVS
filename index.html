@@ -292,9 +292,67 @@
                     <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
-                    <!-- Events will be injected here via JavaScript -->
                     <div class="w-full text-center py-12">
                          <div class="video-loader mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advisor Panel Section (Tree/Triangle Layout) -->
+        <section id="advisors" class="py-8 bg-orange-50/20">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="text-center mb-6 animate-on-scroll">
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Advisor Panel</h2>
+                    <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
+                </div>
+
+                <div class="relative flex flex-col items-center">
+                    <!-- Root Node: Chief Advisor -->
+                    <div class="relative z-10 animate-on-scroll">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group hover:shadow-xl transition-all duration-300">
+                            <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
+                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Chief+Advisor" class="w-full h-full object-cover" alt="Chief Advisor">
+                            </div>
+                            <h3 class="text-base font-bold text-red-900 leading-tight">Dr. Placeholder Name</h3>
+                            <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
+                        </div>
+                    </div>
+
+                    <!-- Visual Connectors (Inverted Y Tree Branch) -->
+                    <div class="w-full max-w-[400px] h-12 flex justify-center animate-on-scroll">
+                        <svg class="w-full h-full overflow-visible" viewBox="0 0 200 60" preserveAspectRatio="none">
+                            <!-- Stem coming down from top -->
+                            <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
+                            <!-- Horizontal cross bar -->
+                            <line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" />
+                            <!-- Left leaf line -->
+                            <line x1="50" y1="30" x2="50" y2="60" stroke="#fde68a" stroke-width="3" />
+                            <!-- Right leaf line -->
+                            <line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
+                        </svg>
+                    </div>
+
+                    <!-- Leaf Nodes: Senior Advisors in same row -->
+                    <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
+                        <!-- Left Child -->
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group hover:shadow-xl transition-all duration-300">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto transition-transform group-hover:scale-105">
+                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover" alt="Advisor 2">
+                            </div>
+                            <h3 class="text-sm font-bold text-red-900 leading-tight">Prof. Placeholder Name</h3>
+                            <p class="text-[8px] font-semibold uppercase tracking-wide mt-1 text-gray-500">Senior Advisor</p>
+                        </div>
+
+                        <!-- Right Child -->
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group hover:shadow-xl transition-all duration-300">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto transition-transform group-hover:scale-105">
+                                <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover" alt="Advisor 3">
+                            </div>
+                            <h3 class="text-sm font-bold text-red-900 leading-tight">Mr. Placeholder Name</h3>
+                            <p class="text-[8px] font-semibold uppercase tracking-wide mt-1 text-gray-500">Senior Advisor</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -446,46 +504,6 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/1.jpg" alt="Ritual" class="text-center w-full h-full object-cover"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/2.jpg" alt="Celebration" class="text-center w-full h-full object-cover"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Advisor Panel Section -->
-        <section id="advisors" class="py-16 bg-white/80">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 animate-on-scroll">
-                    <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Advisor Panel</h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Advisor 1 -->
-                    <div class="card animate-on-scroll group">
-                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
-                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+1" class="w-full h-full object-cover" alt="Advisor Name">
-                        </div>
-                        <h3 class="text-xl font-bold text-red-900">Dr. Placeholder Name</h3>
-                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Chief Advisor</p>
-                        <p class="text-gray-400 text-xs mt-2">United International University</p>
-                    </div>
-                    <!-- Advisor 2 -->
-                    <div class="card animate-on-scroll delay-100 group">
-                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
-                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover" alt="Advisor Name">
-                        </div>
-                        <h3 class="text-xl font-bold text-red-900">Prof. Placeholder Name</h3>
-                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Technical Advisor</p>
-                        <p class="text-gray-400 text-xs mt-2">United International University</p>
-                    </div>
-                    <!-- Advisor 3 -->
-                    <div class="card animate-on-scroll delay-200 group">
-                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
-                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover" alt="Advisor Name">
-                        </div>
-                        <h3 class="text-xl font-bold text-red-900">Mr. Placeholder Name</h3>
-                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Cultural Advisor</p>
-                        <p class="text-gray-400 text-xs mt-2">United International University</p>
                     </div>
                 </div>
             </div>
