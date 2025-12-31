@@ -342,12 +342,8 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
                     <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-gray-100 relative video-wrapper">
-                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Shiv_Ratri/1.mp4" type="video/mp4"></video>
-                        </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/1.jpeg" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/2.jpeg" class="w-full h-full object-cover"></div>
                     </div>
                 </div>
 
@@ -445,7 +441,7 @@
         </section>
     </main>
 
-    <!-- Detailed Footer Section -->
+    <!-- Footer -->
     <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -498,7 +494,7 @@
             { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
-        // Ensure global functions for inline handlers
+        // Ensure global functions for inline handlers are properly accessible
         window.loadVideo = (container, id) => {
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
