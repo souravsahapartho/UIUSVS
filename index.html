@@ -325,7 +325,7 @@
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
@@ -342,7 +342,7 @@
 
                 <!-- 2. Kali Puja 2025 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -356,7 +356,7 @@
 
                 <!-- 3. Holi 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Festival</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -530,9 +530,11 @@
 
     <script type="module">
         const upcomingEventsData = [
-            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "saraswati_puja.png" },
-            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "holi.png" },
-            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "kali_puja.png" }
+            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "Upcoming_Events/saraswati_puja.png" },
+            { name: "Shiv Ratri 2026", date: "2026-02-15", image_url: "Upcoming_Events/shiv_ratri.jpg" },
+            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "Upcoming_Events/holi.png" },
+            { name: "Bhai Phota 2026", date: "2026-11-10", image_url: "Upcoming_Events/Bhai_phota.jpg" },
+            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "Upcoming_Events/kali_puja.png" }
         ];
 
         const spiritualQuotes = [
@@ -569,15 +571,27 @@
             const list = document.getElementById('upcoming-events-list');
             if(!list) return;
             const today = new Date(); today.setHours(0,0,0,0);
-            const active = upcomingEventsData.filter(e => new Date(e.date) >= today).sort((a,b) => new Date(a.date)-new Date(b.date)).slice(0, 2);
+            
+            // Filter events that haven't passed and sort them chronologically
+            // Always slice(0, 2) to show exactly the most 2 immediate upcoming events
+            const active = upcomingEventsData
+                .filter(e => new Date(e.date) >= today)
+                .sort((a,b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 2); 
+                
+            if (active.length === 0) {
+                list.innerHTML = `<p class="text-gray-500 italic">No upcoming events at the moment. Stay tuned!</p>`;
+                return;
+            }
+
             list.innerHTML = active.map(e => {
                 const d = new Date(e.date);
-                return `<div class="card border-l-4 border-red-600 w-full md:w-[48%] p-6 flex justify-between animate-on-scroll">
+                return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
                     <div class="text-left flex flex-col justify-between">
                         <div>
                             <span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold uppercase">Upcoming</span>
-                            <div class="mt-2"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold">${d.toLocaleDateString('en-US',{month:'short'})}</span></div>
-                            <h3 class="font-bold text-lg mt-3">${e.name}</h3>
+                            <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold text-gray-600">${d.toLocaleDateString('en-US',{month:'short'})}</span> <span class="text-xs text-gray-400 ml-1">${d.getFullYear()}</span></div>
+                            <h3 class="font-bold text-lg mt-3 text-gray-900">${e.name}</h3>
                         </div>
                     </div>
                     <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50">
@@ -585,6 +599,7 @@
                     </div>
                 </div>`;
             }).join('');
+            
             list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         }
 
@@ -659,11 +674,9 @@
                 const handleInteraction = (e) => {
                     if (e.target.closest('[onclick]')) return;
                     this.paused = !this.paused;
-                    // Sync the precision position with the actual scrollLeft if swiping
                     this.pos = this.container.scrollLeft;
                 };
 
-                // Sync position during manual scroll
                 this.container.addEventListener('scroll', () => {
                     if (this.paused) {
                         this.pos = this.container.scrollLeft;
@@ -672,10 +685,9 @@
 
                 this.container.addEventListener('click', handleInteraction);
                 this.container.addEventListener('touchstart', (e) => {
-                    this.paused = true; // Stop immediately on touch start to prevent buffering
+                    this.paused = true;
                 }, {passive: true});
                 this.container.addEventListener('touchend', (e) => {
-                    // Let it stay paused for observation or toggle off
                     this.pos = this.container.scrollLeft;
                 }, {passive: true});
             }
