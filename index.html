@@ -208,7 +208,7 @@
         <div class="text-xl font-bold text-red-800 font-serif tracking-wider animate-pulse">UIU SVS</div>
     </div>
 
-    <!-- Google Style Notification (Hidden by default) -->
+    <!-- Google Style Notification -->
     <div class="fixed bottom-24 right-4 sm:right-10 z-[100] flex justify-center w-auto pointer-events-none">
         <div id="slow-internet-msg" class="pointer-events-auto">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffb74d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -308,7 +308,7 @@
                 <!-- 1. Saraswati Puja 2026 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2026</h3></div>
-                    <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                    <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
                         </div>
@@ -325,7 +325,7 @@
                 <!-- 2. Kali Puja 2026 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2026</h3></div>
-                    <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                    <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="metadata"><source src="Kali_Puja_2026/6.mp4" type="video/mp4"></video>
@@ -339,7 +339,7 @@
                 <!-- 3. Holi 2026 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2026</h3></div>
-                    <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                    <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="auto"><source src="Holi_2026/1.mp4" type="video/mp4"></video>
@@ -353,7 +353,7 @@
                 <!-- 4. Monthly Prayer -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
-                    <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                    <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
@@ -369,8 +369,7 @@
                 <!-- 5. Shiv Ratri -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
-                    <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <!-- Shivratri Video Card -->
+                    <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Shivratri Video">
@@ -386,7 +385,7 @@
                 <!-- 6. Bhai Phota -->
                 <div class="animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
-                    <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
+                    <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/8.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/9.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/10.jpg" class="w-full h-full object-cover" loading="lazy"></div>
@@ -395,7 +394,7 @@
             </div>
         </section>
 
-        <!-- Advisor Panel Section (Hierarchical Tree) -->
+        <!-- Advisor Panel Section -->
         <section id="advisors" class="py-12 bg-white/80 text-center">
             <div class="container mx-auto px-6 max-w-4xl">
                 <div class="mb-8 animate-on-scroll">
@@ -454,7 +453,7 @@
             </div>
         </section>
 
-        <!-- YouTube Highlights Section -->
+        <!-- YouTube Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center">
             <div class="container mx-auto px-6 relative z-10">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
@@ -538,11 +537,6 @@
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.onclick = null;
-        };
-
-        window.scrollGallery = (id, direction) => {
-            const container = document.getElementById(id);
-            if(container) container.scrollBy({ left: direction === 'left' ? -320 : 320, behavior: 'smooth' });
         };
 
         function displayRandomQuote() {
@@ -631,9 +625,8 @@
                 
                 this.direction = direction;
                 this.paused = false;
-                this.speed = 0.25; // Adjusted speed to be clearly visible but still very slow (ultra-slow drift)
+                this.speed = 0.1; // Extremely slow "creeping" drift
                 this.lastTime = null;
-                // High-precision position tracking
                 this.pos = (direction === 'right') ? 0 : this.container.scrollWidth / 2;
 
                 // Infinite loop cloning
@@ -646,10 +639,19 @@
                 this.animate = this.animate.bind(this);
                 requestAnimationFrame(this.animate);
 
-                this.container.addEventListener('mousedown', () => this.paused = true);
-                this.container.addEventListener('touchstart', () => this.paused = true);
-                this.container.addEventListener('mouseup', () => this.paused = false);
-                this.container.addEventListener('touchend', () => this.paused = false);
+                // Stop scrolling fully on touch/click
+                const handleInteraction = (e) => {
+                    // Prevent pause if specifically playing a video
+                    if (e.target.closest('[onclick]')) return;
+                    this.paused = !this.paused;
+                };
+
+                this.container.addEventListener('click', handleInteraction);
+                this.container.addEventListener('touchstart', (e) => {
+                    // Touch events need careful handling to not break native scrolling
+                    // but for this specific scroller, we toggle the pause state.
+                    handleInteraction(e);
+                }, {passive: true});
             }
 
             animate(timestamp) {
@@ -659,7 +661,6 @@
 
                 if (!this.paused) {
                     const halfWidth = this.container.scrollWidth / 2;
-                    // Move amount scaled strictly to time for consistent slow creep
                     const moveAmount = this.speed * (deltaTime / 16.67);
                     
                     if (this.direction === 'right') {
@@ -673,7 +674,7 @@
                             this.pos = halfWidth;
                         }
                     }
-                    this.container.scrollLeft = this.pos;
+                    this.container.scrollLeft = Math.floor(this.pos);
                 }
                 requestAnimationFrame(this.animate);
             }
