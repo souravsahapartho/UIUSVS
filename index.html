@@ -188,6 +188,11 @@
         <div class="text-xl font-bold text-red-800 font-serif tracking-wider animate-pulse">UIU SVS</div>
     </div>
 
+    <!-- Slow Internet Notification -->
+    <div id="slow-internet-msg" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-red-700 text-white px-8 py-3 rounded-full shadow-2xl font-bold text-sm border-2 border-yellow-500 animate-bounce">
+        Slow internet detected. Please enhance your internet and try again.
+    </div>
+
     <!-- Bottom Quote Bar -->
     <div class="bottom-quote-bar py-2 px-4 text-center">
         <div class="container mx-auto flex justify-center items-center">
@@ -364,7 +369,7 @@
             </div>
         </section>
 
-        <!-- Advisor Panel Section -->
+        <!-- Advisor Panel Section (Hierarchical Tree) -->
         <section id="advisors" class="py-12 bg-white/80">
             <div class="container mx-auto px-6 max-w-4xl text-center">
                 <div class="mb-8 animate-on-scroll">
@@ -373,6 +378,7 @@
                     <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
                 </div>
                 <div class="relative flex flex-col items-center">
+                    <!-- Top: Chief Advisor -->
                     <div class="relative z-10 animate-on-scroll">
                         <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group">
                             <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform">
@@ -382,6 +388,7 @@
                             <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
                         </div>
                     </div>
+                    <!-- Connector Lines -->
                     <div class="w-full max-w-[400px] h-12 flex justify-center">
                         <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
                             <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
@@ -390,6 +397,7 @@
                             <line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
                         </svg>
                     </div>
+                    <!-- Bottom: Senior Advisors -->
                     <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
                             <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
@@ -453,7 +461,10 @@
                         <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
                         <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br><br>United City, Madani Avenue, Dhaka-1212</p>
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
+                        United International University<br><br>
+                        United City, Madani Avenue, Dhaka-1212
+                    </p>
                 </div>
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
@@ -611,18 +622,40 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
-            const hide = () => { if(preloader && preloader.style.display !== 'none') { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } };
-            window.addEventListener('load', hide);
-            setTimeout(hide, 8000); // 8s safety timeout
+            const slowNetMsg = document.getElementById('slow-internet-msg');
+
+            const hideLoader = () => {
+                if (isPageLoaded) return;
+                isPageLoaded = true;
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => { preloader.style.display = 'none'; }, 500);
+                }
+            };
+
+            // Hide preloader naturally when everything is ready
+            window.addEventListener('load', hideLoader);
+
+            // Cap the preloader duration at 8 seconds
+            setTimeout(() => {
+                if (!isPageLoaded) {
+                    hideLoader();
+                    // If it took more than 8 seconds, show the notification
+                    if(slowNetMsg) {
+                        slowNetMsg.classList.remove('hidden');
+                        setTimeout(() => { slowNetMsg.classList.add('hidden'); }, 5000);
+                    }
+                }
+            }, 8000);
 
             displayRandomQuote();
             renderEvents();
             fetchYouTube();
             fetchBlogs();
             
-            const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
-            galleryIds.forEach((id, i) => {
+            ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'].forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
