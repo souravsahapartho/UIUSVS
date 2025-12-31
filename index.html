@@ -292,7 +292,10 @@
                     <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
-                    <div class="w-full text-center py-12"></div>
+                    <!-- Events will be injected here via JavaScript -->
+                    <div class="w-full text-center py-12">
+                         <div class="video-loader mx-auto"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -421,8 +424,8 @@
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Shiv_Ratri/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" alt="Pooja" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" alt="Devotion" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/1.jpg" alt="Pooja" class="text-center w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="Shiv_Ratri/2.jpg" alt="Devotion" class="text-center w-full h-full object-cover"></div>
                     </div>
                 </div>
 
@@ -441,8 +444,48 @@
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls playsinline preload="metadata"><source src="Bhai_Phonta/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/1.jpg" alt="Ritual" class="w-full h-full object-cover"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/2.jpg" alt="Celebration" class="w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/1.jpg" alt="Ritual" class="text-center w-full h-full object-cover"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phonta/2.jpg" alt="Celebration" class="text-center w-full h-full object-cover"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advisor Panel Section -->
+        <section id="advisors" class="py-16 bg-white/80">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll">
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Advisor Panel</h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Advisor 1 -->
+                    <div class="card animate-on-scroll group">
+                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
+                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+1" class="w-full h-full object-cover" alt="Advisor Name">
+                        </div>
+                        <h3 class="text-xl font-bold text-red-900">Dr. Placeholder Name</h3>
+                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Chief Advisor</p>
+                        <p class="text-gray-400 text-xs mt-2">United International University</p>
+                    </div>
+                    <!-- Advisor 2 -->
+                    <div class="card animate-on-scroll delay-100 group">
+                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
+                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+2" class="w-full h-full object-cover" alt="Advisor Name">
+                        </div>
+                        <h3 class="text-xl font-bold text-red-900">Prof. Placeholder Name</h3>
+                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Technical Advisor</p>
+                        <p class="text-gray-400 text-xs mt-2">United International University</p>
+                    </div>
+                    <!-- Advisor 3 -->
+                    <div class="card animate-on-scroll delay-200 group">
+                        <div class="w-36 h-36 rounded-full overflow-hidden mb-6 border-4 border-orange-100 mx-auto transition-transform group-hover:scale-105">
+                            <img src="https://placehold.co/300x300/f3f4f6/b91c1c?text=Advisor+3" class="w-full h-full object-cover" alt="Advisor Name">
+                        </div>
+                        <h3 class="text-xl font-bold text-red-900">Mr. Placeholder Name</h3>
+                        <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide mt-1">Cultural Advisor</p>
+                        <p class="text-gray-400 text-xs mt-2">United International University</p>
                     </div>
                 </div>
             </div>
@@ -581,7 +624,14 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
 
-        // Initial Quotes
+        // Upcoming Events Data
+        const upcomingEventsData = [
+            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "https://placehold.co/400x400/fffaf0/b91c1c?text=Saraswati+Puja" },
+            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "https://placehold.co/400x400/fffaf0/ea580c?text=Holi+2026" },
+            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "https://placehold.co/400x400/fffaf0/7f1d1d?text=Kali+Puja" }
+        ];
+
+        // Quotes
         const spiritualQuotes = [
             { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
             { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
@@ -593,6 +643,53 @@
             const randomIndex = Math.floor(Math.random() * spiritualQuotes.length);
             const quote = spiritualQuotes[randomIndex];
             document.getElementById('daily-quote-text').textContent = `"${quote.text}" — ${quote.author}`;
+        }
+
+        // Render Events
+        function renderEvents() {
+            const listEl = document.getElementById('upcoming-events-list');
+            if(!listEl) return;
+            listEl.innerHTML = '';
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const activeEvents = upcomingEventsData
+                .filter(e => new Date(e.date) >= today)
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 2);
+
+            if(activeEvents.length === 0) {
+                listEl.innerHTML = '<p class="text-gray-500">No upcoming events scheduled.</p>';
+                return;
+            }
+
+            activeEvents.forEach(event => {
+                const dateObj = new Date(event.date);
+                const day = dateObj.toLocaleDateString('en-US', { day: 'numeric' });
+                const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
+                const year = dateObj.toLocaleDateString('en-US', { year: 'numeric' });
+
+                const card = `
+                    <div class="card relative border-l-4 border-red-600 w-full md:w-[48%] p-6 flex items-center justify-between min-h-[180px] animate-on-scroll">
+                        <div class="flex flex-col justify-between h-full pr-4 text-left">
+                            <div>
+                                <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wide">Upcoming</span>
+                                <div class="mt-2">
+                                    <span class="text-4xl font-bold text-red-700 font-serif leading-none">${day}</span>
+                                    <span class="text-sm font-medium text-red-900 uppercase tracking-widest ml-1">${month}</span>
+                                    <span class="text-xs text-gray-400 font-medium block mt-1">${year}</span>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-xl text-gray-900 font-serif leading-tight mt-4">${event.name}</h3>
+                        </div>
+                        <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                            <img src="${event.image_url}" alt="${event.name}" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                `;
+                listEl.insertAdjacentHTML('beforeend', card);
+            });
         }
 
         class AutoScroller {
@@ -657,6 +754,7 @@
             };
 
             displayRandomQuote();
+            renderEvents(); // Initialize the events list
             new AutoScroller('gallery-saraswati', 'right');
             new AutoScroller('gallery-kali', 'left');
             new AutoScroller('gallery-holi', 'right');
