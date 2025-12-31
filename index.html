@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <!-- Header / Navigation -->
+    <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer">
@@ -248,15 +248,15 @@
                     <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">UIU <br><span class="text-gradient">Sanatani Vidyarthi Samsad</span></h1>
                     <p class="text-lg md:text-xl text-red-800 max-w-2xl mx-auto mb-10 font-medium">Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.</p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-sm sm:max-w-none animate-on-scroll delay-100 is-visible mb-16">
+                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
                     <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
                     <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
 
-        <!-- Upcoming Events -->
-        <section id="events" class="py-16 relative bg-white/80 backdrop-blur-sm">
+        <!-- Upcoming Events Section -->
+        <section id="events" class="py-16 bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
@@ -295,7 +295,7 @@
                 </div>
 
                 <!-- 2. Kali Puja 2025 -->
-                <div class="mb-12 animate-on-scroll relative group/section">
+                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
@@ -362,7 +362,7 @@
             </div>
         </section>
 
-        <!-- Advisor Panel Section (Hierarchical Tree) -->
+        <!-- Advisor Panel Section -->
         <section id="advisors" class="py-12 bg-white/80">
             <div class="container mx-auto px-6 max-w-4xl text-center">
                 <div class="mb-8 animate-on-scroll">
@@ -371,7 +371,6 @@
                     <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
                 </div>
                 <div class="relative flex flex-col items-center">
-                    <!-- Top: Chief Advisor -->
                     <div class="relative z-10 animate-on-scroll">
                         <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-56 text-center group">
                             <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform">
@@ -381,7 +380,6 @@
                             <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
                         </div>
                     </div>
-                    <!-- Connector Lines -->
                     <div class="w-full max-w-[400px] h-12 flex justify-center">
                         <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
                             <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
@@ -390,7 +388,6 @@
                             <line x1="150" y1="30" x2="150" y2="60" stroke="#fde68a" stroke-width="3" />
                         </svg>
                     </div>
-                    <!-- Bottom: Senior Advisors -->
                     <div class="flex flex-row justify-center gap-8 md:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-48 text-center group">
                             <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
@@ -418,7 +415,10 @@
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4">Latest Updates</h2>
                 </div>
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"><div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div></div>
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                    <!-- Fallback content in the "given style" while fetching -->
+                    <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
+                </div>
             </div>
         </section>
 
@@ -426,7 +426,9 @@
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative">
             <div class="container mx-auto px-6 relative z-10 text-center">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
-                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div class="col-span-full flex justify-center py-12"><div class="video-loader"></div></div></div>
+                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
+                </div>
             </div>
         </section>
 
@@ -441,7 +443,7 @@
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer Section -->
     <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -450,10 +452,7 @@
                         <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
                         <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
-                        United International University<br><br>
-                        United City, Madani Avenue, Dhaka-1212
-                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br><br>United City, Madani Avenue, Dhaka-1212</p>
                 </div>
                 <div>
                     <h4 class="font-bold text-red-900 mb-4">Quick Links</h4>
@@ -494,7 +493,15 @@
             { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" }
         ];
 
-        // Ensure global functions for inline handlers are properly accessible
+        let contentObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    contentObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
         window.loadVideo = (container, id) => {
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
@@ -506,15 +513,15 @@
             if(container) container.scrollBy({ left: direction === 'left' ? -320 : 320, behavior: 'smooth' });
         };
 
-        const displayRandomQuote = () => {
+        function displayRandomQuote() {
             const quoteTextEl = document.getElementById('daily-quote-text');
             if(quoteTextEl) {
                 const quote = spiritualQuotes[Math.floor(Math.random() * spiritualQuotes.length)];
                 quoteTextEl.textContent = `"${quote.text}" — ${quote.author}`;
             }
-        };
+        }
 
-        const renderEvents = () => {
+        function renderEvents() {
             const list = document.getElementById('upcoming-events-list');
             if(!list) return;
             const today = new Date(); today.setHours(0,0,0,0);
@@ -532,7 +539,8 @@
                     <img src="${e.image_url}" class="w-20 h-20 rounded-lg object-cover">
                 </div>`;
             }).join('');
-        };
+            list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+        }
 
         async function fetchYouTube() {
             const grid = document.getElementById('youtube-video-grid');
@@ -541,13 +549,17 @@
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
                 const data = await res.json();
                 if (data.status === 'ok') {
-                    grid.innerHTML = data.items.slice(0, 4).map(v => `
-                        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${v.link.split('v=')[1]}')">
+                    grid.innerHTML = data.items.slice(0, 4).map(v => {
+                        const videoId = v.link.includes('v=') ? v.link.split('v=')[1].split('&')[0] : v.link.split('/').pop();
+                        return `
+                        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${videoId}')">
                             <div class="aspect-video relative overflow-hidden"><img src="${v.thumbnail}" class="w-full h-full object-cover"></div>
-                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2">${v.title}</h3></div>
-                        </div>`).join('');
+                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
+                        </div>`;
+                    }).join('');
+                    grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-red-200">Videos unavailable at the moment.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full">Videos unavailable.</p>'; }
         }
 
         async function fetchBlogs() {
@@ -556,13 +568,25 @@
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
                 const data = await res.json();
-                if (data.status === 'ok') {
-                    grid.innerHTML = data.items.slice(0, 3).map(b => `
-                        <article class="card animate-on-scroll cursor-pointer" onclick="window.open('${b.link}', '_blank')">
-                            <img src="${b.thumbnail || 'https://placehold.co/400x200?text=SVS+Blog'}" class="rounded-lg mb-4 aspect-video object-cover">
-                            <h3 class="font-bold text-sm">${b.title}</h3>
-                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-2 text-center">${b.description.replace(/<[^>]*>?/gm, '')}</p>
-                        </article>`).join('');
+                if (data.status === 'ok' && data.items.length > 0) {
+                    grid.innerHTML = data.items.slice(0, 3).map(b => {
+                        // Extract first image from description if thumbnail is missing
+                        let thumb = b.thumbnail;
+                        if(!thumb) {
+                            const match = b.description.match(/<img[^>]+src="([^">]+)"/);
+                            thumb = match ? match[1] : 'https://placehold.co/400x200?text=SVS+Blog';
+                        }
+                        const cleanDesc = b.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
+                        return `
+                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
+                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
+                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}">
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">${b.title}</h3>
+                            <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
+                        </article>`;
+                    }).join('');
+                    grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
             } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full">Blogs unavailable at the moment.</p>'; }
         }
@@ -588,15 +612,14 @@
             const preloader = document.getElementById('page-preloader');
             const hide = () => { if(preloader && preloader.style.display !== 'none') { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } };
             window.addEventListener('load', hide);
-            setTimeout(hide, 5000); // 5s safety timeout
+            setTimeout(hide, 5000); 
 
             displayRandomQuote();
             renderEvents();
             fetchYouTube();
             fetchBlogs();
             
-            const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
-            galleryIds.forEach((id, i) => {
+            ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'].forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
@@ -613,9 +636,7 @@
             });
             
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-            
-            const obs = new IntersectionObserver((ents) => ents.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); }), {threshold:0.1});
-            document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
+            document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         });
     </script>
 </body>
