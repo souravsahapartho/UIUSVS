@@ -253,7 +253,6 @@
                 <a href="#home" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
                 <a href="#events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
                 <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
-                <a href="#blogs" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Blog</a>
                 <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
                 <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
@@ -325,7 +324,7 @@
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
@@ -344,7 +343,7 @@
 
                 <!-- 2. Kali Puja 2025 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -358,7 +357,7 @@
 
                 <!-- 3. Holi 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -670,38 +669,29 @@
                 
                 this.direction = direction;
                 this.paused = false;
-                this.speed = 0.1;
+                this.speed = 0.2; // Adjusted for noticeable auto-scrolling
                 this.lastTime = null;
-                this.pos = (direction === 'right') ? 0 : this.container.scrollWidth / 2;
-
-                const children = [...this.container.children];
-                children.forEach(child => {
-                    const clone = child.cloneNode(true);
-                    this.container.appendChild(clone);
-                });
+                this.pos = 0;
 
                 this.animate = this.animate.bind(this);
                 requestAnimationFrame(this.animate);
 
-                const handleInteraction = (e) => {
-                    if (e.target.closest('[onclick]')) return;
+                const handleInteraction = () => {
                     this.paused = !this.paused;
                     this.pos = this.container.scrollLeft;
                 };
 
                 this.container.addEventListener('scroll', () => {
-                    if (this.paused) {
-                        this.pos = this.container.scrollLeft;
-                    }
+                    if (this.paused) this.pos = this.container.scrollLeft;
                 });
 
-                this.container.addEventListener('click', handleInteraction);
-                this.container.addEventListener('touchstart', (e) => {
-                    this.paused = true;
-                }, {passive: true});
-                this.container.addEventListener('touchend', (e) => {
-                    this.pos = this.container.scrollLeft;
-                }, {passive: true});
+                this.container.addEventListener('click', (e) => {
+                   if (!e.target.closest('[onclick]') && !e.target.closest('video')) {
+                       handleInteraction();
+                   }
+                });
+                
+                this.container.addEventListener('touchstart', () => { this.paused = true; }, {passive: true});
             }
 
             animate(timestamp) {
@@ -710,17 +700,18 @@
                 this.lastTime = timestamp;
 
                 if (!this.paused) {
-                    const halfWidth = this.container.scrollWidth / 2;
+                    const maxScroll = this.container.scrollWidth - this.container.clientWidth;
                     const moveAmount = this.speed * (deltaTime / 16.67);
                     
                     if (this.direction === 'right') {
                         this.pos += moveAmount;
-                        if (this.pos >= halfWidth) this.pos = 0;
+                        if (this.pos >= maxScroll) this.pos = 0;
                     } else {
+                        // For 'left', we start at end or move negative
                         this.pos -= moveAmount;
-                        if (this.pos <= 0) this.pos = halfWidth;
+                        if (this.pos <= 0) this.pos = maxScroll;
                     }
-                    this.container.scrollLeft = Math.floor(this.pos);
+                    this.container.scrollLeft = this.pos;
                 }
                 requestAnimationFrame(this.animate);
             }
@@ -741,10 +732,8 @@
                 const showOverlay = () => { if (overlay) overlay.style.display = 'flex'; };
 
                 v.addEventListener('canplay', hideOverlay);
-                v.addEventListener('canplaythrough', hideOverlay);
                 v.addEventListener('playing', hideOverlay);
                 v.addEventListener('waiting', showOverlay);
-                v.addEventListener('loadstart', showOverlay);
 
                 if (v.readyState >= 3) hideOverlay();
             });
