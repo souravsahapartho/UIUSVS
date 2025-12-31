@@ -385,22 +385,17 @@
                 <div class="animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 bg-gray-100 relative video-wrapper">
-                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Bhai_Phota/1.mp4" type="video/mp4"></video>
-                        </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/1.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="Bhai_Phota/2.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/3.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/4.jpeg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/8.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/9.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/10.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Advisor Panel Section (Hierarchical Tree) -->
-        <section id="advisors" class="py-12 bg-white/80">
-            <div class="container mx-auto px-6 max-w-4xl text-center">
+        <section id="advisors" class="py-12 bg-white/80 text-center">
+            <div class="container mx-auto px-6 max-w-4xl">
                 <div class="mb-8 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
                     <h2 class="text-3xl font-extrabold text-gray-900 mt-2">Advisor Panel</h2>
@@ -444,11 +439,11 @@
             </div>
         </section>
 
-        <!-- Blogs Section -->
+        <!-- Blogs -->
         <section id="blogs" class="py-16 bg-white/90 backdrop-blur">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
-                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
                     <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4">Latest Updates</h2>
                 </div>
                 <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
@@ -467,7 +462,7 @@
             </div>
         </section>
 
-        <!-- Join SVS Section -->
+        <!-- Join SVS -->
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-6">
             <div class="container mx-auto relative z-10">
                 <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
@@ -596,7 +591,7 @@
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4">YouTube feed temporarily unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4">YouTube feed unavailable.</p>'; }
         }
 
         async function fetchBlogs() {
@@ -618,13 +613,13 @@
                             <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
                                 <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}" loading="lazy">
                             </div>
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">${b.title}</h3>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
                         </article>`;
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4">Substack feed temporarily unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4">Substack feed unavailable.</p>'; }
         }
 
         class Scroller {
