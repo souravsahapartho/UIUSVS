@@ -208,6 +208,15 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* Fix for white initial video frame */
+        .video-wrapper {
+            background-color: #000;
+        }
+        .loading-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
@@ -343,7 +352,7 @@
                 
                 <!-- 1. Saraswati Puja 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja 2025</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
@@ -362,7 +371,7 @@
 
                 <!-- 2. Kali Puja 2025 -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja 2025</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -376,7 +385,7 @@
 
                 <!-- 3. Holi 2025 -->
                 <div class="mb-12 animate-on-scroll relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi 2025</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
@@ -452,7 +461,7 @@
                     <!-- Milestone Stats -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 max-w-3xl mx-auto">
                         <div class="bg-orange-50 p-6 rounded-3xl text-center border border-orange-100 shadow-sm transition-transform hover:scale-105">
-                            <div class="text-3xl font-extrabold text-red-800">6+</div>
+                            <div class="text-3xl font-extrabold text-red-800">5+</div>
                             <div class="text-xs uppercase font-bold text-gray-600 mt-1 tracking-wider">Years Legacy</div>
                         </div>
                         <div class="bg-red-50 p-6 rounded-3xl text-center border border-red-100 shadow-sm transition-transform hover:scale-105">
@@ -701,24 +710,37 @@
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
                 const data = await res.json();
-                if (data.status === 'ok' && data.items.length > 0) {
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
-                        let thumb = b.thumbnail;
-                        if(!thumb) {
-                            const match = b.description.match(/<img[^>]+src="([^">]+)"/);
-                            thumb = match ? match[1] : 'https://placehold.co/400x200?text=SVS+Blog';
+                        let thumb = "";
+                        // Check multiple sources for Substack images
+                        if (b.enclosure && b.enclosure.link) {
+                            thumb = b.enclosure.link;
+                        } else if (b.thumbnail) {
+                            thumb = b.thumbnail;
+                        } else if (b.content) {
+                            const imgMatch = b.content.match(/<img[^>]+src="([^">]+)"/);
+                            thumb = imgMatch ? imgMatch[1] : '';
                         }
+                        
+                        if(!thumb) {
+                           const descMatch = b.description.match(/<img[^>]+src="([^">]+)"/);
+                           thumb = descMatch ? descMatch[1] : 'https://placehold.co/400x200?text=SVS+Blog';
+                        }
+                        
                         const cleanDesc = b.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
                         return `
                         <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
-                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-100 aspect-video w-full relative">
-                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}">
+                            <div class="mb-5 overflow-hidden rounded-lg bg-gray-200 aspect-video w-full relative">
+                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}" onerror="this.src='https://placehold.co/400x200?text=SVS+Blog'">
                             </div>
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
                         </article>`;
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+                } else {
+                    grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">No blog posts found.</p>';
                 }
             } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4">Blog Updates unavailable.</p>'; }
         }
@@ -782,7 +804,7 @@
                 const wrapper = v.closest('.video-wrapper');
                 const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
 
-                v.preload = "metadata";
+                v.preload = "auto"; // Changed to auto for better smooth start
 
                 v.addEventListener('play', function() {
                     stopOtherMedia(this);
@@ -794,6 +816,7 @@
                 v.addEventListener('canplay', hideOverlay);
                 v.addEventListener('playing', hideOverlay);
                 v.addEventListener('waiting', showOverlay);
+                v.addEventListener('loadeddata', hideOverlay);
 
                 if (v.readyState >= 3) hideOverlay();
             });
@@ -854,12 +877,10 @@
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
 
-            // Handle mobile menu button toggle
             const menuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
 
-            // Auto-close navigation menu when any link is clicked
             document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
