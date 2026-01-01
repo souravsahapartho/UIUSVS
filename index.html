@@ -188,9 +188,12 @@
         @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         
-        /* Video styling fixes */
+        /* Video styling fixes - Ensure dark background to prevent white initial state */
         .video-wrapper {
-            background-color: #000 !important; /* Solid black background for videos */
+            background-color: #000 !important;
+        }
+        video {
+            background-color: #000 !important;
         }
         .loading-overlay {
             background-color: rgba(0, 0, 0, 0.4);
@@ -305,7 +308,7 @@
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
                     <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4">Upcoming Events</h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
+                    <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
                 <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
                     <div class="w-full text-center py-12"><div class="video-loader mx-auto"></div></div>
@@ -344,9 +347,9 @@
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-gray-100 relative video-wrapper">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="metadata"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover" loading="lazy"></div>
@@ -358,7 +361,7 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-gray-100 relative video-wrapper">
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative video-wrapper">
                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
@@ -372,11 +375,11 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-gray-100 relative video-wrapper">
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
                              <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
                             <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
@@ -685,34 +688,33 @@
             const grid = document.getElementById('blog-grid');
             if(!grid) return;
             try {
-                // Fetching Substack RSS through a reliable proxy
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
                 const data = await res.json();
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
                         let thumb = "";
-                        // Advanced discovery for Substack's nested image structures
-                        if (b.enclosure && b.enclosure.link) {
-                            thumb = b.enclosure.link;
-                        } else if (b.thumbnail) {
+                        
+                        // 1. Try to find cover image in Substack's unique structure
+                        if (b.thumbnail && !b.thumbnail.includes('pixel') && !b.thumbnail.includes('stat.substack')) {
                             thumb = b.thumbnail;
+                        } else if (b.enclosure && b.enclosure.link) {
+                            thumb = b.enclosure.link;
                         } else {
-                            const contentSearch = (b.content || b.description || "");
-                            // Filter for standard Substack CDN paths to avoid tracking pixels
-                            const imgMatches = contentSearch.match(/src="([^"]+)"/g);
-                            if (imgMatches) {
-                                const validImg = imgMatches.find(src => 
-                                    (src.includes('substack-post-assets') || src.includes('bucketeer')) && 
-                                    !src.includes('pixel')
-                                );
-                                if (validImg) thumb = validImg.replace('src="', '').replace('"', '');
+                            // Deep DOM parsing for Substack's CDN URLs
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(b.content || b.description || "", 'text/html');
+                            const imgTags = doc.querySelectorAll('img');
+                            for (let img of imgTags) {
+                                const src = img.getAttribute('src');
+                                if (src && !src.includes('pixel') && !src.includes('stat.substack') && src.length > 30) {
+                                    thumb = src;
+                                    break;
+                                }
                             }
                         }
                         
-                        // Default fallback image if nothing found
-                        if(!thumb || thumb.length < 50) {
-                            thumb = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog';
-                        }
+                        // Default fallback
+                        if(!thumb) thumb = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update';
 
                         const cleanDesc = b.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
                         return `
@@ -720,7 +722,7 @@
                             <div class="mb-5 overflow-hidden rounded-lg bg-gray-200 aspect-video w-full relative">
                                 <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'">
                             </div>
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2">${b.title}</h3>
+                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
                         </article>`;
                     }).join('');
@@ -728,7 +730,7 @@
                 } else {
                     grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">No blog posts found.</p>';
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog Updates temporarily unavailable.</p>'; }
+            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog updates temporarily unavailable.</p>'; }
         }
 
         class Scroller {
@@ -759,6 +761,7 @@
                        handleInteraction();
                    }
                 });
+                
                 this.container.addEventListener('touchstart', () => { this.paused = true; }, {passive: true});
             }
 
