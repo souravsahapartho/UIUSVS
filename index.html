@@ -213,7 +213,8 @@
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2 font-serif">Jai Shree Krishna!</h3>
                 <p class="text-gray-600 mb-6">Thank you for joining UIU SVS. Your membership request has been submitted successfully!</p>
-                <button onclick="closeSuccessModal()" class="btn-base btn-puja w-full">Continue Browsing</button>
+                <!-- BUG FIX: Redirection to gallery added via new function handleSuccessRedirection -->
+                <button onclick="handleSuccessRedirection()" class="btn-base btn-puja w-full">Continue Browsing</button>
             </div>
         </div>
     </div>
@@ -247,10 +248,11 @@
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3 group cursor-pointer">
+            <!-- BUG FIX: Wrapped logo and text in <a> tag to make it a working Home link -->
+            <a href="#home" class="flex items-center gap-3 group cursor-pointer">
                 <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
-            </div>
+            </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
                 <a href="#home" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
                 <a href="#events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
@@ -616,6 +618,13 @@
             const overlay = document.getElementById('form-success-overlay');
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
+        };
+
+        // BUG FIX: Function to handle redirection after form success
+        window.handleSuccessRedirection = () => {
+            closeSuccessModal();
+            // Smoothly navigate to gallery section
+            window.location.hash = '#gallery';
         };
 
         function displayRandomQuote() {
