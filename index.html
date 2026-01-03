@@ -248,7 +248,7 @@
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <!-- BUG FIX: Wrapped logo and text in <a> tag to make it a working Home link -->
+            <!-- Wrapped logo and text in <a> tag to make it a working Home link -->
             <a href="#home" class="flex items-center gap-3 group cursor-pointer">
                 <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
@@ -610,7 +610,8 @@
         window.loadVideo = (container, id) => {
             stopOtherMedia(null);
             const videoId = id.includes('&') ? id.split('&')[0] : id;
-            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            // Added rel=0 to prevent YouTube from showing videos from other channels at the end
+            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.onclick = null;
         };
 
@@ -620,7 +621,7 @@
             overlay.classList.remove('flex');
         };
 
-        // BUG FIX: Function to handle redirection after form success
+        // Function to handle redirection after form success
         window.handleSuccessRedirection = () => {
             closeSuccessModal();
             // Smoothly navigate to gallery section
