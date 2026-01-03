@@ -37,6 +37,8 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -213,7 +215,6 @@
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2 font-serif">Jai Shree Krishna!</h3>
                 <p class="text-gray-600 mb-6">Thank you for joining UIU SVS. Your membership request has been submitted successfully!</p>
-                <!-- BUG FIX: Redirection to gallery added via new function handleSuccessRedirection -->
                 <button onclick="handleSuccessRedirection()" class="btn-base btn-puja w-full">Continue Browsing</button>
             </div>
         </div>
@@ -248,7 +249,6 @@
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <!-- Wrapped logo and text in <a> tag to make it a working Home link -->
             <a href="#home" class="flex items-center gap-3 group cursor-pointer">
                 <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
@@ -596,23 +596,74 @@
             });
         }, { threshold: 0.1 });
 
+        // Storage for YouTube players to control them via API
+        const ytPlayers = new Set();
+
         function stopOtherMedia(except) {
+            // Pause all native video elements
             document.querySelectorAll('video').forEach(v => {
                 if (v !== except) v.pause();
             });
+            
+            // Pause all registered YouTube API players
+            ytPlayers.forEach(player => {
+                try {
+                    if (player && player.getPlayerState && player.getPlayerState() === 1) { // 1 = Playing
+                        if (player.getIframe() !== except) {
+                            player.pauseVideo();
+                        }
+                    }
+                } catch (e) {
+                    // Silently fail if player is destroyed or inaccessible
+                }
+            });
+
+            // Fallback: Message all other iframes (just in case they weren't registered yet)
             document.querySelectorAll('iframe').forEach(f => {
                 if (f !== except) {
-                    f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    try {
+                        f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    } catch (e) {}
                 }
             });
         }
 
         window.loadVideo = (container, id) => {
+            // Immediately stop anything else playing
             stopOtherMedia(null);
+            
             const videoId = id.includes('&') ? id.split('&')[0] : id;
-            // Added rel=0 to prevent YouTube from showing videos from other channels at the end
-            container.querySelector('.aspect-video').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            const uniqueId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
+            
+            // Clear container and create an element for the API to target
+            const aspectDiv = container.querySelector('.aspect-video');
+            aspectDiv.innerHTML = `<div id="${uniqueId}" class="w-full h-full"></div>`;
             container.onclick = null;
+
+            // Use the YouTube IFrame API to create a player
+            if (window.YT && window.YT.Player) {
+                const player = new YT.Player(uniqueId, {
+                    videoId: videoId,
+                    playerVars: {
+                        'autoplay': 1,
+                        'rel': 0,
+                        'enablejsapi': 1,
+                        'modestbranding': 1
+                    },
+                    events: {
+                        'onStateChange': (event) => {
+                            // When this video starts playing (state 1), stop all others
+                            if (event.data === YT.PlayerState.PLAYING) {
+                                stopOtherMedia(event.target.getIframe());
+                            }
+                        }
+                    }
+                });
+                ytPlayers.add(player);
+            } else {
+                // Fallback if API not ready
+                aspectDiv.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            }
         };
 
         window.closeSuccessModal = () => {
@@ -621,10 +672,8 @@
             overlay.classList.remove('flex');
         };
 
-        // Function to handle redirection after form success
         window.handleSuccessRedirection = () => {
             closeSuccessModal();
-            // Smoothly navigate to gallery section
             window.location.hash = '#gallery';
         };
 
@@ -703,14 +752,11 @@
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
                         let thumb = "";
-                        
-                        // 1. Try to find cover image in Substack's unique structure
                         if (b.thumbnail && !b.thumbnail.includes('pixel') && !b.thumbnail.includes('stat.substack')) {
                             thumb = b.thumbnail;
                         } else if (b.enclosure && b.enclosure.link) {
                             thumb = b.enclosure.link;
                         } else {
-                            // Deep DOM parsing for Substack's CDN URLs
                             const parser = new DOMParser();
                             const doc = parser.parseFromString(b.content || b.description || "", 'text/html');
                             const imgTags = doc.querySelectorAll('img');
@@ -722,10 +768,7 @@
                                 }
                             }
                         }
-                        
-                        // Default fallback
                         if(!thumb) thumb = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update';
-
                         const cleanDesc = b.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
                         return `
                         <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
@@ -747,43 +790,34 @@
             constructor(id, direction = 'right') {
                 this.container = document.getElementById(id);
                 if (!this.container) return;
-                
                 this.direction = direction;
                 this.paused = false;
                 this.speed = 0.2; 
                 this.lastTime = null;
                 this.pos = 0;
-
                 this.animate = this.animate.bind(this);
                 requestAnimationFrame(this.animate);
-
                 const handleInteraction = () => {
                     this.paused = !this.paused;
                     this.pos = this.container.scrollLeft;
                 };
-
                 this.container.addEventListener('scroll', () => {
                     if (this.paused) this.pos = this.container.scrollLeft;
                 });
-
                 this.container.addEventListener('click', (e) => {
                    if (!e.target.closest('[onclick]') && !e.target.closest('video')) {
                        handleInteraction();
                    }
                 });
-                
                 this.container.addEventListener('touchstart', () => { this.paused = true; }, {passive: true});
             }
-
             animate(timestamp) {
                 if (!this.lastTime) this.lastTime = timestamp;
                 const deltaTime = timestamp - this.lastTime;
                 this.lastTime = timestamp;
-
                 if (!this.paused) {
                     const maxScroll = this.container.scrollWidth - this.container.clientWidth;
                     const moveAmount = this.speed * (deltaTime / 16.67);
-                    
                     if (this.direction === 'right') {
                         this.pos += moveAmount;
                         if (this.pos >= maxScroll) this.pos = 0;
@@ -801,21 +835,16 @@
             document.querySelectorAll('video').forEach(v => {
                 const wrapper = v.closest('.video-wrapper');
                 const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
-
                 v.preload = "auto"; 
-
                 v.addEventListener('play', function() {
                     stopOtherMedia(this);
                 });
-
                 const hideOverlay = () => { if (overlay) overlay.style.display = 'none'; };
                 const showOverlay = () => { if (overlay) overlay.style.display = 'flex'; };
-
                 v.addEventListener('canplay', hideOverlay);
                 v.addEventListener('playing', hideOverlay);
                 v.addEventListener('waiting', showOverlay);
                 v.addEventListener('loadeddata', hideOverlay);
-
                 if (v.readyState >= 3) hideOverlay();
             });
         }
@@ -840,7 +869,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
-
             const hideLoader = () => {
                 if (isPageLoaded) return;
                 isPageLoaded = true;
@@ -849,26 +877,21 @@
                     setTimeout(() => { preloader.style.display = 'none'; }, 500);
                 }
             };
-
             window.addEventListener('load', hideLoader);
             setTimeout(() => { if (!isPageLoaded) hideLoader(); }, 6000);
-
             displayRandomQuote();
             renderEvents();
             fetchYouTube();
             fetchBlogs();
             initVideoSyncAndLoading();
             initMembershipFormDetection();
-
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
             galleryIds.forEach((id, i) => {
                 new Scroller(id, i % 2 === 0 ? 'right' : 'left');
             });
-
             const menuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
-
             document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
@@ -876,7 +899,6 @@
                     }
                 });
             });
-            
             window.addEventListener('scroll', () => {
                 const scrollable = document.documentElement.scrollHeight - window.innerHeight;
                 const perc = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
@@ -887,7 +909,6 @@
                     btn.classList.toggle('invisible', perc < 25);
                 }
             });
-            
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         });
