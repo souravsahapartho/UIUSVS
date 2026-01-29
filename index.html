@@ -210,6 +210,68 @@
             background-color: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(2px);
         }
+
+        /* --- Eye-Catching Countdown & Status Animations --- */
+        
+        /* Level 30d: Sweep Shine */
+        @keyframes sweep-shine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .anim-shine {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: sweep-shine 3s infinite linear;
+        }
+
+        /* Level 15d: Breathing Breath */
+        @keyframes breathing-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 5px rgba(245, 158, 11, 0.2); }
+            50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+        }
+        .anim-breath { animation: breathing-glow 3s infinite ease-in-out; }
+
+        /* Level 7d: Heartbeat Pop */
+        @keyframes heartbeat-pop {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .anim-pop { animation: heartbeat-pop 1.5s infinite cubic-bezier(0.21, 0.85, 0.49, 0.99); }
+
+        /* Level 3d: Electric Strobe */
+        @keyframes electric-strobe {
+            0%, 100% { background-color: #fee2e2; transform: translate(0,0); }
+            10% { background-color: #fca5a5; transform: translate(-1px, 1px); }
+            20% { transform: translate(1px, -1px); }
+            30% { background-color: #f87171; transform: translate(-1px, -1px); }
+            40% { transform: translate(1px, 1px); }
+        }
+        .anim-strobe { animation: electric-strobe 0.4s infinite; border-color: #ef4444 !important; color: #991b1b !important; }
+
+        /* Ongoing: Broadcast Ripple */
+        @keyframes broadcast-ripple {
+            0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(22, 163, 74, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+        }
+        .anim-ripple { animation: broadcast-ripple 1.5s infinite; background-color: #dcfce7 !important; border-color: #22c55e !important; color: #166534 !important; }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #16a34a;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: dot-blink 1s infinite alternate;
+        }
+        @keyframes dot-blink {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0.4; transform: scale(0.8); }
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
@@ -582,11 +644,11 @@
 
     <script type="module">
         const upcomingEventsData = [
-            { name: "Saraswati Puja 2026", date: "2026-01-23", image_url: "Upcoming_Events/saraswati_puja.png" },
+            { name: "Saraswati Puja 2027", date: "2026-02-11", image_url: "Upcoming_Events/saraswati_puja.png" },
             { name: "Shiv Ratri 2026", date: "2026-02-15", image_url: "Upcoming_Events/shiv_ratri.jpg" },
             { name: "Holi Festival 2026", date: "2026-03-04", image_url: "Upcoming_Events/holi.png" },
             { name: "Bhai Phota 2026", date: "2026-11-10", image_url: "Upcoming_Events/Bhai_phota.jpg" },
-            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "Upcoming_Events/kali_puja.png" }
+            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "Upcoming_Events/kali_pu_ja.png" }
         ];
 
         const spiritualQuotes = [
@@ -697,11 +759,14 @@
         function renderEvents() {
             const list = document.getElementById('upcoming-events-list');
             if(!list) return;
-            const today = new Date(); today.setHours(0,0,0,0);
+            
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             
             const active = upcomingEventsData
-                .filter(e => new Date(e.date) >= today)
-                .sort((a,b) => new Date(a.date) - new Date(b.date))
+                .map(e => ({ ...e, eventTime: new Date(e.date).getTime() }))
+                .filter(e => e.eventTime >= todayStart)
+                .sort((a,b) => a.eventTime - b.eventTime)
                 .slice(0, 2); 
                 
             if (active.length === 0) {
@@ -710,11 +775,46 @@
             }
 
             list.innerHTML = active.map(e => {
+                const eventDay = e.eventTime;
+                const diffMs = eventDay - now.getTime();
+                const diffDays = Math.floor(diffMs / 86400000);
+                const diffHours = Math.floor((diffMs % 86400000) / 3600000);
+                
+                const isOngoing = new Date(eventDay).toDateString() === now.toDateString();
+
+                let statusText = "";
+                let statusClass = "bg-orange-50 text-orange-700 border border-orange-200";
+                let badgePrefix = "";
+
+                if (isOngoing) {
+                    statusText = "Ongoing";
+                    statusClass = "anim-ripple";
+                    badgePrefix = '<span class="live-dot"></span>';
+                } else {
+                    statusText = `${diffDays}d ${diffHours}h left`;
+                    
+                    if (diffDays < 3) {
+                        statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
+                        badgePrefix = "⚡ ";
+                    } else if (diffDays < 7) {
+                        statusClass = "bg-orange-50 text-orange-700 border border-orange-300 anim-pop shadow-md";
+                        badgePrefix = "📢 ";
+                    } else if (diffDays < 15) {
+                        statusClass = "bg-amber-50 text-amber-700 border border-amber-200 anim-breath";
+                        badgePrefix = "🗓️ ";
+                    } else if (diffDays <= 30) {
+                        statusClass = "bg-yellow-50 text-yellow-700 border border-yellow-200 anim-shine overflow-hidden";
+                        badgePrefix = "📅 ";
+                    } else {
+                        statusText = "Upcoming";
+                    }
+                }
+
                 const d = new Date(e.date);
                 return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
                     <div class="text-left flex flex-col justify-between">
                         <div>
-                            <span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold uppercase">Upcoming</span>
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full ${statusClass} text-[9px] font-bold uppercase tracking-wider transition-all duration-300">${badgePrefix}${statusText}</span>
                             <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold text-gray-600">${d.toLocaleDateString('en-US',{month:'short'})}</span> <span class="text-xs text-gray-400 ml-1">${d.getFullYear()}</span></div>
                             <h3 class="font-bold text-lg mt-3 text-gray-900">${e.name}</h3>
                         </div>
@@ -900,14 +1000,21 @@
             });
             const menuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
+            
+            menuBtn?.addEventListener('click', () => {
+                const isMenuHidden = mobileMenu?.classList.toggle('hidden');
+                document.body.style.overflow = isMenuHidden ? '' : 'hidden';
+            });
+
             document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
+                        document.body.style.overflow = '';
                     }
                 });
             });
+
             window.addEventListener('scroll', () => {
                 const scrollable = document.documentElement.scrollHeight - window.innerHeight;
                 const perc = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
