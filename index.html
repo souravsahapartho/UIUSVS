@@ -272,6 +272,46 @@
             from { opacity: 1; transform: scale(1); }
             to { opacity: 0.4; transform: scale(0.8); }
         }
+
+        /* --- Eye-Catching Placeholder Enhancements --- */
+        @keyframes placeholder-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.05); opacity: 0.6; }
+        }
+        
+        .media-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%);
+            z-index: 5;
+            overflow: hidden;
+        }
+        
+        .placeholder-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.25rem;
+            color: #b91c1c;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: placeholder-pulse 2s infinite ease-in-out;
+            text-shadow: 0 2px 10px rgba(185, 28, 28, 0.2);
+            position: relative;
+        }
+
+        /* Subtle decorative ring for placeholders */
+        .media-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 1px solid rgba(185, 28, 28, 0.05);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern" oncontextmenu="return false;">
@@ -397,50 +437,88 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">Memories & Moments</h2>
                 </div>
                 
-                <!-- 1. Saraswati Puja 2025 -->
+                <!-- 1. Saraswati Puja -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
-                            <div class="aspect-video w-full h-full relative overflow-hidden"><img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja"><div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div></div>
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" onload="this.previousElementSibling.style.display='none'">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+                            </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
-                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Saraswati Puja Celebration">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div>
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" onload="this.previousElementSibling.style.display='none'">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2. Kali Puja 2025 -->
+                <!-- 2. Kali Puja -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative video-wrapper">
-                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
+                                <span class="placeholder-text mb-2">UIU SVS</span>
+                                <div class="video-loader"></div>
+                            </div>
+                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100"><img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100"><img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
 
-                <!-- 3. Holi 2025 -->
+                <!-- 3. Holi Celebration -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative video-wrapper">
-                            <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
+                                <span class="placeholder-text mb-2">UIU SVS</span>
+                                <div class="video-loader"></div>
+                            </div>
+                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/11.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/17.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100"><img src="Holi_2025/12.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Holi_2025/17.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
 
@@ -449,14 +527,23 @@
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
-                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
+                             <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
+                                <span class="placeholder-text mb-2">UIU SVS</span>
+                                <div class="video-loader"></div>
+                            </div>
+                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
-                             <div class="absolute inset-0 flex items-center justify-center z-10 loading-overlay"><div class="video-loader"></div></div>
-                            <video class="w-full h-full object-cover" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
+                             <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
+                                <span class="placeholder-text mb-2">UIU SVS</span>
+                                <div class="video-loader"></div>
+                            </div>
+                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100"><img src="Prayer/4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
 
@@ -466,13 +553,23 @@
                     <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
-                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" alt="Shivratri Video">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div>
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" onload="this.previousElementSibling.style.display='none'">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/1.jpeg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/2.jpeg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100"><img src="ShivRatri/3.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
 
@@ -480,9 +577,18 @@
                 <div class="animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/8.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/9.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100"><img src="BhaiPhota/10.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -819,8 +925,9 @@
                             <h3 class="font-bold text-lg mt-3 text-gray-900">${e.name}</h3>
                         </div>
                     </div>
-                    <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50">
-                        <img src="${e.image_url}" class="w-full h-full object-cover" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy">
+                    <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50 relative">
+                        <div class="media-placeholder" style="background: transparent;"><span class="placeholder-text" style="font-size: 0.5rem; opacity: 0.6;">SVS</span></div>
+                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                     </div>
                 </div>`;
             }).join('');
@@ -841,8 +948,9 @@
                         return `
                         <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${videoId}')">
                             <div class="aspect-video relative overflow-hidden">
-                                <img src="${thumbnail}" class="w-full h-full object-cover" loading="lazy">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl">▶</div>
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                             <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
                         </div>`;
@@ -882,7 +990,8 @@
                         return `
                         <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
                             <div class="mb-5 overflow-hidden rounded-lg bg-gray-200 aspect-video w-full relative">
-                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 relative z-10" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'" onload="this.previousElementSibling.style.display='none'">
                             </div>
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
@@ -1002,15 +1111,13 @@
             const mobileMenu = document.getElementById('mobile-menu');
             
             menuBtn?.addEventListener('click', () => {
-                const isMenuHidden = mobileMenu?.classList.toggle('hidden');
-                document.body.style.overflow = isMenuHidden ? '' : 'hidden';
+                mobileMenu?.classList.toggle('hidden');
             });
 
             document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
-                        document.body.style.overflow = '';
                     }
                 });
             });
