@@ -204,16 +204,22 @@
         }
         .bottom-quote-bar.visible { transform: translateY(0); }
 
-        /* Robust Responsive Form Container - Enlarged for Mobile/Tablet */
+        /* Enhanced Responsive Form Container - Bigger Heights for Mobile & Tablet */
         .responsive-iframe-container {
             width: 100%;
-            height: 850px; /* Significantly taller for mobile readability */
+            height: 1200px; /* Bigger height for mobile phones */
             overflow: hidden;
             border-radius: 1rem;
+            background: white;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
             .responsive-iframe-container {
-                height: 900px; /* Optimized height for tablet/desktop */
+                height: 1400px; /* Bigger height for tablets */
+            }
+        }
+        @media (min-width: 1024px) {
+            .responsive-iframe-container {
+                height: 1600px; /* Full length for desktop browsers */
             }
         }
         .responsive-iframe-container iframe {
@@ -441,7 +447,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
                     <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
-                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-50">Explore Events</a>
                 </div>
             </div>
         </section>
@@ -488,15 +494,15 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Pu_ja_2025/13.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Pu_ja_2025/14.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Pu_ja_2025/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                     </div>
                 </div>
@@ -510,19 +516,19 @@
                                 <span class="placeholder-text mb-2">UIU SVS</span>
                                 <div class="video-loader"></div>
                             </div>
-                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Kali_Pu_ja_2025/6.mp4" type="video/mp4"></video>
+                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Pu_ja_2025/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Pu_ja_2025/5.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Pu_ja_2025/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
                         </div>
                     </div>
                 </div>
@@ -689,14 +695,14 @@
                     </div>
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
@@ -724,8 +730,8 @@
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center">
             <div class="container mx-auto px-6 relative z-10">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
-                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
+                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto border-white/20 border-t-white"></div></div>
                 </div>
             </div>
         </section>
@@ -734,7 +740,7 @@
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-6">
             <div class="container mx-auto relative z-10 flex flex-col items-center">
                 <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
-                <div class="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
+                <div class="max-w-xl md:max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
                     <div class="responsive-iframe-container">
                         <iframe id="membership-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdfz-lRBm0t_8uUmBu_xjOi-V5NSyMiy4x8V5gpQM_m30KXeA/viewform?embedded=true">Loading…</iframe>
                     </div>
@@ -809,34 +815,24 @@
         let blogFeedLoaded = false;
         const ytPlayers = new Set();
 
-        /**
-         * Enhanced Stop Other Media
-         * Pauses native video elements AND all registered YouTube players.
-         */
         function stopOtherMedia(except) {
-            // Pause all native HTML5 video elements
+            // Stop standard <video> elements
             document.querySelectorAll('video').forEach(v => {
                 if (v !== except) v.pause();
             });
-
-            // Pause all registered YouTube API player instances
+            // Stop YouTube players
             ytPlayers.forEach(player => {
                 try {
-                    // Check if player exists and if it's the one we should skip
-                    if (player && typeof player.pauseVideo === 'function') {
-                        // If 'except' is the iframe of this player, don't pause it
+                    if (player && player.getPlayerState && player.getPlayerState() === 1) { // 1 = PLAYING
                         if (player.getIframe() !== except) {
                             player.pauseVideo();
                         }
                     }
-                } catch (e) {
-                    // Fail silently if player is destroyed
-                }
+                } catch (e) {}
             });
-
-            // Universal fallback for any other iframes not yet registered
+            // Handle iframes that might not be in the ytPlayers set (fallback)
             document.querySelectorAll('iframe').forEach(f => {
-                if (f !== except) {
+                if (f !== except && f.id !== 'membership-form-iframe') {
                     try {
                         f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                     } catch (e) {}
@@ -845,27 +841,18 @@
         }
 
         window.loadVideo = (container, id) => {
-            // Pause other playing media before loading new YT video
             stopOtherMedia(null);
-
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             const uniqueId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
             const aspectDiv = container.querySelector('.aspect-video');
             aspectDiv.innerHTML = `<div id="${uniqueId}" class="w-full h-full"></div>`;
             container.onclick = null;
-
             if (window.YT && window.YT.Player) {
                 const player = new YT.Player(uniqueId, {
                     videoId: videoId,
-                    playerVars: { 
-                        'autoplay': 1, 
-                        'rel': 0, 
-                        'enablejsapi': 1, 
-                        'modestbranding': 1 
-                    },
+                    playerVars: { 'autoplay': 1, 'rel': 0, 'enablejsapi': 1, 'modestbranding': 1 },
                     events: {
                         'onStateChange': (event) => {
-                            // If this YouTube video starts playing, pause all others
                             if (event.data === YT.PlayerState.PLAYING) {
                                 stopOtherMedia(event.target.getIframe());
                             }
@@ -957,23 +944,28 @@
             const grid = document.getElementById('youtube-video-grid');
             if(!grid) return;
             try {
+                // Using a more reliable way to fetch the YouTube RSS feed
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
                 const data = await res.json();
-                if (data.status === 'ok') {
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
                     youtubeFeedLoaded = true;
                     grid.innerHTML = data.items.slice(0, 4).map(v => {
                         const videoId = v.link.includes('v=') ? v.link.split('v=')[1].split('&')[0] : v.link.split('/').pop();
                         const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                        return `<div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${videoId}')">
-                            <div class="aspect-video relative overflow-hidden">
+                        return `<div class="video-card-group bg-white/5 rounded-2xl overflow-hidden animate-on-scroll cursor-pointer group" onclick="window.loadVideo(this, '${videoId}')">
+                            <div class="aspect-video relative overflow-hidden bg-black/40">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-3xl z-20">▶</div>
                             </div>
-                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
+                            <div class="p-4 bg-white/5 group-hover:bg-white/10 transition-colors">
+                                <h3 class="text-xs font-bold line-clamp-2 text-red-100 group-hover:text-white leading-snug">${v.title}</h3>
+                            </div>
                         </div>`;
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+                } else {
+                    grid.innerHTML = '<p class="text-red-200 col-span-full text-sm text-center py-4 italic">No videos found. Check back later!</p>';
                 }
             } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4 italic">YouTube feed temporarily unavailable.</p>'; }
         }
@@ -1043,42 +1035,6 @@
             }
         }
 
-        function initVideoSyncAndLoading() {
-            document.querySelectorAll('video').forEach(v => {
-                const wrapper = v.closest('.video-wrapper');
-                const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
-                v.preload = "auto"; 
-                v.addEventListener('play', function() {
-                    // When a native video plays, pause all other media
-                    stopOtherMedia(this);
-                });
-                const hideOverlay = () => { if (overlay) overlay.style.display = 'none'; };
-                const showOverlay = () => { if (overlay) overlay.style.display = 'flex'; };
-                v.addEventListener('canplay', hideOverlay);
-                v.addEventListener('playing', hideOverlay);
-                v.addEventListener('waiting', showOverlay);
-                v.addEventListener('loadeddata', hideOverlay);
-                if (v.readyState >= 3) hideOverlay();
-            });
-        }
-
-        function initMembershipFormDetection() {
-            const formIframe = document.getElementById('membership-form-iframe');
-            let loadCount = 0;
-            if (formIframe) {
-                formIframe.onload = function() {
-                    loadCount++;
-                    if (loadCount > 1) {
-                        const overlay = document.getElementById('form-success-overlay');
-                        if (overlay) {
-                            overlay.classList.remove('hidden');
-                            overlay.classList.add('flex');
-                        }
-                    }
-                };
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
@@ -1111,8 +1067,12 @@
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
 
-            // Synchronization for gallery native videos
-            initVideoSyncAndLoading();
+            // Logic to sync standard video playback
+            document.addEventListener('play', (event) => {
+                if (event.target.tagName === 'VIDEO') {
+                    stopOtherMedia(event.target);
+                }
+            }, true);
 
             // Auto-recovery when internet returns
             window.addEventListener('online', () => {
