@@ -809,19 +809,32 @@
         let blogFeedLoaded = false;
         const ytPlayers = new Set();
 
+        /**
+         * Enhanced Stop Other Media
+         * Pauses native video elements AND all registered YouTube players.
+         */
         function stopOtherMedia(except) {
+            // Pause all native HTML5 video elements
             document.querySelectorAll('video').forEach(v => {
                 if (v !== except) v.pause();
             });
+
+            // Pause all registered YouTube API player instances
             ytPlayers.forEach(player => {
                 try {
-                    if (player && player.getPlayerState && player.getPlayerState() === 1) {
+                    // Check if player exists and if it's the one we should skip
+                    if (player && typeof player.pauseVideo === 'function') {
+                        // If 'except' is the iframe of this player, don't pause it
                         if (player.getIframe() !== except) {
                             player.pauseVideo();
                         }
                     }
-                } catch (e) {}
+                } catch (e) {
+                    // Fail silently if player is destroyed
+                }
             });
+
+            // Universal fallback for any other iframes not yet registered
             document.querySelectorAll('iframe').forEach(f => {
                 if (f !== except) {
                     try {
@@ -832,18 +845,27 @@
         }
 
         window.loadVideo = (container, id) => {
+            // Pause other playing media before loading new YT video
             stopOtherMedia(null);
+
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             const uniqueId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
             const aspectDiv = container.querySelector('.aspect-video');
             aspectDiv.innerHTML = `<div id="${uniqueId}" class="w-full h-full"></div>`;
             container.onclick = null;
+
             if (window.YT && window.YT.Player) {
                 const player = new YT.Player(uniqueId, {
                     videoId: videoId,
-                    playerVars: { 'autoplay': 1, 'rel': 0, 'enablejsapi': 1, 'modestbranding': 1 },
+                    playerVars: { 
+                        'autoplay': 1, 
+                        'rel': 0, 
+                        'enablejsapi': 1, 
+                        'modestbranding': 1 
+                    },
                     events: {
                         'onStateChange': (event) => {
+                            // If this YouTube video starts playing, pause all others
                             if (event.data === YT.PlayerState.PLAYING) {
                                 stopOtherMedia(event.target.getIframe());
                             }
@@ -1021,6 +1043,42 @@
             }
         }
 
+        function initVideoSyncAndLoading() {
+            document.querySelectorAll('video').forEach(v => {
+                const wrapper = v.closest('.video-wrapper');
+                const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
+                v.preload = "auto"; 
+                v.addEventListener('play', function() {
+                    // When a native video plays, pause all other media
+                    stopOtherMedia(this);
+                });
+                const hideOverlay = () => { if (overlay) overlay.style.display = 'none'; };
+                const showOverlay = () => { if (overlay) overlay.style.display = 'flex'; };
+                v.addEventListener('canplay', hideOverlay);
+                v.addEventListener('playing', hideOverlay);
+                v.addEventListener('waiting', showOverlay);
+                v.addEventListener('loadeddata', hideOverlay);
+                if (v.readyState >= 3) hideOverlay();
+            });
+        }
+
+        function initMembershipFormDetection() {
+            const formIframe = document.getElementById('membership-form-iframe');
+            let loadCount = 0;
+            if (formIframe) {
+                formIframe.onload = function() {
+                    loadCount++;
+                    if (loadCount > 1) {
+                        const overlay = document.getElementById('form-success-overlay');
+                        if (overlay) {
+                            overlay.classList.remove('hidden');
+                            overlay.classList.add('flex');
+                        }
+                    }
+                };
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
@@ -1052,6 +1110,9 @@
             });
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+
+            // Synchronization for gallery native videos
+            initVideoSyncAndLoading();
 
             // Auto-recovery when internet returns
             window.addEventListener('online', () => {
