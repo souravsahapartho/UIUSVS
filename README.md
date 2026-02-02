@@ -1,4 +1,4 @@
-# UIU Sanatani Vidyarthi Samsad (SVS) - Official Website
+# UIU Sanatani Vidyarthi Samsad (UIUSVS) - Official Website
 
 Welcome to the official repository for the **UIU Sanatani Vidyarthi Samsad (SVS)** community website. This project serves as a digital hub for the Sanatani community at United International University (UIU), showcasing culture, spirituality, and unity.
 
