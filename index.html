@@ -48,25 +48,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- YouTube IFrame API -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    
-    <script>
-        /**
-         * Global Media Handlers - Defined here to ensure they are available 
-         * as soon as HTML is parsed, preventing ReferenceErrors on fast-loading images.
-         */
-        window.handleMediaLoad = function(el) {
-            el.dataset.failed = "false";
-            var placeholder = el.previousElementSibling;
-            if (placeholder && placeholder.classList.contains('media-placeholder')) {
-                placeholder.style.display = 'none';
-            }
-        };
-
-        window.handleMediaError = function(el) {
-            el.dataset.failed = "true";
-        };
-    </script>
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -174,17 +155,9 @@
             background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
         }
         .btn-explore {
-            background: white;
-            color: #9a3412;
-            border: 2px solid #f97316;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
-        }
-        .btn-explore:hover {
-            background: #fff7ed;
+            background: transparent;
             color: #7c2d12;
-            border-color: #ea580c;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.2);
+            border: 2px solid #d97706;
         }
 
         .card {
@@ -212,35 +185,21 @@
         .bottom-quote-bar.visible { transform: translateY(0); }
 
         .responsive-iframe-container {
-            width: 100%;
-            height: 1200px; /* Bigger height for mobile phones */
-            overflow: hidden;
-            border-radius: 1rem;
-            background: white;
-        }
-        @media (min-width: 640px) {
-            .responsive-iframe-container {
-                height: 1400px; /* Bigger height for tablets */
-            }
-        }
-        @media (min-width: 1024px) {
-            .responsive-iframe-container {
-                height: 1600px; /* Full length for desktop browsers */
-            }
+            position: relative; padding-bottom: 100%; height: 0; overflow: hidden;
         }
         .responsive-iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
         }
         
         .play-overlay { background: rgba(0, 0, 0, 0.3); transition: background 0.3s; cursor: pointer; }
         .play-icon { transition: transform 0.3s; font-size: 2rem; color: white; }
         .video-card-group:hover .play-icon { transform: scale(1.2); }
 
+        /* Success Animation Styles */
         @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         
+        /* Video styling fixes - Ensure dark background to prevent white initial state */
         .video-wrapper {
             background-color: #000 !important;
         }
@@ -252,6 +211,9 @@
             backdrop-filter: blur(2px);
         }
 
+        /* --- Eye-Catching Countdown & Status Animations --- */
+        
+        /* Level 30d: Sweep Shine */
         @keyframes sweep-shine {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
@@ -262,12 +224,14 @@
             animation: sweep-shine 3s infinite linear;
         }
 
+        /* Level 15d: Breathing Breath */
         @keyframes breathing-glow {
             0%, 100% { transform: scale(1); box-shadow: 0 0 5px rgba(245, 158, 11, 0.2); }
             50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
         }
         .anim-breath { animation: breathing-glow 3s infinite ease-in-out; }
 
+        /* Level 7d: Heartbeat Pop */
         @keyframes heartbeat-pop {
             0% { transform: scale(1); }
             15% { transform: scale(1.1); }
@@ -277,6 +241,7 @@
         }
         .anim-pop { animation: heartbeat-pop 1.5s infinite cubic-bezier(0.21, 0.85, 0.49, 0.99); }
 
+        /* Level 3d: Electric Strobe */
         @keyframes electric-strobe {
             0%, 100% { background-color: #fee2e2; transform: translate(0,0); }
             10% { background-color: #fca5a5; transform: translate(-1px, 1px); }
@@ -286,6 +251,7 @@
         }
         .anim-strobe { animation: electric-strobe 0.4s infinite; border-color: #ef4444 !important; color: #991b1b !important; }
 
+        /* Ongoing: Broadcast Ripple */
         @keyframes broadcast-ripple {
             0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
             70% { box-shadow: 0 0 0 12px rgba(22, 163, 74, 0); }
@@ -307,6 +273,7 @@
             to { opacity: 0.4; transform: scale(0.8); }
         }
 
+        /* --- Eye-Catching Placeholder Enhancements --- */
         @keyframes placeholder-pulse {
             0%, 100% { transform: scale(1); opacity: 0.3; }
             50% { transform: scale(1.05); opacity: 0.6; }
@@ -335,6 +302,7 @@
             position: relative;
         }
 
+        /* Subtle decorative ring for placeholders */
         .media-placeholder::before {
             content: '';
             position: absolute;
@@ -440,10 +408,9 @@
                     <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">UIU <br><span class="text-gradient">Sanatani Vidyarthi Samsad</span></h1>
                     <p class="text-base md:text-xl text-red-800 max-w-2xl mx-auto mb-10 font-medium">Uniting hearts through culture, enlightening minds through wisdom, and serving humanity through action.</p>
                 </div>
-                <!-- Buttons Container - Perfectly Centered and Responsive -->
-                <div class="flex flex-col sm:flex-row gap-5 items-center justify-center w-full max-w-lg mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto px-10">Become a Member</a>
-                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto px-10">Explore Events</a>
+                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
@@ -474,35 +441,31 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
-                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/2026_1.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
-                        </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                                <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -520,15 +483,15 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -546,15 +509,15 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/17.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Holi_2025/17.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -579,7 +542,7 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -591,21 +554,21 @@
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -616,15 +579,15 @@
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
+                            <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -695,14 +658,14 @@
                     </div>
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
@@ -730,8 +693,8 @@
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center">
             <div class="container mx-auto px-6 relative z-10">
                 <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
-                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto border-white/20 border-t-white"></div></div>
+                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
             </div>
         </section>
@@ -740,7 +703,7 @@
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-6">
             <div class="container mx-auto relative z-10 flex flex-col items-center">
                 <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
-                <div class="max-w-xl md:max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
+                <div class="max-w-3xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
                     <div class="responsive-iframe-container">
                         <iframe id="membership-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdfz-lRBm0t_8uUmBu_xjOi-V5NSyMiy4x8V5gpQM_m30KXeA/viewform?embedded=true">Loading…</iframe>
                     </div>
@@ -785,8 +748,7 @@
         </div>
     </footer>
 
-    <script>
-        // Main Application Logic
+    <script type="module">
         const upcomingEventsData = [
             { name: "Saraswati Puja 2027", date: "2027-02-11", image_url: "Upcoming_Events/saraswati_puja.png" },
             { name: "Shiv Ratri 2026", date: "2026-02-15", image_url: "Upcoming_Events/shiv_ratri.jpg" },
@@ -811,25 +773,31 @@
             });
         }, { threshold: 0.1 });
 
-        let youtubeFeedLoaded = false;
-        let blogFeedLoaded = false;
+        // Storage for YouTube players to control them via API
         const ytPlayers = new Set();
 
         function stopOtherMedia(except) {
+            // Pause all native video elements
             document.querySelectorAll('video').forEach(v => {
                 if (v !== except) v.pause();
             });
+            
+            // Pause all registered YouTube API players
             ytPlayers.forEach(player => {
                 try {
-                    if (player && player.getPlayerState && player.getPlayerState() === 1) { 
+                    if (player && player.getPlayerState && player.getPlayerState() === 1) { // 1 = Playing
                         if (player.getIframe() !== except) {
                             player.pauseVideo();
                         }
                     }
-                } catch (e) {}
+                } catch (e) {
+                    // Silently fail if player is destroyed or inaccessible
+                }
             });
+
+            // Fallback: Message all other iframes (just in case they weren't registered yet)
             document.querySelectorAll('iframe').forEach(f => {
-                if (f !== except && f.id !== 'membership-form-iframe') {
+                if (f !== except) {
                     try {
                         f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                     } catch (e) {}
@@ -838,18 +806,30 @@
         }
 
         window.loadVideo = (container, id) => {
+            // Immediately stop anything else playing
             stopOtherMedia(null);
+            
             const videoId = id.includes('&') ? id.split('&')[0] : id;
             const uniqueId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
+            
+            // Clear container and create an element for the API to target
             const aspectDiv = container.querySelector('.aspect-video');
             aspectDiv.innerHTML = `<div id="${uniqueId}" class="w-full h-full"></div>`;
             container.onclick = null;
+
+            // Use the YouTube IFrame API to create a player
             if (window.YT && window.YT.Player) {
                 const player = new YT.Player(uniqueId, {
                     videoId: videoId,
-                    playerVars: { 'autoplay': 1, 'rel': 0, 'enablejsapi': 1, 'modestbranding': 1 },
+                    playerVars: {
+                        'autoplay': 1,
+                        'rel': 0,
+                        'enablejsapi': 1,
+                        'modestbranding': 1
+                    },
                     events: {
                         'onStateChange': (event) => {
+                            // When this video starts playing (state 1), stop all others
                             if (event.data === YT.PlayerState.PLAYING) {
                                 stopOtherMedia(event.target.getIframe());
                             }
@@ -858,13 +838,19 @@
                 });
                 ytPlayers.add(player);
             } else {
+                // Fallback if API not ready
                 aspectDiv.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             }
         };
 
-        window.handleSuccessRedirection = () => {
+        window.closeSuccessModal = () => {
             const overlay = document.getElementById('form-success-overlay');
             overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+        };
+
+        window.handleSuccessRedirection = () => {
+            closeSuccessModal();
             window.location.hash = '#gallery';
         };
 
@@ -879,43 +865,40 @@
         function renderEvents() {
             const list = document.getElementById('upcoming-events-list');
             if(!list) return;
+            
             const now = new Date();
-            // Use local date parsing for accuracy
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            
             const active = upcomingEventsData
-                .map(e => {
-                    const eventDate = new Date(e.date + 'T00:00:00'); // Ensure local midnight parsing
-                    return { ...e, eventTime: eventDate.getTime() };
-                })
-                .filter(e => {
-                    const today = new Date();
-                    today.setHours(0,0,0,0);
-                    return e.eventTime >= today.getTime();
-                })
+                .map(e => ({ ...e, eventTime: new Date(e.date).getTime() }))
+                .filter(e => e.eventTime >= todayStart)
                 .sort((a,b) => a.eventTime - b.eventTime)
                 .slice(0, 2); 
-            
+                
             if (active.length === 0) {
                 list.innerHTML = `<p class="text-gray-500 italic">No upcoming events at the moment. Stay tuned!</p>`;
                 return;
             }
-            
+
             list.innerHTML = active.map(e => {
                 const eventDay = e.eventTime;
                 const diffMs = eventDay - now.getTime();
                 const diffDays = Math.floor(diffMs / 86400000);
                 const diffHours = Math.floor((diffMs % 86400000) / 3600000);
-                const isOngoing = new Date(eventDay).toDateString() === now.toDateString();
                 
+                const isOngoing = new Date(eventDay).toDateString() === now.toDateString();
+
                 let statusText = "";
                 let statusClass = "bg-orange-50 text-orange-700 border border-orange-200";
                 let badgePrefix = "";
-                
+
                 if (isOngoing) {
                     statusText = "Ongoing";
                     statusClass = "anim-ripple";
                     badgePrefix = '<span class="live-dot"></span>';
-                } else if (diffMs > 0) {
+                } else {
                     statusText = `${diffDays}d ${diffHours}h left`;
+                    
                     if (diffDays < 3) {
                         statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
                         badgePrefix = "⚡ ";
@@ -928,14 +911,12 @@
                     } else if (diffDays <= 30) {
                         statusClass = "bg-yellow-50 text-yellow-700 border border-yellow-200 anim-shine overflow-hidden";
                         badgePrefix = "📅 ";
-                    } else { 
-                        statusText = "Upcoming"; 
+                    } else {
+                        statusText = "Upcoming";
                     }
-                } else {
-                    statusText = "Completed";
                 }
-                
-                const d = new Date(e.date + 'T00:00:00');
+
+                const d = new Date(e.date);
                 return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
                     <div class="text-left flex flex-col justify-between">
                         <div>
@@ -946,12 +927,11 @@
                     </div>
                     <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50 relative">
                         <div class="media-placeholder" style="background: transparent;"><span class="placeholder-text" style="font-size: 0.5rem; opacity: 0.6;">SVS</span></div>
-                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10" alt="${e.name}" onerror="handleMediaError(this)" loading="lazy" onload="handleMediaLoad(this)">
+                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                     </div>
                 </div>`;
             }).join('');
             
-            // Re-apply observer to new elements
             list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         }
 
@@ -961,25 +941,21 @@
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
                 const data = await res.json();
-                if (data.status === 'ok' && data.items && data.items.length > 0) {
-                    youtubeFeedLoaded = true;
+                if (data.status === 'ok') {
                     grid.innerHTML = data.items.slice(0, 4).map(v => {
                         const videoId = v.link.includes('v=') ? v.link.split('v=')[1].split('&')[0] : v.link.split('/').pop();
                         const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                        return `<div class="video-card-group bg-white/5 rounded-2xl overflow-hidden animate-on-scroll cursor-pointer group" onclick="window.loadVideo(this, '${videoId}')">
-                            <div class="aspect-video relative overflow-hidden bg-black/40">
+                        return `
+                        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${videoId}')">
+                            <div class="aspect-video relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" onload="handleMediaLoad(this)" onerror="handleMediaError(this)">
-                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-3xl z-20">▶</div>
+                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <div class="p-4 bg-white/5 group-hover:bg-white/10 transition-colors">
-                                <h3 class="text-xs font-bold line-clamp-2 text-red-100 group-hover:text-white leading-snug">${v.title}</h3>
-                            </div>
+                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
                         </div>`;
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
-                } else {
-                    grid.innerHTML = '<p class="text-red-200 col-span-full text-sm text-center py-4 italic">No videos found. Check back later!</p>';
                 }
             } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4 italic">YouTube feed temporarily unavailable.</p>'; }
         }
@@ -991,34 +967,39 @@
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
                 const data = await res.json();
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
-                    blogFeedLoaded = true;
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
                         let thumb = "";
-                        if (b.thumbnail && !b.thumbnail.includes('pixel') && !b.thumbnail.includes('stat.substack')) thumb = b.thumbnail;
-                        else if (b.enclosure && b.enclosure.link) thumb = b.enclosure.link;
-                        else {
+                        if (b.thumbnail && !b.thumbnail.includes('pixel') && !b.thumbnail.includes('stat.substack')) {
+                            thumb = b.thumbnail;
+                        } else if (b.enclosure && b.enclosure.link) {
+                            thumb = b.enclosure.link;
+                        } else {
                             const parser = new DOMParser();
                             const doc = parser.parseFromString(b.content || b.description || "", 'text/html');
                             const imgTags = doc.querySelectorAll('img');
                             for (let img of imgTags) {
                                 const src = img.getAttribute('src');
                                 if (src && !src.includes('pixel') && !src.includes('stat.substack') && src.length > 30) {
-                                    thumb = src; break;
+                                    thumb = src;
+                                    break;
                                 }
                             }
                         }
                         if(!thumb) thumb = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update';
                         const cleanDesc = b.description.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...';
-                        return `<article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
+                        return `
+                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
                             <div class="mb-5 overflow-hidden rounded-lg bg-gray-200 aspect-video w-full relative">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 relative z-10" alt="${b.title}" onerror="handleMediaError(this)" onload="handleMediaLoad(this)">
+                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 relative z-10" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'" onload="this.previousElementSibling.style.display='none'">
                             </div>
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
                         </article>`;
                     }).join('');
                     grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+                } else {
+                    grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">No blog posts found.</p>';
                 }
             } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog updates temporarily unavailable.</p>'; }
         }
@@ -1027,25 +1008,79 @@
             constructor(id, direction = 'right') {
                 this.container = document.getElementById(id);
                 if (!this.container) return;
-                this.direction = direction; this.paused = false; this.speed = 0.2; this.lastTime = null; this.pos = 0;
+                this.direction = direction;
+                this.paused = false;
+                this.speed = 0.2; 
+                this.lastTime = null;
+                this.pos = 0;
                 this.animate = this.animate.bind(this);
                 requestAnimationFrame(this.animate);
-                const handleInteraction = () => { this.paused = !this.paused; this.pos = this.container.scrollLeft; };
-                this.container.addEventListener('scroll', () => { if (this.paused) this.pos = this.container.scrollLeft; });
-                this.container.addEventListener('click', (e) => { if (!e.target.closest('[onclick]') && !e.target.closest('video')) handleInteraction(); });
+                const handleInteraction = () => {
+                    this.paused = !this.paused;
+                    this.pos = this.container.scrollLeft;
+                };
+                this.container.addEventListener('scroll', () => {
+                    if (this.paused) this.pos = this.container.scrollLeft;
+                });
+                this.container.addEventListener('click', (e) => {
+                   if (!e.target.closest('[onclick]') && !e.target.closest('video')) {
+                       handleInteraction();
+                   }
+                });
                 this.container.addEventListener('touchstart', () => { this.paused = true; }, {passive: true});
             }
             animate(timestamp) {
                 if (!this.lastTime) this.lastTime = timestamp;
-                const deltaTime = timestamp - this.lastTime; this.lastTime = timestamp;
+                const deltaTime = timestamp - this.lastTime;
+                this.lastTime = timestamp;
                 if (!this.paused) {
                     const maxScroll = this.container.scrollWidth - this.container.clientWidth;
                     const moveAmount = this.speed * (deltaTime / 16.67);
-                    if (this.direction === 'right') { this.pos += moveAmount; if (this.pos >= maxScroll) this.pos = 0; }
-                    else { this.pos -= moveAmount; if (this.pos <= 0) this.pos = maxScroll; }
+                    if (this.direction === 'right') {
+                        this.pos += moveAmount;
+                        if (this.pos >= maxScroll) this.pos = 0;
+                    } else {
+                        this.pos -= moveAmount;
+                        if (this.pos <= 0) this.pos = maxScroll;
+                    }
                     this.container.scrollLeft = this.pos;
                 }
                 requestAnimationFrame(this.animate);
+            }
+        }
+
+        function initVideoSyncAndLoading() {
+            document.querySelectorAll('video').forEach(v => {
+                const wrapper = v.closest('.video-wrapper');
+                const overlay = wrapper ? wrapper.querySelector('.loading-overlay') : null;
+                v.preload = "auto"; 
+                v.addEventListener('play', function() {
+                    stopOtherMedia(this);
+                });
+                const hideOverlay = () => { if (overlay) overlay.style.display = 'none'; };
+                const showOverlay = () => { if (overlay) overlay.style.display = 'flex'; };
+                v.addEventListener('canplay', hideOverlay);
+                v.addEventListener('playing', hideOverlay);
+                v.addEventListener('waiting', showOverlay);
+                v.addEventListener('loadeddata', hideOverlay);
+                if (v.readyState >= 3) hideOverlay();
+            });
+        }
+
+        function initMembershipFormDetection() {
+            const formIframe = document.getElementById('membership-form-iframe');
+            let loadCount = 0;
+            if (formIframe) {
+                formIframe.onload = function() {
+                    loadCount++;
+                    if (loadCount > 1) {
+                        const overlay = document.getElementById('form-success-overlay');
+                        if (overlay) {
+                            overlay.classList.remove('hidden');
+                            overlay.classList.add('flex');
+                        }
+                    }
+                };
             }
         }
 
@@ -1062,51 +1097,43 @@
             };
             window.addEventListener('load', hideLoader);
             setTimeout(() => { if (!isPageLoaded) hideLoader(); }, 6000);
-            
-            displayRandomQuote(); 
-            renderEvents(); 
-            fetchYouTube(); 
+            displayRandomQuote();
+            renderEvents();
+            fetchYouTube();
             fetchBlogs();
-            
-            // Set up real-time countdown refresh every minute
-            setInterval(renderEvents, 60000);
-
+            initVideoSyncAndLoading();
+            initMembershipFormDetection();
             const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
-            galleryIds.forEach((id, i) => { new Scroller(id, i % 2 === 0 ? 'right' : 'left'); });
-            
+            galleryIds.forEach((id, i) => {
+                new Scroller(id, i % 2 === 0 ? 'right' : 'left');
+            });
             const menuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
-            document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
-                link.addEventListener('click', () => { if (mobileMenu && !mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden'); });
-            });
             
+            menuBtn?.addEventListener('click', () => {
+                mobileMenu?.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
             window.addEventListener('scroll', () => {
                 const scrollable = document.documentElement.scrollHeight - window.innerHeight;
                 const perc = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
                 document.querySelector('.bottom-quote-bar')?.classList.toggle('visible', perc > 2);
                 const btn = document.getElementById('scroll-to-top');
-                if(btn) { btn.classList.toggle('opacity-0', perc < 25); btn.classList.toggle('invisible', perc < 25); }
+                if(btn) {
+                    btn.classList.toggle('opacity-0', perc < 25);
+                    btn.classList.toggle('invisible', perc < 25);
+                }
             });
-            
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
-
-            document.addEventListener('play', (event) => {
-                if (event.target.tagName === 'VIDEO') {
-                    stopOtherMedia(event.target);
-                }
-            }, true);
-
-            window.addEventListener('online', () => {
-                document.querySelectorAll('img[data-failed="true"]').forEach(img => {
-                    const originalSrc = img.src;
-                    img.src = ''; 
-                    img.src = originalSrc; 
-                });
-                if (!youtubeFeedLoaded) fetchYouTube();
-                if (!blogFeedLoaded) fetchBlogs();
-            });
         });
     </script>
 </body>
