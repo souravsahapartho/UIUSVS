@@ -866,15 +866,22 @@
             }
         }
 
+        // Live Event Rendering with auto-updating countdown
         function renderEvents() {
             const list = document.getElementById('upcoming-events-list');
             if(!list) return;
             
             const now = new Date();
+            // Start comparison from midnight of the current day in local time
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             
             const active = upcomingEventsData
-                .map(e => ({ ...e, eventTime: new Date(e.date).getTime() }))
+                .map(e => {
+                    // Force parsing date string as local midnight (12:00 AM)
+                    const [y, m, d] = e.date.split('-').map(Number);
+                    const eventTime = new Date(y, m - 1, d).getTime();
+                    return { ...e, eventTime };
+                })
                 .filter(e => e.eventTime >= todayStart)
                 .sort((a,b) => a.eventTime - b.eventTime)
                 .slice(0, 2); 
@@ -884,25 +891,33 @@
                 return;
             }
 
-            list.innerHTML = active.map(e => {
-                const eventDay = e.eventTime;
-                const diffMs = eventDay - now.getTime();
-                const diffDays = Math.floor(diffMs / 86400000);
-                const diffHours = Math.floor((diffMs % 86400000) / 3600000);
+            const html = active.map(e => {
+                const eventTime = e.eventTime;
+                // Calculate difference until local midnight of that day
+                const diffMs = eventTime - now.getTime();
                 
-                const isOngoing = new Date(eventDay).toDateString() === now.toDateString();
+                const isOngoing = new Date(eventTime).toDateString() === now.toDateString();
 
                 let statusText = "";
                 let statusClass = "bg-orange-50 text-orange-700 border border-orange-200";
                 let badgePrefix = "";
 
                 if (isOngoing) {
-                    statusText = "Ongoing";
+                    statusText = "Ongoing Today";
                     statusClass = "anim-ripple";
                     badgePrefix = '<span class="live-dot"></span>';
-                } else {
-                    statusText = `${diffDays}d ${diffHours}h left`;
+                } else if (diffMs > 0) {
+                    const diffDays = Math.floor(diffMs / 86400000);
+                    const diffHours = Math.floor((diffMs % 86400000) / 3600000);
+                    const diffMins = Math.floor((diffMs % 3600000) / 60000);
                     
+                    if (diffDays === 0) {
+                        statusText = `${diffHours}h ${diffMins}m left`;
+                    } else {
+                        statusText = `${diffDays}d ${diffHours}h left`;
+                    }
+                    
+                    // Style logic based on days remaining
                     if (diffDays < 3) {
                         statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
                         badgePrefix = "⚡ ";
@@ -917,10 +932,13 @@
                         badgePrefix = "📅 ";
                     } else {
                         statusText = "Upcoming";
+                        badgePrefix = "⏳ ";
                     }
+                } else {
+                    statusText = "Recently Concluded";
                 }
 
-                const d = new Date(e.date);
+                const d = new Date(e.eventTime);
                 return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
                     <div class="text-left flex flex-col justify-between">
                         <div>
@@ -936,32 +954,66 @@
                 </div>`;
             }).join('');
             
-            list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+            // Comparison logic to prevent flicker on update
+            if (list.getAttribute('data-last-html') !== html) {
+                list.innerHTML = html;
+                list.setAttribute('data-last-html', html);
+                list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+            }
         }
 
         async function fetchYouTube() {
             const grid = document.getElementById('youtube-video-grid');
             if(!grid) return;
             try {
+                // Using rss2json as a proxy for YouTube RSS feed
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
                 const data = await res.json();
-                if (data.status === 'ok') {
+                
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 4).map(v => {
-                        const videoId = v.link.includes('v=') ? v.link.split('v=')[1].split('&')[0] : v.link.split('/').pop();
-                        const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                        // Extract video ID from guid (yt:video:VIDEO_ID) or link
+                        let videoId = "";
+                        if (v.guid && v.guid.includes('yt:video:')) {
+                            videoId = v.guid.replace('yt:video:', '');
+                        } else {
+                            videoId = v.link.includes('v=') ? v.link.split('v=')[1].split('&')[0] : v.link.split('/').pop();
+                        }
+                        
+                        const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
                         return `
                         <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${videoId}')">
                             <div class="aspect-video relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                                <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" alt="${v.title}" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                             <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
                         </div>`;
                     }).join('');
-                    grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
+                } else {
+                    throw new Error('API unreachable or empty');
                 }
-            } catch (e) { grid.innerHTML = '<p class="text-red-200 col-span-full text-xs text-center py-4 italic">YouTube feed temporarily unavailable.</p>'; }
+            } catch (e) { 
+                // Reliable Fallback: Featured videos to ensure section is never empty
+                const highlights = [
+                    { id: '90lqh7LOEQw', title: 'Saraswati Puja 2025 Highlights' },
+                    { id: '8Snvn0-Qq9w', title: 'Unity & Celebration at Campus' },
+                    { id: '76sJJnnHEf0', title: 'Maha Shivratri Celebration' },
+                    { id: '90lqh7LOEQw', title: 'UIU SVS Cultural Moments' }
+                ];
+                grid.innerHTML = highlights.map(v => `
+                    <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer" onclick="window.loadVideo(this, '${v.id}')">
+                        <div class="aspect-video relative overflow-hidden">
+                            <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                            <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" class="w-full h-full object-cover relative z-10" alt="${v.title}" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+                        </div>
+                        <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
+                    </div>
+                `).join('');
+            }
+            grid.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         }
 
         async function fetchBlogs() {
@@ -1101,8 +1153,14 @@
             };
             window.addEventListener('load', hideLoader);
             setTimeout(() => { if (!isPageLoaded) hideLoader(); }, 6000);
+            
             displayRandomQuote();
+            
+            // Initial Render
             renderEvents();
+            // Set up interval for live auto-update of countdowns every minute
+            setInterval(renderEvents, 60000);
+            
             fetchYouTube();
             fetchBlogs();
             initVideoSyncAndLoading();
