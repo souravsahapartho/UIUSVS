@@ -872,12 +872,12 @@
             if(!list) return;
             
             const now = new Date();
-            // Start comparison from midnight of the current day in local time
+            // Start comparison from midnight (12:00 AM) of the current day in local time
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             
             const active = upcomingEventsData
                 .map(e => {
-                    // Force parsing date string as local midnight (12:00 AM)
+                    // Explicitly parse YYYY-MM-DD to local midnight (12:00 AM)
                     const [y, m, d] = e.date.split('-').map(Number);
                     const eventTime = new Date(y, m - 1, d).getTime();
                     return { ...e, eventTime };
@@ -917,7 +917,7 @@
                         statusText = `${diffDays}d ${diffHours}h left`;
                     }
                     
-                    // Style logic based on days remaining
+                    // Style logic based on urgency
                     if (diffDays < 3) {
                         statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
                         badgePrefix = "⚡ ";
@@ -954,7 +954,6 @@
                 </div>`;
             }).join('');
             
-            // Comparison logic to prevent flicker on update
             if (list.getAttribute('data-last-html') !== html) {
                 list.innerHTML = html;
                 list.setAttribute('data-last-html', html);
@@ -966,13 +965,12 @@
             const grid = document.getElementById('youtube-video-grid');
             if(!grid) return;
             try {
-                // Using rss2json as a proxy for YouTube RSS feed
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}`);
+                // Added Date.now() as a cache buster for the RSS proxy
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}&_=${Date.now()}`);
                 const data = await res.json();
                 
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 4).map(v => {
-                        // Extract video ID from guid (yt:video:VIDEO_ID) or link
                         let videoId = "";
                         if (v.guid && v.guid.includes('yt:video:')) {
                             videoId = v.guid.replace('yt:video:', '');
@@ -995,7 +993,6 @@
                     throw new Error('API unreachable or empty');
                 }
             } catch (e) { 
-                // Reliable Fallback: Featured videos to ensure section is never empty
                 const highlights = [
                     { id: '90lqh7LOEQw', title: 'Saraswati Puja 2025 Highlights' },
                     { id: '8Snvn0-Qq9w', title: 'Unity & Celebration at Campus' },
@@ -1020,7 +1017,8 @@
             const grid = document.getElementById('blog-grid');
             if(!grid) return;
             try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}`);
+                // Added Date.now() as a cache buster for the Substack feed to ensure mobile devices see latest posts
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}&_=${Date.now()}`);
                 const data = await res.json();
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
                     grid.innerHTML = data.items.slice(0, 3).map(b => {
