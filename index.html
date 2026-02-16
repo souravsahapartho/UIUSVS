@@ -319,13 +319,14 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
-    <!-- Image Lightbox Modal -->
+    <!-- Lightbox Modal -->
     <div id="image-lightbox" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-md cursor-zoom-out" onclick="closeLightbox()">
         <button class="absolute top-6 right-6 text-white bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all z-[210] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
-        <div class="relative w-full h-full flex items-center justify-center">
-            <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scale-in" alt="Popup Image" onclick="event.stopPropagation()">
+        <div class="relative w-full h-full max-w-5xl flex items-center justify-center">
+            <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scale-in hidden" alt="Popup Image" onclick="event.stopPropagation()">
+            <div id="lightbox-video-container" class="w-full aspect-video rounded-lg overflow-hidden shadow-2xl animate-scale-in hidden" onclick="event.stopPropagation()"></div>
         </div>
     </div>
 
@@ -499,12 +500,12 @@
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative video-wrapper">
-                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
-                                <span class="placeholder-text mb-2">UIU SVS</span>
-                                <div class="video-loader"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Kali_Puja_2025/6.mp4', 'local')">
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <video class="w-full h-full object-cover relative z-10" muted><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -525,12 +526,12 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
                     <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative video-wrapper">
-                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
-                                <span class="placeholder-text mb-2">UIU SVS</span>
-                                <div class="video-loader"></div>
+                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Holi_2025/1.mp4', 'local')">
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <video class="w-full h-full object-cover relative z-10" muted><source src="Holi_2025/1.mp4" type="video/mp4"></video>
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -551,19 +552,19 @@
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
                     <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
-                             <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
-                                <span class="placeholder-text mb-2">UIU SVS</span>
-                                <div class="video-loader"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Prayer/2.mp4', 'local')">
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <video class="w-full h-full object-cover relative z-10" muted><source src="Prayer/2.mp4" type="video/mp4"></video>
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Prayer/2.mp4" type="video/mp4"></video>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative video-wrapper">
-                             <div class="absolute inset-0 flex flex-col items-center justify-center z-10 loading-overlay bg-[#fff8f0]">
-                                <span class="placeholder-text mb-2">UIU SVS</span>
-                                <div class="video-loader"></div>
+                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Prayer/1.mp4', 'local')">
+                            <div class="aspect-video w-full h-full relative overflow-hidden">
+                                <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
+                                <video class="w-full h-full object-cover relative z-10" muted><source src="Prayer/1.mp4" type="video/mp4"></video>
+                                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <video class="w-full h-full object-cover relative z-20" controls preload="auto"><source src="Prayer/1.mp4" type="video/mp4"></video>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -815,12 +816,10 @@
                             player.pauseVideo();
                         }
                     }
-                } catch (e) {
-                    // Silently fail if player is destroyed or inaccessible
-                }
+                } catch (e) {}
             });
 
-            // Fallback: Message all other iframes (just in case they weren't registered yet)
+            // Fallback: Message all other iframes
             document.querySelectorAll('iframe').forEach(f => {
                 if (f !== except) {
                     try {
@@ -830,42 +829,9 @@
             });
         }
 
-        window.loadVideo = (container, id) => {
-            // Immediately stop anything else playing
-            stopOtherMedia(null);
-            
-            const videoId = id.includes('&') ? id.split('&')[0] : id;
-            const uniqueId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
-            
-            // Clear container and create an element for the API to target
-            const aspectDiv = container.querySelector('.aspect-video');
-            aspectDiv.innerHTML = `<div id="${uniqueId}" class="w-full h-full"></div>`;
-            container.onclick = null;
-
-            // Use the YouTube IFrame API to create a player
-            if (window.YT && window.YT.Player) {
-                const player = new YT.Player(uniqueId, {
-                    videoId: videoId,
-                    playerVars: {
-                        'autoplay': 1,
-                        'rel': 0,
-                        'enablejsapi': 1,
-                        'modestbranding': 1
-                    },
-                    events: {
-                        'onStateChange': (event) => {
-                            // When this video starts playing (state 1), stop all others
-                            if (event.data === YT.PlayerState.PLAYING) {
-                                stopOtherMedia(event.target.getIframe());
-                            }
-                        }
-                    }
-                });
-                ytPlayers.add(player);
-            } else {
-                // Fallback if API not ready
-                aspectDiv.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" class="w-full h-full absolute top-0 left-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            }
+        window.loadVideo = (container, id, type = 'youtube') => {
+            // Updated to use the popup lightbox instead of inline play
+            window.openLightbox(id, type);
         };
 
         window.closeSuccessModal = () => {
@@ -879,19 +845,40 @@
             window.location.hash = '#gallery';
         };
 
-        // Lightbox Functions
-        window.openLightbox = (src) => {
-            if (!src || src.includes('data:image/svg')) return;
+        // Enhanced Lightbox Functions for both Images and Videos
+        window.openLightbox = (content, type = 'image') => {
+            if (!content) return;
             const lightbox = document.getElementById('image-lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
-            lightboxImg.src = src;
+            const videoContainer = document.getElementById('lightbox-video-container');
+            
+            // Hide both first
+            lightboxImg.classList.add('hidden');
+            videoContainer.classList.add('hidden');
+            videoContainer.innerHTML = '';
+            
+            if (type === 'image') {
+                if (content.includes('data:image/svg')) return;
+                lightboxImg.src = content;
+                lightboxImg.classList.remove('hidden');
+            } else if (type === 'youtube') {
+                videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${content}?autoplay=1&rel=0&enablejsapi=1" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                videoContainer.classList.remove('hidden');
+            } else if (type === 'local') {
+                videoContainer.innerHTML = `<video controls autoplay class="w-full h-full bg-black"><source src="${content}" type="video/mp4"></video>`;
+                videoContainer.classList.remove('hidden');
+            }
+            
             lightbox.classList.remove('hidden');
             lightbox.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            stopOtherMedia(null);
         };
 
         window.closeLightbox = () => {
             const lightbox = document.getElementById('image-lightbox');
+            const videoContainer = document.getElementById('lightbox-video-container');
+            videoContainer.innerHTML = ''; // Stop video playback
             lightbox.classList.add('hidden');
             lightbox.classList.remove('flex');
             document.body.style.overflow = '';
@@ -911,12 +898,10 @@
             if(!list) return;
             
             const now = new Date();
-            // Start comparison from midnight (12:00 AM) of the current day in local time
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             
             const active = upcomingEventsData
                 .map(e => {
-                    // Explicitly parse YYYY-MM-DD to local midnight (12:00 AM)
                     const [y, m, d] = e.date.split('-').map(Number);
                     const eventTime = new Date(y, m - 1, d).getTime();
                     return { ...e, eventTime };
@@ -932,9 +917,7 @@
 
             const html = active.map(e => {
                 const eventTime = e.eventTime;
-                // Calculate difference until local midnight of that day
                 const diffMs = eventTime - now.getTime();
-                
                 const isOngoing = new Date(eventTime).toDateString() === now.toDateString();
 
                 let statusText = "";
@@ -956,7 +939,6 @@
                         statusText = `${diffDays}d ${diffHours}h left`;
                     }
                     
-                    // Style logic based on urgency
                     if (diffDays < 3) {
                         statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
                         badgePrefix = "⚡ ";
@@ -1004,7 +986,6 @@
             const grid = document.getElementById('youtube-video-grid');
             if(!grid) return;
             try {
-                // Added Date.now() as a cache buster for the RSS proxy
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ')}&_=${Date.now()}`);
                 const data = await res.json();
                 
@@ -1029,7 +1010,7 @@
                         </div>`;
                     }).join('');
                 } else {
-                    throw new Error('API unreachable or empty');
+                    throw new Error('API unreachable');
                 }
             } catch (e) { 
                 const highlights = [
@@ -1056,7 +1037,6 @@
             const grid = document.getElementById('blog-grid');
             if(!grid) return;
             try {
-                // Added Date.now() as a cache buster for the Substack feed to ensure mobile devices see latest posts
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://uiusvs.substack.com/feed')}&_=${Date.now()}`);
                 const data = await res.json();
                 if (data.status === 'ok' && data.items && data.items.length > 0) {
@@ -1192,11 +1172,8 @@
             setTimeout(() => { if (!isPageLoaded) hideLoader(); }, 6000);
             
             displayRandomQuote();
-            
-            // Initial Render
             renderEvents();
             setInterval(renderEvents, 60000);
-            
             fetchYouTube();
             fetchBlogs();
             initVideoSyncAndLoading();
@@ -1210,7 +1187,6 @@
                 }
             });
 
-            // Close Lightbox on ESC key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') window.closeLightbox();
             });
