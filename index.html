@@ -319,12 +319,37 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
-    <!-- Lightbox Modal -->
+    <!-- Lightbox Modal with Alpona Decorations -->
     <div id="image-lightbox" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-md cursor-zoom-out" onclick="closeLightbox()">
+        
+        <!-- Large Rotating Central Alpona (Background) -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <svg class="w-[120%] h-[120%] opacity-[0.03] text-yellow-500 animate-[spin_60s_linear_infinite]" viewBox="0 0 200 200" fill="currentColor">
+                <path d="M100 0C105.5 0 110 4.5 110 10V30.5C125.6 33.1 139.7 40.5 150.5 51.3L165 36.8C168.9 32.9 175.2 32.9 179.1 36.8C183 40.7 183 47 179.1 50.9L164.6 65.4C175.4 76.2 182.8 90.3 185.4 105.9H205.9C211.4 105.9 215.9 110.4 215.9 115.9C215.9 121.4 211.4 125.9 205.9 125.9H185.4C182.8 141.5 175.4 155.6 164.6 166.4L179.1 180.9C183 184.8 183 191.1 179.1 195C175.2 198.9 168.9 198.9 165 195L150.5 180.5C139.7 191.3 125.6 198.7 110 201.3V221.8C110 227.3 105.5 231.8 100 231.8C94.5 231.8 90 227.3 90 221.8V201.3C74.4 198.7 60.3 191.3 49.5 180.5L35 195C31.1 198.9 24.8 198.9 20.9 195C17 191.1 17 184.8 20.9 180.9L35.4 166.4C24.6 155.6 17.2 141.5 14.6 125.9H-5.9C-11.4 125.9 -15.9 121.4 -15.9 115.9C-15.9 110.4 -11.4 105.9 -5.9 105.9H14.6C17.2 90.3 24.6 76.2 35.4 65.4L20.9 50.9C17 47 17 40.7 20.9 36.8C24.8 32.9 31.1 32.9 35 36.8L49.5 51.3C60.3 40.5 74.4 33.1 90 30.5V10C90 4.5 94.5 0 100 0Z" />
+            </svg>
+        </div>
+
+        <!-- Decorative Corner Alponas -->
+        <div class="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 opacity-20 pointer-events-none">
+            <svg class="w-full h-full text-yellow-500" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0 0C30 0 50 20 50 50C20 50 0 30 0 0Z" opacity="0.6"/>
+                <circle cx="20" cy="20" r="5"/>
+                <circle cx="35" cy="35" r="3"/>
+            </svg>
+        </div>
+        <div class="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-20 pointer-events-none rotate-180">
+            <svg class="w-full h-full text-yellow-500" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0 0C30 0 50 20 50 50C20 50 0 30 0 0Z" opacity="0.6"/>
+                <circle cx="20" cy="20" r="5"/>
+                <circle cx="35" cy="35" r="3"/>
+            </svg>
+        </div>
+
         <button class="absolute top-6 right-6 text-white bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all z-[210] flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
-        <div class="relative w-full h-full max-w-5xl flex items-center justify-center">
+
+        <div class="relative w-full h-full max-w-5xl flex items-center justify-center z-10">
             <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scale-in hidden" alt="Popup Image" onclick="event.stopPropagation()">
             <div id="lightbox-video-container" class="w-full aspect-video rounded-lg overflow-hidden shadow-2xl animate-scale-in hidden" onclick="event.stopPropagation()"></div>
         </div>
