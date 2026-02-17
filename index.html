@@ -72,8 +72,8 @@
         img { pointer-events: none; }
         video[controls], iframe { pointer-events: auto; }
         
-        /* Lightbox Specific Styles */
-        .lightbox-active img { pointer-events: auto !important; cursor: zoom-in; }
+        /* Lightbox Specific Styles - Updated to target only gallery images */
+        .lightbox-active .gallery-img { pointer-events: auto !important; cursor: zoom-in; }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -319,45 +319,61 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
-    <!-- Image Lightbox Modal with Alpona Decorations -->
-    <div id="image-lightbox" class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-md cursor-zoom-out" onclick="closeLightbox()">
+    <!-- Image Lightbox Modal with Enhanced Alpona Decorations -->
+    <div id="image-lightbox" class="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-950/40 via-black to-black z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-xl cursor-zoom-out" onclick="closeLightbox()">
         
+        <!-- Animated Divine Glow (Background) -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="w-[80%] h-[80%] bg-orange-600/10 blur-[120px] rounded-full animate-pulse"></div>
+        </div>
+
         <!-- Large Rotating Central Alpona (Background) -->
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-            <svg class="w-[120%] h-[120%] opacity-[0.03] text-yellow-500 animate-[spin_60s_linear_infinite]" viewBox="0 0 200 200" fill="currentColor">
+            <svg class="w-[110%] h-[110%] opacity-[0.08] text-yellow-500/50 animate-[spin_100s_linear_infinite]" viewBox="0 0 200 200" fill="currentColor">
                 <path d="M100 0C105.5 0 110 4.5 110 10V30.5C125.6 33.1 139.7 40.5 150.5 51.3L165 36.8C168.9 32.9 175.2 32.9 179.1 36.8C183 40.7 183 47 179.1 50.9L164.6 65.4C175.4 76.2 182.8 90.3 185.4 105.9H205.9C211.4 105.9 215.9 110.4 215.9 115.9C215.9 121.4 211.4 125.9 205.9 125.9H185.4C182.8 141.5 175.4 155.6 164.6 166.4L179.1 180.9C183 184.8 183 191.1 179.1 195C175.2 198.9 168.9 198.9 165 195L150.5 180.5C139.7 191.3 125.6 198.7 110 201.3V221.8C110 227.3 105.5 231.8 100 231.8C94.5 231.8 90 227.3 90 221.8V201.3C74.4 198.7 60.3 191.3 49.5 180.5L35 195C31.1 198.9 24.8 198.9 20.9 195C17 191.1 17 184.8 20.9 180.9L35.4 166.4C24.6 155.6 17.2 141.5 14.6 125.9H-5.9C-11.4 125.9 -15.9 121.4 -15.9 115.9C-15.9 110.4 -11.4 105.9 -5.9 105.9H14.6C17.2 90.3 24.6 76.2 35.4 65.4L20.9 50.9C17 47 17 40.7 20.9 36.8C24.8 32.9 31.1 32.9 35 36.8L49.5 51.3C60.3 40.5 74.4 33.1 90 30.5V10C90 4.5 94.5 0 100 0Z" />
             </svg>
         </div>
 
         <!-- Decorative Corner Alponas -->
-        <div class="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 opacity-20 pointer-events-none">
-            <svg class="w-full h-full text-yellow-500" viewBox="0 0 100 100" fill="currentColor">
-                <path d="M0 0C30 0 50 20 50 50C20 50 0 30 0 0Z" opacity="0.6"/>
-                <circle cx="20" cy="20" r="5"/>
-                <circle cx="35" cy="35" r="3"/>
+        <div class="absolute top-0 left-0 w-40 h-40 md:w-64 md:h-64 opacity-25 pointer-events-none">
+            <svg class="w-full h-full text-orange-400" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0 0C40 0 70 30 70 70C30 70 0 40 0 0Z" opacity="0.4"/>
+                <circle cx="25" cy="25" r="6" fill="#fbbf24"/>
+                <circle cx="45" cy="45" r="4" fill="#f59e0b"/>
             </svg>
         </div>
-        <div class="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-20 pointer-events-none rotate-180">
-            <svg class="w-full h-full text-yellow-500" viewBox="0 0 100 100" fill="currentColor">
-                <path d="M0 0C30 0 50 20 50 50C20 50 0 30 0 0Z" opacity="0.6"/>
-                <circle cx="20" cy="20" r="5"/>
-                <circle cx="35" cy="35" r="3"/>
+        <div class="absolute bottom-0 right-0 w-40 h-40 md:w-64 md:h-64 opacity-25 pointer-events-none rotate-180">
+            <svg class="w-full h-full text-orange-400" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0 0C40 0 70 30 70 70C30 70 0 40 0 0Z" opacity="0.4"/>
+                <circle cx="25" cy="25" r="6" fill="#fbbf24"/>
+                <circle cx="45" cy="45" r="4" fill="#f59e0b"/>
             </svg>
         </div>
 
-        <button class="absolute top-6 right-6 text-white bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all z-[210] flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <!-- Close Button -->
+        <button class="absolute top-6 right-6 text-white bg-white/5 backdrop-blur-md p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[210] flex items-center justify-center shadow-lg" onclick="closeLightbox()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
         <!-- Main Content Wrapper -->
-        <div class="relative w-full h-full flex flex-col items-center justify-center z-10 px-4 pt-12 pb-24">
-            <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scale-in" alt="Popup Image" onclick="event.stopPropagation()">
+        <div class="relative w-full h-full flex flex-col items-center justify-center z-10 px-4 pt-10 pb-28">
+            <div class="relative group max-w-full max-h-full">
+                <!-- Inner Light Border for Image -->
+                <div class="absolute -inset-1 bg-gradient-to-tr from-yellow-500/20 to-orange-500/20 rounded-xl blur-sm opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <img id="lightbox-img" src="" class="relative max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 animate-scale-in" alt="Popup Image" onclick="event.stopPropagation()">
+            </div>
             
-            <!-- Warning Message Strictly at Bottom -->
-            <div class="absolute bottom-8 left-0 w-full text-center px-4 pointer-events-none">
-                <p class="text-white/60 text-[10px] md:text-xs tracking-[0.2em] uppercase font-bold bg-black/50 backdrop-blur-md px-6 py-2 rounded-full border border-white/5 inline-block animate-pulse">
-                    Respect the Heritage: Please use this image responsibly
-                </p>
+            <!-- Enhanced Warning Message Properly Placed -->
+            <div class="absolute bottom-10 left-0 w-full flex justify-center px-6 pointer-events-none">
+                <div class="flex items-center gap-3 bg-black/60 backdrop-blur-lg px-8 py-3 rounded-full border border-yellow-500/20 shadow-2xl animate-pulse">
+                    <svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                    </svg>
+                    <p class="text-white text-[11px] md:text-sm tracking-widest uppercase font-bold text-center">
+                        <span class="text-yellow-500">Respect the Heritage:</span> Please use this image responsibly
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -903,7 +919,7 @@
             window.location.hash = '#gallery';
         };
 
-        // Lightbox Function for Images with Alpona Decorations
+        // Lightbox Function for Images with Enhanced Alpona Decorations
         window.openLightbox = (src) => {
             if (!src || src.includes('data:image/svg')) return;
             const lightbox = document.getElementById('image-lightbox');
@@ -998,6 +1014,7 @@
                 }
 
                 const d = new Date(e.eventTime);
+                // Note: gallery-img class removed from here to disable lightbox popup
                 return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
                     <div class="text-left flex flex-col justify-between">
                         <div>
@@ -1008,7 +1025,7 @@
                     </div>
                     <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50 relative">
                         <div class="media-placeholder" style="background: transparent;"><span class="placeholder-text" style="font-size: 0.5rem; opacity: 0.6;">SVS</span></div>
-                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10 gallery-img" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10 event-thumb-img" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                     </div>
                 </div>`;
             }).join('');
@@ -1102,7 +1119,7 @@
                         <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center" onclick="window.open('${b.link}', '_blank')">
                             <div class="mb-5 overflow-hidden rounded-lg bg-gray-200 aspect-video w-full relative">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 relative z-10 gallery-img" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'" onload="this.previousElementSibling.style.display='none'">
+                                <img src="${thumb}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 relative z-10 blog-thumb-img" alt="${b.title}" onerror="this.src='https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog'" onload="this.previousElementSibling.style.display='none'">
                             </div>
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
                             <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
@@ -1217,7 +1234,7 @@
             initVideoSyncAndLoading();
             initMembershipFormDetection();
 
-            // Lightbox Event Delegation
+            // Lightbox Event Delegation - Only for elements with gallery-img class
             document.addEventListener('click', (e) => {
                 const target = e.target;
                 if (target.classList.contains('gallery-img')) {
