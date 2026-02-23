@@ -181,11 +181,7 @@
             background-color: #7f1d1d;
             color: #fef3c7;
             border-top: 2px solid #d97706;
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            z-index: 100;
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -427,7 +423,7 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="#home" class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-100">
+                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
@@ -736,14 +732,14 @@
                     </div>
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
@@ -1294,121 +1290,6 @@
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         });
-    </script>
-
-    <!-- 
-      MANDATORY ANTI-SCREENSHOT & ANTI-COPY LAYER
-      This script instantly blurs the UI when focus is lost (mobile overlays/swiping)
-      and blocks all standard keyboard shortcuts.
-    -->
-    <style>
-        /* Extreme mandatory blur applied to the entire HTML document */
-        html.svs-protected body {
-            filter: blur(100px) grayscale(1) !important;
-            opacity: 0.05 !important;
-            pointer-events: none !important;
-            transition: none !important; /* Instant trigger */
-        }
-        
-        #svs-guard-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 1000000; display: none;
-            align-items: center; justify-content: center; color: #fff;
-            font-family: serif; text-align: center; pointer-events: auto;
-        }
-
-        @media print { body { display: none !important; } }
-    </style>
-
-    <div id="svs-guard-screen">
-        <div>
-            <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">SECURITY GUARD ACTIVE</div>
-            <div style="font-size: 14px; opacity: 0.6; letter-spacing: 2px;">CONTENT PROTECTED</div>
-        </div>
-    </div>
-
-    <script>
-    (function() {
-        'use strict';
-        const html = document.documentElement;
-        const guard = document.getElementById('svs-guard-screen');
-
-        const forceLock = () => {
-            html.classList.add('svs-protected');
-            guard.style.display = 'flex';
-        };
-
-        const forceUnlock = () => {
-            html.classList.remove('svs-protected');
-            guard.style.display = 'none';
-        };
-
-        // 1. Monitor System Overlays (Swiping Control Center, Notification shade, Screenshot UI)
-        // These events fire the moment the browser window is no longer the active system element.
-        window.addEventListener('blur', forceLock);
-        window.addEventListener('focus', forceUnlock);
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) forceLock(); else forceUnlock();
-        });
-
-        // 2. Comprehensive Keyboard Monitor (PC & Mac)
-        const killEvent = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            forceLock();
-            setTimeout(forceUnlock, 2000);
-            return false;
-        };
-
-        document.addEventListener('keydown', (e) => {
-            const ctrl = e.ctrlKey || e.metaKey;
-            const shift = e.shiftKey;
-            
-            // Block PrintScreen (standard keyboard)
-            if (e.key === "PrintScreen" || e.keyCode === 44) {
-                navigator.clipboard.writeText("");
-                return killEvent(e);
-            }
-
-            // Block DevTools (F12, Ctrl+Shift+I/J/C)
-            if (e.keyCode === 123 || (ctrl && shift && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67))) {
-                return killEvent(e);
-            }
-
-            // Block Browser Controls (Ctrl+S, Ctrl+U, Ctrl+P)
-            if (ctrl && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 80)) {
-                return killEvent(e);
-            }
-
-            // Block Content Theft (Ctrl+C, Ctrl+X, Ctrl+A)
-            if (ctrl && (e.keyCode === 67 || e.keyCode === 88 || e.keyCode === 65)) {
-                return killEvent(e);
-            }
-
-            // Block Mac Screenshot Shortcuts (Cmd+Shift+3/4/5)
-            if (e.metaKey && shift && (e.keyCode === 51 || e.keyCode === 52 || e.keyCode === 53)) {
-                return killEvent(e);
-            }
-        }, true);
-
-        // 3. UI Blocks
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-
-        // 4. Image Hardening
-        const lockImages = () => {
-            document.querySelectorAll('img').forEach(img => {
-                img.style.pointerEvents = 'none';
-                img.setAttribute('draggable', 'false');
-                img.oncontextmenu = (e) => e.preventDefault();
-            });
-        };
-        lockImages();
-        new MutationObserver(lockImages).observe(document.body, { childList: true, subtree: true });
-
-        console.log("%cSecurity Active: Unauthorized inspection monitored.", "color: red; font-weight: bold;");
-    })();
     </script>
 </body>
 </html>
