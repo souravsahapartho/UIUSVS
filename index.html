@@ -181,7 +181,7 @@
             background-color: #7f1d1d;
             color: #fef3c7;
             border-top: 2px solid #d97706;
-            position: fixed bottom: 0; left: 0; width: 100%; z-index: 100;
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -472,7 +472,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
                     <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
-                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-50">Explore Events</a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
@@ -732,14 +732,14 @@
                     </div>
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-5 mx-auto group-hover:scale-105 transition-transform">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
@@ -1290,94 +1290,6 @@
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         });
-    </script>
-
-    <!-- 
-      ADVANCED FRONT-END PROTECTION LAYER
-      Note: Layered defense to hinder content theft and screenshots.
-    -->
-    <style>
-        .svs-protection-blur {
-            filter: blur(40px) !important;
-            pointer-events: none !important;
-            transition: filter 0.3s ease;
-        }
-        /* Hides content when printing (helps hinder some mobile screenshot workflows) */
-        @media print {
-            body { display: none !important; }
-        }
-    </style>
-
-    <script>
-    (function() {
-        'use strict';
-        const body = document.body;
-
-        const applyBlur = (state) => {
-            if (state) body.classList.add('svs-protection-blur');
-            else body.classList.remove('svs-protection-blur');
-        };
-
-        const protectImages = () => {
-            document.querySelectorAll('img').forEach(img => {
-                img.style.pointerEvents = 'none';
-                img.style.webkitUserDrag = 'none';
-                img.addEventListener('contextmenu', e => e.preventDefault());
-                img.addEventListener('dragstart', e => e.preventDefault());
-            });
-        };
-
-        // Comprehensive Keyboard Shortcut Blocker
-        document.addEventListener('keydown', (e) => {
-            const ctrl = e.ctrlKey || e.metaKey;
-            const shift = e.shiftKey;
-
-            // Block common screenshot/dev/save shortcuts
-            const blockedKeys = [
-                e.keyCode === 123, // F12
-                ctrl && shift && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67), // Ctrl+Shift+I/J/C
-                ctrl && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 88), // Ctrl+U/S/C/V/X
-                e.key === "PrintScreen",
-                ctrl && e.key === "p", // Print
-                (e.metaKey && shift && e.keyCode === 52), // Cmd+Shift+4 (Mac SS)
-                (e.metaKey && shift && e.keyCode === 51)  // Cmd+Shift+3 (Mac SS)
-            ];
-
-            if (blockedKeys.some(condition => condition)) {
-                e.preventDefault();
-                // Brief blur to hinder screenshots
-                applyBlur(true);
-                setTimeout(() => applyBlur(false), 500);
-                return false;
-            }
-        });
-
-        // Tab Visibility & Focus (Helps hinder mobile screenshot previews and app switching)
-        document.addEventListener('visibilitychange', () => {
-            applyBlur(document.hidden);
-        });
-
-        window.addEventListener('blur', () => {
-            // Slight delay to allow clicks within the same window but catch app-switching
-            setTimeout(() => { if (!document.hasFocus()) applyBlur(true); }, 100);
-        });
-
-        window.addEventListener('focus', () => {
-            applyBlur(false);
-        });
-
-        // Global UI Blocks
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-
-        // Init
-        protectImages();
-        const obs = new MutationObserver(protectImages);
-        obs.observe(document.body, { childList: true, subtree: true });
-        
-        console.log("%cUnauthorized access or inspection is monitored.", "color: red; font-size: 20px; font-weight: bold;");
-    })();
     </script>
 </body>
 </html>
