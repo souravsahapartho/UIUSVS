@@ -427,7 +427,7 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="#home" class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
+                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-100">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
@@ -1297,117 +1297,117 @@
     </script>
 
     <!-- 
-      ADVANCED FRONT-END PROTECTION LAYER
-      Note: Layered defense to hinder content theft and screenshots.
-      Updates: Blackout method used on blur/focus switch to disrupt captures.
+      MANDATORY ANTI-SCREENSHOT & ANTI-COPY LAYER
+      This script instantly blurs the UI when focus is lost (mobile overlays/swiping)
+      and blocks all standard keyboard shortcuts.
     -->
     <style>
-        .svs-blackout-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 999999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-family: serif;
-            font-size: 1.5rem;
-            text-align: center;
-            padding: 2rem;
-            pointer-events: auto;
-        }
-        .svs-protection-active {
+        /* Extreme mandatory blur applied to the entire HTML document */
+        html.svs-protected body {
             filter: blur(100px) grayscale(1) !important;
-            opacity: 0.1 !important;
+            opacity: 0.05 !important;
             pointer-events: none !important;
+            transition: none !important; /* Instant trigger */
         }
+        
+        #svs-guard-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 1000000; display: none;
+            align-items: center; justify-content: center; color: #fff;
+            font-family: serif; text-align: center; pointer-events: auto;
+        }
+
         @media print { body { display: none !important; } }
     </style>
 
-    <div id="blackout-screen" class="svs-blackout-overlay">
+    <div id="svs-guard-screen">
         <div>
-            <div class="mb-4">UIU SVS SECURITY</div>
-            <div class="text-sm opacity-50 uppercase tracking-widest">Protected Content</div>
+            <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">SECURITY GUARD ACTIVE</div>
+            <div style="font-size: 14px; opacity: 0.6; letter-spacing: 2px;">CONTENT PROTECTED</div>
         </div>
     </div>
 
     <script>
     (function() {
         'use strict';
-        const body = document.body;
-        const blackout = document.getElementById('blackout-screen');
+        const html = document.documentElement;
+        const guard = document.getElementById('svs-guard-screen');
 
-        const enableProtection = () => {
-            blackout.style.display = 'flex';
-            body.classList.add('svs-protection-active');
+        const forceLock = () => {
+            html.classList.add('svs-protected');
+            guard.style.display = 'flex';
         };
 
-        const disableProtection = () => {
-            blackout.style.display = 'none';
-            body.classList.remove('svs-protection-active');
+        const forceUnlock = () => {
+            html.classList.remove('svs-protected');
+            guard.style.display = 'none';
         };
 
-        // Shortcut Monitor
-        const blockShortcuts = (e) => {
+        // 1. Monitor System Overlays (Swiping Control Center, Notification shade, Screenshot UI)
+        // These events fire the moment the browser window is no longer the active system element.
+        window.addEventListener('blur', forceLock);
+        window.addEventListener('focus', forceUnlock);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) forceLock(); else forceUnlock();
+        });
+
+        // 2. Comprehensive Keyboard Monitor (PC & Mac)
+        const killEvent = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            forceLock();
+            setTimeout(forceUnlock, 2000);
+            return false;
+        };
+
+        document.addEventListener('keydown', (e) => {
             const ctrl = e.ctrlKey || e.metaKey;
             const shift = e.shiftKey;
             
-            const isScreenshot = e.key === "PrintScreen" || e.keyCode === 44 || (e.metaKey && shift && (e.keyCode === 51 || e.keyCode === 52));
-            const isDevTools = e.keyCode === 123 || (ctrl && shift && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67));
-            const isSaveSource = ctrl && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 80);
-            const isCopyPaste = ctrl && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 88);
-
-            if (isScreenshot || isDevTools || isSaveSource || isCopyPaste) {
-                e.preventDefault();
-                e.stopPropagation();
-                enableProtection();
-                setTimeout(disableProtection, 2000);
-                if(isScreenshot) navigator.clipboard.writeText("");
-                return false;
+            // Block PrintScreen (standard keyboard)
+            if (e.key === "PrintScreen" || e.keyCode === 44) {
+                navigator.clipboard.writeText("");
+                return killEvent(e);
             }
-        };
 
-        // Aggressive Image Protection
-        const protectImages = () => {
+            // Block DevTools (F12, Ctrl+Shift+I/J/C)
+            if (e.keyCode === 123 || (ctrl && shift && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67))) {
+                return killEvent(e);
+            }
+
+            // Block Browser Controls (Ctrl+S, Ctrl+U, Ctrl+P)
+            if (ctrl && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 80)) {
+                return killEvent(e);
+            }
+
+            // Block Content Theft (Ctrl+C, Ctrl+X, Ctrl+A)
+            if (ctrl && (e.keyCode === 67 || e.keyCode === 88 || e.keyCode === 65)) {
+                return killEvent(e);
+            }
+
+            // Block Mac Screenshot Shortcuts (Cmd+Shift+3/4/5)
+            if (e.metaKey && shift && (e.keyCode === 51 || e.keyCode === 52 || e.keyCode === 53)) {
+                return killEvent(e);
+            }
+        }, true);
+
+        // 3. UI Blocks
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+
+        // 4. Image Hardening
+        const lockImages = () => {
             document.querySelectorAll('img').forEach(img => {
                 img.style.pointerEvents = 'none';
                 img.setAttribute('draggable', 'false');
                 img.oncontextmenu = (e) => e.preventDefault();
             });
         };
+        lockImages();
+        new MutationObserver(lockImages).observe(document.body, { childList: true, subtree: true });
 
-        // Events
-        document.addEventListener('keydown', blockShortcuts, true);
-        document.addEventListener('keyup', (e) => {
-            if (e.key === "PrintScreen" || e.keyCode === 44) {
-                enableProtection();
-                setTimeout(disableProtection, 1500);
-            }
-        }, true);
-
-        // Mobile/System Focus Monitoring
-        // Most mobile screenshot gestures trigger a 'blur' event before the snap.
-        window.addEventListener('blur', enableProtection);
-        window.addEventListener('focus', disableProtection);
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) enableProtection();
-            else disableProtection();
-        });
-
-        // UI Interactions
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-
-        // Initialization
-        protectImages();
-        new MutationObserver(protectImages).observe(document.body, { childList: true, subtree: true });
-        
-        console.log("%cUnauthorized access or inspection is monitored.", "color: red; font-size: 20px; font-weight: bold;");
+        console.log("%cSecurity Active: Unauthorized inspection monitored.", "color: red; font-weight: bold;");
     })();
     </script>
 </body>
