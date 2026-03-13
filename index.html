@@ -816,7 +816,7 @@
                         <svg class="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         </svg>
-                        <p class="text-sm text-gray-700 text-left">
+                        <p class="text-sm text-gray-700 text-justify">
                             <strong class="text-orange-900">Secure & Confidential:</strong> Your information is fully secure. It will only be used for UIU SVS official events, communications, and generating your personalized Digital ID Card.
                         </p>
                     </div>
@@ -837,7 +837,7 @@
                             <!-- Student ID -->
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">UIU Student ID <span class="text-red-500">*</span></label>
-                                <input type="text" name="studentId" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 0112330701">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="studentId" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 0112330701">
                             </div>
                             <!-- Contact Number -->
                             <div>
@@ -1366,6 +1366,33 @@
                 membershipForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
+                    // --- Custom Validation Logic ---
+                    const emailField = document.querySelector("[name='email']").value.trim();
+                    const studentIdField = document.querySelector("[name='studentId']").value.trim();
+                    const phoneField = document.querySelector("[name='contactNumber']").value.trim();
+
+                    // Basic email regex
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(emailField)) {
+                        alert("Please enter your valid email address.");
+                        return; // Stop submission
+                    }
+
+                    // Check if Student ID is 9 digits (UIU standard length)
+                    const idRegex = /^\d{9}$/;
+                    if (!idRegex.test(studentIdField)) {
+                        alert("Please enter your valid Student ID (9 digits).");
+                        return; // Stop submission
+                    }
+
+                    // Check if Phone number is 11 digits (BD standard)
+                    const phoneRegex = /^\d{11}$/;
+                    if (!phoneRegex.test(phoneField)) {
+                        alert("Please enter your valid Phone Number (11 digits, e.g., 017xxxxxxxx).");
+                        return; // Stop submission
+                    }
+                    // --- End Validation ---
+
                     const submitBtn = document.getElementById('submitBtn');
                     const originalBtnContent = submitBtn.innerHTML;
                     
@@ -1393,7 +1420,7 @@
                     const web3FormData = {
                         access_key: "aada240c-d8d9-4d01-b88c-b2ef62c2cdb8",
                         subject: "New UIU SVS Membership Application",
-                        from_name: "UIU SVS System",
+                        from_name: "UIUSVS Website Team",
                         "Applicant Name": formData["Name"],
                         "Email": formData["Email"],
                         "Student ID": formData["UIU Student ID"],
@@ -1403,7 +1430,7 @@
                         "Blood Group": formData["Blood Group"],
                         "Address": formData["Present Address"],
                         "Reason": formData["Why do you want to join UIU SVS?"],
-                        "System Website": "https://uiusvs.netlify.app"
+                        "UIUSVS Website": "https://uiusvs.netlify.app"
                     };
                     
                     // Send Admin Notification asynchronously via Web3Forms (Fire and Forget)
