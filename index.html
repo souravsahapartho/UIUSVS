@@ -152,10 +152,14 @@
             border: 1px solid #fca5a5;
             box-shadow: 0 4px 15px rgba(185, 28, 28, 0.3);
         }
-        .btn-puja:hover {
+        .btn-puja:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(185, 28, 28, 0.45);
             background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+        }
+        .btn-puja:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
         .btn-explore {
             background: transparent;
@@ -314,6 +318,31 @@
             border: 1px solid rgba(185, 28, 28, 0.05);
             border-radius: 50%;
             animation: spin 10s linear infinite;
+        }
+
+        /* Custom Input selection styling to allow users to select text naturally inside inputs */
+        input, textarea, select {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* Smooth Custom Dropdown for all devices */
+        .smooth-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ea580c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .smooth-select:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ea580c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 15l7-7 7 7'%3E%3C/path%3E%3C/svg%3E");
         }
     </style>
 </head>
@@ -777,10 +806,96 @@
         <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-6">
             <div class="container mx-auto relative z-10 flex flex-col items-center">
                 <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
-                <div class="max-w-3xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden p-1 sm:p-2 border-4 border-yellow-500/30">
-                    <div class="responsive-iframe-container">
-                        <iframe id="membership-form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdfz-lRBm0t_8uUmBu_xjOi-V5NSyMiy4x8V5gpQM_m30KXeA/viewform?embedded=true">Loading…</iframe>
+                
+                <div class="max-w-3xl w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden p-6 sm:p-10 border border-orange-100 relative">
+                    <!-- Decorative Corner Pattern -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-full opacity-50 pointer-events-none"></div>
+
+                    <!-- Security & Privacy Note -->
+                    <div class="bg-orange-50/80 border border-orange-200 rounded-2xl p-4 mb-8 flex items-start gap-3 relative z-10">
+                        <svg class="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <p class="text-sm text-gray-700 text-left">
+                            <strong class="text-orange-900">Secure & Confidential:</strong> Your information is fully secure. It will only be used for UIU SVS official events, communications, and generating your personalized Digital ID Card.
+                        </p>
                     </div>
+
+                    <form id="membershipForm" class="space-y-6 text-left relative z-10">
+                        <!-- Grid for 2 columns -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Binoy Sarker">
+                            </div>
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address <span class="text-red-500">*</span></label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. binoy@example.com">
+                            </div>
+                            <!-- Student ID -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">UIU Student ID <span class="text-red-500">*</span></label>
+                                <input type="text" name="studentId" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 0112330701">
+                            </div>
+                            <!-- Contact Number -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Contact Number <span class="text-red-500">*</span></label>
+                                <input type="tel" name="contactNumber" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 017xxxxxxxx">
+                            </div>
+                            <!-- Department -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Department <span class="text-red-500">*</span></label>
+                                <select name="department" id="departmentSelect" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="CSE">CSE</option>
+                                    <option value="EEE">EEE</option>
+                                    <option value="BBA">BBA</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Pharmacy">Pharmacy</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input type="text" name="otherDepartment" id="otherDepartmentInput" class="hidden w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 mt-3" placeholder="Please specify your department">
+                            </div>
+                            <!-- Trimester/Year -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Trimester/Year <span class="text-red-500">*</span></label>
+                                <input type="text" name="trimester" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Spring 2026 / 1st Year">
+                            </div>
+                            <!-- Blood Group -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Blood Group <span class="text-red-500">*</span></label>
+                                <select name="bloodGroup" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                    <option value="" disabled selected>Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <!-- Present Address -->
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Present Address <span class="text-red-500">*</span></label>
+                                <input type="text" name="address" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Sayednagar, Vatara, Dhaka">
+                            </div>
+                        </div>
+                        
+                        <!-- Why join (Optional) -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Why do you want to join UIU SVS? <span class="text-gray-400 font-normal normal-case tracking-normal ml-1">(Optional)</span></label>
+                            <textarea name="reason" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Tell us a little about your motivation..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full btn-base btn-puja py-4 text-lg mt-4 flex items-center justify-center gap-2">
+                            <span>Submit Application</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -842,7 +957,7 @@
 { text: "সত্যই ঈশ্বর, আর ঈশ্বরই সত্য।", author: "মহাত্মা গান্ধী" },
 { text: "কর্মই তোমার অধিকার, ফলের প্রতি নয়।", author: "শ্রীমদ্ভগবদ্গীতা" },
 { text: "অহিংসাই পরম ধর্ম।", author: "মহাভারত" },
-{ text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+{ text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
 { text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
 { text: "মনই মানুষের বন্ধু, মনই মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
 { text: "যে নিজেকে জয় করেছে, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
@@ -1207,23 +1322,6 @@
             });
         }
 
-        function initMembershipFormDetection() {
-            const formIframe = document.getElementById('membership-form-iframe');
-            let loadCount = 0;
-            if (formIframe) {
-                formIframe.onload = function() {
-                    loadCount++;
-                    if (loadCount > 1) {
-                        const overlay = document.getElementById('form-success-overlay');
-                        if (overlay) {
-                            overlay.classList.remove('hidden');
-                            overlay.classList.add('flex');
-                        }
-                    }
-                };
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
@@ -1244,7 +1342,111 @@
             fetchYouTube();
             fetchBlogs();
             initVideoSyncAndLoading();
-            initMembershipFormDetection();
+
+            /* ======== Custom Native HTML Form Logic ======== */
+            const deptSelect = document.getElementById('departmentSelect');
+            const otherDeptInput = document.getElementById('otherDepartmentInput');
+
+            if (deptSelect && otherDeptInput) {
+                // Show/hide custom department input
+                deptSelect.addEventListener('change', function() {
+                    if (this.value === 'Other') {
+                        otherDeptInput.classList.remove('hidden');
+                        otherDeptInput.required = true;
+                    } else {
+                        otherDeptInput.classList.add('hidden');
+                        otherDeptInput.required = false;
+                        otherDeptInput.value = '';
+                    }
+                });
+            }
+
+            const membershipForm = document.getElementById('membershipForm');
+            if (membershipForm) {
+                membershipForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const submitBtn = document.getElementById('submitBtn');
+                    const originalBtnContent = submitBtn.innerHTML;
+                    
+                    // Display a quick loading state to acknowledge the click
+                    submitBtn.innerHTML = '<div class="video-loader !w-5 !h-5 !border-white !border-t-transparent !border-[2px] mr-2"></div> Submitting...';
+                    submitBtn.disabled = true;
+
+                    // Compute final department value
+                    const deptValue = deptSelect.value === 'Other' ? otherDeptInput.value : deptSelect.value;
+
+                    // Build JSON payload matching exactly the requested column names
+                    const formData = {
+                        "Email": document.querySelector("[name='email']").value,
+                        "Name": document.querySelector("[name='name']").value,
+                        "UIU Student ID": document.querySelector("[name='studentId']").value,
+                        "Contact Number": document.querySelector("[name='contactNumber']").value,
+                        "Select Your Department": deptValue,
+                        "Trimester/Year": document.querySelector("[name='trimester']").value,
+                        "Blood Group": document.querySelector("[name='bloodGroup']").value,
+                        "Present Address": document.querySelector("[name='address']").value,
+                        "Why do you want to join UIU SVS?": document.querySelector("[name='reason']").value
+                    };
+
+                    // Web3Forms Admin Notification Payload
+                    const web3FormData = {
+                        access_key: "aada240c-d8d9-4d01-b88c-b2ef62c2cdb8",
+                        subject: "New UIU SVS Membership Application",
+                        from_name: "UIU SVS System",
+                        "Applicant Name": formData["Name"],
+                        "Email": formData["Email"],
+                        "Student ID": formData["UIU Student ID"],
+                        "Contact Number": formData["Contact Number"],
+                        "Department": formData["Select Your Department"],
+                        "Trimester": formData["Trimester/Year"],
+                        "Blood Group": formData["Blood Group"],
+                        "Address": formData["Present Address"],
+                        "Reason": formData["Why do you want to join UIU SVS?"]
+                    };
+                    
+                    // Send Admin Notification asynchronously via Web3Forms (Fire and Forget)
+                    fetch("https://api.web3forms.com/submit", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify(web3FormData)
+                    }).catch(e => console.error("Admin notification failed:", e));
+
+                    // Google Apps Script Web App URL
+                    const scriptURL = "https://script.google.com/macros/s/AKfycbz6VerjOL9udJ43V5pu6Q0you828VevPTv0LAoFUg_AIixjJizGgzNNphHJc407Ybun/exec";
+
+                    // Send data to Google Sheets asynchronously (Fire and Forget)
+                    fetch(scriptURL, {
+                        method: "POST",
+                        body: JSON.stringify(formData),
+                        headers: {
+                            "Content-Type": "text/plain;charset=utf-8"
+                        }
+                    }).catch(error => console.error('Submission Error:', error));
+
+                    // Instant UI Feedback: Show success modal after a tiny delay for UX
+                    setTimeout(() => {
+                        const overlay = document.getElementById('form-success-overlay');
+                        if (overlay) {
+                            overlay.classList.remove('hidden');
+                            overlay.classList.add('flex');
+                        }
+                        
+                        // Reset form instantly
+                        membershipForm.reset();
+                        otherDeptInput.classList.add('hidden');
+                        otherDeptInput.required = false;
+                        
+                        // Restore button state behind the modal
+                        submitBtn.innerHTML = originalBtnContent;
+                        submitBtn.disabled = false;
+                    }, 500); // 500ms feels like a real action took place, without the 8-second wait
+                });
+            }
+            /* =============================================== */
 
             // Lightbox Event Delegation - Only for elements with gallery-img class
             document.addEventListener('click', (e) => {
