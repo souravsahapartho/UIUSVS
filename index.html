@@ -427,6 +427,12 @@
         </div>
     </div>
 
+    <!-- Custom Error Toast Notification -->
+    <div id="error-toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-2xl z-[9999] opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3 translate-y-[-20px]">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="error-toast-msg" class="font-medium text-sm whitespace-nowrap">Error message here</span>
+    </div>
+
     <!-- Enhanced Fixed Puja Background Decorations -->
     <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
         <svg class="puja-decoration animate-float w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
@@ -826,8 +832,8 @@
                         </p>
                     </div>
 
-                    <form id="membershipForm" class="space-y-6 text-left relative z-10">
-                        <!-- Grid for 2 columns -->
+                    <form id="membershipForm" class="text-left relative z-10 w-full" novalidate>
+                        <!-- Grid for Initial 3 fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Name -->
                             <div>
@@ -845,63 +851,79 @@
                                 <label class="block text-sm font-bold text-gray-700 mb-2">UIU Student ID <span class="text-red-500">*</span></label>
                                 <input type="text" inputmode="numeric" pattern="[0-9]*" name="studentId" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 0112330701">
                             </div>
-                            <!-- Contact Number -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Contact Number <span class="text-red-500">*</span></label>
-                                <input type="tel" name="contactNumber" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 017xxxxxxxx">
-                            </div>
-                            <!-- Department -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Department <span class="text-red-500">*</span></label>
-                                <select name="department" id="departmentSelect" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
-                                    <option value="" disabled selected>Select Department</option>
-                                    <option value="CSE">CSE</option>
-                                    <option value="EEE">EEE</option>
-                                    <option value="BBA">BBA</option>
-                                    <option value="Civil Engineering">Civil Engineering</option>
-                                    <option value="Pharmacy">Pharmacy</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <input type="text" name="otherDepartment" id="otherDepartmentInput" class="hidden w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 mt-3" placeholder="Please specify your department">
-                            </div>
-                            <!-- Trimester/Semester -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Trimester/Semester <span class="text-red-500">*</span></label>
-                                <input type="text" name="trimester" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Spring 2026">
-                                <p class="text-[11px] sm:text-xs text-gray-500 mt-1.5 ml-1">Please specify the trimester or semester when you were admitted to UIU.</p>
-                            </div>
-                            <!-- Blood Group -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Blood Group <span class="text-red-500">*</span></label>
-                                <select name="bloodGroup" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
-                                    <option value="" disabled selected>Select Blood Group</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                            </div>
-                            <!-- Present Address -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Present Address <span class="text-red-500">*</span></label>
-                                <input type="text" name="address" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Sayednagar, Vatara, Dhaka">
-                            </div>
-                        </div>
-                        
-                        <!-- Why join (Optional) -->
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Why do you want to join UIU SVS? <span class="text-gray-400 font-normal normal-case tracking-normal ml-1">(Optional)</span></label>
-                            <textarea name="reason" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Tell us a little about your motivation..."></textarea>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="w-full btn-base btn-puja py-4 text-lg mt-4 flex items-center justify-center gap-2">
-                            <span>Submit Application</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </button>
+                        <!-- Expand Trigger Zone -->
+                        <div id="expand-trigger-zone" class="flex justify-center mt-6 transition-all duration-300 overflow-hidden opacity-100 max-h-[100px]">
+                            <button type="button" id="expandFormBtn" class="px-8 py-3 bg-[#fffaf0] border border-[#d97706] text-[#92400e] text-sm font-bold uppercase tracking-wider rounded-full shadow-sm hover:bg-[#fef3c7] hover:shadow-md transition-all flex items-center gap-3 group">
+                                <span>Continue Application</span>
+                                <svg class="w-4 h-4 text-[#d97706] group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+
+                        <!-- Hidden Extended Fields -->
+                        <div id="extended-fields" class="opacity-0 overflow-hidden transition-all duration-[700ms] ease-in-out" style="max-height: 0px;">
+                            <div class="pt-6 pb-2">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Contact Number -->
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Contact Number <span class="text-red-500">*</span></label>
+                                        <input type="tel" name="contactNumber" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 017xxxxxxxx">
+                                    </div>
+                                    <!-- Department -->
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Department <span class="text-red-500">*</span></label>
+                                        <select name="department" id="departmentSelect" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                            <option value="" disabled selected>Select Department</option>
+                                            <option value="CSE">CSE</option>
+                                            <option value="EEE">EEE</option>
+                                            <option value="BBA">BBA</option>
+                                            <option value="Civil Engineering">Civil Engineering</option>
+                                            <option value="Pharmacy">Pharmacy</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <input type="text" name="otherDepartment" id="otherDepartmentInput" class="hidden w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 mt-3" placeholder="Please specify your department">
+                                    </div>
+                                    <!-- Trimester/Semester -->
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Trimester/Semester <span class="text-red-500">*</span></label>
+                                        <input type="text" name="trimester" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Spring 2026">
+                                        <p class="text-[11px] sm:text-xs text-gray-500 mt-1.5 ml-1">Please specify the trimester or semester when you were admitted to UIU.</p>
+                                    </div>
+                                    <!-- Blood Group -->
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Blood Group <span class="text-red-500">*</span></label>
+                                        <select name="bloodGroup" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                            <option value="" disabled selected>Select Blood Group</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                        </select>
+                                    </div>
+                                    <!-- Present Address -->
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Present Address <span class="text-red-500">*</span></label>
+                                        <input type="text" name="address" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Sayednagar, Vatara, Dhaka">
+                                    </div>
+                                </div>
+                                
+                                <!-- Why join (Optional) -->
+                                <div class="mt-6">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Why do you want to join UIU SVS? <span class="text-gray-400 font-normal normal-case tracking-normal ml-1">(Optional)</span></label>
+                                    <textarea name="reason" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Tell us a little about your motivation..."></textarea>
+                                </div>
+
+                                <button type="submit" id="submitBtn" class="w-full btn-base btn-puja py-4 text-lg mt-6 flex items-center justify-center gap-2">
+                                    <span>Submit Application</span>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -967,7 +989,7 @@
 { text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
 { text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
 { text: "মনই মানুষের বন্ধু, মনই মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
-{ text: "যে নিজেকে জয় করেছে, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
+{ text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
 { text: "ধৈর্য, সহনশীলতা ও ভালোবাসাই জীবনের মূলমন্ত্র।", author: "মা সারদা দেবী" },
 { text: "সব ধর্মের লক্ষ্য এক—ঈশ্বর লাভ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" }
         ];
@@ -1345,6 +1367,12 @@
                         if (window.location.hash) {
                             const target = document.querySelector(window.location.hash);
                             if (target) {
+                                // Auto expand form if URL is #join
+                                if (window.location.hash === '#join') {
+                                    const expandBtn = document.getElementById('expandFormBtn');
+                                    if(expandBtn) expandBtn.click();
+                                }
+                                
                                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                 // Fallback scroll just in case heavy images take an extra second to expand
                                 setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1000);
@@ -1381,6 +1409,48 @@
                 });
             }
 
+            // --- Form Expansion Logic ---
+            const expandBtn = document.getElementById('expandFormBtn');
+            const extendedFields = document.getElementById('extended-fields');
+            const expandZone = document.getElementById('expand-trigger-zone');
+            const initialInputs = document.querySelectorAll("input[name='name'], input[name='email'], input[name='studentId']");
+            let isFormExpanded = false;
+
+            const expandForm = () => {
+                if (isFormExpanded) return;
+                isFormExpanded = true;
+                
+                if (expandZone) {
+                    // Smoothly remove margins and height to collapse perfectly without ghost space
+                    expandZone.style.maxHeight = '0px';
+                    expandZone.style.marginTop = '0px';
+                    expandZone.style.opacity = '0';
+                    setTimeout(() => { if (expandZone) expandZone.style.display = 'none'; }, 300);
+                }
+                
+                if (extendedFields) {
+                    extendedFields.classList.remove('opacity-0');
+                    extendedFields.classList.add('opacity-100');
+                    
+                    // Delay slightly to let browser calculate exact rendering height
+                    requestAnimationFrame(() => {
+                        extendedFields.style.maxHeight = extendedFields.scrollHeight + 'px';
+                        
+                        setTimeout(() => {
+                            if (extendedFields) {
+                                extendedFields.style.maxHeight = 'none'; // Remove limit for dropdown overflow
+                                extendedFields.classList.remove('overflow-hidden');
+                            }
+                        }, 700); // Allow dropdowns to overflow after animation completes
+                    });
+                }
+            };
+
+            if (expandBtn) expandBtn.addEventListener('click', expandForm);
+            initialInputs.forEach(input => {
+                input.addEventListener('input', expandForm);
+            });
+
             // --- Local Storage Memory Functionality (with 2-day expiry) ---
             const STORAGE_KEY = 'uiusvs_form_data';
             const EXPIRY_MS = 48 * 60 * 60 * 1000; // 48 hours
@@ -1416,22 +1486,28 @@
                         localStorage.removeItem(STORAGE_KEY);
                     } else {
                         const f = savedData.fields;
-                        if (f.name) document.querySelector("[name='name']").value = f.name;
-                        if (f.email) document.querySelector("[name='email']").value = f.email;
-                        if (f.studentId) document.querySelector("[name='studentId']").value = f.studentId;
-                        if (f.contactNumber) document.querySelector("[name='contactNumber']").value = f.contactNumber;
+                        let hasData = false;
+                        
+                        if (f.name) { document.querySelector("[name='name']").value = f.name; hasData = true; }
+                        if (f.email) { document.querySelector("[name='email']").value = f.email; hasData = true; }
+                        if (f.studentId) { document.querySelector("[name='studentId']").value = f.studentId; hasData = true; }
+                        if (f.contactNumber) { document.querySelector("[name='contactNumber']").value = f.contactNumber; hasData = true; }
                         if (f.department) {
                             document.querySelector("[name='department']").value = f.department;
+                            hasData = true;
                             if (f.department === 'Other') {
                                 otherDeptInput.classList.remove('hidden');
                                 otherDeptInput.required = true;
                                 if (f.otherDepartment) otherDeptInput.value = f.otherDepartment;
                             }
                         }
-                        if (f.trimester) document.querySelector("[name='trimester']").value = f.trimester;
-                        if (f.bloodGroup) document.querySelector("[name='bloodGroup']").value = f.bloodGroup;
-                        if (f.address) document.querySelector("[name='address']").value = f.address;
-                        if (f.reason) document.querySelector("[name='reason']").value = f.reason;
+                        if (f.trimester) { document.querySelector("[name='trimester']").value = f.trimester; hasData = true; }
+                        if (f.bloodGroup) { document.querySelector("[name='bloodGroup']").value = f.bloodGroup; hasData = true; }
+                        if (f.address) { document.querySelector("[name='address']").value = f.address; hasData = true; }
+                        if (f.reason) { document.querySelector("[name='reason']").value = f.reason; hasData = true; }
+                        
+                        // Automatically expand if there's any saved data restored
+                        if (hasData) expandForm();
                     }
                 }
             } catch (e) {
@@ -1445,34 +1521,113 @@
             });
             // ----------------------------------------
 
+            // Custom Toast Display Function
+            const showError = (msg) => {
+                const toast = document.getElementById('error-toast');
+                const toastMsg = document.getElementById('error-toast-msg');
+                if (toast && toastMsg) {
+                    toastMsg.textContent = msg;
+                    toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                    toast.classList.add('opacity-100', 'translate-y-0');
+                    setTimeout(() => {
+                        toast.classList.remove('opacity-100', 'translate-y-0');
+                        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                    }, 4000); // Hides after 4 seconds
+                }
+            };
+
             const membershipForm = document.getElementById('membershipForm');
             if (membershipForm) {
                 membershipForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
+                    // --- Input Elements ---
+                    const nameInput = document.querySelector("[name='name']");
+                    const emailInput = document.querySelector("[name='email']");
+                    const studentIdInput = document.querySelector("[name='studentId']");
+                    const phoneInput = document.querySelector("[name='contactNumber']");
+                    const deptSelect = document.getElementById('departmentSelect');
+                    const otherDeptInput = document.getElementById('otherDepartmentInput');
+                    const trimesterInput = document.querySelector("[name='trimester']");
+                    const bloodGroupInput = document.querySelector("[name='bloodGroup']");
+                    const addressInput = document.querySelector("[name='address']");
+
                     // --- Custom Validation Logic ---
-                    const emailField = document.querySelector("[name='email']").value.trim();
-                    const studentIdField = document.querySelector("[name='studentId']").value.trim();
-                    const phoneField = document.querySelector("[name='contactNumber']").value.trim();
+                    const nameField = nameInput.value.trim();
+                    const emailField = emailInput.value.trim();
+                    const studentIdField = studentIdInput.value.trim();
+                    const phoneField = phoneInput.value.trim();
+                    const deptValue = deptSelect.value === 'Other' ? otherDeptInput.value.trim() : deptSelect.value;
+                    const trimesterField = trimesterInput.value.trim();
+                    const bloodGroupField = bloodGroupInput.value;
+                    const addressField = addressInput.value.trim();
+
+                    if (!nameField) {
+                        showError("Please enter your full name.");
+                        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        nameInput.focus();
+                        return;
+                    }
 
                     // Basic email regex
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(emailField)) {
-                        alert("Please enter your valid email address.");
+                        showError("Please enter your valid email.");
+                        emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        emailInput.focus();
                         return; // Stop submission
                     }
 
-                    // Check if Student ID contains only digits (numbers only)
-                    const idRegex = /^\d+$/;
+                    // Check if Student ID contains only digits (minimum 6 digits)
+                    const idRegex = /^\d{6,}$/;
                     if (!idRegex.test(studentIdField)) {
-                        alert("Please enter a valid Student ID (numbers only).");
+                        showError("Please enter your valid student id.");
+                        studentIdInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        studentIdInput.focus();
                         return; // Stop submission
                     }
 
-                    // Check if Phone number contains only digits (numbers only)
-                    const phoneRegex = /^\d+$/;
+                    // Check if Phone number contains only digits (minimum 11 digits)
+                    const phoneRegex = /^\d{11,}$/;
                     if (!phoneRegex.test(phoneField)) {
-                        alert("Please enter a valid Phone Number (numbers only).");
+                        showError("Please enter your valid phone number.");
+                        phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        phoneInput.focus();
+                        return; // Stop submission
+                    }
+
+                    if (!deptValue) {
+                        showError("Please select or specify your department.");
+                        if (deptSelect.value === 'Other') {
+                            otherDeptInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            otherDeptInput.focus();
+                        } else {
+                            deptSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            deptSelect.focus();
+                        }
+                        return;
+                    }
+
+                    if (!trimesterField) {
+                        showError("Please enter your trimester/semester.");
+                        trimesterInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        trimesterInput.focus();
+                        return;
+                    }
+
+                    if (!bloodGroupField) {
+                        showError("Please select your blood group.");
+                        bloodGroupInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        bloodGroupInput.focus();
+                        return;
+                    }
+
+                    // Check if Address contains at least one letter
+                    const addressRegex = /[a-zA-Z]/;
+                    if (!addressRegex.test(addressField)) {
+                        showError("Please enter your valid address.");
+                        addressInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        addressInput.focus();
                         return; // Stop submission
                     }
                     // --- End Validation ---
@@ -1484,19 +1639,16 @@
                     submitBtn.innerHTML = '<div class="video-loader !w-5 !h-5 !border-white !border-t-transparent !border-[2px] mr-2"></div> Submitting...';
                     submitBtn.disabled = true;
 
-                    // Compute final department value
-                    const deptValue = deptSelect.value === 'Other' ? otherDeptInput.value : deptSelect.value;
-
                     // Build JSON payload matching exactly the requested column names
                     const formData = {
-                        "Email": document.querySelector("[name='email']").value,
-                        "Name": document.querySelector("[name='name']").value,
-                        "UIU Student ID": document.querySelector("[name='studentId']").value,
-                        "Contact Number": document.querySelector("[name='contactNumber']").value,
+                        "Email": emailField,
+                        "Name": nameField,
+                        "UIU Student ID": studentIdField,
+                        "Contact Number": phoneField,
                         "Select Your Department": deptValue,
-                        "Trimester/Year": document.querySelector("[name='trimester']").value,
-                        "Blood Group": document.querySelector("[name='bloodGroup']").value,
-                        "Present Address": document.querySelector("[name='address']").value,
+                        "Trimester/Year": trimesterField,
+                        "Blood Group": bloodGroupField,
+                        "Present Address": addressField,
                         "Why do you want to join UIU SVS?": document.querySelector("[name='reason']").value
                     };
 
@@ -1553,6 +1705,28 @@
                         otherDeptInput.classList.add('hidden');
                         otherDeptInput.required = false;
                         
+                        // Collapse form smoothly back to original state
+                        isFormExpanded = false;
+                        if (expandZone) {
+                            expandZone.style.display = 'flex';
+                            void expandZone.offsetWidth; // force browser reflow
+                            expandZone.style.marginTop = ''; // clear inline style to restore original spacing
+                            expandZone.style.maxHeight = '100px';
+                            expandZone.style.opacity = '1';
+                        }
+                        if (extendedFields) {
+                            // Lock height to exact pixel size before shrinking
+                            extendedFields.style.maxHeight = extendedFields.scrollHeight + 'px';
+                            extendedFields.classList.add('overflow-hidden');
+                            
+                            void extendedFields.offsetWidth; // force browser reflow
+                            
+                            // Shrink to zero
+                            extendedFields.classList.add('opacity-0');
+                            extendedFields.classList.remove('opacity-100');
+                            extendedFields.style.maxHeight = '0px';
+                        }
+
                         // Restore button state behind the modal
                         submitBtn.innerHTML = originalBtnContent;
                         submitBtn.disabled = false;
@@ -1588,6 +1762,15 @@
                 link.addEventListener('click', () => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Auto-expand form when clicking "Become a Member" or "Join SVS" internal links
+            document.querySelectorAll('a[href="#join"]').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (typeof expandForm === 'function' && !isFormExpanded) {
+                        expandForm();
                     }
                 });
             });
