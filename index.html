@@ -511,11 +511,11 @@
                     </div>
                 </div>
                 <div class="animate-on-scroll is-visible w-full px-4">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-gray-900 leading-tight mb-4 tracking-tight">
-                        <span class="block mb-2">UIU</span>
-                        <span class="text-gradient block">Sanatani Vidyarthi Samsad</span>
+                    <h1 class="font-extrabold text-gray-900 leading-tight mb-3 tracking-tight w-full">
+                        <span class="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-1">UIU</span>
+                        <span class="text-gradient block whitespace-nowrap text-[5.5vw] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">Sanatani Vidyarthi Samsad</span>
                     </h1>
-                    <h2 class="text-sm sm:text-base md:text-xl text-red-800/90 max-w-2xl mx-auto mb-12 font-medium font-serif tracking-wide leading-relaxed">
+                    <h2 class="text-[3.5vw] sm:text-sm md:text-lg lg:text-xl text-red-800/90 max-w-3xl mx-auto mb-10 font-medium font-serif tracking-wide leading-relaxed px-2">
                         UIUSVS is the official Sanatani student community of United International University.
                     </h2>
                 </div>
@@ -1387,9 +1387,10 @@
                                 }
                                 
                                 // Use a tiny timeout to ensure form layout settles before scrolling
-                                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-                                // Fallback scroll just in case heavy images take an extra second to expand
-                                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 800);
+                                setTimeout(() => {
+                                    const y = target.getBoundingClientRect().top + window.scrollY - 80;
+                                    window.scrollTo({top: y, behavior: 'smooth'});
+                                }, 150);
                             }
                         }
                     }, 500);
@@ -1786,19 +1787,24 @@
                             e.preventDefault();
                             window.history.pushState(null, '', href);
                             
-                            // Handle form auto-expand if clicking join
-                            if (targetId === 'join' && typeof expandForm === 'function' && !isFormExpanded) {
-                                expandForm();
-                            }
-                            
-                            // Delay scroll slightly to prevent rendering jitter while form expands
-                            setTimeout(() => {
-                                (target || document.body).scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }, 50);
-                            
                             // Close mobile menu if open
                             if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                                 mobileMenu.classList.add('hidden');
+                            }
+
+                            // Handle form auto-expand if clicking join
+                            if (targetId === 'join' && typeof expandForm === 'function' && !isFormExpanded) {
+                                expandForm();
+                                // Give the browser a microsecond to render the expanded form before calculating height
+                                requestAnimationFrame(() => {
+                                    const y = target.getBoundingClientRect().top + window.scrollY - 80;
+                                    window.scrollTo({top: y, behavior: 'smooth'});
+                                });
+                            } else {
+                                // Instant scroll without timeout buffering
+                                const scrollTarget = target || document.body;
+                                const y = scrollTarget.getBoundingClientRect().top + window.scrollY - 80;
+                                window.scrollTo({top: y, behavior: 'smooth'});
                             }
                         }
                     });
