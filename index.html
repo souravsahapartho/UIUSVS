@@ -43,32 +43,37 @@
 
     <!-- Dynamic Meta Tags for Advanced Search Engines (Googlebot) -->
     <script>
-        // Check for either the pathname, hash or a query parameter
-        if (window.location.pathname.includes('join') || window.location.hash.includes('join') || window.location.search.includes('join')) {
-            document.title = 'Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!';
-            
-            function updateMetaTags() {
-                const updateMeta = (selector, content) => {
-                    let el = document.querySelector(selector);
-                    if (el) el.setAttribute("content", content);
-                };
+        // Wrap in try-catch to prevent sandbox/cross-origin SecurityErrors in preview environments
+        try {
+            const loc = window.location.href || '';
+            if (loc.includes('join')) {
+                document.title = 'Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!';
                 
-                const specialDescription = "Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!";
-                const specialImage = "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg";
+                function updateMetaTags() {
+                    const updateMeta = (selector, content) => {
+                        let el = document.querySelector(selector);
+                        if (el) el.setAttribute("content", content);
+                    };
+                    
+                    const specialDescription = "Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!";
+                    const specialImage = "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg";
+                    
+                    updateMeta('meta[name="description"]', specialDescription);
+                    updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
+                    updateMeta('meta[property="og:description"]', specialDescription);
+                    updateMeta('meta[property="og:image"]', specialImage);
+                    updateMeta('meta[property="og:image:secure_url"]', specialImage);
+                    updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
+                    updateMeta('meta[name="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
+                    updateMeta('meta[name="twitter:description"]', specialDescription);
+                    updateMeta('meta[name="twitter:image"]', specialImage);
+                }
                 
-                updateMeta('meta[name="description"]', specialDescription);
-                updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
-                updateMeta('meta[property="og:description"]', specialDescription);
-                updateMeta('meta[property="og:image"]', specialImage);
-                updateMeta('meta[property="og:image:secure_url"]', specialImage);
-                updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
-                updateMeta('meta[name="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
-                updateMeta('meta[name="twitter:description"]', specialDescription);
-                updateMeta('meta[name="twitter:image"]', specialImage);
+                updateMetaTags();
+                document.addEventListener('DOMContentLoaded', updateMetaTags);
             }
-            
-            updateMetaTags();
-            document.addEventListener('DOMContentLoaded', updateMetaTags);
+        } catch(e) {
+            console.warn("Location check bypassed in sandbox preview.");
         }
     </script>
 
@@ -999,7 +1004,7 @@
 { text: "অহিংসাই পরম ধর্ম।", author: "মহাভারত" },
 { text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
 { text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
-{ text: "মনই মানুষের বন্ধু, মনই মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
+{ text: "মনই মানুষের বন্ধু, মনই তৃতীয় মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
 { text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
 { text: "ধৈর্য, সহনশীলতা ও ভালোবাসাই জীবনের মূলমন্ত্র।", author: "মা সারদা দেবী" },
 { text: "সব ধর্মের লক্ষ্য এক—ঈশ্বর লাভ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" }
@@ -1083,7 +1088,7 @@
 
         window.handleSuccessRedirection = () => {
             closeSuccessModal();
-            window.history.pushState(null, '', '/gallery');
+            try { window.history.pushState(null, '', '/gallery'); } catch(e) {}
             document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
@@ -1374,27 +1379,29 @@
                     setTimeout(() => { 
                         preloader.style.display = 'none'; 
                         
-                        // Handle direct links to sections (like /join or /#join) correctly 
-                        const path = window.location.pathname.replace(/^\/|\/$/g, '');
-                        const hash = window.location.hash.replace('#', '');
-                        const targetId = path || hash;
-                        
-                        if (targetId) {
-                            const target = document.getElementById(targetId);
-                            if (target) {
-                                // Auto expand form if URL is /join
-                                if (targetId === 'join') {
-                                    const expandBtn = document.getElementById('expandFormBtn');
-                                    if(expandBtn) expandBtn.click();
+                        try {
+                            // Handle direct links to sections (like /join or /#join) correctly 
+                            const path = window.location.pathname.replace(/^\/|\/$/g, '');
+                            const hash = window.location.hash.replace('#', '');
+                            const targetId = path || hash;
+                            
+                            if (targetId) {
+                                const target = document.getElementById(targetId);
+                                if (target) {
+                                    // Auto expand form if URL is /join
+                                    if (targetId === 'join') {
+                                        const expandBtn = document.getElementById('expandFormBtn');
+                                        if(expandBtn) expandBtn.click();
+                                    }
+                                    
+                                    // Use a tiny timeout to ensure form layout settles before scrolling
+                                    setTimeout(() => {
+                                        const y = target.getBoundingClientRect().top + window.scrollY - 80;
+                                        window.scrollTo({top: y, behavior: 'smooth'});
+                                    }, 150);
                                 }
-                                
-                                // Use a tiny timeout to ensure form layout settles before scrolling
-                                setTimeout(() => {
-                                    const y = target.getBoundingClientRect().top + window.scrollY - 80;
-                                    window.scrollTo({top: y, behavior: 'smooth'});
-                                }, 150);
                             }
-                        }
+                        } catch(e) {}
                     }, 500);
                 }
             };
@@ -1787,7 +1794,7 @@
                         // If it's a valid section on this page, scroll to it smoothly
                         if (target || href === '/') {
                             e.preventDefault();
-                            window.history.pushState(null, '', href);
+                            try { window.history.pushState(null, '', href); } catch(err){}
                             
                             // Close mobile menu if open
                             if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
