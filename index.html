@@ -63,7 +63,7 @@
                     updateMeta('meta[property="og:description"]', specialDescription);
                     updateMeta('meta[property="og:image"]', specialImage);
                     updateMeta('meta[property="og:image:secure_url"]', specialImage);
-                    updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
+                    updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/#join");
                     updateMeta('meta[name="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
                     updateMeta('meta[name="twitter:description"]', specialDescription);
                     updateMeta('meta[name="twitter:image"]', specialImage);
@@ -473,19 +473,19 @@
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 group cursor-pointer">
+            <a href="#home" class="flex items-center gap-3 group cursor-pointer">
                 <img src="logo.jpg" alt="UIUSVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
-                <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
-                <a href="/events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
-                <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
-                <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
-                <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
+                <a href="#home" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
+                <a href="#events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
+                <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
+                <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
+                <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
             <div class="flex items-center gap-4">
-                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all" aria-label="Join UIUSVS">Join SVS</a>
+                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all" aria-label="Join UIUSVS">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
@@ -493,12 +493,12 @@
         </div>
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
-                <a href="/" class="block py-3 text-red-900 font-semibold text-lg">Home</a>
-                <a href="/events" class="block py-3 text-red-900 font-semibold text-lg">Events</a>
-                <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg">Gallery</a>
-                <a href="/about" class="block py-3 text-red-900 font-semibold text-lg">About</a>
-                <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg">Videos</a>
-                <a href="/join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md">Join SVS</a>
+                <a href="#home" class="block py-3 text-red-900 font-semibold text-lg">Home</a>
+                <a href="#events" class="block py-3 text-red-900 font-semibold text-lg">Events</a>
+                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg">Gallery</a>
+                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg">About</a>
+                <a href="#latest-videos" class="block py-3 text-red-900 font-semibold text-lg">Videos</a>
+                <a href="#join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md">Join SVS</a>
             </nav>
         </div>
     </header>
@@ -527,8 +527,8 @@
                     </h2>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" aria-label="Become a Member of UIUSVS">Become a Member</a>
-                    <a href="/events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" aria-label="Become a Member of UIUSVS">Become a Member</a>
+                    <a href="#events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
         </section>
@@ -960,10 +960,10 @@
                 <div>
                     <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="/" class="hover:text-red-600 transition-colors">Home</a></li>
-                        <li><a href="/events" class="hover:text-red-600 transition-colors">Events</a></li>
-                        <li><a href="/about" class="hover:text-red-700 transition-colors">About</a></li>
-                        <li><a href="/join" class="hover:text-red-700 transition-colors">Join Now</a></li>
+                        <li><a href="#home" class="hover:text-red-600 transition-colors">Home</a></li>
+                        <li><a href="#events" class="hover:text-red-600 transition-colors">Events</a></li>
+                        <li><a href="#about" class="hover:text-red-700 transition-colors">About</a></li>
+                        <li><a href="#join" class="hover:text-red-700 transition-colors">Join Now</a></li>
                     </ul>
                 </div>
                 <div>
@@ -1383,8 +1383,9 @@
                         preloader.style.display = 'none'; 
                         
                         try {
+                            const path = window.location.pathname.replace(/^\/|\/$/g, '');
                             const hash = window.location.hash.replace('#', '');
-                            const targetId = hash; 
+                            const targetId = hash || (path.includes('.html') ? '' : path); 
                             
                             if (targetId) {
                                 const target = document.getElementById(targetId);
