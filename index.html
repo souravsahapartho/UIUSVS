@@ -16,7 +16,7 @@
     <!-- SEO & Meta Tags -->
     <title>UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Official Sanatani Student Community</title>
     <meta name="description" content="Join UIU Sanatani Vidyarthi Sangsad (UIUSVS), a student community at United International University promoting culture, unity, and student engagement. Apply now to become a UIUSVS member.">
-    <meta name="keywords" content="UIU, UIUSVS, UIU SVS, SVS, UIUSVS Member, UIU Sanatani Vidyarthi Sangsad, United International University student organization">
+    <meta name="keywords" content="UIU, UIUSVS, UIU SVS, SVS, UIUSVS Member, UIU Sanatani Vidyarthi Sangsad, United International University student organization, Sanatani students UIU, UIU clubs, UIU Hindu student community">
     <meta name="author" content="UIU Sanatani Vidyarthi Sangsad">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://uiusvs.netlify.app/">
@@ -42,7 +42,7 @@
     <script>
         // Check for either the pathname, hash or a query parameter in case bots pass it
         if (window.location.pathname.includes('join') || window.location.hash.includes('join') || window.location.search.includes('join')) {
-            document.title = 'Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member';
+            document.title = 'Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!';
             
             function updateMetaTags() {
                 const updateMeta = (selector, content) => {
@@ -50,14 +50,17 @@
                     if (el) el.setAttribute("content", content);
                 };
                 
-                updateMeta('meta[name="description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
-                updateMeta('meta[property="og:description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                updateMeta('meta[property="og:image"]', "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
+                const specialDescription = "Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!";
+                const specialImage = "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg";
+                
+                updateMeta('meta[name="description"]', specialDescription);
+                updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
+                updateMeta('meta[property="og:description"]', specialDescription);
+                updateMeta('meta[property="og:image"]', specialImage);
                 updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
-                updateMeta('meta[property="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
-                updateMeta('meta[property="twitter:description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                updateMeta('meta[property="twitter:image"]', "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
+                updateMeta('meta[property="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
+                updateMeta('meta[property="twitter:description"]', specialDescription);
+                updateMeta('meta[property="twitter:image"]', specialImage);
             }
             
             // Execute immediately for advanced crawlers processing DOM sequentially
@@ -73,13 +76,13 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "UIU Sanatani Vidyarthi Sangsad",
-      "alternateName": "UIUSVS",
+      "alternateName": ["UIUSVS", "UIU SVS"],
       "description": "UIU Sanatani Vidyarthi Sangsad (UIUSVS) is a student community at United International University dedicated to culture, unity, and student engagement.",
       "url": "https://uiusvs.netlify.app",
       "logo": "https://uiusvs.netlify.app/logo.jpg",
       "location": {
         "@type": "Place",
-        "name": "United International University, Bangladesh"
+        "name": "United International University, Dhaka, Bangladesh"
       }
     }
     </script>
@@ -118,7 +121,7 @@
         img { pointer-events: none; }
         video[controls], iframe { pointer-events: auto; }
         
-        /* Lightbox Specific Styles - Updated to target only gallery images */
+        /* Lightbox Specific Styles */
         .lightbox-active .gallery-img { pointer-events: auto !important; cursor: zoom-in; }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -154,8 +157,11 @@
             50% { transform: translateY(-20px) rotate(5deg); }
         }
 
+        /* GPU Acceleration for background animations to prevent scroll buffering */
         .animate-float {
             animation: float 6s ease-in-out infinite;
+            will-change: transform;
+            transform: translateZ(0); 
         }
 
         .text-gradient {
@@ -173,11 +179,21 @@
         }
 
         .puja-decoration {
-            position: fixed;
+            position: absolute; /* Changed from fixed to absolute to drastically reduce scroll jank */
             z-index: -1;
             opacity: 0.08;
             pointer-events: none;
-            filter: drop-shadow(0 0 5px rgba(234, 88, 12, 0.2));
+            will-change: transform;
+        }
+        
+        /* Container to hold the absolutely positioned background SVGs safely */
+        .bg-decoration-wrapper {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            transform: translateZ(0); /* Hardware acceleration layer */
         }
 
         .glass-nav {
@@ -185,6 +201,8 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 2px solid #fbbf24;
+            transform: translateZ(0); /* Prevents blur from causing scroll stutter */
+            will-change: transform, backdrop-filter;
         }
 
         .btn-base {
@@ -221,6 +239,7 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
         }
         .animate-on-scroll.is-visible {
             opacity: 1;
@@ -234,6 +253,7 @@
             position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
         }
         .bottom-quote-bar.visible { transform: translateY(0); }
 
@@ -253,48 +273,30 @@
         .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         
         /* Video styling fixes - Ensure dark background to prevent white initial state */
-        .video-wrapper {
-            background-color: #000 !important;
-        }
-        video {
-            background-color: #000 !important;
-        }
-        .loading-overlay {
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(2px);
-        }
+        .video-wrapper { background-color: #000 !important; }
+        video { background-color: #000 !important; }
+        .loading-overlay { background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px); }
 
         /* --- Eye-Catching Countdown & Status Animations --- */
-        
-        /* Level 30d: Sweep Shine */
-        @keyframes sweep-shine {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+        @keyframes sweep-shine { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         .anim-shine {
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             background-size: 200% 100%;
             animation: sweep-shine 3s infinite linear;
         }
 
-        /* Level 15d: Breathing Breath */
         @keyframes breathing-glow {
             0%, 100% { transform: scale(1); box-shadow: 0 0 5px rgba(245, 158, 11, 0.2); }
             50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
         }
         .anim-breath { animation: breathing-glow 3s infinite ease-in-out; }
 
-        /* Level 7d: Heartbeat Pop */
         @keyframes heartbeat-pop {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.1); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); } 15% { transform: scale(1.1); } 30% { transform: scale(1); }
+            45% { transform: scale(1.1); } 100% { transform: scale(1); }
         }
         .anim-pop { animation: heartbeat-pop 1.5s infinite cubic-bezier(0.21, 0.85, 0.49, 0.99); }
 
-        /* Level 3d: Electric Strobe */
         @keyframes electric-strobe {
             0%, 100% { background-color: #fee2e2; transform: translate(0,0); }
             10% { background-color: #fca5a5; transform: translate(-1px, 1px); }
@@ -304,7 +306,6 @@
         }
         .anim-strobe { animation: electric-strobe 0.4s infinite; border-color: #ef4444 !important; color: #991b1b !important; }
 
-        /* Ongoing: Broadcast Ripple */
         @keyframes broadcast-ripple {
             0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
             70% { box-shadow: 0 0 0 12px rgba(22, 163, 74, 0); }
@@ -313,88 +314,45 @@
         .anim-ripple { animation: broadcast-ripple 1.5s infinite; background-color: #dcfce7 !important; border-color: #22c55e !important; color: #166534 !important; }
 
         .live-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #16a34a;
-            border-radius: 50%;
-            margin-right: 6px;
+            display: inline-block; width: 8px; height: 8px; background-color: #16a34a; border-radius: 50%; margin-right: 6px;
             animation: dot-blink 1s infinite alternate;
         }
-        @keyframes dot-blink {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0.4; transform: scale(0.8); }
-        }
+        @keyframes dot-blink { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(0.8); } }
 
         /* --- Eye-Catching Placeholder Enhancements --- */
-        @keyframes placeholder-pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.05); opacity: 0.6; }
-        }
+        @keyframes placeholder-pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.05); opacity: 0.6; } }
         
         .media-placeholder {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%);
-            z-index: 5;
-            overflow: hidden;
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%); z-index: 5; overflow: hidden;
         }
         
         .placeholder-text {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: 1.25rem;
-            color: #b91c1c;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            animation: placeholder-pulse 2s infinite ease-in-out;
-            text-shadow: 0 2px 10px rgba(185, 28, 28, 0.2);
-            position: relative;
+            font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.25rem; color: #b91c1c;
+            letter-spacing: 0.3em; text-transform: uppercase; animation: placeholder-pulse 2s infinite ease-in-out;
+            text-shadow: 0 2px 10px rgba(185, 28, 28, 0.2); position: relative;
         }
 
-        /* Subtle decorative ring for placeholders */
         .media-placeholder::before {
-            content: '';
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            border: 1px solid rgba(185, 28, 28, 0.05);
-            border-radius: 50%;
-            animation: spin 10s linear infinite;
+            content: ''; position: absolute; width: 80%; height: 80%; border: 1px solid rgba(185, 28, 28, 0.05);
+            border-radius: 50%; animation: spin 10s linear infinite;
         }
 
-        /* Custom Input selection styling to allow users to select text naturally inside inputs */
         input, textarea, select {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
+            -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text;
         }
 
-        /* Smooth Custom Dropdown for all devices */
         .smooth-select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ea580c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-            padding-right: 2.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.2em;
+            padding-right: 2.5rem; cursor: pointer; transition: all 0.3s ease;
         }
         .smooth-select:focus {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ea580c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 15l7-7 7 7'%3E%3C/path%3E%3C/svg%3E");
         }
 
-        /* Responsive Placeholder Text */
-        ::placeholder {
-            @apply text-xs sm:text-sm md:text-base;
-        }
+        ::placeholder { @apply text-xs sm:text-sm md:text-base; }
     </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
@@ -479,8 +437,8 @@
         <span id="error-toast-msg" class="font-medium text-sm whitespace-nowrap">Error message here</span>
     </div>
 
-    <!-- Enhanced Fixed Puja Background Decorations -->
-    <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+    <!-- Enhanced GPU Accelerated Background Decorations -->
+    <div class="bg-decoration-wrapper">
         <svg class="puja-decoration animate-float w-24 h-24 top-20 left-10" viewBox="0 0 100 100"><path d="M30,20 Q50,0 70,20 L75,70 L25,70 Z" fill="#d97706" /><circle cx="50" cy="80" r="5" fill="#4a0404" /></svg>
         <svg class="puja-decoration animate-float w-32 h-32 top-32 right-12" style="animation-delay: -2s;" viewBox="0 0 100 100"><path d="M50,80 Q30,60 10,80 Q30,40 50,60 Q70,40 90,80 Q70,60 50,80 Z" fill="#991b1b" /><path d="M50,80 Q40,30 50,10 Q60,30 50,80 Z" fill="#b91c1c" /></svg>
         <svg class="puja-decoration animate-float w-28 h-28 bottom-32 left-12" style="animation-delay: -4s;" viewBox="0 0 100 100"><path d="M10,70 Q50,100 90,70 L90,65 Q50,85 10,65 Z" fill="#b91c1c"/><path d="M45,60 Q50,20 55,60 Z" fill="#ea580c"/></svg>
@@ -509,7 +467,7 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
+                <img src="logo.jpg" alt="UIUSVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
@@ -520,7 +478,7 @@
                 <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
             <div class="flex items-center gap-4">
-                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all">Join SVS</a>
+                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all" aria-label="Join UIUSVS">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
@@ -549,7 +507,7 @@
             <div class="container mx-auto px-6 flex flex-col items-center">
                 <div class="mb-6 animate-on-scroll is-visible">
                     <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
-                        <img src="saraswati.png" alt="Saraswati" class="w-full h-full object-contain pointer-events-none">
+                        <img src="saraswati.png" alt="Saraswati UIUSVS" class="w-full h-full object-contain pointer-events-none">
                     </div>
                 </div>
                 <div class="animate-on-scroll is-visible">
@@ -557,7 +515,7 @@
                     <h2 class="text-base md:text-xl text-red-800/90 max-w-2xl mx-auto mb-12 font-medium font-serif tracking-wide">Official Sanatani Student Community of United International University</h2>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
+                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" aria-label="Become a Member of UIUSVS">Become a Member</a>
                     <a href="/events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
                 </div>
             </div>
@@ -591,15 +549,15 @@
                     <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                             <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/2026_1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/2026_1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIU SVS Saraswati Puja" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/Saraswati_2026.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/Saraswati_2026.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Saraswati" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                          <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/2026_5.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/2026_5.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja 2025" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
@@ -617,7 +575,7 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Student Community UIUSVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -643,7 +601,7 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -669,11 +627,11 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi at UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/holi.png" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Holi_2025/holi.png" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Holi" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
@@ -982,7 +940,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="logo.jpg" alt="SVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
+                        <img src="logo.jpg" alt="UIUSVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
                         <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
                     <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br>United City, Madani Avenue, Dhaka-1212</p>
@@ -1423,9 +1381,10 @@
                                     if(expandBtn) expandBtn.click();
                                 }
                                 
-                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                // Use a tiny timeout to ensure form layout settles before scrolling
+                                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
                                 // Fallback scroll just in case heavy images take an extra second to expand
-                                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1000);
+                                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 800);
                             }
                         }
                     }, 500);
@@ -1808,7 +1767,7 @@
                 mobileMenu?.classList.toggle('hidden');
             });
 
-            // Smooth routing for clean URLs (e.g. /join, /events) without page reloads
+            // Smooth routing for clean URLs (e.g. /join, /events) without page reloads or buffering
             document.querySelectorAll('a').forEach(link => {
                 const href = link.getAttribute('href');
                 // Only intercept internal clean URLs starting with /
@@ -1817,7 +1776,7 @@
                         const targetId = href === '/' ? 'home' : href.substring(1);
                         const target = document.getElementById(targetId);
                         
-                        // If it's a valid section on this page, scroll to it instead of navigating
+                        // If it's a valid section on this page, scroll to it smoothly
                         if (target || href === '/') {
                             e.preventDefault();
                             window.history.pushState(null, '', href);
@@ -1827,7 +1786,10 @@
                                 expandForm();
                             }
                             
-                            (target || document.body).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            // Delay scroll slightly to prevent rendering jitter while form expands
+                            setTimeout(() => {
+                                (target || document.body).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }, 50);
                             
                             // Close mobile menu if open
                             if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
@@ -1838,16 +1800,25 @@
                 }
             });
 
+            // Extremely optimized scroll listener using requestAnimationFrame to kill buffering/jank
+            let isScrolling = false;
             window.addEventListener('scroll', () => {
-                const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-                const perc = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-                document.querySelector('.bottom-quote-bar')?.classList.toggle('visible', perc > 2);
-                const btn = document.getElementById('scroll-to-top');
-                if(btn) {
-                    btn.classList.toggle('opacity-0', perc < 25);
-                    btn.classList.toggle('invisible', perc < 25);
+                if (!isScrolling) {
+                    window.requestAnimationFrame(() => {
+                        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+                        const perc = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+                        document.querySelector('.bottom-quote-bar')?.classList.toggle('visible', perc > 2);
+                        const btn = document.getElementById('scroll-to-top');
+                        if(btn) {
+                            btn.classList.toggle('opacity-0', perc < 25);
+                            btn.classList.toggle('invisible', perc < 25);
+                        }
+                        isScrolling = false;
+                    });
+                    isScrolling = true;
                 }
-            });
+            }, { passive: true }); // passive: true dramatically improves scroll performance on mobile
+            
             document.getElementById('scroll-to-top')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
             document.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
         });
