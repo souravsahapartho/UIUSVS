@@ -40,17 +40,30 @@
 
     <!-- Dynamic Meta Tags for #join Preview -->
     <script>
-        if (window.location.hash === '#join') {
+        // Check for either the hash or a query parameter in case bots pass it
+        if (window.location.hash.includes('join') || window.location.search.includes('join')) {
             document.title = 'Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member';
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelector('meta[name="description"]')?.setAttribute("content", "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                document.querySelector('meta[property="og:title"]')?.setAttribute("content", "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
-                document.querySelector('meta[property="og:description"]')?.setAttribute("content", "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                document.querySelector('meta[property="og:image"]')?.setAttribute("content", "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
-                document.querySelector('meta[property="twitter:title"]')?.setAttribute("content", "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
-                document.querySelector('meta[property="twitter:description"]')?.setAttribute("content", "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
-                document.querySelector('meta[property="twitter:image"]')?.setAttribute("content", "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
-            });
+            
+            function updateMetaTags() {
+                const updateMeta = (selector, content) => {
+                    let el = document.querySelector(selector);
+                    if (el) el.setAttribute("content", content);
+                };
+                
+                updateMeta('meta[name="description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
+                updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
+                updateMeta('meta[property="og:description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
+                updateMeta('meta[property="og:image"]', "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
+                updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/#join");
+                updateMeta('meta[property="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad | Become a UIUSVS Member");
+                updateMeta('meta[property="twitter:description"]', "Apply to join UIU Sanatani Vidyarthi Sangsad (UIUSVS) at United International University. Fill out the membership form and become a UIUSVS member today.");
+                updateMeta('meta[property="twitter:image"]', "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg");
+            }
+            
+            // Execute immediately for advanced crawlers processing DOM sequentially
+            updateMetaTags();
+            // Re-execute on DOMContentLoaded to ensure elements are present
+            document.addEventListener('DOMContentLoaded', updateMetaTags);
         }
     </script>
 
