@@ -13,42 +13,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO & Meta Tags ONLY FOR JOIN PAGE -->
-    <title>Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!</title>
-    <meta name="description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!">
-    <meta name="keywords" content="UIU, UIUSVS, UIU SVS, SVS, UIUSVS Member, UIU Sanatani Vidyarthi Sangsad, United International University student organization, Sanatani students UIU, UIU clubs, UIU Hindu student community">
-    <meta name="author" content="UIU Sanatani Vidyarthi Sangsad">
-    <meta name="robots" content="index, follow">
+    <!-- HIGHLY OPTIMIZED SEO & META TAGS ONLY FOR JOIN PAGE -->
+    <title>Join UIUSVS | UIU Sanatani Vidyarthi Samsad Membership Form</title>
+    <meta name="description" content="Apply now to join UIU Sanatani Vidyarthi Samsad (UIUSVS). Become an official member of the Sanatani student community at United International University (UIU) and celebrate our cultural heritage.">
+    <meta name="keywords" content="Join UIUSVS, UIUSVS Membership, UIU Sanatani Vidyarthi Samsad, UIU SVS form, UIUSVS, UIU Hindu community, Sanatani students UIU, United International University clubs">
+    <meta name="author" content="UIU Sanatani Vidyarthi Samsad">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://uiusvs.netlify.app/join">
 
-    <!-- Open Graph / Facebook / WhatsApp -->
+    <!-- Open Graph / Facebook / WhatsApp (Optimized for Join Link) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://uiusvs.netlify.app/join"> 
     <meta property="og:site_name" content="UIUSVS">
-    <meta property="og:title" content="Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!">
-    <meta property="og:description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!">
-    <!-- SPECIAL JOIN IMAGE -->
-    <meta property="og:image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
-    <meta property="og:image:secure_url" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
+    <meta property="og:title" content="Join UIUSVS | Become a Member Today!">
+    <meta property="og:description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Samsad to celebrate our rich culture, unite with fellow students, and grow together at UIU. Apply today!">
+    <!-- STRICT UNIQUE IMAGE FOR JOIN LINK -->
+    <meta property="og:image" itemprop="image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
+    <meta property="og:image:secure_url" itemprop="image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UIUSVS Members Celebrating Culture">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:domain" content="uiusvs.netlify.app">
     <meta name="twitter:url" content="https://uiusvs.netlify.app/join">
-    <meta name="twitter:title" content="Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!">
-    <meta name="twitter:description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) to celebrate our rich Sanatani culture, unite with fellow students, and grow together at United International University. Apply today!">
+    <meta name="twitter:title" content="Join UIUSVS | Become a Member Today!">
+    <meta name="twitter:description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Samsad to celebrate our rich culture, unite with fellow students, and grow together at UIU.">
     <meta name="twitter:image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data (JSON-LD) Optimized for Search Engine -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "UIU Sanatani Vidyarthi Sangsad",
+      "name": "UIU Sanatani Vidyarthi Samsad",
       "alternateName": ["UIUSVS", "UIU SVS"],
-      "description": "UIU Sanatani Vidyarthi Sangsad (UIUSVS) is a student community at United International University dedicated to culture, unity, and student engagement.",
+      "description": "UIUSVS is the official Sanatani student community at United International University dedicated to culture, unity, and student engagement.",
       "url": "https://uiusvs.netlify.app",
       "logo": "https://uiusvs.netlify.app/logo.jpg",
       "location": {
@@ -56,6 +58,41 @@
         "name": "United International University, Dhaka, Bangladesh"
       }
     }
+    </script>
+
+    <!-- Dynamic Meta Tags fallback for javascript routing -->
+    <script>
+        try {
+            const loc = window.location.href || '';
+            if (loc.includes('join')) {
+                document.title = 'Join UIUSVS | UIU Sanatani Vidyarthi Samsad Membership Form';
+                
+                function updateMetaTags() {
+                    const updateMeta = (selector, content) => {
+                        let el = document.querySelector(selector);
+                        if (el) el.setAttribute("content", content);
+                    };
+                    
+                    const specialDescription = "Apply now to join UIU Sanatani Vidyarthi Samsad (UIUSVS). Become an official member of the Sanatani student community at United International University (UIU) and celebrate our cultural heritage.";
+                    const specialImage = "https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg";
+                    
+                    updateMeta('meta[name="description"]', specialDescription);
+                    updateMeta('meta[property="og:title"]', "Join UIUSVS | Become a Member Today!");
+                    updateMeta('meta[property="og:description"]', specialDescription);
+                    updateMeta('meta[property="og:image"]', specialImage);
+                    updateMeta('meta[property="og:image:secure_url"]', specialImage);
+                    updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
+                    updateMeta('meta[name="twitter:title"]', "Join UIUSVS | Become a Member Today!");
+                    updateMeta('meta[name="twitter:description"]', specialDescription);
+                    updateMeta('meta[name="twitter:image"]', specialImage);
+                }
+                
+                updateMetaTags();
+                document.addEventListener('DOMContentLoaded', updateMetaTags);
+            }
+        } catch(e) {
+            console.warn("Location check bypassed in sandbox preview.");
+        }
     </script>
 
     <!-- Favicon -->
