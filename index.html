@@ -27,20 +27,23 @@
     <meta property="og:site_name" content="UIUSVS">
     <meta property="og:title" content="UIU Sanatani Vidyarthi Sangsad (UIUSVS)">
     <meta property="og:description" content="Official platform of UIU Sanatani Vidyarthi Sangsad at United International University. Join the community and become a UIUSVS member.">
-    <meta property="og:image" content="https://uiusvs.netlify.app/preview.png">
+    <!-- Changed to a guaranteed existing image for standard sharing fallback -->
+    <meta property="og:image" content="https://uiusvs.netlify.app/logo.jpg">
+    <meta property="og:image:secure_url" content="https://uiusvs.netlify.app/logo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://uiusvs.netlify.app/">
-    <meta property="twitter:title" content="UIU Sanatani Vidyarthi Sangsad (UIUSVS)">
-    <meta property="twitter:description" content="Official platform of UIU Sanatani Vidyarthi Sangsad at United International University. Join the community and become a UIUSVS member.">
-    <meta property="twitter:image" content="https://uiusvs.netlify.app/preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://uiusvs.netlify.app/">
+    <meta name="twitter:title" content="UIU Sanatani Vidyarthi Sangsad (UIUSVS)">
+    <meta name="twitter:description" content="Official platform of UIU Sanatani Vidyarthi Sangsad at United International University. Join the community and become a UIUSVS member.">
+    <meta name="twitter:image" content="https://uiusvs.netlify.app/logo.jpg">
 
-    <!-- Dynamic Meta Tags for join Preview -->
+    <!-- Dynamic Meta Tags for Advanced Search Engines (Googlebot) -->
     <script>
-        // Check for either the pathname, hash or a query parameter in case bots pass it
+        // Check for either the pathname, hash or a query parameter
         if (window.location.pathname.includes('join') || window.location.hash.includes('join') || window.location.search.includes('join')) {
             document.title = 'Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!';
             
@@ -57,15 +60,14 @@
                 updateMeta('meta[property="og:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
                 updateMeta('meta[property="og:description"]', specialDescription);
                 updateMeta('meta[property="og:image"]', specialImage);
+                updateMeta('meta[property="og:image:secure_url"]', specialImage);
                 updateMeta('meta[property="og:url"]', "https://uiusvs.netlify.app/join");
-                updateMeta('meta[property="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
-                updateMeta('meta[property="twitter:description"]', specialDescription);
-                updateMeta('meta[property="twitter:image"]', specialImage);
+                updateMeta('meta[name="twitter:title"]', "Join UIU Sanatani Vidyarthi Sangsad (UIUSVS) | Become a Member Today!");
+                updateMeta('meta[name="twitter:description"]', specialDescription);
+                updateMeta('meta[name="twitter:image"]', specialImage);
             }
             
-            // Execute immediately for advanced crawlers processing DOM sequentially
             updateMetaTags();
-            // Re-execute on DOMContentLoaded to ensure elements are present
             document.addEventListener('DOMContentLoaded', updateMetaTags);
         }
     </script>
@@ -179,7 +181,7 @@
         }
 
         .puja-decoration {
-            position: absolute; /* Changed from fixed to absolute to drastically reduce scroll jank */
+            position: absolute; 
             z-index: -1;
             opacity: 0.08;
             pointer-events: none;
