@@ -513,30 +513,30 @@
         </button>
 
         <!-- Hero Section -->
-        <section id="home" class="relative pt-12 pb-16 md:pt-24 md:pb-24 text-center overflow-hidden">
-            <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-col items-center">
+        <section id="home" class="relative pt-16 pb-20 md:pt-32 md:pb-32 text-center overflow-hidden">
+            <div class="w-full max-w-none px-2 sm:px-4 flex flex-col items-center">
                 <div class="mb-6 animate-on-scroll is-visible">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
-                        <img src="saraswati.png" alt="Saraswati Idol - UIU Sanatani Vidyarthi Samsad (UIUSVS)" class="w-full h-full object-contain pointer-events-none">
+                        <img src="saraswati.png" alt="Saraswati UIUSVS" class="w-full h-full object-contain">
                     </div>
                 </div>
-                <div class="animate-on-scroll is-visible w-full">
-                    <h1 class="font-extrabold text-gray-900 leading-tight mb-2 sm:mb-4 tracking-tight w-full">
-                        <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-1 sm:mb-2 text-gray-700">UIU</span>
-                        <span class="text-gradient block whitespace-nowrap text-[6vw] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">Sanatani Vidyarthi Samsad</span>
+                <div class="animate-on-scroll is-visible w-full px-1 sm:px-4 md:px-6">
+                    <h1 class="font-extrabold text-gray-900 leading-none mb-3 sm:mb-4 tracking-tighter w-full">
+                        <span class="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 text-gray-600">UIU</span>
+                        <span class="text-gradient block whitespace-nowrap text-[9.5vw] sm:text-[8vw] md:text-[6.5vw] lg:text-[5.5vw] xl:text-[5vw] 2xl:text-[4.5vw]">Sanatani Vidyarthi Samsad</span>
                     </h1>
-                    <h2 class="text-sm sm:text-base md:text-lg lg:text-xl text-red-800/90 max-w-3xl mx-auto mb-10 sm:mb-12 font-medium font-serif tracking-wide leading-relaxed px-4">
+                    <h2 class="text-[4.5vw] sm:text-[3.2vw] md:text-[2.2vw] lg:text-[1.8vw] xl:text-[1.5vw] 2xl:text-[1.2vw] text-red-800/90 w-full mx-auto mb-10 sm:mb-12 font-medium font-serif tracking-wide leading-snug">
                         UIUSVS is the official Sanatani student community of United International University.
                     </h2>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" aria-label="Become a Member of UIUSVS">Become a Member</a>
-                    <a href="/events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Events</a>
+                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" onclick="handleNavClick(event, '/join')">Become a Member</a>
+                    <a href="/events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500" onclick="handleNavClick(event, '/events')">Explore Events</a>
                 </div>
             </div>
         </section>
 
-        <!-- Upcoming Events -->
+        <!-- Events Section -->
         <section id="events" class="py-16 bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 animate-on-scroll">
@@ -1427,6 +1427,29 @@
                     }
                 });
             }
+
+            // Real-time strict validation for mobile keyboards & browsers
+            const enforceLimits = (inputEl, maxLength) => {
+                if (!inputEl) return;
+                inputEl.addEventListener('input', function(e) {
+                    // Allow only letters, spaces, periods, hyphens, and apostrophes
+                    let val = this.value.replace(/[^a-zA-Z\s\.\-\']/g, '');
+                    // Force strictly to max length
+                    if (val.length > maxLength) {
+                        val = val.substring(0, maxLength);
+                    }
+                    // Update field without losing cursor position if possible
+                    if (this.value !== val) {
+                        this.value = val;
+                    }
+                });
+            };
+
+            const nameInputEl = document.querySelector("input[name='name']");
+            const otherDeptInputEl = document.getElementById('otherDepartmentInput');
+            
+            enforceLimits(nameInputEl, 24);
+            enforceLimits(otherDeptInputEl, 24);
 
             const expandBtn = document.getElementById('expandFormBtn');
             const extendedFields = document.getElementById('extended-fields');
