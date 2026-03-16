@@ -14,13 +14,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- ========================================== -->
-    <!-- DEFAULT SEO & META TAGS FOR MAIN WEBSITE   -->
+    <!-- HIGHLY OPTIMIZED DEFAULT SEO & META TAGS   -->
     <!-- ========================================== -->
-    <title>UIU Sanatani Vidyarthi Samsad (UIUSVS) | Official Community</title>
-    <meta name="description" content="Official platform of UIU Sanatani Vidyarthi Samsad at United International University. Join the community to celebrate our rich Sanatani culture and unity.">
-    <meta name="keywords" content="UIU, UIUSVS, UIU SVS, SVS, UIUSVS Member, UIU Sanatani Vidyarthi Sangsad, United International University student organization, Sanatani students UIU, UIU clubs, UIU Hindu student community">
+    <title>UIU Sanatani Vidyarthi Samsad (UIUSVS) | United International University</title>
+    <meta name="description" content="Welcome to the official platform of UIU Sanatani Vidyarthi Samsad (UIUSVS) at United International University. Join our vibrant Sanatani student community to celebrate culture, devotion, and unity.">
+    <meta name="keywords" content="UIU, UIUSVS, UIU SVS, SVS, UIUSVS Member, UIU Sanatani Vidyarthi Samsad, United International University student organization, Sanatani students UIU, UIU clubs, UIU Hindu student community, Sanatani Vidyarthi Samsad">
     <meta name="author" content="UIU Sanatani Vidyarthi Samsad">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="language" content="English">
     <link rel="canonical" href="https://uiusvs.netlify.app/">
 
     <!-- Open Graph / Facebook / WhatsApp (Default) -->
@@ -28,23 +29,23 @@
     <meta property="og:url" content="https://uiusvs.netlify.app/"> 
     <meta property="og:site_name" content="UIUSVS">
     <meta property="og:title" content="UIU Sanatani Vidyarthi Samsad (UIUSVS) | Official Community">
-    <meta property="og:description" content="Official platform of UIU Sanatani Vidyarthi Samsad at United International University. Join the community to celebrate our rich Sanatani culture and unity.">
+    <meta property="og:description" content="Welcome to the official platform of UIU Sanatani Vidyarthi Samsad (UIUSVS) at United International University. Join our vibrant student community.">
     <meta property="og:image" content="https://uiusvs.netlify.app/logo.jpg">
     <meta property="og:image:secure_url" content="https://uiusvs.netlify.app/logo.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UIUSVS Official Logo">
 
     <!-- Twitter (Default) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:domain" content="uiusvs.netlify.app">
     <meta name="twitter:url" content="https://uiusvs.netlify.app/">
     <meta name="twitter:title" content="UIU Sanatani Vidyarthi Samsad (UIUSVS) | Official Community">
-    <meta name="twitter:description" content="Official platform of UIU Sanatani Vidyarthi Samsad at United International University. Join the community to celebrate our rich Sanatani culture and unity.">
+    <meta name="twitter:description" content="Welcome to the official platform of UIU Sanatani Vidyarthi Samsad (UIUSVS) at United International University. Join our vibrant student community.">
     <meta name="twitter:image" content="https://uiusvs.netlify.app/logo.jpg">
 
-    <!-- DYNAMIC JAVASCRIPT TO SWAP META TAGS IF URL IS /join -->
-    <!-- Eta shudhu index.html file-er maddhomei url onujayi meta tag change korbe -->
+    <!-- DYNAMIC JAVASCRIPT TO SWAP META TAGS IF URL IS /join (For Googlebot & JS Crawlers) -->
     <script>
         try {
             const loc = window.location.pathname + window.location.hash + window.location.search;
@@ -55,17 +56,14 @@
 
                 document.title = joinTitle;
                 
-                // Swap standard tags
                 document.querySelector('meta[name="description"]')?.setAttribute("content", joinDesc);
                 
-                // Swap OG tags
                 document.querySelector('meta[property="og:title"]')?.setAttribute("content", joinTitle);
                 document.querySelector('meta[property="og:description"]')?.setAttribute("content", joinDesc);
                 document.querySelector('meta[property="og:image"]')?.setAttribute("content", joinImg);
                 document.querySelector('meta[property="og:image:secure_url"]')?.setAttribute("content", joinImg);
                 document.querySelector('meta[property="og:url"]')?.setAttribute("content", "https://uiusvs.netlify.app/join");
                 
-                // Swap Twitter tags
                 document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", joinTitle);
                 document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", joinDesc);
                 document.querySelector('meta[name="twitter:image"]')?.setAttribute("content", joinImg);
@@ -75,20 +73,40 @@
         }
     </script>
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Advanced Structured Data (JSON-LD) for #1 Google Ranking -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "UIU Sanatani Vidyarthi Samsad",
-      "alternateName": ["UIUSVS", "UIU SVS"],
-      "description": "UIUSVS is the official Sanatani student community at United International University dedicated to culture, unity, and student engagement.",
-      "url": "https://uiusvs.netlify.app",
-      "logo": "https://uiusvs.netlify.app/logo.jpg",
-      "location": {
-        "@type": "Place",
-        "name": "United International University, Dhaka, Bangladesh"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "UIU Sanatani Vidyarthi Samsad",
+          "alternateName": ["UIUSVS", "UIU SVS", "Sanatani Vidyarthi Samsad UIU"],
+          "description": "The official Sanatani student community at United International University (UIU), dedicated to preserving culture, unity, and heritage.",
+          "url": "https://uiusvs.netlify.app/",
+          "logo": "https://uiusvs.netlify.app/logo.jpg",
+          "sameAs": [
+            "https://www.facebook.com/uiusvs"
+          ],
+          "location": {
+            "@type": "Place",
+            "name": "United International University",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "United City, Madani Avenue",
+              "addressLocality": "Dhaka",
+              "postalCode": "1212",
+              "addressCountry": "Bangladesh"
+            }
+          }
+        },
+        {
+          "@type": "WebSite",
+          "name": "UIUSVS",
+          "alternateName": "UIU Sanatani Vidyarthi Samsad",
+          "url": "https://uiusvs.netlify.app/"
+        }
+      ]
     }
     </script>
 
@@ -384,7 +402,7 @@
             </svg>
         </div>
 
-        <button class="absolute top-6 right-6 text-white bg-white/5 backdrop-blur-md p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[210] flex items-center justify-center shadow-lg" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white bg-white/5 backdrop-blur-md p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[210] flex items-center justify-center shadow-lg" onclick="closeLightbox()" aria-label="Close Lightbox">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
@@ -459,7 +477,7 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="UIUSVS Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
+                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
                 <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
@@ -471,7 +489,7 @@
             </nav>
             <div class="flex items-center gap-4">
                 <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all" aria-label="Join UIUSVS">Join SVS</a>
-                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg">
+                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg" aria-label="Toggle Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
             </div>
@@ -499,7 +517,7 @@
             <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-col items-center">
                 <div class="mb-6 animate-on-scroll is-visible">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg p-2 border-2 border-red-100">
-                        <img src="saraswati.png" alt="Saraswati UIUSVS" class="w-full h-full object-contain pointer-events-none">
+                        <img src="saraswati.png" alt="Saraswati Idol - UIU Sanatani Vidyarthi Samsad (UIUSVS)" class="w-full h-full object-contain pointer-events-none">
                     </div>
                 </div>
                 <div class="animate-on-scroll is-visible w-full">
@@ -559,14 +577,14 @@
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" onload="this.previousElementSibling.style.display='none'">
+                                <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" onload="this.previousElementSibling.style.display='none'">
+                                <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
@@ -576,11 +594,11 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja Gathering UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -598,15 +616,15 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Celebration UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Gathering" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -624,15 +642,15 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi at UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi Festival at UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/holi.png" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Holi" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Holi_2025/holi.png" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Holi Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi Colors UIU SVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -657,7 +675,7 @@
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Monthly Prayer Gathering" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -669,21 +687,21 @@
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" onload="this.previousElementSibling.style.display='none'">
+                                <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Maha Shivratri UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Shivratri Celebration UIUSVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Shivratri Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -694,15 +712,15 @@
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Bhai Phota Event UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Bhai Phota" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
-                            <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10 gallery-img" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+                            <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Bhai Phota Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -757,7 +775,7 @@
                     <div class="relative z-10 animate-on-scroll">
                         <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-48 sm:w-56 text-center group">
                             <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform">
-                                <img src="Advisor/jashodhan_sir.jpg" class="w-full h-full object-cover" alt="Dr. Jashodhan Saha" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Dr.+Jashodhan+Saha'">
+                                <img src="Advisor/jashodhan_sir.jpg" class="w-full h-full object-cover" alt="Dr. Jashodhan Saha - UIUSVS Chief Advisor" loading="lazy" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Dr.+Jashodhan+Saha'">
                             </div>
                             <h3 class="text-sm sm:text-base font-bold text-red-900">Dr. Jashodhan Saha</h3>
                             <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
@@ -774,14 +792,14 @@
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
                             <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
-                                <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
+                                <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta - UIUSVS Senior Advisor" loading="lazy" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
                         <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
                             <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
-                                <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
+                                <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das - UIUSVS Senior Advisor" loading="lazy" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
@@ -1364,8 +1382,7 @@
                         
                         try {
                             const path = window.location.pathname.replace(/^\/|\/$/g, '');
-                            const hash = window.location.hash.replace('#', '');
-                            const targetId = hash || (path.includes('.html') ? '' : path); 
+                            const targetId = path; 
                             
                             if (targetId) {
                                 const target = document.getElementById(targetId);
@@ -1378,7 +1395,7 @@
                                     setTimeout(() => {
                                         const y = target.getBoundingClientRect().top + window.scrollY - 80;
                                         window.scrollTo({top: y, behavior: 'smooth'});
-                                    }, 150);
+                                    }, 100);
                                 }
                             }
                         } catch(e) {}
@@ -1746,9 +1763,17 @@
 
                             if (targetId === 'join' && typeof expandForm === 'function' && !isFormExpanded) {
                                 expandForm();
-                            } 
-                            
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                requestAnimationFrame(() => {
+                                    const y = target.getBoundingClientRect().top + window.scrollY - 80;
+                                    window.scrollTo({top: y, behavior: 'smooth'});
+                                });
+                            } else {
+                                const scrollTarget = target || document.getElementById('home');
+                                if(scrollTarget) {
+                                    const y = scrollTarget.getBoundingClientRect().top + window.scrollY - 80;
+                                    window.scrollTo({top: y, behavior: 'smooth'});
+                                }
+                            }
                         }
                     });
                 }
