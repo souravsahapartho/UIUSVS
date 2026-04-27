@@ -168,6 +168,12 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Custom Scrollbar for Quiz */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #fff7ed; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #fdba74; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
         #page-preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #fffaf0; z-index: 9999;
@@ -392,6 +398,36 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
+    <!-- Daily Festival Notification Popup -->
+    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🪔</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Next Festival</p>
+                <p id="notif-fest-name" class="font-bold text-gray-900 text-sm leading-tight mt-0.5">...</p>
+                <p id="notif-fest-days" class="text-xs text-gray-600 mt-1 font-medium">...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Suggestion Popup (Scroll Triggered) -->
+    <div id="quiz-suggestion-toast" class="fixed bottom-24 sm:bottom-6 right-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeQuizSuggestion()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🧠</div>
+            <div>
+                <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Knowledge Test</p>
+                <p class="font-bold text-gray-900 text-sm leading-tight mt-0.5">How much do you know about Sanatan Dharma?</p>
+                <button onclick="scrollToQuiz()" class="mt-2 text-xs font-bold text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-4 py-1.5 rounded-full transition-colors shadow-sm">Play Now</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Image Lightbox Modal -->
     <div id="image-lightbox" class="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-950/40 via-black to-black z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-xl cursor-zoom-out" onclick="closeLightbox()">
         
@@ -500,7 +536,7 @@
             </a>
             <nav class="hidden md:flex items-center space-x-8 font-sans">
                 <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
-                <a href="/events" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Events</a>
+                <a href="#festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
                 <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
                 <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
                 <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
@@ -515,7 +551,7 @@
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
                 <a href="/" class="block py-3 text-red-900 font-semibold text-lg">Home</a>
-                <a href="/events" class="block py-3 text-red-900 font-semibold text-lg">Events</a>
+                <a href="#festivals" class="block py-3 text-red-900 font-semibold text-lg">Festivals</a>
                 <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg">Gallery</a>
                 <a href="/about" class="block py-3 text-red-900 font-semibold text-lg">About</a>
                 <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg">Videos</a>
@@ -548,23 +584,43 @@
                         UIUSVS is the official Sanatani student community of United International University.
                     </h2>
                 </div>
+
+                <!-- Next Festival Countdown in Hero -->
+                <div id="hero-festival-countdown" class="animate-on-scroll is-visible mb-10 inline-flex flex-col items-center justify-center bg-white/70 backdrop-blur-md border-2 border-orange-200 px-6 py-4 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] text-red-900 transition-transform hover:scale-[1.02] cursor-default hidden">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-1.5 flex items-center gap-1.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Next Spiritual Gathering</span>
+                    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+                        <span id="hero-fest-name" class="font-serif font-extrabold text-xl sm:text-2xl text-gray-900 leading-none">...</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 hidden sm:block opacity-50"></span>
+                        <span id="hero-fest-days" class="font-bold bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-1 rounded-full text-sm shadow-sm whitespace-nowrap">...</span>
+                    </div>
+                </div>
+
                 <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
                     <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" onclick="handleNavClick(event, '/join')">Become a Member</a>
-                    <a href="/events" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500" onclick="handleNavClick(event, '/events')">Explore Events</a>
+                    <a href="#festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
                 </div>
             </div>
         </section>
 
-        <!-- Events Section -->
-        <section id="events" class="py-16 bg-white/80 backdrop-blur-sm">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 animate-on-scroll">
-                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Mark Your Calendar</span>
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4">Upcoming Events</h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-orange-500 mx-auto mt-4 rounded-full"></div>
+        <!-- Auto Hindu Festival System -->
+        <section id="festivals" class="py-16 bg-orange-50/50 backdrop-blur-sm relative overflow-hidden">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-10 animate-on-scroll">
+                    <span class="text-orange-600 font-bold uppercase tracking-widest text-[10px] bg-orange-100 px-3 py-1 rounded-full border border-orange-200">Sacred Timeline</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 font-serif">Sanatan Festivals</h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto mt-4 rounded-full"></div>
                 </div>
-                <div id="upcoming-events-list" class="flex flex-wrap justify-center gap-8">
-                    <div class="w-full text-center py-12"><div class="video-loader mx-auto"></div></div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mb-10 animate-on-scroll">
+                    <button onclick="filterFestivals('all')" id="btn-fest-all" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-red-600 text-white shadow-md">All Upcoming</button>
+                    <button onclick="filterFestivals('major')" id="btn-fest-major" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50">Major Festivals</button>
+                    <button onclick="filterFestivals('ekadashi')" id="btn-fest-ekadashi" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50">Only Ekadashi</button>
+                </div>
+
+                <!-- Dynamic List -->
+                <div id="festival-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <div class="col-span-full flex justify-center py-8"><div class="spinner border-orange-200 border-l-orange-500 w-8 h-8"></div></div>
                 </div>
             </div>
         </section>
@@ -841,6 +897,38 @@
             </div>
         </section>
 
+        <!-- Quick Sanatan Quiz -->
+        <section id="quiz" class="py-16 bg-orange-50/40 backdrop-blur-sm border-t border-b border-orange-100">
+            <div class="container mx-auto px-6 max-w-3xl">
+                <div class="text-center mb-10 animate-on-scroll">
+                    <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-white px-3 py-1 rounded-full border border-red-100 shadow-sm">Knowledge Test</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 font-serif">How much do you know about Sanatan Dharma?</h2>
+                    <div class="w-16 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="bg-gradient-to-br from-white to-orange-50 p-4 sm:p-8 rounded-3xl shadow-md border border-orange-200 animate-on-scroll relative overflow-hidden transition-all duration-300">
+                    <!-- Quiz Form -->
+                    <div id="quiz-container">
+                        <div id="quiz-questions-wrapper" class="max-h-[60vh] overflow-y-auto pr-2 sm:pr-4 space-y-6 mb-6 rounded-2xl border border-orange-100 bg-white/60 p-4 sm:p-6 custom-scrollbar">
+                            <!-- Questions will be rendered here dynamically -->
+                        </div>
+                        <button onclick="submitQuiz()" class="w-full btn-base btn-puja py-3.5 shadow-md text-lg tracking-normal">Submit Answers</button>
+                    </div>
+
+                    <!-- Quiz Results -->
+                    <div id="quiz-result" class="hidden text-center py-8">
+                        <div class="w-20 h-20 bg-green-50 border border-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                            <span class="text-4xl">🕉️</span>
+                        </div>
+                        <h3 id="quiz-feedback-title" class="text-2xl font-bold text-gray-900 mb-2 font-serif">Good Effort!</h3>
+                        <p class="text-lg text-gray-700 mb-6 font-medium">Your Score: <span id="quiz-score" class="font-extrabold text-orange-600 text-3xl mx-1">0</span> <span class="text-gray-400 text-sm">/ <span id="quiz-total-score">50</span></span></p>
+                        <p id="quiz-feedback-text" class="text-sm text-gray-600 mb-8 italic">Stay with us to learn more about Sanatan Dharma.</p>
+                        <button onclick="resetQuiz()" class="btn-base btn-explore border-2 border-orange-500 px-8 py-2">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- YouTube Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center">
             <div class="container mx-auto px-6 relative z-10">
@@ -983,7 +1071,7 @@
                     <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="/" class="hover:text-red-600 transition-colors">Home</a></li>
-                        <li><a href="/events" class="hover:text-red-600 transition-colors">Events</a></li>
+                        <li><a href="#festivals" class="hover:text-red-600 transition-colors">Festivals</a></li>
                         <li><a href="/about" class="hover:text-red-700 transition-colors">About</a></li>
                         <li><a href="/join" class="hover:text-red-700 transition-colors">Join Now</a></li>
                     </ul>
@@ -991,8 +1079,8 @@
                 <div>
                     <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
-                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook</a></li>
-                        <li><a href="https://wa.me/+8801747596847" class="flex items-center hover:text-green-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg> WhatsApp</a></li>
+                        <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook Page</a></li>
+                        <li><a href="https://www.facebook.com/share/g/1DtDc8vrRz/" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Facebook Group</a></li>
                         <li><a href="mailto:uiubaniarchana2020@gmail.com" class="flex items-center hover:text-red-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email Us</a></li>
                     </ul>
                 </div>
@@ -1005,13 +1093,424 @@
     </footer>
 
     <script type="module">
-        const upcomingEventsData = [
-            { name: "Saraswati Puja 2027", date: "2027-02-11", image_url: "Upcoming_Events/saraswati_puja.png" },
-            { name: "Shiv Ratri 2026", date: "2026-02-15", image_url: "Upcoming_Events/shiv_ratri.jpg" },
-            { name: "Holi Festival 2026", date: "2026-03-04", image_url: "Upcoming_Events/Holi_upcoming.jpeg" },
-            { name: "Bhai Phota 2026", date: "2026-11-10", image_url: "Upcoming_Events/Bhai_Fota_Upcoming.png" },
-            { name: "Kali Puja 2026", date: "2026-11-08", image_url: "Upcoming_Events/kali_puja_upcoming.jpeg" }
+        // 🎯 ADDED: Sanatan Quiz 50 Questions Data
+        const sanatanQuizData = [
+            { q: "What is the primary sacred text of Hinduism?", options: ["Quran", "Vedas", "Bible", "Tripitaka"], ans: 1 },
+            { q: "How many Vedas are there?", options: ["2", "3", "4", "5"], ans: 2 },
+            { q: "Who delivered the Bhagavad Gita?", options: ["Rama", "Krishna", "Shiva", "Indra"], ans: 1 },
+            { q: "Who is the hero of the Ramayana?", options: ["Krishna", "Rama", "Arjuna", "Karna"], ans: 1 },
+            { q: "What is the vehicle of Lord Shiva?", options: ["Lion", "Bull", "Peacock", "Elephant"], ans: 1 },
+            { q: "Goddess Lakshmi is the goddess of?", options: ["Knowledge", "Power", "Wealth", "War"], ans: 2 },
+            { q: "Goddess Saraswati is the goddess of?", options: ["Wealth", "Knowledge", "Power", "Love"], ans: 1 },
+            { q: "What is the vehicle of Goddess Durga?", options: ["Horse", "Lion", "Elephant", "Bull"], ans: 1 },
+            { q: "Lord Ganesha has the head of which animal?", options: ["Horse", "Lion", "Elephant", "Tiger"], ans: 2 },
+            { q: "Holi is the festival of?", options: ["Lights", "Colors", "Water", "Fruits"], ans: 1 },
+            { q: "Diwali is the festival of?", options: ["Lights", "Water", "Flowers", "Colors"], ans: 0 },
+            { q: "What is Om (ॐ)?", options: ["God", "Sacred sound/mantra", "Book", "Festival"], ans: 1 },
+            { q: "What is the role of Brahma?", options: ["Creation", "Destruction", "Protection", "War"], ans: 0 },
+            { q: "What is the role of Vishnu?", options: ["Creation", "Protection", "Destruction", "Judgment"], ans: 1 },
+            { q: "What is the role of Shiva?", options: ["Creation", "Protection", "Destruction", "Teaching"], ans: 2 },
+            { q: "According to belief, where did the Ganga come from?", options: ["Ocean", "Heaven", "Mountain", "Forest"], ans: 1 },
+            { q: "Where was Krishna born?", options: ["Vrindavan", "Mathura", "Ayodhya", "Kashi"], ans: 1 },
+            { q: "Where was Rama born?", options: ["Ayodhya", "Mathura", "Lanka", "Kurukshetra"], ans: 0 },
+            { q: "Hanuman is a devotee of whom?", options: ["Krishna", "Rama", "Shiva", "Vishnu"], ans: 1 },
+            { q: "Bhagavad Gita is part of which epic?", options: ["Ramayana", "Mahabharata", "Vedas", "Puranas"], ans: 1 },
+            { q: "How many parvas are in the Mahabharata?", options: ["16", "18", "20", "12"], ans: 1 },
+            { q: "What is the name of Arjuna’s bow?", options: ["Pinaka", "Gandiva", "Sudarshan", "Vijaya"], ans: 1 },
+            { q: "Who was Karna’s biological father?", options: ["Indra", "Surya", "Vayu", "Agni"], ans: 1 },
+            { q: "How many days did the Kurukshetra war last?", options: ["10", "15", "18", "21"], ans: 2 },
+            { q: "How many husbands did Draupadi have?", options: ["3", "4", "5", "6"], ans: 2 },
+            { q: "Who was the first avatar of Vishnu?", options: ["Kurma", "Matsya", "Varaha", "Narasimha"], ans: 1 },
+            { q: "Who was Rama’s wife?", options: ["Radha", "Sita", "Draupadi", "Rukmini"], ans: 1 },
+            { q: "Who is Shiva’s consort?", options: ["Lakshmi", "Saraswati", "Parvati", "Ganga"], ans: 2 },
+            { q: "Who is Ganesha’s brother?", options: ["Kartikeya", "Hanuman", "Rama", "Krishna"], ans: 0 },
+            { q: "Whom did Narasimha kill?", options: ["Ravana", "Kansa", "Hiranyakashipu", "Bali"], ans: 2 },
+            { q: "Who was Krishna’s poor friend?", options: ["Sudama", "Arjuna", "Uddhava", "Balarama"], ans: 0 },
+            { q: "How many chapters are in Bhagavad Gita?", options: ["16", "18", "20", "12"], ans: 1 },
+            { q: "How many heads did Ravana have?", options: ["5", "7", "10", "12"], ans: 2 },
+            { q: "How many days is Durga Puja typically celebrated?", options: ["3", "5", "7", "10"], ans: 1 },
+            { q: "What does Shiva’s third eye symbolize?", options: ["Anger", "Wisdom", "Power of destruction", "Illusion"], ans: 2 },
+            { q: "Which is the oldest Veda?", options: ["Yajurveda", "Samaveda", "Rigveda", "Atharvaveda"], ans: 2 },
+            { q: "What do the Upanishads mainly discuss?", options: ["Rituals", "Philosophy", "War", "Politics"], ans: 1 },
+            { q: "What was the purpose of Ashvamedha Yajna?", options: ["Wealth", "Power and sovereignty", "Marriage", "Education"], ans: 1 },
+            { q: "What is the core teaching of Bhagavad Gita?", options: ["War", "Karma and duty", "Wealth", "Fear"], ans: 1 },
+            { q: "Who founded Sankhya philosophy?", options: ["Patanjali", "Kapila", "Vyasa", "Shankara"], ans: 1 },
+            { q: "Who is the founder of Yoga philosophy?", options: ["Kapila", "Patanjali", "Vyasa", "Valmiki"], ans: 1 },
+            { q: "Who propagated Advaita Vedanta?", options: ["Ramanuja", "Madhva", "Adi Shankaracharya", "Buddha"], ans: 2 },
+            { q: "What is the relationship between Karma, Dharma, and Moksha?", options: ["Unrelated", "Path to liberation", "War system", "Social rule"], ans: 1 },
+            { q: "What are the three Gunas?", options: ["Dharma, Karma, Moksha", "Sattva, Rajas, Tamas", "Earth, Water, Fire", "Mind, Body, Soul"], ans: 1 },
+            { q: "What does Maya represent?", options: ["Truth", "Illusion", "War", "Knowledge"], ans: 1 },
+            { q: "What is the Varna system?", options: ["Education system", "Social classification", "War strategy", "Ritual system"], ans: 1 },
+            { q: "What are the four Ashramas?", options: ["Dharma, Karma, Moksha, Artha", "Brahmacharya, Grihastha, Vanaprastha, Sannyasa", "Rig, Sama, Yajur, Atharva", "Earth, Water, Fire, Air"], ans: 1 },
+            { q: "How many Purusharthas are there?", options: ["2", "3", "4", "5"], ans: 2 },
+            { q: "Gayatri Mantra is found in which Veda?", options: ["Rigveda", "Samaveda", "Yajurveda", "Atharvaveda"], ans: 0 },
+            { q: "What does “Tat Tvam Asi” mean?", options: ["You are great", "You are that (divine)", "God is separate", "Worship nature"], ans: 1 }
         ];
+
+        // 🎯 ADDED: Sampurna 2026 Festival Data
+        const systemFestivalData = [
+            // --- APRIL 2026 (Upcoming) ---
+            { name: "Vaishakha Amavasya", bnName: "বৈশাখ অমাবস্যা", date: "2026-04-17", type: "moon" },
+            { name: "Akshaya Tritiya", bnName: "অক্ষয় তৃতীয়া", date: "2026-04-19", type: "major" },
+            { name: "Mohini Ekadashi", bnName: "মোহিনী একাদশী", date: "2026-04-27", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-04-28", type: "other" },
+
+            // --- MAY 2026 ---
+            { name: "Buddha Purnima", bnName: "বুদ্ধ পূর্ণিমা", date: "2026-05-01", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-05-05", type: "other" },
+            { name: "Apara Ekadashi", bnName: "অপরা একাদশী", date: "2026-05-13", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-05-14", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-05-15", type: "other" },
+            { name: "Jyeshtha Amavasya", bnName: "জ্যৈষ্ঠ অমাবস্যা", date: "2026-05-16", type: "moon" },
+            { name: "Padmini Ekadashi", bnName: "পদ্মিনী একাদশী", date: "2026-05-27", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-05-28", type: "other" },
+            { name: "Purnima Vrat", bnName: "পূর্ণিমা ব্রত", date: "2026-05-31", type: "moon" },
+
+            // --- JUNE 2026 ---
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-06-03", type: "other" },
+            { name: "Parama Ekadashi", bnName: "পরমা একাদশী", date: "2026-06-11", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-06-12", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-06-13", type: "other" },
+            { name: "Amavasya", bnName: "অমাবস্যা", date: "2026-06-15", type: "moon" },
+            { name: "Nirjala Ekadashi", bnName: "নির্জলা একাদশী", date: "2026-06-25", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-06-27", type: "other" },
+            { name: "Jyeshtha Purnima", bnName: "জ্যৈষ্ঠ পূর্ণিমা ব্রত", date: "2026-06-29", type: "moon" },
+
+            // --- JULY 2026 ---
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-07-03", type: "other" },
+            { name: "Yogini Ekadashi", bnName: "যোগিনী একাদশী", date: "2026-07-10", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-07-12", type: "other" },
+            { name: "Ashadha Amavasya", bnName: "আষাঢ় অমাবস্যা", date: "2026-07-14", type: "moon" },
+            { name: "Rath Yatra", bnName: "রথ যাত্রা", date: "2026-07-16", type: "major" },
+            { name: "Shayani Ekadashi", bnName: "শয়নী একাদশী", date: "2026-07-25", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-07-26", type: "other" },
+            { name: "Guru Purnima", bnName: "গুরু পূর্ণিমা", date: "2026-07-29", type: "major" },
+
+            // --- AUGUST 2026 ---
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-08-02", type: "other" },
+            { name: "Kamika Ekadashi", bnName: "কামিকা একাদশী", date: "2026-08-09", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-08-10", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-08-11", type: "other" },
+            { name: "Shravana Amavasya", bnName: "শ্রাবণ অমাবস্যা", date: "2026-08-12", type: "moon" },
+            { name: "Hariyali Teej", bnName: "হরিয়ালী তীজ", date: "2026-08-15", type: "other" },
+            { name: "Nag Panchami", bnName: "নাগ পঞ্চমী", date: "2026-08-17", type: "other" },
+            { name: "Putrada Ekadashi", bnName: "পুত্রদা একাদশী", date: "2026-08-23", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-08-25", type: "other" },
+            { name: "Onam", bnName: "ওনাম", date: "2026-08-26", type: "other" },
+            { name: "Raksha Bandhan", bnName: "রক্ষা বন্ধন / রাখী পূর্ণিমা", date: "2026-08-28", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-08-31", type: "other" },
+
+            // --- SEPTEMBER 2026 ---
+            { name: "Janmashtami", bnName: "কৃষ্ণ জন্মাষ্টমী", date: "2026-09-04", type: "major" },
+            { name: "Aja Ekadashi", bnName: "অজা একাদশী", date: "2026-09-07", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (কৃষ্ণ)", date: "2026-09-08", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-09-09", type: "other" },
+            { name: "Bhadrapada Amavasya", bnName: "ভাদ্রপদ অমাবস্যা", date: "2026-09-11", type: "moon" },
+            { name: "Ganesh Chaturthi", bnName: "গণেশ চতুর্থী", date: "2026-09-14", type: "major" },
+            { name: "Kanya Sankranti", bnName: "কন্যা সংক্রান্তি", date: "2026-09-17", type: "other" },
+            { name: "Parivartini Ekadashi", bnName: "পরিবর্তিনী একাদশী", date: "2026-09-22", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-09-24", type: "other" },
+            { name: "Anant Chaturdashi", bnName: "অনন্ত চতুর্দশী", date: "2026-09-25", type: "other" },
+            { name: "Bhadrapada Purnima", bnName: "ভাদ্রপদ পূর্ণিমা ব্রত", date: "2026-09-26", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-09-29", type: "other" },
+
+            // --- OCTOBER 2026 ---
+            { name: "Indira Ekadashi", bnName: "ইন্দিরা একাদশী", date: "2026-10-06", type: "ekadashi" },
+            { name: "Pradosh & Masik Shivaratri", bnName: "প্রদোষ ব্রত ও মাসিক শিবরাত্রি", date: "2026-10-08", type: "other" },
+            { name: "Ashwin Amavasya", bnName: "আশ্বিন অমাবস্যা", date: "2026-10-10", type: "moon" },
+            { name: "Sharad Navaratri", bnName: "শারদীয়া নবরাত্রি (ঘটস্থাপন)", date: "2026-10-11", type: "major" },
+            { name: "Kalparambha", bnName: "কল্পারম্ভ", date: "2026-10-16", type: "major" },
+            { name: "Navapatrika Puja", bnName: "নবপত্রিকা পূজা", date: "2026-10-17", type: "major" },
+            { name: "Durga Maha Navami/Ashtami", bnName: "দুর্গা মহা অষ্টমী ও নবমী", date: "2026-10-19", type: "major" },
+            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2026-10-20", type: "major" },
+            { name: "Durga Visarjan", bnName: "দুর্গা বিসর্জন", date: "2026-10-21", type: "major" },
+            { name: "Papankusha Ekadashi", bnName: "পাপঙ্কুশা একাদশী", date: "2026-10-22", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-10-23", type: "other" },
+            { name: "Ashwin Purnima", bnName: "আশ্বিন পূর্ণিমা ব্রত", date: "2026-10-26", type: "moon" },
+            { name: "Karva Chauth", bnName: "করওয়া চৌথ / সংকষ্টী চতুর্থী", date: "2026-10-29", type: "other" },
+
+            // --- NOVEMBER 2026 ---
+            { name: "Rama Ekadashi", bnName: "রমা একাদশী", date: "2026-11-05", type: "ekadashi" },
+            { name: "Dhanteras", bnName: "ধনতেরাস", date: "2026-11-06", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-11-07", type: "other" },
+            { name: "Diwali / Kali Puja", bnName: "দীপাবলি / কালী পূজা", date: "2026-11-08", type: "major" },
+            { name: "Kartik Amavasya", bnName: "কার্তিক অমাবস্যা", date: "2026-11-09", type: "moon" },
+            { name: "Govardhan Puja", bnName: "গোবর্ধন পূজা", date: "2026-11-10", type: "major" },
+            { name: "Bhai Phota", bnName: "ভাইফোঁটা", date: "2026-11-11", type: "major" },
+            { name: "Chhath Puja", bnName: "ছট পূজা", date: "2026-11-15", type: "major" },
+            { name: "Vrishchika Sankranti", bnName: "বৃশ্চিক সংক্রান্তি", date: "2026-11-16", type: "other" },
+            { name: "Devutthana Ekadashi", bnName: "দেবোত্থান একাদশী", date: "2026-11-20", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-11-22", type: "other" },
+            { name: "Kartik Purnima", bnName: "কার্তিক পূর্ণিমা ব্রত", date: "2026-11-24", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-11-27", type: "other" },
+
+            // --- DECEMBER 2026 ---
+            { name: "Utpanna Ekadashi", bnName: "উৎপন্না একাদশী", date: "2026-12-04", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (কৃষ্ণ)", date: "2026-12-06", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-12-07", type: "other" },
+            { name: "Margashirsha Amavasya", bnName: "অগ্রহায়ণ অমাবস্যা", date: "2026-12-08", type: "moon" },
+            { name: "Dhanu Sankranti", bnName: "ধনু সংক্রান্তি", date: "2026-12-16", type: "other" },
+            { name: "Mokshada Ekadashi", bnName: "মোক্ষদা একাদশী", date: "2026-12-20", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-12-21", type: "other" },
+            { name: "Margashirsha Purnima", bnName: "অগ্রহায়ণ পূর্ণিমা ব্রত", date: "2026-12-23", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-12-26", type: "other" }
+        ];
+
+        let currentFestFilter = 'all';
+
+        function getDaysDiff(targetDateStr) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(targetDateStr);
+            target.setHours(0, 0, 0, 0);
+            return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+        }
+
+        function getUpcomingFestivals() {
+            return systemFestivalData
+                .map(f => ({ ...f, daysLeft: getDaysDiff(f.date) }))
+                .filter(f => f.daysLeft >= 0)
+                .sort((a, b) => a.daysLeft - b.daysLeft);
+        }
+
+        window.filterFestivals = (type) => {
+            currentFestFilter = type;
+            const btns = {
+                'all': document.getElementById('btn-fest-all'),
+                'major': document.getElementById('btn-fest-major'),
+                'ekadashi': document.getElementById('btn-fest-ekadashi')
+            };
+            
+            Object.keys(btns).forEach(k => {
+                if (btns[k]) {
+                    if (k === type) {
+                        btns[k].className = "px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-red-600 text-white shadow-md";
+                    } else {
+                        btns[k].className = "px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50";
+                    }
+                }
+            });
+            renderFestivalList();
+        };
+
+        function renderFestivalList() {
+            const listEl = document.getElementById('festival-list');
+            if(!listEl) return;
+            
+            let upcoming = getUpcomingFestivals();
+            if (currentFestFilter !== 'all') upcoming = upcoming.filter(f => f.type === currentFestFilter);
+            upcoming = upcoming.slice(0, 6);
+
+            if (upcoming.length === 0) {
+                listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found for this category.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = upcoming.map((f, i) => {
+                const d = new Date(f.date);
+                const dateStr = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                const isNearest = (i === 0 && currentFestFilter === 'all');
+                const highlightClass = isNearest ? 'border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200' : 'border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md';
+                
+                let timeBadge = '';
+                if (f.daysLeft === 0) {
+                    timeBadge = `<span class="inline-flex items-center bg-green-100 text-green-700 border border-green-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-extrabold anim-ripple shadow-sm"><span class="live-dot"></span>🎉 Today!</span>`;
+                } else if (f.daysLeft === 1) {
+                    timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm">⚡ Tomorrow!</span>`;
+                } else if (f.daysLeft <= 3) {
+                    timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm">⚡ In ${f.daysLeft} days</span>`;
+                } else if (f.daysLeft <= 7) {
+                    timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-300 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-pop shadow-sm">📢 In ${f.daysLeft} days</span>`;
+                } else if (f.daysLeft <= 15) {
+                    timeBadge = `<span class="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-breath shadow-sm">🗓️ In ${f.daysLeft} days</span>`;
+                } else if (f.daysLeft <= 30) {
+                    timeBadge = `<span class="inline-flex items-center bg-yellow-50 text-yellow-700 border border-yellow-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-shine overflow-hidden shadow-sm">📅 In ${f.daysLeft} days</span>`;
+                } else {
+                    timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-100 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold shadow-sm">⏳ In ${f.daysLeft} days</span>`;
+                }
+
+                const icon = f.type === 'ekadashi' ? '🌾' : (f.type === 'moon' ? '🌕' : '🪔');
+
+                return `
+                    <div class="p-6 rounded-2xl border transition-all duration-300 ${highlightClass}">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100">${icon}</div>
+                            ${timeBadge}
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-xl mb-0.5 font-serif">${f.name}</h3>
+                        <p class="text-sm text-orange-700 font-medium font-serif mb-1.5">${f.bnName}</p>
+                        <p class="text-sm text-gray-500 font-medium flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> 
+                            ${dateStr}
+                        </p>
+                    </div>`;
+            }).join('');
+        }
+
+        function initFestivalSystem() {
+            const upcoming = getUpcomingFestivals();
+            
+            // Update Hero Box (Only Major Festivals)
+            const upcomingMajor = upcoming.filter(f => f.type === 'major');
+            if (upcomingMajor.length > 0) {
+                const nextMajorFest = upcomingMajor[0];
+                
+                const heroBox = document.getElementById('hero-festival-countdown');
+                const heroName = document.getElementById('hero-fest-name');
+                const heroDays = document.getElementById('hero-fest-days');
+                
+                if (heroBox && heroName && heroDays) {
+                    heroName.textContent = nextMajorFest.name;
+                    heroDays.textContent = nextMajorFest.daysLeft === 0 ? "Today!" : `In ${nextMajorFest.daysLeft} Days`;
+                    heroBox.classList.remove('hidden');
+                }
+            }
+            
+            // Daily Popup logic (All Festivals)
+            if (upcoming.length > 0) {
+                const nextFest = upcoming[0];
+                const todayStr = new Date().toDateString();
+                const lastNotif = localStorage.getItem('last_festival_notif_date');
+                if (lastNotif !== todayStr) {
+                    setTimeout(() => {
+                        const notifBox = document.getElementById('festival-notification');
+                        if (notifBox) {
+                            document.getElementById('notif-fest-name').textContent = nextFest.name;
+                            document.getElementById('notif-fest-days').textContent = nextFest.daysLeft === 0 ? "Happening today! 🙏" : `${nextFest.daysLeft} days remaining`;
+                            notifBox.classList.remove('hidden');
+                            setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
+                            localStorage.setItem('last_festival_notif_date', todayStr);
+                            setTimeout(window.closeNotification, 8000);
+                        }
+                    }, 3000);
+                }
+            }
+            filterFestivals('all');
+        }
+
+        window.closeNotification = () => {
+            const notifBox = document.getElementById('festival-notification');
+            if(notifBox) {
+                notifBox.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                setTimeout(() => notifBox.classList.add('hidden'), 500);
+            }
+        };
+
+        // 🎯 ADDED: Quiz Suggestion Handlers
+        window.closeQuizSuggestion = () => {
+            const toast = document.getElementById('quiz-suggestion-toast');
+            if(toast) {
+                toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                setTimeout(() => toast.classList.add('hidden'), 500);
+            }
+        };
+
+        window.scrollToQuiz = () => {
+            window.closeQuizSuggestion();
+            const quizSection = document.getElementById('quiz');
+            if(quizSection) {
+                const y = quizSection.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }
+        };
+
+        // 🎯 ADDED: Global array to store the 3 active questions
+        let currentQuizQuestions = [];
+
+        // 🎯 ADDED: Initialize 3 Random Questions (1 Easy, 1 Medium, 1 Hard)
+        function initSanatanQuiz() {
+            const wrapper = document.getElementById('quiz-questions-wrapper');
+            if (!wrapper) return;
+            
+            // Randomly select indices
+            const easyIndex = Math.floor(Math.random() * 20); // 0 to 19
+            const mediumIndex = 20 + Math.floor(Math.random() * 15); // 20 to 34
+            const hardIndex = 35 + Math.floor(Math.random() * 15); // 35 to 49
+
+            currentQuizQuestions = [
+                { ...sanatanQuizData[easyIndex], originalIndex: easyIndex, level: 'Easy' },
+                { ...sanatanQuizData[mediumIndex], originalIndex: mediumIndex, level: 'Medium' },
+                { ...sanatanQuizData[hardIndex], originalIndex: hardIndex, level: 'Hard' }
+            ];
+            
+            wrapper.innerHTML = currentQuizQuestions.map((q, i) => {
+                let levelBadge = '';
+                if(q.level === 'Easy') levelBadge = '<span class="text-[10px] bg-green-100 text-green-700 border border-green-200 px-2 py-0.5 rounded-full ml-2 align-middle font-bold tracking-wider uppercase">Easy</span>';
+                else if(q.level === 'Medium') levelBadge = '<span class="text-[10px] bg-yellow-100 text-yellow-700 border border-yellow-200 px-2 py-0.5 rounded-full ml-2 align-middle font-bold tracking-wider uppercase">Medium</span>';
+                else levelBadge = '<span class="text-[10px] bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded-full ml-2 align-middle font-bold tracking-wider uppercase">Hard</span>';
+
+                const optionsHtml = q.options.map((opt, optIndex) => `
+                    <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors">
+                        <input type="radio" name="q${q.originalIndex}" value="${optIndex}" class="mr-3 text-orange-500 focus:ring-orange-500 w-4 h-4">
+                        ${opt}
+                    </label>
+                `).join('');
+
+                return `
+                    <div class="quiz-question block" data-q="${q.originalIndex}">
+                        <h3 class="font-bold text-base sm:text-lg text-gray-800 mb-3 leading-tight">
+                            <span class="text-orange-600 mr-1">${i + 1}.</span> ${q.q} ${levelBadge}
+                        </h3>
+                        <div class="space-y-2.5 font-medium text-gray-700 text-sm sm:text-base">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('<hr class="my-6 border-orange-100/50">');
+            
+            // Set the total score display to 3
+            const totalScoreEl = document.getElementById('quiz-total-score');
+            if (totalScoreEl) totalScoreEl.textContent = "3";
+        }
+
+        // 🎯 ADDED: Quiz Logic
+        window.submitQuiz = () => {
+            let score = 0;
+            
+            currentQuizQuestions.forEach((q) => {
+                const selected = document.querySelector(`input[name="q${q.originalIndex}"]:checked`);
+                if (selected && parseInt(selected.value) === q.ans) {
+                    score++;
+                }
+            });
+            
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-score').textContent = score;
+            
+            const titleEl = document.getElementById('quiz-feedback-title');
+            const textEl = document.getElementById('quiz-feedback-text');
+            
+            if(score === 3) {
+                titleEl.textContent = "Congratulations! Perfect Score! 🏆";
+                textEl.textContent = "Your deep understanding of Sanatan Dharma is truly commendable. Excellent performance! 🙏";
+            } else if (score === 2) {
+                titleEl.textContent = "Great Job!";
+                textEl.textContent = "You know quite a bit. Just a little more reading and you'll be perfect! 🌸";
+            } else {
+                titleEl.textContent = "Good Effort!";
+                textEl.textContent = "This is just the beginning of your journey. Stay with us to learn more about Sanatan Dharma. 🕉️";
+            }
+            
+            document.getElementById('quiz-result').classList.remove('hidden');
+
+            // Keep the user focused on the quiz result after submission
+            const quizResultSection = document.getElementById('quiz-result');
+            if(quizResultSection) {
+                const y = quizResultSection.getBoundingClientRect().top + window.scrollY - 150;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }
+        };
+
+        window.resetQuiz = () => {
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            
+            // Generate 3 new questions
+            initSanatanQuiz();
+            
+            const wrapper = document.getElementById('quiz-questions-wrapper');
+            if (wrapper) wrapper.scrollTop = 0;
+        };
 
         const spiritualQuotes = [
             { text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।", author: "স্বামী বিবেকানন্দ" },
@@ -1019,17 +1518,17 @@
             { text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।", author: "মা সারদা দেবী" },
             { text: "মানুষের সেবা করাই হলো ভগবানের শ্রেষ্ঠ পূজা।", author: "স্বামী বিবেকানন্দ" },
             { text: "নিজেকে দুর্বল ভাবাই সবচেয়ে বড় পাপ।", author: "স্বামী বিবেকানন্দ" },
-{ text: "বিশ্বাস করো, তুমি পারবে—তাহলেই তুমি অর্ধেক পথ পেরিয়ে গেছ।", author: "স্বামী বিবেকানন্দ" },
-{ text: "ধর্ম হলো মানুষের অন্তরের জাগরণ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-{ text: "সত্যই ঈশ্বর, আর ঈশ্বরই সত্য।", author: "মহাত্মা গান্ধী" },
-{ text: "কর্মই তোমার অধিকার, ফলের প্রতি নয়।", author: "শ্রীমদ্ভগবদ্গীতা" },
-{ text: "অহিংসাই পরম ধর্ম।", author: "মহাভারত" },
-{ text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-{ text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
-{ text: "মনই মানুষের বন্ধু, মনই তৃতীয় মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
-{ text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
-{ text: "ধৈর্য, সহনশীলতা ও ভালোবাসাই জীবনের মূলমন্ত্র।", author: "মা সারদা দেবী" },
-{ text: "সব ধর্মের লক্ষ্য এক—ঈশ্বর লাভ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" }
+            { text: "বিশ্বাস করো, তুমি পারবে—তাহলেই তুমি অর্ধেক পথ পেরিয়ে গেছ।", author: "স্বামী বিবেকানন্দ" },
+            { text: "ধর্ম হলো মানুষের অন্তরের জাগরণ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "সত্যই ঈশ্বর, আর ঈশ্বরই সত্য।", author: "মহাত্মা গান্ধী" },
+            { text: "কর্মই তোমার অধিকার, ফলের প্রতি নয়।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "অহিংসাই পরম ধর্ম।", author: "মহাভারত" },
+            { text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            { text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
+            { text: "মনই মানুষের বন্ধু, মনই তৃতীয় মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "ধৈর্য, সহনশীলতা ও ভালোবাসাই জীবনের মূলমন্ত্র।", author: "মা সারদা দেবী" },
+            { text: "সব ধর্মের লক্ষ্য এক—ঈশ্বর লাভ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" }
         ];
 
         const contentObserver = new IntersectionObserver((entries) => {
@@ -1138,95 +1637,6 @@
             if(quoteTextEl) {
                 const quote = spiritualQuotes[Math.floor(Math.random() * spiritualQuotes.length)];
                 quoteTextEl.textContent = `"${quote.text}" — ${quote.author}`;
-            }
-        }
-
-        function renderEvents() {
-            const list = document.getElementById('upcoming-events-list');
-            if(!list) return;
-            
-            const now = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            
-            const active = upcomingEventsData
-                .map(e => {
-                    const [y, m, d] = e.date.split('-').map(Number);
-                    const eventTime = new Date(y, m - 1, d).getTime();
-                    return { ...e, eventTime };
-                })
-                .filter(e => e.eventTime >= todayStart)
-                .sort((a,b) => a.eventTime - b.eventTime)
-                .slice(0, 2); 
-                
-            if (active.length === 0) {
-                list.innerHTML = `<p class="text-gray-500 italic">No upcoming events at the moment. Stay tuned!</p>`;
-                return;
-            }
-
-            const html = active.map(e => {
-                const eventTime = e.eventTime;
-                const diffMs = eventTime - now.getTime();
-                const isOngoing = new Date(eventTime).toDateString() === now.toDateString();
-
-                let statusText = "";
-                let statusClass = "bg-orange-50 text-orange-700 border border-orange-200";
-                let badgePrefix = "";
-
-                if (isOngoing) {
-                    statusText = "Ongoing Today";
-                    statusClass = "anim-ripple";
-                    badgePrefix = '<span class="live-dot"></span>';
-                } else if (diffMs > 0) {
-                    const diffDays = Math.floor(diffMs / 86400000);
-                    const diffHours = Math.floor((diffMs % 86400000) / 3600000);
-                    const diffMins = Math.floor((diffMs % 3600000) / 60000);
-                    
-                    if (diffDays === 0) {
-                        statusText = `${diffHours}h ${diffMins}m left`;
-                    } else {
-                        statusText = `${diffDays}d ${diffHours}h left`;
-                    }
-                    
-                    if (diffDays < 3) {
-                        statusClass = "bg-red-50 text-red-700 border border-red-200 anim-strobe shadow-lg";
-                        badgePrefix = "⚡ ";
-                    } else if (diffDays < 7) {
-                        statusClass = "bg-orange-50 text-orange-700 border border-orange-300 anim-pop shadow-md";
-                        badgePrefix = "📢 ";
-                    } else if (diffDays < 15) {
-                        statusClass = "bg-amber-50 text-amber-700 border border-amber-200 anim-breath";
-                        badgePrefix = "🗓️ ";
-                    } else if (diffDays <= 30) {
-                        statusClass = "bg-yellow-50 text-yellow-700 border border-yellow-200 anim-shine overflow-hidden";
-                        badgePrefix = "📅 ";
-                    } else {
-                        statusText = "Upcoming";
-                        badgePrefix = "⏳ ";
-                    }
-                } else {
-                    statusText = "Recently Concluded";
-                }
-
-                const d = new Date(e.eventTime);
-                return `<div class="card border-l-4 border-red-600 w-full md:w-[45%] p-6 flex justify-between items-center animate-on-scroll">
-                    <div class="text-left flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex items-center px-3 py-1.5 rounded-full ${statusClass} text-[9px] font-bold uppercase tracking-wider transition-all duration-300">${badgePrefix}${statusText}</span>
-                            <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-red-700">${d.getDate()}</span> <span class="uppercase text-xs font-bold text-gray-600">${d.toLocaleDateString('en-US',{month:'short'})}</span> <span class="text-xs text-gray-400 ml-1">${d.getFullYear()}</span></div>
-                            <h3 class="font-bold text-lg mt-3 text-gray-900">${e.name}</h3>
-                        </div>
-                    </div>
-                    <div class="w-20 h-20 flex-shrink-0 ml-4 rounded-lg overflow-hidden bg-gray-100 shadow-sm border border-red-50 relative">
-                        <div class="media-placeholder" style="background: transparent;"><span class="placeholder-text" style="font-size: 0.5rem; opacity: 0.6;">SVS</span></div>
-                        <img src="${e.image_url}" class="w-full h-full object-cover relative z-10 event-thumb-img" alt="${e.name}" onerror="this.src='https://placehold.co/400x400?text=Event'" loading="lazy" onload="this.previousElementSibling.style.display='none'">
-                    </div>
-                </div>`;
-            }).join('');
-            
-            if (list.getAttribute('data-last-html') !== html) {
-                list.innerHTML = html;
-                list.setAttribute('data-last-html', html);
-                list.querySelectorAll('.animate-on-scroll').forEach(el => contentObserver.observe(el));
             }
         }
 
@@ -1425,11 +1835,14 @@
             setTimeout(() => { if (!isPageLoaded) hideLoader(); }, 6000);
             
             displayRandomQuote();
-            renderEvents();
-            setInterval(renderEvents, 60000);
             fetchYouTube();
             fetchBlogs();
             initVideoSyncAndLoading();
+            
+            initFestivalSystem();
+            initSanatanQuiz(); // 🎯 Render the 50 questions
+            
+            setInterval(() => { filterFestivals(currentFestFilter); }, 60000);
 
             const deptSelect = document.getElementById('departmentSelect');
             const otherDeptInput = document.getElementById('otherDepartmentInput');
@@ -1447,17 +1860,13 @@
                 });
             }
 
-            // Real-time strict validation for mobile keyboards & browsers
             const enforceLimits = (inputEl, maxLength) => {
                 if (!inputEl) return;
                 inputEl.addEventListener('input', function(e) {
-                    // Allow only letters, spaces, periods, hyphens, and apostrophes
                     let val = this.value.replace(/[^a-zA-Z\s\.\-\']/g, '');
-                    // Force strictly to max length
                     if (val.length > maxLength) {
                         val = val.substring(0, maxLength);
                     }
-                    // Update field without losing cursor position if possible
                     if (this.value !== val) {
                         this.value = val;
                     }
@@ -1836,17 +2245,49 @@
             });
 
             let isScrolling = false;
+            let quizSuggestionShown = false; 
+            let lastScrollY = window.scrollY; 
             
             window.addEventListener('scroll', () => {
                 if (!isScrolling) {
                     window.requestAnimationFrame(() => {
                         const scrollY = window.scrollY;
+                        const isScrollingUp = scrollY < lastScrollY - 2; 
+                        
                         document.querySelector('.bottom-quote-bar')?.classList.toggle('visible', scrollY > 100);
                         const btn = document.getElementById('scroll-to-top');
                         if(btn) {
                             btn.classList.toggle('opacity-0', scrollY < 400);
                             btn.classList.toggle('invisible', scrollY < 400);
                         }
+
+                        const scrollPercent = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+                        if (scrollPercent >= 0.45 && !quizSuggestionShown && !sessionStorage.getItem('quiz_suggested')) {
+                            quizSuggestionShown = true;
+                            sessionStorage.setItem('quiz_suggested', 'true');
+                            
+                            if (typeof window.closeNotification === 'function') {
+                                window.closeNotification();
+                            }
+
+                            const toast = document.getElementById('quiz-suggestion-toast');
+                            if (toast) {
+                                toast.classList.remove('hidden');
+                                setTimeout(() => {
+                                    toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+                                }, 50);
+                                setTimeout(window.closeQuizSuggestion, 12000);
+                            }
+                        }
+
+                        if (quizSuggestionShown && isScrollingUp) {
+                            const toast = document.getElementById('quiz-suggestion-toast');
+                            if (toast && !toast.classList.contains('hidden') && !toast.classList.contains('opacity-0')) {
+                                window.closeQuizSuggestion();
+                            }
+                        }
+
+                        lastScrollY = scrollY; 
                         isScrolling = false;
                     });
                     isScrolling = true;
