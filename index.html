@@ -168,7 +168,7 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Custom Scrollbar for Quiz */
+        /* Custom Scrollbar for Quiz & Modals */
         .custom-scrollbar::-webkit-scrollbar { width: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #fff7ed; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #fdba74; border-radius: 10px; }
@@ -399,31 +399,60 @@
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
     <!-- Daily Festival Notification Popup -->
-    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
-        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
+    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-0 right-0 sm:left-6 sm:right-auto mx-4 sm:mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🪔</div>
-            <div>
+            <div class="flex-1 min-w-0 pr-4">
                 <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Next Festival</p>
-                <p id="notif-fest-name" class="font-bold text-gray-900 text-sm leading-tight mt-0.5">...</p>
-                <p id="notif-fest-days" class="text-xs text-gray-600 mt-1 font-medium">...</p>
+                <p id="notif-fest-name" class="font-bold text-gray-900 text-sm leading-tight mt-0.5 truncate">...</p>
+                <p id="notif-fest-days" class="text-xs text-gray-600 mt-1 font-medium truncate">...</p>
             </div>
         </div>
     </div>
     
     <!-- Quiz Suggestion Popup (Scroll Triggered) -->
-    <div id="quiz-suggestion-toast" class="fixed bottom-24 sm:bottom-6 right-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
-        <button onclick="closeQuizSuggestion()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
+    <div id="quiz-suggestion-toast" class="fixed bottom-24 sm:bottom-6 left-0 right-0 sm:left-auto sm:right-6 mx-4 sm:mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeQuizSuggestion()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🧠</div>
-            <div>
+            <div class="flex-1 min-w-0 pr-2">
                 <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Knowledge Test</p>
-                <p class="font-bold text-gray-900 text-sm leading-tight mt-0.5">How much do you know about Sanatan Dharma?</p>
-                <button onclick="scrollToQuiz()" class="mt-2 text-xs font-bold text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-4 py-1.5 rounded-full transition-colors shadow-sm">Play Now</button>
+                <p id="quiz-toast-text" class="font-bold text-gray-900 text-sm leading-tight mt-0.5 mb-2">How much do you know about Sanatan Dharma?</p>
+                <button onclick="scrollToQuiz()" class="text-xs font-bold text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-4 py-1.5 rounded-full transition-colors shadow-sm w-full sm:w-auto text-center block">Play Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Festivals Popup Modal -->
+    <div id="all-festivals-popup" class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl w-[calc(100vw-2rem)] sm:w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl relative overflow-hidden animate-scale-in">
+            <!-- Header -->
+            <div class="p-5 border-b border-orange-100 bg-orange-50/50 flex-shrink-0">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 font-serif">Upcoming Festivals</h3>
+                        <p class="text-xs text-orange-600 font-medium">Complete sacred timeline</p>
+                    </div>
+                    <button onclick="closeAllFestivalsPopup()" class="text-gray-400 hover:text-red-600 transition-colors p-1" aria-label="Close List">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <!-- Search Bar -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="festival-search-input" oninput="searchFestivals(this.value)" class="w-full pl-9 pr-4 py-2.5 bg-white border border-orange-200 rounded-xl text-sm focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all placeholder-gray-400 text-gray-800" placeholder="Search by name, month, or date...">
+                </div>
+            </div>
+            <!-- Scrollable List -->
+            <div id="all-festivals-list" class="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3 bg-gray-50/50">
+                <!-- Injected via JS -->
             </div>
         </div>
     </div>
@@ -466,13 +495,13 @@
                 <img id="lightbox-img" src="" class="relative max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 animate-scale-in" alt="Popup Image" onclick="event.stopPropagation()">
             </div>
             
-            <div class="absolute bottom-10 left-0 w-full flex justify-center px-6 pointer-events-none">
-                <div class="flex items-center gap-3 bg-black/60 backdrop-blur-lg px-8 py-3 rounded-full border border-yellow-500/20 shadow-2xl animate-pulse">
-                    <svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="absolute bottom-10 left-0 w-full flex justify-center px-4 md:px-6 pointer-events-none">
+                <div class="flex items-center gap-3 bg-black/60 backdrop-blur-lg px-6 md:px-8 py-3 rounded-full border border-yellow-500/20 shadow-2xl animate-pulse">
+                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                     </svg>
-                    <p class="text-white text-[11px] md:text-sm tracking-widest uppercase font-bold text-center">
+                    <p class="text-white text-[10px] md:text-sm tracking-widest uppercase font-bold text-center">
                         <span class="text-yellow-500">Respect the Heritage:</span> Please use this image responsibly
                     </p>
                 </div>
@@ -482,7 +511,7 @@
 
     <!-- Form Submission Success Overlay -->
     <div id="form-success-overlay" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl relative overflow-hidden animate-scale-in">
+        <div class="bg-white rounded-3xl p-8 max-w-[calc(100vw-2rem)] sm:max-w-sm w-full text-center shadow-2xl relative overflow-hidden animate-scale-in">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full opacity-50"></div>
             <div class="relative z-10">
                 <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -496,9 +525,9 @@
     </div>
 
     <!-- Custom Error Toast Notification -->
-    <div id="error-toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-2xl z-[9999] opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3 translate-y-[-20px]">
+    <div id="error-toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-auto max-w-md bg-red-600 text-white px-6 py-3 rounded-full shadow-2xl z-[9999] opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center gap-3 translate-y-[-20px]">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span id="error-toast-msg" class="font-medium text-sm whitespace-nowrap">Error message here</span>
+        <span id="error-toast-msg" class="font-medium text-sm whitespace-normal sm:whitespace-nowrap text-center sm:text-left leading-tight">Error message here</span>
     </div>
 
     <!-- Enhanced GPU Accelerated Background Decorations -->
@@ -523,46 +552,47 @@
     <div class="bottom-quote-bar py-2 px-4 text-center">
         <div class="container mx-auto flex justify-center items-center">
             <span class="text-xs md:text-sm font-bold uppercase text-yellow-500 mr-2 tracking-widest hidden sm:inline">Daily Wisdom:</span>
-            <p id="daily-quote-text" class="quote-font text-sm md:text-base font-medium italic">Loading spiritual thought...</p>
+            <p id="daily-quote-text" class="quote-font text-xs sm:text-sm md:text-base font-medium italic line-clamp-2 sm:line-clamp-none">Loading spiritual thought...</p>
         </div>
     </div>
 
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 group cursor-pointer">
-                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-10 w-10 object-contain rounded-full shadow-md border-2 border-red-200">
-                <span class="text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-2 sm:gap-3 group cursor-pointer">
+                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded-full shadow-md border-2 border-red-200">
+                <span class="text-lg sm:text-xl font-extrabold tracking-tight text-red-900 font-serif">UIU SVS</span>
             </a>
-            <nav class="hidden md:flex items-center space-x-8 font-sans">
+            <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-sans">
                 <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
                 <a href="#festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
                 <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
                 <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
                 <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
-            <div class="flex items-center gap-4">
-                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all" aria-label="Join UIUSVS">Join SVS</a>
-                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg" aria-label="Toggle Menu">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
+                <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors" aria-label="Toggle Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50">
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50 max-h-[85vh] overflow-y-auto">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
-                <a href="/" class="block py-3 text-red-900 font-semibold text-lg">Home</a>
-                <a href="#festivals" class="block py-3 text-red-900 font-semibold text-lg">Festivals</a>
-                <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg">Gallery</a>
-                <a href="/about" class="block py-3 text-red-900 font-semibold text-lg">About</a>
-                <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg">Videos</a>
-                <a href="/join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md">Join SVS</a>
+                <a href="/" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Home</a>
+                <a href="#festivals" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Festivals</a>
+                <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Gallery</a>
+                <a href="/about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">About</a>
+                <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Videos</a>
+                <a href="/join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors">Join SVS</a>
             </nav>
         </div>
     </header>
 
     <main>
         <!-- Scroll Up Button -->
-        <button id="scroll-to-top" class="fixed bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 transition-all duration-300 opacity-0 invisible" aria-label="Scroll to top">
+        <button id="scroll-to-top" class="fixed bottom-24 md:bottom-16 right-6 p-3 rounded-full bg-red-600 text-white shadow-lg z-50 transition-all duration-300 opacity-0 invisible hover:bg-red-700" aria-label="Scroll to top">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
 
@@ -585,17 +615,7 @@
                     </h2>
                 </div>
 
-                <!-- Next Festival Countdown in Hero -->
-                <div id="hero-festival-countdown" class="animate-on-scroll is-visible mb-10 inline-flex flex-col items-center justify-center bg-white/70 backdrop-blur-md border-2 border-orange-200 px-6 py-4 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] text-red-900 transition-transform hover:scale-[1.02] cursor-default hidden">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-1.5 flex items-center gap-1.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Next Spiritual Gathering</span>
-                    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-                        <span id="hero-fest-name" class="font-serif font-extrabold text-xl sm:text-2xl text-gray-900 leading-none">...</span>
-                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 hidden sm:block opacity-50"></span>
-                        <span id="hero-fest-days" class="font-bold bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-1 rounded-full text-sm shadow-sm whitespace-nowrap">...</span>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-5 justify-center w-full max-sm:max-w-xs mx-auto animate-on-scroll delay-100 is-visible mb-16">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none mx-auto animate-on-scroll delay-100 is-visible mb-16">
                     <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse" onclick="handleNavClick(event, '/join')">Become a Member</a>
                     <a href="#festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
                 </div>
@@ -604,7 +624,7 @@
 
         <!-- Auto Hindu Festival System -->
         <section id="festivals" class="py-16 bg-orange-50/50 backdrop-blur-sm relative overflow-hidden">
-            <div class="container mx-auto px-6 relative z-10">
+            <div class="container mx-auto px-4 sm:px-6 relative z-10">
                 <div class="text-center mb-10 animate-on-scroll">
                     <span class="text-orange-600 font-bold uppercase tracking-widest text-[10px] bg-orange-100 px-3 py-1 rounded-full border border-orange-200">Sacred Timeline</span>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 font-serif">Sanatan Festivals</h2>
@@ -612,66 +632,92 @@
                 </div>
 
                 <!-- Filters -->
-                <div class="flex flex-wrap justify-center gap-3 mb-10 animate-on-scroll">
-                    <button onclick="filterFestivals('all')" id="btn-fest-all" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-red-600 text-white shadow-md">All Upcoming</button>
-                    <button onclick="filterFestivals('major')" id="btn-fest-major" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50">Major Festivals</button>
-                    <button onclick="filterFestivals('ekadashi')" id="btn-fest-ekadashi" class="px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50">Only Ekadashi</button>
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 animate-on-scroll">
+                    <button onclick="filterFestivals('all')" id="btn-fest-all" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto">All Upcoming</button>
+                    <button onclick="filterFestivals('major')" id="btn-fest-major" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto">Major Festivals</button>
+                    <button onclick="filterFestivals('ekadashi')" id="btn-fest-ekadashi" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[92%] sm:w-auto mt-2 sm:mt-0">Only Ekadashi</button>
                 </div>
 
                 <!-- Dynamic List -->
                 <div id="festival-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                     <div class="col-span-full flex justify-center py-8"><div class="spinner border-orange-200 border-l-orange-500 w-8 h-8"></div></div>
                 </div>
+
+                <!-- Minimal Flagship Banner -->
+                <div class="mt-10 animate-on-scroll max-w-3xl mx-auto px-4 sm:px-0">
+                    <div class="bg-gradient-to-r from-red-50 via-white to-orange-50 border border-orange-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex items-center gap-4 w-full sm:w-auto">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-full flex items-center justify-center shadow-sm border-2 border-orange-200 flex-shrink-0 overflow-hidden p-0.5">
+                                <img src="Saraswati_Puja_2025/Saraswati_2026.jpeg" alt="Saraswati Puja" class="w-full h-full object-cover rounded-full">
+                            </div>
+                            <div class="text-left flex-1">
+                                <span class="text-xs font-bold tracking-wider text-red-600 mb-0.5 block">বিদ্যা দেবীর আরাধনা</span>
+                                <h3 class="font-serif font-extrabold text-lg sm:text-xl text-gray-900 leading-tight">Saraswati Puja 2027</h3>
+                                <p class="text-xs text-gray-600 font-medium mt-0.5">11 February, Thursday</p>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 w-full sm:w-auto text-center sm:text-right">
+                             <div id="flagship-countdown" class="inline-block bg-white text-red-700 font-bold px-5 py-2 rounded-full text-sm border border-red-200 shadow-sm whitespace-nowrap anim-breath w-full sm:w-auto">
+                                 Calculating...
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show More Button -->
+                <div id="show-more-festivals-container" class="mt-8 text-center hidden animate-on-scroll delay-100">
+                    <button onclick="openAllFestivalsPopup()" class="btn-base btn-explore border-2 border-orange-500 bg-white shadow-sm py-2.5 px-8 text-sm w-full max-w-[280px] hover:bg-orange-50">Explore More Festivals</button>
+                </div>
             </div>
         </section>
 
         <!-- Gallery Section -->
         <section id="gallery" class="py-16 bg-orange-50/50">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Gallery</span>
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">Memories & Moments</h2>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4 font-serif">Memories & Moments</h2>
                 </div>
                 
                 <!-- 1. Saraswati Puja -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Saraswati Puja</h3></div>
-                    <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                            <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                    <div id="gallery-saraswati" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                            <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/2026_1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIU SVS Saraswati Puja" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/Saraswati_2026.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Saraswati" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                         <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/2026_5.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja 2025" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '90lqh7LOEQw')">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, '90lqh7LOEQw')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <img src="https://i.ytimg.com/vi/90lqh7LOEQw/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '8Snvn0-Qq9w')">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, '8Snvn0-Qq9w')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <img src="https://i.ytimg.com/vi/8Snvn0-Qq9w/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Saraswati Puja Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/13.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Student Community UIUSVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/14.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja Gathering UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Saraswati_Puja_2025/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Saraswati Puja Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -681,23 +727,23 @@
                 <!-- 2. Kali Puja -->
                 <div class="mb-12 animate-on-scroll delay-100 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
-                    <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Kali_Puja_2025/6.mp4', 'local')">
+                    <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, 'Kali_Puja_2025/6.mp4', 'local')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <video class="w-full h-full object-cover relative z-10" muted><source src="Kali_Puja_2025/6.mp4" type="video/mp4"></video>
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Celebration UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Gathering" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Kali Puja Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -707,23 +753,23 @@
                 <!-- 3. Holi Celebration -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-pink-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Holi Celebration</h3></div>
-                    <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                         <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Holi_2025/1.mp4', 'local')">
+                    <div id="gallery-holi" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                         <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, 'Holi_2025/1.mp4', 'local')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <video class="w-full h-full object-cover relative z-10" muted><source src="Holi_2025/1.mp4" type="video/mp4"></video>
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Holi_2025/11.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi Festival at UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Holi_2025/holi.png" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Holi Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-pink-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Holi_2025/12.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Holi Colors UIU SVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -733,22 +779,22 @@
                 <!-- 4. Monthly Prayer -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-yellow-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Monthly Prayer</h3></div>
-                    <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Prayer/2.mp4', 'local')">
+                    <div id="gallery-prayer" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, 'Prayer/2.mp4', 'local')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <video class="w-full h-full object-cover relative z-10" muted><source src="Prayer/2.mp4" type="video/mp4"></video>
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Prayer/1.mp4', 'local')">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, 'Prayer/1.mp4', 'local')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <video class="w-full h-full object-cover relative z-10" muted><source src="Prayer/1.mp4" type="video/mp4"></video>
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-yellow-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="Prayer/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Monthly Prayer Gathering" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -758,23 +804,23 @@
                 <!-- 5. Shiv Ratri -->
                 <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-purple-700 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Shiv Ratri</h3></div>
-                    <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, '76sJJnnHEf0')">
+                    <div id="gallery-shivratri" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 bg-black relative group cursor-pointer snap-center" onclick="loadVideo(this, '76sJJnnHEf0')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
                                 <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                                 <img src="https://i.ytimg.com/vi/76sJJnnHEf0/hqdefault.jpg" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 relative z-10" alt="Shivratri Video" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="ShivRatri/1.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Maha Shivratri UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="ShivRatri/2.jpeg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Shivratri Celebration UIUSVS" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-purple-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="ShivRatri/3.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Shivratri Moments" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -784,16 +830,16 @@
                 <!-- 6. Bhai Phota -->
                 <div class="animate-on-scroll delay-200 relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
-                    <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                    <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container snap-x snap-mandatory">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="BhaiPhota/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Bhai Phota Event UIU" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="BhaiPhota/9.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="UIUSVS Bhai Phota" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
-                        <div class="flex-shrink-0 w-72 h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative snap-center">
                             <div class="media-placeholder"><span class="placeholder-text">UIU SVS</span></div>
                             <img src="BhaiPhota/10.jpg" class="w-full h-full object-cover relative z-10 gallery-img" alt="Bhai Phota Celebration" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                         </div>
@@ -803,24 +849,24 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 bg-white/90">
-            <div class="container mx-auto px-6 max-w-4xl text-center">
-                <div class="mb-16 animate-on-scroll">
+        <section id="about" class="py-16 md:py-20 bg-white/90">
+            <div class="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
+                <div class="mb-12 md:mb-16 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-4 py-1.5 rounded-full border border-red-100">About Us</span>
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 font-serif">Our Essence & Purpose</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4 font-serif">Our Essence & Purpose</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-red-600 to-orange-500 mx-auto mt-6 rounded-full"></div>
                 </div>
 
-                <div class="animate-on-scroll space-y-8">
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed font-medium max-w-3xl mx-auto">
+                <div class="animate-on-scroll space-y-6 md:space-y-8">
+                    <p class="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed font-medium max-w-3xl mx-auto px-2">
                         The <span class="text-red-800 font-bold">UIU Sanatani Vidyarthi Samsad (SVS)</span> is a vibrant community dedicated to preserving and celebrating the rich spiritual and cultural heritage of Sanatana Dharma at United International University.
                     </p>
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                    <p class="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto px-2">
                         We believe in the power of unity and the light of wisdom. Our mission is to create a nurturing environment where students can connect with their roots, practice their faith with dignity, and serve the society with a spirit of compassion.
                     </p>
                     
                     <!-- Milestone Stats -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 max-w-3xl mx-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-8 md:pt-10 max-w-3xl mx-auto px-4">
                         <div class="bg-orange-50 p-6 rounded-3xl text-center border border-orange-100 shadow-sm transition-transform hover:scale-105">
                             <div class="text-3xl font-extrabold text-red-800">6+</div>
                             <div class="text-xs uppercase font-bold text-gray-600 mt-1 tracking-wider">Years Legacy</div>
@@ -840,10 +886,10 @@
 
         <!-- Advisor Panel -->
         <section id="advisors" class="py-12 bg-white/80 text-center">
-            <div class="container mx-auto px-6 max-w-4xl">
+            <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
                 <div class="mb-8 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100">Guidance</span>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mt-2 font-serif">Advisor Panel</h2>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-2 font-serif">Advisor Panel</h2>
                     <div class="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-2 rounded-full"></div>
                 </div>
                 <div class="relative flex flex-col items-center">
@@ -856,7 +902,7 @@
                             <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">Chief Advisor</p>
                         </div>
                     </div>
-                    <div class="w-full max-w-[400px] h-8 sm:h-12 flex justify-center">
+                    <div class="w-full max-w-[300px] sm:max-w-[400px] h-8 sm:h-12 flex justify-center">
                         <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
                             <line x1="100" y1="0" x2="100" y2="30" stroke="#fde68a" stroke-width="3" />
                             <line x1="50" y1="30" x2="150" y2="30" stroke="#fde68a" stroke-width="3" />
@@ -865,15 +911,15 @@
                         </svg>
                     </div>
                     <div class="flex flex-row justify-center gap-4 sm:gap-24 w-full animate-on-scroll delay-100">
-                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-[45%] sm:w-48 text-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Mallika_mam.jpg" class="w-full h-full object-cover" alt="Mallika Datta - UIUSVS Senior Advisor" loading="lazy" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Mallika+Datta'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Mallika Datta</h3>
                             <p class="text-[8px] font-semibold uppercase text-gray-500">Senior Advisor</p>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-40 sm:w-48 text-center group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-[45%] sm:w-48 text-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform">
                                 <img src="Advisor/Rajib_sir.jpg" class="w-full h-full object-cover" alt="Rajib Das - UIUSVS Senior Advisor" loading="lazy" onerror="this.src='https://placehold.co/300x300/f3f4f6/b91c1c?text=Rajib+Das'">
                             </div>
                             <h3 class="text-xs sm:text-sm font-bold text-red-900">Rajib Das</h3>
@@ -886,12 +932,12 @@
 
         <!-- Blogs -->
         <section id="blogs" class="py-16 bg-white/90 backdrop-blur">
-            <div class="container mx-auto px-6 text-center">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
                 <div class="mb-12 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-xs bg-red-50 px-3 py-1 rounded-full border border-red-100">Blog</span>
                     <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4 font-serif">Latest Updates</h2>
                 </div>
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full max-w-6xl mx-auto">
                     <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
             </div>
@@ -899,31 +945,31 @@
 
         <!-- Quick Sanatan Quiz -->
         <section id="quiz" class="py-16 bg-orange-50/40 backdrop-blur-sm border-t border-b border-orange-100">
-            <div class="container mx-auto px-6 max-w-3xl">
+            <div class="container mx-auto px-4 sm:px-6 max-w-3xl">
                 <div class="text-center mb-10 animate-on-scroll">
                     <span class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-white px-3 py-1 rounded-full border border-red-100 shadow-sm">Knowledge Test</span>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 font-serif">How much do you know about Sanatan Dharma?</h2>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 font-serif">How much do you know about Sanatan Dharma?</h2>
                     <div class="w-16 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto mt-4 rounded-full"></div>
                 </div>
 
                 <div class="bg-gradient-to-br from-white to-orange-50 p-4 sm:p-8 rounded-3xl shadow-md border border-orange-200 animate-on-scroll relative overflow-hidden transition-all duration-300">
                     <!-- Quiz Form -->
                     <div id="quiz-container">
-                        <div id="quiz-questions-wrapper" class="max-h-[60vh] overflow-y-auto pr-2 sm:pr-4 space-y-6 mb-6 rounded-2xl border border-orange-100 bg-white/60 p-4 sm:p-6 custom-scrollbar">
+                        <div id="quiz-questions-wrapper" class="pr-2 sm:pr-4 space-y-6 mb-6 rounded-2xl border border-orange-100 bg-white/60 p-4 sm:p-6">
                             <!-- Questions will be rendered here dynamically -->
                         </div>
-                        <button onclick="submitQuiz()" class="w-full btn-base btn-puja py-3.5 shadow-md text-lg tracking-normal">Submit Answers</button>
+                        <button onclick="submitQuiz()" class="w-full btn-base btn-puja py-3.5 shadow-md text-base sm:text-lg tracking-normal">Submit Answers</button>
                     </div>
 
                     <!-- Quiz Results -->
                     <div id="quiz-result" class="hidden text-center py-8">
-                        <div class="w-20 h-20 bg-green-50 border border-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                            <span class="text-4xl">🕉️</span>
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-green-50 border border-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                            <span class="text-3xl sm:text-4xl">🕉️</span>
                         </div>
-                        <h3 id="quiz-feedback-title" class="text-2xl font-bold text-gray-900 mb-2 font-serif">Good Effort!</h3>
-                        <p class="text-lg text-gray-700 mb-6 font-medium">Your Score: <span id="quiz-score" class="font-extrabold text-orange-600 text-3xl mx-1">0</span> <span class="text-gray-400 text-sm">/ <span id="quiz-total-score">50</span></span></p>
-                        <p id="quiz-feedback-text" class="text-sm text-gray-600 mb-8 italic">Stay with us to learn more about Sanatan Dharma.</p>
-                        <button onclick="resetQuiz()" class="btn-base btn-explore border-2 border-orange-500 px-8 py-2">Try Again</button>
+                        <h3 id="quiz-feedback-title" class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 font-serif">Good Effort!</h3>
+                        <p class="text-base sm:text-lg text-gray-700 mb-6 font-medium">Your Score: <span id="quiz-score" class="font-extrabold text-orange-600 text-2xl sm:text-3xl mx-1">0</span> <span class="text-gray-400 text-xs sm:text-sm">/ <span id="quiz-total-score">50</span></span></p>
+                        <p id="quiz-feedback-text" class="text-xs sm:text-sm text-gray-600 mb-8 italic px-2">Stay with us to learn more about Sanatan Dharma.</p>
+                        <button onclick="resetQuiz()" class="btn-base btn-explore border-2 border-orange-500 px-6 sm:px-8 py-2 text-sm sm:text-base">Try Again</button>
                     </div>
                 </div>
             </div>
@@ -931,62 +977,62 @@
 
         <!-- YouTube Section -->
         <section id="latest-videos" class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center">
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
-                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
+                <div class="mb-12 animate-on-scroll"><h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200">YouTube Highlights</h2></div>
+                <div id="youtube-video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                      <div class="col-span-full flex justify-center py-12"><div class="video-loader mx-auto"></div></div>
                 </div>
             </div>
         </section>
 
         <!-- Join SVS -->
-        <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-6">
+        <section id="join" class="py-16 bg-gray-900 text-white relative overflow-hidden text-center px-4 sm:px-6">
             <div class="container mx-auto relative z-10 flex flex-col items-center">
-                <h2 class="text-3xl md:text-6xl font-extrabold mb-8 font-serif">Become part of the Legacy</h2>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-8 font-serif leading-tight">Become part of the Legacy</h2>
                 
-                <div class="max-w-3xl w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden p-6 sm:p-10 border border-orange-100 relative">
+                <div class="max-w-3xl w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden p-5 sm:p-10 border border-orange-100 relative">
                     <!-- Decorative Corner Pattern -->
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-full opacity-50 pointer-events-none"></div>
+                    <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-full opacity-50 pointer-events-none"></div>
 
                     <!-- Security & Privacy Note -->
-                    <div class="bg-orange-50/80 border border-orange-200 rounded-2xl p-4 mb-8 flex items-start gap-3 relative z-10">
+                    <div class="bg-orange-50/80 border border-orange-200 rounded-2xl p-3 sm:p-4 mb-6 sm:mb-8 flex items-start gap-3 relative z-10">
                         <svg class="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         </svg>
-                        <p class="text-sm text-gray-700 text-left">
+                        <p class="text-xs sm:text-sm text-gray-700 text-left">
                             <strong class="text-orange-900">Secure & Confidential:</strong> Your information is fully secure. It will only be used for UIU SVS official events, communications, and generating your personalized Digital ID Card.
                         </p>
                     </div>
 
                     <form id="membershipForm" class="text-left relative z-10 w-full" novalidate>
                         <!-- Grid for Initial Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                             <!-- Name -->
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
-                                <input type="text" name="name" maxlength="24" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Binoy Sarker">
+                                <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="name" maxlength="24" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. Binoy Sarker">
                             </div>
                             <!-- Email -->
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address <span class="text-red-500">*</span></label>
-                                <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. binoy@example.com">
-                                <p class="text-[11px] sm:text-xs text-gray-500 mt-1.5 ml-1">Please provide an active email. UIU student email is not mandatory.</p>
+                                <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Email Address <span class="text-red-500">*</span></label>
+                                <input type="email" name="email" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. binoy@example.com">
+                                <p class="text-[10px] sm:text-[11px] text-gray-500 mt-1.5 ml-1">Please provide an active email. UIU student email is not mandatory.</p>
                             </div>
                             <!-- Student ID -->
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">UIU Student ID <span class="text-red-500">*</span></label>
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="15" name="studentId" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 0112330701">
+                                <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">UIU Student ID <span class="text-red-500">*</span></label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="15" name="studentId" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. 0112330701">
                             </div>
                             <!-- Contact Number -->
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Contact Number <span class="text-red-500">*</span></label>
-                                <input type="tel" name="contactNumber" maxlength="15" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. 017xxxxxxxx">
+                                <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Contact Number <span class="text-red-500">*</span></label>
+                                <input type="tel" name="contactNumber" maxlength="15" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. 017xxxxxxxx">
                             </div>
                         </div>
 
                         <!-- Expand Trigger Zone -->
-                        <div id="expand-trigger-zone" class="flex justify-center mt-6 transition-all duration-300 overflow-hidden opacity-100 max-h-[100px]">
-                            <button type="button" id="expandFormBtn" class="px-5 sm:px-8 py-3 bg-[#fffaf0] border border-[#d97706] text-[#92400e] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-full shadow-sm hover:bg-[#fef3c7] hover:shadow-md transition-all flex items-center justify-center gap-2 sm:gap-3 group whitespace-nowrap">
+                        <div id="expand-trigger-zone" class="flex justify-center mt-5 sm:mt-6 transition-all duration-300 overflow-hidden opacity-100 max-h-[100px]">
+                            <button type="button" id="expandFormBtn" class="px-5 sm:px-8 py-2.5 sm:py-3 bg-[#fffaf0] border border-[#d97706] text-[#92400e] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-full shadow-sm hover:bg-[#fef3c7] hover:shadow-md transition-all flex items-center justify-center gap-2 sm:gap-3 group whitespace-nowrap w-full sm:w-auto">
                                 <span>Continue Application</span>
                                 <svg class="w-4 h-4 flex-shrink-0 text-[#d97706] group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
@@ -994,12 +1040,12 @@
 
                         <!-- Hidden Extended Fields -->
                         <div id="extended-fields" class="opacity-0 overflow-hidden transition-all duration-[700ms] ease-in-out" style="max-height: 0px;">
-                            <div class="pt-6 pb-2">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="pt-5 sm:pt-6 pb-2">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                     <!-- Department -->
                                     <div>
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">Department <span class="text-red-500">*</span></label>
-                                        <select name="department" id="departmentSelect" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                        <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Department <span class="text-red-500">*</span></label>
+                                        <select name="department" id="departmentSelect" required class="smooth-select w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white text-sm sm:text-base">
                                             <option value="" disabled selected>Select Department</option>
                                             <option value="CSE">CSE</option>
                                             <option value="EEE">EEE</option>
@@ -1008,18 +1054,18 @@
                                             <option value="Pharmacy">Pharmacy</option>
                                             <option value="Other">Other</option>
                                         </select>
-                                        <input type="text" name="otherDepartment" id="otherDepartmentInput" maxlength="24" class="hidden w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 mt-3" placeholder="Please specify your department">
+                                        <input type="text" name="otherDepartment" id="otherDepartmentInput" maxlength="24" class="hidden w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 mt-3 text-sm sm:text-base" placeholder="Please specify your department">
                                     </div>
                                     <!-- Trimester/Semester -->
                                     <div>
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">Trimester/Semester <span class="text-red-500">*</span></label>
-                                        <input type="text" name="trimester" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Spring 2026">
-                                        <p class="text-[11px] sm:text-xs text-gray-500 mt-1.5 ml-1">Please specify the trimester or semester when you were admitted to UIU.</p>
+                                        <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Trimester/Semester <span class="text-red-500">*</span></label>
+                                        <input type="text" name="trimester" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. Spring 2026">
+                                        <p class="text-[10px] sm:text-[11px] text-gray-500 mt-1.5 ml-1">Please specify the trimester or semester when you were admitted to UIU.</p>
                                     </div>
                                     <!-- Blood Group -->
                                     <div>
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">Blood Group <span class="text-red-500">*</span></label>
-                                        <select name="bloodGroup" required class="smooth-select w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white">
+                                        <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Blood Group <span class="text-red-500">*</span></label>
+                                        <select name="bloodGroup" required class="smooth-select w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-gray-800 bg-white text-sm sm:text-base">
                                             <option value="" disabled selected>Select Blood Group</option>
                                             <option value="A+">A+</option>
                                             <option value="A-">A-</option>
@@ -1033,20 +1079,20 @@
                                     </div>
                                     <!-- Present Address -->
                                     <div>
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">Present Address <span class="text-red-500">*</span></label>
-                                        <input type="text" name="address" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400" placeholder="e.g. Sayednagar, Vatara, Dhaka">
+                                        <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Present Address <span class="text-red-500">*</span></label>
+                                        <input type="text" name="address" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 text-sm sm:text-base" placeholder="e.g. Sayednagar, Vatara, Dhaka">
                                     </div>
                                 </div>
                                 
                                 <!-- Why join (Optional) -->
-                                <div class="mt-6">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Why do you want to join UIU SVS? <span class="text-gray-400 font-normal normal-case tracking-normal ml-1">(Optional)</span></label>
-                                    <textarea name="reason" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Tell us a little about your motivation..."></textarea>
+                                <div class="mt-4 sm:mt-6">
+                                    <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Why do you want to join UIU SVS? <span class="text-gray-400 font-normal normal-case tracking-normal ml-1">(Optional)</span></label>
+                                    <textarea name="reason" rows="3" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none text-sm sm:text-base" placeholder="Tell us a little about your motivation..."></textarea>
                                 </div>
 
-                                <button type="submit" id="submitBtn" class="w-full btn-base btn-puja py-4 text-lg mt-6 flex items-center justify-center gap-2">
+                                <button type="submit" id="submitBtn" class="w-full btn-base btn-puja py-3 sm:py-4 text-base sm:text-lg mt-5 sm:mt-6 flex items-center justify-center gap-2">
                                     <span>Submit Application</span>
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                 </button>
                             </div>
                         </div>
@@ -1057,18 +1103,18 @@
     </main>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-white border-t-4 border-red-700 pt-16 pb-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div class="md:col-span-2">
+    <footer id="contact" class="bg-white border-t-4 border-red-700 pt-12 sm:pt-16 pb-10 sm:pb-12">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-10 sm:mb-12">
+                <div class="sm:col-span-2 md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="logo.jpg" alt="UIUSVS Logo" class="h-10 w-10 object-contain rounded-full border border-red-100">
-                        <span class="text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
+                        <img src="logo.jpg" alt="UIUSVS Logo" class="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded-full border border-red-100">
+                        <span class="text-lg sm:text-xl font-extrabold text-red-900 font-serif">UIU SVS</span>
                     </div>
                     <p class="text-gray-600 text-sm leading-relaxed max-w-xs">United International University<br>United City, Madani Avenue, Dhaka-1212</p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Quick Links</h4>
+                    <h4 class="font-bold text-red-900 mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="/" class="hover:text-red-600 transition-colors">Home</a></li>
                         <li><a href="#festivals" class="hover:text-red-600 transition-colors">Festivals</a></li>
@@ -1077,7 +1123,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-red-900 mb-4 text-sm sm:text-base">Connect</h4>
+                    <h4 class="font-bold text-red-900 mb-3 sm:mb-4 text-sm sm:text-base">Connect</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="https://www.facebook.com/uiusvs" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook Page</a></li>
                         <li><a href="https://www.facebook.com/share/g/1DtDc8vrRz/" class="flex items-center hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Facebook Group</a></li>
@@ -1085,7 +1131,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-red-100 pt-8 pb-10 text-center text-xs sm:text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="border-t border-red-100 pt-6 sm:pt-8 pb-4 sm:pb-10 text-center text-xs sm:text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-2">
                 <span>&copy; 2026 UIUSVS. All rights reserved.</span>
                 <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700 hover:text-red-900 transition-colors">Sourav Saha</a></span>
             </div>
@@ -1093,7 +1139,7 @@
     </footer>
 
     <script type="module">
-        // 🎯 ADDED: Sanatan Quiz 50 Questions Data
+        // 🎯 Sanatan Quiz 50 Questions Data
         const sanatanQuizData = [
             { q: "What is the primary sacred text of Hinduism?", options: ["Quran", "Vedas", "Bible", "Tripitaka"], ans: 1 },
             { q: "How many Vedas are there?", options: ["2", "3", "4", "5"], ans: 2 },
@@ -1147,7 +1193,7 @@
             { q: "What does “Tat Tvam Asi” mean?", options: ["You are great", "You are that (divine)", "God is separate", "Worship nature"], ans: 1 }
         ];
 
-        // 🎯 ADDED: Sampurna 2026 Festival Data
+        // 🎯 Sampurna 2026 Festival Data
         const systemFestivalData = [
             // --- APRIL 2026 (Upcoming) ---
             { name: "Vaishakha Amavasya", bnName: "বৈশাখ অমাবস্যা", date: "2026-04-17", type: "moon" },
@@ -1180,7 +1226,7 @@
             { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-07-03", type: "other" },
             { name: "Yogini Ekadashi", bnName: "যোগিনী একাদশী", date: "2026-07-10", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-07-12", type: "other" },
-            { name: "Ashadha Amavasya", bnName: "আষাঢ় অমাবস্যা", date: "2026-07-14", type: "moon" },
+            { name: "Ashadha Amavasya", bnName: "আষাঢ় অমাবস্যা", date: "2026-07-14", type: "moon" },
             { name: "Rath Yatra", bnName: "রথ যাত্রা", date: "2026-07-16", type: "major" },
             { name: "Shayani Ekadashi", bnName: "শয়নী একাদশী", date: "2026-07-25", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-07-26", type: "other" },
@@ -1192,7 +1238,7 @@
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-08-10", type: "other" },
             { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-08-11", type: "other" },
             { name: "Shravana Amavasya", bnName: "শ্রাবণ অমাবস্যা", date: "2026-08-12", type: "moon" },
-            { name: "Hariyali Teej", bnName: "হরিয়ালী তীজ", date: "2026-08-15", type: "other" },
+            { name: "Hariyali Teej", bnName: "হরিয়ালী তীজ", date: "2026-08-15", type: "other" },
             { name: "Nag Panchami", bnName: "নাগ পঞ্চমী", date: "2026-08-17", type: "other" },
             { name: "Putrada Ekadashi", bnName: "পুত্রদা একাদশী", date: "2026-08-23", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-08-25", type: "other" },
@@ -1218,16 +1264,16 @@
             { name: "Indira Ekadashi", bnName: "ইন্দিরা একাদশী", date: "2026-10-06", type: "ekadashi" },
             { name: "Pradosh & Masik Shivaratri", bnName: "প্রদোষ ব্রত ও মাসিক শিবরাত্রি", date: "2026-10-08", type: "other" },
             { name: "Ashwin Amavasya", bnName: "আশ্বিন অমাবস্যা", date: "2026-10-10", type: "moon" },
-            { name: "Sharad Navaratri", bnName: "শারদীয়া নবরাত্রি (ঘটস্থাপন)", date: "2026-10-11", type: "major" },
+            { name: "Sharad Navaratri", bnName: "শারদীয়া নবরাত্রি (ঘটস্থাপন)", date: "2026-10-11", type: "major" },
             { name: "Kalparambha", bnName: "কল্পারম্ভ", date: "2026-10-16", type: "major" },
             { name: "Navapatrika Puja", bnName: "নবপত্রিকা পূজা", date: "2026-10-17", type: "major" },
             { name: "Durga Maha Navami/Ashtami", bnName: "দুর্গা মহা অষ্টমী ও নবমী", date: "2026-10-19", type: "major" },
-            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2026-10-20", type: "major" },
+            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2026-10-20", type: "major" },
             { name: "Durga Visarjan", bnName: "দুর্গা বিসর্জন", date: "2026-10-21", type: "major" },
             { name: "Papankusha Ekadashi", bnName: "পাপঙ্কুশা একাদশী", date: "2026-10-22", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-10-23", type: "other" },
             { name: "Ashwin Purnima", bnName: "আশ্বিন পূর্ণিমা ব্রত", date: "2026-10-26", type: "moon" },
-            { name: "Karva Chauth", bnName: "করওয়া চৌথ / সংকষ্টী চতুর্থী", date: "2026-10-29", type: "other" },
+            { name: "Karva Chauth", bnName: "করওয়া চৌথ / সংকষ্টী চতুর্থী", date: "2026-10-29", type: "other" },
 
             // --- NOVEMBER 2026 ---
             { name: "Rama Ekadashi", bnName: "রমা একাদশী", date: "2026-11-05", type: "ekadashi" },
@@ -1248,12 +1294,15 @@
             { name: "Utpanna Ekadashi", bnName: "উৎপন্না একাদশী", date: "2026-12-04", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (কৃষ্ণ)", date: "2026-12-06", type: "other" },
             { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-12-07", type: "other" },
-            { name: "Margashirsha Amavasya", bnName: "অগ্রহায়ণ অমাবস্যা", date: "2026-12-08", type: "moon" },
+            { name: "Margashirsha Amavasya", bnName: "অগ্রহায়ণ অমাবস্যা", date: "2026-12-08", type: "moon" },
             { name: "Dhanu Sankranti", bnName: "ধনু সংক্রান্তি", date: "2026-12-16", type: "other" },
             { name: "Mokshada Ekadashi", bnName: "মোক্ষদা একাদশী", date: "2026-12-20", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-12-21", type: "other" },
-            { name: "Margashirsha Purnima", bnName: "অগ্রহায়ণ পূর্ণিমা ব্রত", date: "2026-12-23", type: "moon" },
-            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-12-26", type: "other" }
+            { name: "Margashirsha Purnima", bnName: "অগ্রহায়ণ পূর্ণিমা ব্রত", date: "2026-12-23", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-12-26", type: "other" },
+            
+            // --- 2027 EVENTS ---
+            { name: "Saraswati Puja", bnName: "সরস্বতী পূজা", date: "2027-02-11", type: "major" }
         ];
 
         let currentFestFilter = 'all';
@@ -1273,6 +1322,115 @@
                 .sort((a, b) => a.daysLeft - b.daysLeft);
         }
 
+        // 🎯 All Festivals Popup Logic
+        let currentPopupFestivals = [];
+
+        window.openAllFestivalsPopup = () => {
+            const popup = document.getElementById('all-festivals-popup');
+            
+            let allUpcoming = getUpcomingFestivals();
+            if (currentFestFilter !== 'all') allUpcoming = allUpcoming.filter(f => f.type === currentFestFilter);
+            
+            currentPopupFestivals = allUpcoming;
+            
+            // Reset Search Input
+            const searchInput = document.getElementById('festival-search-input');
+            if (searchInput) searchInput.value = '';
+
+            renderPopupList(currentPopupFestivals);
+            
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.searchFestivals = (query) => {
+            query = query.toLowerCase().trim();
+            if (!query) {
+                renderPopupList(currentPopupFestivals);
+                return;
+            }
+            
+            // Split the search query into individual words for a smarter, flexible search
+            const searchTerms = query.split(/\s+/);
+            
+            const filtered = currentPopupFestivals.filter(f => {
+                const d = new Date(f.date);
+                
+                // Combine all possible text matches into one big string
+                const searchTarget = `
+                    ${f.name} 
+                    ${f.bnName} 
+                    ${d.getDate()} 
+                    ${d.toLocaleString('en-US', { month: 'long' })} 
+                    ${d.toLocaleString('en-US', { month: 'short' })} 
+                    ${d.getFullYear()}
+                `.toLowerCase();
+                
+                // Return true only if ALL typed search terms exist anywhere in the target string
+                return searchTerms.every(term => searchTarget.includes(term));
+            });
+            
+            renderPopupList(filtered);
+        };
+
+        function renderPopupList(festivals) {
+            const listContainer = document.getElementById('all-festivals-list');
+
+            if (festivals.length === 0) {
+                listContainer.innerHTML = `<p class="text-center text-gray-500 py-6 italic text-sm">No matching events found.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = festivals.map(f => {
+                const d = new Date(f.date);
+                const dateStr = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                
+                let timeText = '';
+                let textClass = '';
+                if (f.daysLeft === 0) {
+                    timeText = 'Today!';
+                    textClass = 'text-green-600 font-extrabold';
+                } else if (f.daysLeft === 1) {
+                    timeText = 'Tomorrow!';
+                    textClass = 'text-red-600 font-bold';
+                } else if (f.daysLeft <= 7) {
+                    timeText = `In ${f.daysLeft} days`;
+                    textClass = 'text-red-500 font-bold';
+                } else if (f.daysLeft <= 30) {
+                    timeText = `In ${f.daysLeft} days`;
+                    textClass = 'text-orange-600 font-medium';
+                } else {
+                    timeText = `In ${f.daysLeft} days`;
+                    textClass = 'text-gray-500 font-medium';
+                }
+
+                const icon = f.type === 'ekadashi' ? '🌾' : (f.type === 'moon' ? '🌕' : '🪔');
+
+                return `
+                <div class="bg-white p-3 sm:p-4 rounded-xl border border-orange-100 shadow-sm flex items-center gap-3 sm:gap-4 transition-transform hover:scale-[1.01]">
+                    <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-lg sm:text-xl shadow-inner border border-orange-100 flex-shrink-0">${icon}</div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-gray-900 text-sm truncate font-serif">${f.name}</h4>
+                        <p class="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> 
+                            ${dateStr}
+                        </p>
+                    </div>
+                    <div class="text-right flex-shrink-0 ml-2">
+                        <span class="text-xs ${textClass}">${timeText}</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.closeAllFestivalsPopup = () => {
+            const popup = document.getElementById('all-festivals-popup');
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+
         window.filterFestivals = (type) => {
             currentFestFilter = type;
             const btns = {
@@ -1284,9 +1442,10 @@
             Object.keys(btns).forEach(k => {
                 if (btns[k]) {
                     if (k === type) {
-                        btns[k].className = "px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-red-600 text-white shadow-md";
+                        btns[k].className = "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto";
                     } else {
-                        btns[k].className = "px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50";
+                        btns[k].className = "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto mt-2 sm:mt-0";
+                        if(k === 'ekadashi' && type !== 'ekadashi') btns[k].classList.replace('w-[45%]', 'w-[92%]');
                     }
                 }
             });
@@ -1295,22 +1454,36 @@
 
         function renderFestivalList() {
             const listEl = document.getElementById('festival-list');
+            const showMoreContainer = document.getElementById('show-more-festivals-container');
             if(!listEl) return;
             
             let upcoming = getUpcomingFestivals();
             if (currentFestFilter !== 'all') upcoming = upcoming.filter(f => f.type === currentFestFilter);
-            upcoming = upcoming.slice(0, 6);
+            
+            if (showMoreContainer) {
+                if (upcoming.length > 3) {
+                    showMoreContainer.classList.remove('hidden');
+                } else {
+                    showMoreContainer.classList.add('hidden');
+                }
+            }
 
-            if (upcoming.length === 0) {
+            // Slice to 6 for standard desktop, we will hide the last 2 via CSS on mobile
+            const slicedUpcoming = upcoming.slice(0, 6);
+
+            if (slicedUpcoming.length === 0) {
                 listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found for this category.</p>`;
                 return;
             }
 
-            listEl.innerHTML = upcoming.map((f, i) => {
+            listEl.innerHTML = slicedUpcoming.map((f, i) => {
                 const d = new Date(f.date);
                 const dateStr = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
                 const isNearest = (i === 0 && currentFestFilter === 'all');
                 const highlightClass = isNearest ? 'border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200' : 'border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md';
+                
+                // Hide item 5 & 6 on small screens (index 4 and 5)
+                const mobileHiddenClass = i >= 4 ? 'hidden sm:block' : '';
                 
                 let timeBadge = '';
                 if (f.daysLeft === 0) {
@@ -1332,7 +1505,7 @@
                 const icon = f.type === 'ekadashi' ? '🌾' : (f.type === 'moon' ? '🌕' : '🪔');
 
                 return `
-                    <div class="p-6 rounded-2xl border transition-all duration-300 ${highlightClass}">
+                    <div class="p-6 rounded-2xl border transition-all duration-300 ${highlightClass} ${mobileHiddenClass}">
                         <div class="flex justify-between items-start mb-4">
                             <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100">${icon}</div>
                             ${timeBadge}
@@ -1350,27 +1523,32 @@
         function initFestivalSystem() {
             const upcoming = getUpcomingFestivals();
             
-            // Update Hero Box (Only Major Festivals)
-            const upcomingMajor = upcoming.filter(f => f.type === 'major');
-            if (upcomingMajor.length > 0) {
-                const nextMajorFest = upcomingMajor[0];
+            // 🎯 Flagship Event Permanent Countdown (Saraswati Puja 2027)
+            function updateFlagship() {
+                const target = new Date('2027-02-11T00:00:00');
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const daysLeft = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
                 
-                const heroBox = document.getElementById('hero-festival-countdown');
-                const heroName = document.getElementById('hero-fest-name');
-                const heroDays = document.getElementById('hero-fest-days');
-                
-                if (heroBox && heroName && heroDays) {
-                    heroName.textContent = nextMajorFest.name;
-                    heroDays.textContent = nextMajorFest.daysLeft === 0 ? "Today!" : `In ${nextMajorFest.daysLeft} Days`;
-                    heroBox.classList.remove('hidden');
+                const el = document.getElementById('flagship-countdown');
+                if(el) {
+                    if (daysLeft > 0) {
+                        el.innerHTML = `⏳ In ${daysLeft} Days`;
+                    } else if (daysLeft === 0) {
+                        el.innerHTML = `🎉 Happening Today!`;
+                    } else {
+                        el.innerHTML = `✨ Successfully Completed`;
+                        el.parentElement.classList.remove('anim-breath');
+                    }
                 }
             }
+            updateFlagship();
             
             // Daily Popup logic (All Festivals)
             if (upcoming.length > 0) {
                 const nextFest = upcoming[0];
                 const todayStr = new Date().toDateString();
-                const lastNotif = localStorage.getItem('last_festival_notif_date');
+                const lastNotif = sessionStorage.getItem('last_festival_notif_date');
                 if (lastNotif !== todayStr) {
                     setTimeout(() => {
                         const notifBox = document.getElementById('festival-notification');
@@ -1379,10 +1557,10 @@
                             document.getElementById('notif-fest-days').textContent = nextFest.daysLeft === 0 ? "Happening today! 🙏" : `${nextFest.daysLeft} days remaining`;
                             notifBox.classList.remove('hidden');
                             setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
-                            localStorage.setItem('last_festival_notif_date', todayStr);
+                            sessionStorage.setItem('last_festival_notif_date', todayStr);
                             setTimeout(window.closeNotification, 8000);
                         }
-                    }, 3000);
+                    }, 2000);
                 }
             }
             filterFestivals('all');
@@ -1396,7 +1574,7 @@
             }
         };
 
-        // 🎯 ADDED: Quiz Suggestion Handlers
+        // 🎯 Quiz Suggestion Handlers
         window.closeQuizSuggestion = () => {
             const toast = document.getElementById('quiz-suggestion-toast');
             if(toast) {
@@ -1414,18 +1592,78 @@
             }
         };
 
-        // 🎯 ADDED: Global array to store the 3 active questions
+        // 🎯 Global array to store the 3 active questions
         let currentQuizQuestions = [];
 
-        // 🎯 ADDED: Initialize 3 Random Questions (1 Easy, 1 Medium, 1 Hard)
+        // 🎯 Quiz Cache Management
+        const QUIZ_CACHE_KEY = 'uiusvs_quiz_state';
+        const QUIZ_CACHE_EXPIRY = 2 * 24 * 60 * 60 * 1000; // 2 days in ms
+
+        function getQuizState() {
+            try {
+                const data = JSON.parse(localStorage.getItem(QUIZ_CACHE_KEY));
+                if (data && (Date.now() - data.timestamp < QUIZ_CACHE_EXPIRY)) {
+                    return data;
+                }
+            } catch(e) {}
+            return { usedIndices: [], showResult: false, score: 0 };
+        }
+
+        function saveQuizState(stateUpdates) {
+            const currentState = getQuizState();
+            const newState = {
+                ...currentState,
+                ...stateUpdates,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(QUIZ_CACHE_KEY, JSON.stringify(newState));
+        }
+
+        // 🎯 Initialize 3 Random Questions (1 Easy, 1 Medium, 1 Hard)
         function initSanatanQuiz() {
             const wrapper = document.getElementById('quiz-questions-wrapper');
             if (!wrapper) return;
+
+            const state = getQuizState();
+
+            // If the user already took the quiz recently, show their cached result
+            if (state.showResult) {
+                document.getElementById('quiz-container').classList.add('hidden');
+                document.getElementById('quiz-result').classList.remove('hidden');
+                
+                document.getElementById('quiz-score').textContent = state.score;
+                const titleEl = document.getElementById('quiz-feedback-title');
+                const textEl = document.getElementById('quiz-feedback-text');
+                
+                if(state.score === 3) {
+                    titleEl.textContent = "Congratulations! Perfect Score! 🏆";
+                    textEl.textContent = "Your deep understanding of Sanatan Dharma is truly commendable. Excellent performance! 🙏";
+                } else if (state.score === 2) {
+                    titleEl.textContent = "Great Job!";
+                    textEl.textContent = "You know quite a bit. Just a little more reading and you'll be perfect! 🌸";
+                } else {
+                    titleEl.textContent = "Good Effort!";
+                    textEl.textContent = "This is just the beginning of your journey. Stay with us to learn more about Sanatan Dharma. 🕉️";
+                }
+                return; // Stop generating questions for now
+            }
             
-            // Randomly select indices
-            const easyIndex = Math.floor(Math.random() * 20); // 0 to 19
-            const mediumIndex = 20 + Math.floor(Math.random() * 15); // 20 to 34
-            const hardIndex = 35 + Math.floor(Math.random() * 15); // 35 to 49
+            // Generate question pools excluding already seen questions
+            let easyPool = []; for(let i=0; i<20; i++) if(!state.usedIndices.includes(i)) easyPool.push(i);
+            let mediumPool = []; for(let i=20; i<35; i++) if(!state.usedIndices.includes(i)) mediumPool.push(i);
+            let hardPool = []; for(let i=35; i<50; i++) if(!state.usedIndices.includes(i)) hardPool.push(i);
+
+            // Reset cache if we run out of fresh questions in any category
+            if(easyPool.length === 0 || mediumPool.length === 0 || hardPool.length === 0) {
+                state.usedIndices = [];
+                easyPool = []; for(let i=0; i<20; i++) easyPool.push(i);
+                mediumPool = []; for(let i=20; i<35; i++) mediumPool.push(i);
+                hardPool = []; for(let i=35; i<50; i++) hardPool.push(i);
+            }
+
+            const easyIndex = easyPool[Math.floor(Math.random() * easyPool.length)];
+            const mediumIndex = mediumPool[Math.floor(Math.random() * mediumPool.length)];
+            const hardIndex = hardPool[Math.floor(Math.random() * hardPool.length)];
 
             currentQuizQuestions = [
                 { ...sanatanQuizData[easyIndex], originalIndex: easyIndex, level: 'Easy' },
@@ -1440,9 +1678,9 @@
                 else levelBadge = '<span class="text-[10px] bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded-full ml-2 align-middle font-bold tracking-wider uppercase">Hard</span>';
 
                 const optionsHtml = q.options.map((opt, optIndex) => `
-                    <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors">
-                        <input type="radio" name="q${q.originalIndex}" value="${optIndex}" class="mr-3 text-orange-500 focus:ring-orange-500 w-4 h-4">
-                        ${opt}
+                    <label class="flex items-start p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors">
+                        <input type="radio" name="q${q.originalIndex}" value="${optIndex}" class="mr-3 mt-0.5 flex-shrink-0 text-orange-500 focus:ring-orange-500 w-4 h-4">
+                        <span class="text-sm sm:text-base leading-tight">${opt}</span>
                     </label>
                 `).join('');
 
@@ -1463,17 +1701,36 @@
             if (totalScoreEl) totalScoreEl.textContent = "3";
         }
 
-        // 🎯 ADDED: Quiz Logic
+        // 🎯 Quiz Logic
         window.submitQuiz = () => {
             let score = 0;
+            let allAnswered = true;
             
             currentQuizQuestions.forEach((q) => {
                 const selected = document.querySelector(`input[name="q${q.originalIndex}"]:checked`);
-                if (selected && parseInt(selected.value) === q.ans) {
-                    score++;
+                if (selected) {
+                    if (parseInt(selected.value) === q.ans) score++;
+                } else {
+                    allAnswered = false;
                 }
             });
             
+            // Ensure the user actually answered all 3 questions
+            if (!allAnswered) {
+                const toast = document.getElementById('error-toast');
+                const toastMsg = document.getElementById('error-toast-msg');
+                if (toast && toastMsg) {
+                    toastMsg.textContent = "Please answer all 3 questions before submitting.";
+                    toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                    toast.classList.add('opacity-100', 'translate-y-0');
+                    setTimeout(() => {
+                        toast.classList.remove('opacity-100', 'translate-y-0');
+                        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                    }, 3000);
+                }
+                return;
+            }
+
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-score').textContent = score;
             
@@ -1493,6 +1750,15 @@
             
             document.getElementById('quiz-result').classList.remove('hidden');
 
+            // Save state and response to 2-day cache
+            const state = getQuizState();
+            const currentIndices = currentQuizQuestions.map(q => q.originalIndex);
+            saveQuizState({
+                usedIndices: [...new Set([...state.usedIndices, ...currentIndices])],
+                showResult: true,
+                score: score
+            });
+
             // Keep the user focused on the quiz result after submission
             const quizResultSection = document.getElementById('quiz-result');
             if(quizResultSection) {
@@ -1502,10 +1768,13 @@
         };
 
         window.resetQuiz = () => {
+            // Un-set the response flag so the form shows up again
+            saveQuizState({ showResult: false });
+            
             document.getElementById('quiz-result').classList.add('hidden');
             document.getElementById('quiz-container').classList.remove('hidden');
             
-            // Generate 3 new questions
+            // Generate 3 NEW questions
             initSanatanQuiz();
             
             const wrapper = document.getElementById('quiz-questions-wrapper');
@@ -1664,7 +1933,7 @@
                                 <img src="${thumbnail}" class="w-full h-full object-cover relative z-10" alt="${v.title}" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                                 <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                             </div>
-                            <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
+                            <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white">${v.title}</h3></div>
                         </div>`;
                     }).join('');
                 } else {
@@ -1684,7 +1953,7 @@
                             <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" class="w-full h-full object-cover relative z-10" alt="${v.title}" loading="lazy" onload="this.previousElementSibling.style.display='none'">
                             <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
                         </div>
-                        <div class="p-4 text-center"><h3 class="text-xs font-bold line-clamp-2 text-white">${v.title}</h3></div>
+                        <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white">${v.title}</h3></div>
                     </div>
                 `).join('');
             }
@@ -2248,6 +2517,16 @@
             let quizSuggestionShown = false; 
             let lastScrollY = window.scrollY; 
             
+            // Catchy phrases for Quiz Toast
+            const quizCatchyPhrases = [
+                "How much do you know about Sanatan Dharma?",
+                "Test your spiritual knowledge today!",
+                "Are you ready for a quick Dharma quiz?",
+                "Discover your roots with this short quiz!",
+                "Challenge yourself: Take the Sanatan Quiz!",
+                "How well do you know your heritage?"
+            ];
+            
             window.addEventListener('scroll', () => {
                 if (!isScrolling) {
                     window.requestAnimationFrame(() => {
@@ -2271,7 +2550,13 @@
                             }
 
                             const toast = document.getElementById('quiz-suggestion-toast');
-                            if (toast) {
+                            const toastText = document.getElementById('quiz-toast-text');
+                            
+                            if (toast && toastText) {
+                                // Randomly pick a catchy phrase
+                                const randomPhrase = quizCatchyPhrases[Math.floor(Math.random() * quizCatchyPhrases.length)];
+                                toastText.textContent = randomPhrase;
+
                                 toast.classList.remove('hidden');
                                 setTimeout(() => {
                                     toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
@@ -2299,4 +2584,4 @@
         });
     </script>
 </body>
-</html>
+ </html>
