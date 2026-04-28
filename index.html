@@ -493,8 +493,8 @@
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
     <!-- Daily Festival Notification Popup -->
-    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-0 right-0 sm:left-6 sm:right-auto mx-4 sm:mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
-        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1">
+    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1 z-10">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <div class="flex items-center gap-3">
@@ -1537,6 +1537,8 @@
         ];
 
         let currentFestFilter = 'all';
+        let pendingFestivalNotification = null;
+        let isFlagshipNotif = false;
 
         function getDaysDiff(targetDateStr) {
             const today = new Date();
@@ -1824,80 +1826,15 @@
             }
             updateFlagship();
             
-            // Daily Popup logic (All Festivals)
+            // 🎯 Store Next Festival details for Scroll Trigger
             const saraswatiPuja = upcoming.find(f => f.name === "Saraswati Puja");
-            const notifBox = document.getElementById('festival-notification');
-            const notifHeader = document.getElementById('notif-fest-header');
-            const notifName = document.getElementById('notif-fest-name');
-            const notifDays = document.getElementById('notif-fest-days');
-            const notifIcon = document.getElementById('notif-fest-icon');
 
             if (saraswatiPuja && saraswatiPuja.daysLeft <= 50 && saraswatiPuja.daysLeft >= 0) {
-                // 🎯 50 Days Flagship Fixed Alert
-                setTimeout(() => {
-                    if (notifBox) {
-                        if (notifIcon) {
-                            notifIcon.textContent = '🌸';
-                            notifIcon.className = "w-10 h-10 bg-red-50 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
-                        }
-                        if (notifHeader) {
-                            notifHeader.textContent = "👑 FLAGSHIP EVENT";
-                            notifHeader.className = "text-[10px] font-extrabold uppercase text-red-600 tracking-widest";
-                        }
-                        if (notifName) notifName.textContent = saraswatiPuja.name;
-                        
-                        if (notifDays) {
-                            notifDays.classList.remove('truncate');
-                            notifDays.innerHTML = saraswatiPuja.daysLeft === 0 
-                                ? "🎉 <span class='font-bold text-red-600'>Happening today! Joy Maa Saraswati!</span>" 
-                                : `আসছে আমাদের প্রাণের পুজো!<br><span class="font-bold text-red-600">⏳ Only ${saraswatiPuja.daysLeft} Days Left!</span>`;
-                        }
-                        // Premium look for Flagship
-                        notifBox.classList.remove('border-orange-200');
-                        notifBox.classList.add('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
-                        
-                        notifBox.classList.remove('hidden');
-                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 500);
-                        
-                        // 🛑 No setTimeout for close (User has to manually close it)
-                    }
-                }, 1500);
+                pendingFestivalNotification = saraswatiPuja;
+                isFlagshipNotif = true;
             } else if (upcoming.length > 0) {
-                // 🎯 Regular Next Festival Alert
-                const nextFest = upcoming[0];
-                const todayStr = new Date().toDateString();
-                const lastNotif = sessionStorage.getItem('last_festival_notif_date');
-                
-                if (lastNotif !== todayStr) {
-                    setTimeout(() => {
-                        if (notifBox) {
-                            if (notifIcon) {
-                                notifIcon.textContent = '🪔';
-                                notifIcon.className = "w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner";
-                            }
-                            if (notifHeader) {
-                                notifHeader.textContent = "Next Festival";
-                                notifHeader.className = "text-[10px] font-bold uppercase text-orange-600 tracking-wider";
-                            }
-                            if (notifName) notifName.textContent = nextFest.name;
-                            
-                            if (notifDays) {
-                                notifDays.classList.add('truncate');
-                                notifDays.textContent = nextFest.daysLeft === 0 ? "Happening today! 🙏" : `${nextFest.daysLeft} days remaining`;
-                            }
-                            
-                            // Normal look
-                            notifBox.classList.remove('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
-                            notifBox.classList.add('border-orange-200');
-
-                            notifBox.classList.remove('hidden');
-                            setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
-                            
-                            sessionStorage.setItem('last_festival_notif_date', todayStr);
-                            setTimeout(window.closeNotification, 8000); // Normal alert auto closes
-                        }
-                    }, 2000);
-                }
+                pendingFestivalNotification = upcoming[0];
+                isFlagshipNotif = false;
             }
         }
 
@@ -2520,6 +2457,7 @@
             initVideoSyncAndLoading();
             
             initFestivalSystem();
+            filterFestivals(currentFestFilter); // 🎯 Fix: Eita add kora hoyeche jate load howar sathei festivals show kore!
             initSanatanQuiz(); // 🎯 Render the 50 questions
             
             setInterval(() => { filterFestivals(currentFestFilter); }, 60000);
@@ -2991,6 +2929,73 @@
                         }
 
                         const scrollPercent = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+                        
+                        // 🎯 15% Scroll - Event Notification (One user, One event, Single time)
+                        if (scrollPercent >= 0.15 && pendingFestivalNotification) {
+                            const eventId = pendingFestivalNotification.name + '_' + pendingFestivalNotification.date;
+                            const storedEventId = localStorage.getItem('notified_event_id');
+
+                            if (storedEventId !== eventId) {
+                                const notifBox = document.getElementById('festival-notification');
+                                const notifHeader = document.getElementById('notif-fest-header');
+                                const notifName = document.getElementById('notif-fest-name');
+                                const notifDays = document.getElementById('notif-fest-days');
+                                const notifIcon = document.getElementById('notif-fest-icon');
+
+                                if (notifBox) {
+                                    if (isFlagshipNotif) {
+                                        if (notifIcon) {
+                                            notifIcon.textContent = '🌸';
+                                            notifIcon.className = "w-10 h-10 bg-red-50 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
+                                        }
+                                        if (notifHeader) {
+                                            notifHeader.textContent = "👑 FLAGSHIP EVENT";
+                                            notifHeader.className = "text-[10px] font-extrabold uppercase text-red-600 tracking-widest";
+                                        }
+                                        if (notifName) notifName.textContent = pendingFestivalNotification.name;
+                                        
+                                        if (notifDays) {
+                                            notifDays.classList.remove('truncate');
+                                            notifDays.innerHTML = pendingFestivalNotification.daysLeft === 0 
+                                                ? "🎉 <span class='font-bold text-red-600'>Happening today! Joy Maa Saraswati!</span>" 
+                                                : `আসছে আমাদের প্রাণের পুজো!<br><span class="font-bold text-red-600">⏳ Only ${pendingFestivalNotification.daysLeft} Days Left!</span>`;
+                                        }
+                                        notifBox.classList.remove('border-orange-200');
+                                        notifBox.classList.add('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                                        
+                                        notifBox.classList.remove('hidden');
+                                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
+                                    } else {
+                                        if (notifIcon) {
+                                            notifIcon.textContent = '🪔';
+                                            notifIcon.className = "w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner";
+                                        }
+                                        if (notifHeader) {
+                                            notifHeader.textContent = "Next Festival";
+                                            notifHeader.className = "text-[10px] font-bold uppercase text-orange-600 tracking-wider";
+                                        }
+                                        if (notifName) notifName.textContent = pendingFestivalNotification.name;
+                                        
+                                        if (notifDays) {
+                                            notifDays.classList.add('truncate');
+                                            notifDays.textContent = pendingFestivalNotification.daysLeft === 0 ? "Happening today! 🙏" : `${pendingFestivalNotification.daysLeft} days remaining`;
+                                        }
+                                        
+                                        notifBox.classList.remove('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                                        notifBox.classList.add('border-orange-200');
+
+                                        notifBox.classList.remove('hidden');
+                                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
+                                        
+                                        setTimeout(window.closeNotification, 8000); 
+                                    }
+                                    
+                                    localStorage.setItem('notified_event_id', eventId);
+                                }
+                            }
+                            pendingFestivalNotification = null; // Clear to prevent running again in this session
+                        }
+
                         if (scrollPercent >= 0.45 && !quizSuggestionShown && !sessionStorage.getItem('quiz_suggested')) {
                             quizSuggestionShown = true;
                             sessionStorage.setItem('quiz_suggested', 'true');
