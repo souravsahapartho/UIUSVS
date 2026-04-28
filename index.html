@@ -138,23 +138,56 @@
         updateDynamicMeta(window.location.pathname + window.location.hash + window.location.search);
     </script>
 
-    <!-- 🎯 Global Image Handlers -->
+    <!-- 🎯 Global Image Handlers (Bomb-Proof Update) -->
     <script>
+        // Fallback global functions to prevent ReferenceErrors from any lingering cached inline attributes
         window.handleImageLoad = function(img) {
-            img.dataset.failed = 'false';
-            img.classList.remove('opacity-0');
-            if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
-                img.previousElementSibling.style.display = 'none';
+            if(img && img.classList) {
+                img.dataset.failed = 'false';
+                img.classList.remove('opacity-0');
+                if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
+                    img.previousElementSibling.style.display = 'none';
+                }
             }
         };
 
         window.handleImageError = function(img) {
-            img.dataset.failed = 'true';
-            img.classList.add('opacity-0'); // Ensure it stays hidden
-            if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
-                img.previousElementSibling.style.display = 'flex'; // Show loader
+            if(img && img.classList) {
+                img.dataset.failed = 'true';
+                img.classList.add('opacity-0');
+                if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
+                    img.previousElementSibling.style.display = 'flex';
+                    const loaderIcon = img.previousElementSibling.querySelector('.uiusvs-loader-icon');
+                    if (loaderIcon) { loaderIcon.textContent = '⚠️'; loaderIcon.style.animation = 'none'; }
+                    const loaderText = img.previousElementSibling.querySelector('.uiusvs-loader-text');
+                    if (loaderText) { loaderText.textContent = 'FAILED'; loaderText.style.animation = 'none'; }
+                }
             }
         };
+
+        // Advanced Global Event Delegation (Capturing Phase)
+        // This catches ALL load/error events seamlessly
+        document.addEventListener('load', function(e) {
+            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
+                window.handleImageLoad(e.target);
+            }
+        }, true);
+
+        document.addEventListener('loadeddata', function(e) {
+            if (e.target.tagName === 'VIDEO') {
+                window.handleImageLoad(e.target);
+            }
+        }, true);
+
+        document.addEventListener('error', function(e) {
+            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
+                window.handleImageError(e.target);
+                // Fallback for Blog images if they fail
+                if (e.target.classList.contains('blog-thumb-img') && !e.target.src.includes('placehold.co')) {
+                    e.target.src = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog';
+                }
+            }
+        }, true);
 
         // Auto-retry loading images when internet comes back
         window.addEventListener('online', function() {
@@ -465,9 +498,9 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🪔</div>
+            <div id="notif-fest-icon" class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🪔</div>
             <div class="flex-1 min-w-0 pr-4">
-                <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Next Festival</p>
+                <p id="notif-fest-header" class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Next Festival</p>
                 <p id="notif-fest-name" class="font-bold text-gray-900 text-sm leading-tight mt-0.5 truncate">...</p>
                 <p id="notif-fest-days" class="text-xs text-gray-600 mt-1 font-medium truncate">...</p>
             </div>
@@ -719,9 +752,9 @@
                                 <img src="Saraswati_Puja_2025/Saraswati_2026.jpeg" class="w-full h-full object-cover rounded-full opacity-0 transition-opacity duration-500 relative z-10" alt="">
                             </div>
                             <div class="text-left flex-1">
-                                <span class="text-xs font-bold tracking-wider text-red-600 mb-0.5 block">বিদ্যা দেবীর আরাধনা</span>
-                                <h3 class="font-serif font-extrabold text-lg sm:text-xl text-gray-900 leading-tight">Saraswati Puja 2027</h3>
-                                <p class="text-xs text-gray-600 font-medium mt-0.5">11 February, Thursday</p>
+                                <span id="flagship-subtitle" class="text-xs font-bold tracking-wider text-red-600 mb-0.5 block">বিদ্যা দেবীর আরাধনা</span>
+                                <h3 id="flagship-title" class="font-serif font-extrabold text-lg sm:text-xl text-gray-900 leading-tight">Saraswati Puja 2027</h3>
+                                <p id="flagship-date" class="text-xs text-gray-600 font-medium mt-0.5">11 February, Thursday</p>
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-full sm:w-auto text-center sm:text-right">
@@ -793,8 +826,8 @@
                 </div>
 
                 <!-- 2. Kali Puja -->
-                <div class="mb-12 animate-on-scroll delay-100 relative group/section">
-                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-900 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
+                <div class="mb-12 animate-on-scroll relative group/section">
+                    <div class="flex items-center mb-4"><div class="h-8 w-1 bg-red-600 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Kali Puja</h3></div>
                     <div id="gallery-kali" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-red-100 bg-black relative group cursor-pointer" onclick="loadVideo(this, 'Kali_Puja_2025/6.mp4', 'local')">
                             <div class="aspect-video w-full h-full relative overflow-hidden">
@@ -807,11 +840,11 @@
                             <div class="media-placeholder absolute inset-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-text">UIUSVS</div></div></div>
                             <img src="Kali_Puja_2025/4.jpg" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500" alt="" loading="lazy">
                         </div>
-                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder absolute inset-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-text">UIUSVS</div></div></div>
                             <img src="Kali_Puja_2025/5.jpg" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500" alt="" loading="lazy">
                         </div>
-                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-red-100 relative">
                             <div class="media-placeholder absolute inset-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-text">UIUSVS</div></div></div>
                             <img src="Kali_Puja_2025/8.jpg" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500" alt="" loading="lazy">
                         </div>
@@ -896,7 +929,7 @@
                 </div>
 
                 <!-- 6. Bhai Phota -->
-                <div class="animate-on-scroll delay-200 relative group/section">
+                <div class="mb-12 animate-on-scroll relative group/section">
                     <div class="flex items-center mb-4"><div class="h-8 w-1 bg-teal-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold text-gray-900 font-serif">Bhai Phota</h3></div>
                     <div id="gallery-bhaiphota" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
                         <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-teal-100 relative">
@@ -1210,49 +1243,6 @@
     </footer>
 
     <script type="module">
-        // 🎯 Global Media Load & Error Handlers
-        // We use Event Delegation (capturing phase) so we don't need inline onload/onerror attributes!
-        document.addEventListener('load', (e) => {
-            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
-                e.target.dataset.failed = 'false';
-                e.target.classList.remove('opacity-0');
-                if (e.target.previousElementSibling && e.target.previousElementSibling.classList.contains('media-placeholder')) {
-                    e.target.previousElementSibling.style.display = 'none';
-                }
-            }
-        }, true);
-
-        document.addEventListener('loadeddata', (e) => {
-            if (e.target.tagName === 'VIDEO') {
-                e.target.dataset.failed = 'false';
-                e.target.classList.remove('opacity-0');
-                if (e.target.previousElementSibling && e.target.previousElementSibling.classList.contains('media-placeholder')) {
-                    e.target.previousElementSibling.style.display = 'none';
-                }
-            }
-        }, true);
-
-        document.addEventListener('error', (e) => {
-            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
-                e.target.dataset.failed = 'true';
-                e.target.classList.add('opacity-0');
-                if (e.target.previousElementSibling && e.target.previousElementSibling.classList.contains('media-placeholder')) {
-                    e.target.previousElementSibling.style.display = 'flex';
-                    // Show a failure state visually on the loader
-                    const loaderIcon = e.target.previousElementSibling.querySelector('.uiusvs-loader-icon');
-                    if (loaderIcon) {
-                        loaderIcon.textContent = '⚠️';
-                        loaderIcon.style.animation = 'none';
-                    }
-                    const loaderText = e.target.previousElementSibling.querySelector('.uiusvs-loader-text');
-                    if (loaderText) {
-                        loaderText.textContent = 'FAILED';
-                        loaderText.style.animation = 'none';
-                    }
-                }
-            }
-        }, true);
-
         // 🎯 Sanatan Quiz 50 Questions Data
         const sanatanQuizData = [
             { q: "What is the primary sacred text of Hinduism?", options: ["Quran", "Vedas", "Bible", "Tripitaka"], ans: 1 },
@@ -1540,7 +1530,10 @@
             { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-12-16", type: "other" },
             { name: "Saphala Ekadashi", bnName: "সফলা একাদশী", date: "2027-12-23", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-12-25", type: "other" },
-            { name: "Paush Amavasya", bnName: "পৌষ অমাবস্যা", date: "2027-12-27", type: "moon" }
+            { name: "Paush Amavasya", bnName: "পৌষ অমাবস্যা", date: "2027-12-27", type: "moon" },
+            
+            // --- 2028 EVENTS ---
+            { name: "Saraswati Puja", bnName: "সরস্বতী পূজা", date: "2028-01-31", type: "major" }
         ];
 
         let currentFestFilter = 'all';
@@ -1762,47 +1755,150 @@
         function initFestivalSystem() {
             const upcoming = getUpcomingFestivals();
             
-            // 🎯 Flagship Event Permanent Countdown (Saraswati Puja 2027)
+            // 🎯 Flagship Event Countdown (Simple style with live ticking time & Auto Year Update)
             function updateFlagship() {
-                const target = new Date('2027-02-11T00:00:00');
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                const daysLeft = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+                const flagshipEvents = [
+                    { title: 'Saraswati Puja 2027', dateStr: '2027-02-11', label: '11 February, Thursday' },
+                    { title: 'Saraswati Puja 2028', dateStr: '2028-01-31', label: '31 January, Monday' }
+                ];
                 
-                const el = document.getElementById('flagship-countdown');
-                if(el) {
-                    if (daysLeft > 0) {
-                        el.innerHTML = `⏳ In ${daysLeft} Days`;
-                    } else if (daysLeft === 0) {
-                        el.innerHTML = `🎉 Happening Today!`;
-                    } else {
-                        el.innerHTML = `✨ Successfully Completed`;
-                        el.parentElement.classList.remove('anim-breath');
+                function refreshCountdown() {
+                    const now = new Date();
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    
+                    let activeEvent = flagshipEvents[flagshipEvents.length - 1]; // Default to last event if all are passed
+
+                    // Find the first event that is either today or in the future
+                    for (let evt of flagshipEvents) {
+                        const [y, m, d] = evt.dateStr.split('-');
+                        const target = new Date(y, m - 1, d); // Safely parse local date
+                        const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+                        
+                        if (diffDays >= 0) {
+                            activeEvent = evt;
+                            activeEvent.parsedDate = target;
+                            break; 
+                        }
+                    }
+                    
+                    const titleEl = document.getElementById('flagship-title');
+                    const dateEl = document.getElementById('flagship-date');
+                    const countdownEl = document.getElementById('flagship-countdown');
+
+                    if (titleEl) titleEl.textContent = activeEvent.title;
+                    if (dateEl) dateEl.textContent = activeEvent.label;
+                    
+                    if (countdownEl) {
+                        // Keep the simple rounded style
+                        countdownEl.className = "inline-block bg-white text-red-700 font-bold px-5 py-2 rounded-full text-sm border border-red-200 shadow-sm whitespace-nowrap anim-breath w-full sm:w-auto tracking-wide";
+                        
+                        const evtDate = activeEvent.parsedDate || new Date(activeEvent.dateStr.split('-')[0], activeEvent.dateStr.split('-')[1] - 1, activeEvent.dateStr.split('-')[2]);
+                        
+                        if (evtDate.getTime() === today.getTime()) {
+                            countdownEl.innerHTML = `<span class="live-dot"></span>🎉 Happening Today (Ongoing)`;
+                        } else if (evtDate.getTime() > today.getTime()) {
+                            const diff = evtDate.getTime() - now.getTime(); // Live difference including time
+                            
+                            const dLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            const hLeft = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const mLeft = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                            const sLeft = Math.floor((diff % (1000 * 60)) / 1000);
+                            
+                            const pad = (num) => num.toString().padStart(2, '0');
+                            
+                            // 🎯 Specific logic for "Tomorrow" and regular days
+                            if (dLeft === 0) {
+                                countdownEl.innerHTML = `⚡ Tomorrow! &nbsp;⏳ ${pad(hLeft)}h : ${pad(mLeft)}m : ${pad(sLeft)}s`;
+                            } else {
+                                countdownEl.innerHTML = `⏳ ${dLeft}d : ${pad(hLeft)}h : ${pad(mLeft)}m : ${pad(sLeft)}s`;
+                            }
+                        } else {
+                            countdownEl.innerHTML = `✨ Successfully Completed`;
+                            countdownEl.classList.remove('anim-breath');
+                        }
                     }
                 }
+                
+                refreshCountdown();
+                setInterval(refreshCountdown, 1000);
             }
             updateFlagship();
             
             // Daily Popup logic (All Festivals)
-            if (upcoming.length > 0) {
+            const saraswatiPuja = upcoming.find(f => f.name === "Saraswati Puja");
+            const notifBox = document.getElementById('festival-notification');
+            const notifHeader = document.getElementById('notif-fest-header');
+            const notifName = document.getElementById('notif-fest-name');
+            const notifDays = document.getElementById('notif-fest-days');
+            const notifIcon = document.getElementById('notif-fest-icon');
+
+            if (saraswatiPuja && saraswatiPuja.daysLeft <= 50 && saraswatiPuja.daysLeft >= 0) {
+                // 🎯 50 Days Flagship Fixed Alert
+                setTimeout(() => {
+                    if (notifBox) {
+                        if (notifIcon) {
+                            notifIcon.textContent = '🌸';
+                            notifIcon.className = "w-10 h-10 bg-red-50 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
+                        }
+                        if (notifHeader) {
+                            notifHeader.textContent = "👑 FLAGSHIP EVENT";
+                            notifHeader.className = "text-[10px] font-extrabold uppercase text-red-600 tracking-widest";
+                        }
+                        if (notifName) notifName.textContent = saraswatiPuja.name;
+                        
+                        if (notifDays) {
+                            notifDays.classList.remove('truncate');
+                            notifDays.innerHTML = saraswatiPuja.daysLeft === 0 
+                                ? "🎉 <span class='font-bold text-red-600'>Happening today! Joy Maa Saraswati!</span>" 
+                                : `আসছে আমাদের প্রাণের পুজো!<br><span class="font-bold text-red-600">⏳ Only ${saraswatiPuja.daysLeft} Days Left!</span>`;
+                        }
+                        // Premium look for Flagship
+                        notifBox.classList.remove('border-orange-200');
+                        notifBox.classList.add('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                        
+                        notifBox.classList.remove('hidden');
+                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 500);
+                        
+                        // 🛑 No setTimeout for close (User has to manually close it)
+                    }
+                }, 1500);
+            } else if (upcoming.length > 0) {
+                // 🎯 Regular Next Festival Alert
                 const nextFest = upcoming[0];
                 const todayStr = new Date().toDateString();
                 const lastNotif = sessionStorage.getItem('last_festival_notif_date');
+                
                 if (lastNotif !== todayStr) {
                     setTimeout(() => {
-                        const notifBox = document.getElementById('festival-notification');
                         if (notifBox) {
-                            document.getElementById('notif-fest-name').textContent = nextFest.name;
-                            document.getElementById('notif-fest-days').textContent = nextFest.daysLeft === 0 ? "Happening today! 🙏" : `${nextFest.daysLeft} days remaining`;
+                            if (notifIcon) {
+                                notifIcon.textContent = '🪔';
+                                notifIcon.className = "w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner";
+                            }
+                            if (notifHeader) {
+                                notifHeader.textContent = "Next Festival";
+                                notifHeader.className = "text-[10px] font-bold uppercase text-orange-600 tracking-wider";
+                            }
+                            if (notifName) notifName.textContent = nextFest.name;
+                            
+                            if (notifDays) {
+                                notifDays.classList.add('truncate');
+                                notifDays.textContent = nextFest.daysLeft === 0 ? "Happening today! 🙏" : `${nextFest.daysLeft} days remaining`;
+                            }
+                            
+                            // Normal look
+                            notifBox.classList.remove('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                            notifBox.classList.add('border-orange-200');
+
                             notifBox.classList.remove('hidden');
                             setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
+                            
                             sessionStorage.setItem('last_festival_notif_date', todayStr);
-                            setTimeout(window.closeNotification, 8000);
+                            setTimeout(window.closeNotification, 8000); // Normal alert auto closes
                         }
                     }, 2000);
                 }
             }
-            filterFestivals('all');
         }
 
         window.closeNotification = () => {
@@ -2264,67 +2360,74 @@
                 if (!this.container) return;
                 this.direction = initialDirection;
                 this.paused = false;
-                this.speed = 0.15; // 🎯 Ekdom slow abong smooth speed
+                this.speed = 0.15; // 🎯 Khub slow abong smooth
                 this.lastTime = null;
-                this.pos = this.container.scrollLeft;
+                this.pos = 0;
+                this.initialized = false; // 🎯 Track korbe je scroll load hoyeche kina
                 
-                // 🎯 Sothik dik theke shuru korar jonno scroll position set kora (Left e gele daan dik theke shuru hobe)
-                setTimeout(() => {
-                    if (this.direction === 'left') {
-                        this.container.scrollLeft = this.container.scrollWidth - this.container.clientWidth;
-                    }
-                    this.pos = this.container.scrollLeft;
-                }, 1000);
-
                 this.animate = this.animate.bind(this);
                 requestAnimationFrame(this.animate);
                 
-                const handleInteraction = () => {
-                    this.paused = !this.paused;
-                    this.pos = this.container.scrollLeft;
+                const pause = () => { this.paused = true; };
+                const resume = () => { 
+                    this.paused = false; 
+                    this.lastTime = null; 
+                    this.pos = this.container.scrollLeft; 
                 };
                 
-                this.container.addEventListener('scroll', () => {
-                    if (this.paused) this.pos = this.container.scrollLeft;
-                });
+                this.container.addEventListener('mouseenter', pause);
+                this.container.addEventListener('mouseleave', resume);
+                this.container.addEventListener('touchstart', pause, {passive: true});
+                this.container.addEventListener('touchend', () => setTimeout(resume, 1500), {passive: true});
                 
                 this.container.addEventListener('click', (e) => {
                    if (!e.target.closest('[onclick]') && !e.target.closest('video') && !e.target.closest('.gallery-img')) {
-                       handleInteraction();
+                       this.paused = !this.paused;
+                       this.pos = this.container.scrollLeft;
+                       this.lastTime = null;
                    }
                 });
-                
-                // Pause on interaction
-                this.container.addEventListener('touchstart', () => { this.paused = true; }, {passive: true});
-                this.container.addEventListener('touchend', () => { 
-                    setTimeout(() => { this.paused = false; this.pos = this.container.scrollLeft; }, 2000);
-                }, {passive: true});
-                this.container.addEventListener('mouseenter', () => { this.paused = true; });
-                this.container.addEventListener('mouseleave', () => { this.paused = false; this.pos = this.container.scrollLeft; });
             }
+
             animate(timestamp) {
-                if (!this.lastTime) this.lastTime = timestamp;
-                const deltaTime = timestamp - this.lastTime;
-                this.lastTime = timestamp;
                 if (!this.paused) {
+                    if (!this.lastTime) this.lastTime = timestamp;
+                    const deltaTime = timestamp - this.lastTime;
+                    this.lastTime = timestamp;
+
                     const maxScroll = this.container.scrollWidth - this.container.clientWidth;
-                    const moveAmount = this.speed * (deltaTime / 16.67);
                     
-                    // Ping-pong scrolling logic
-                    if (this.direction === 'right') {
-                        this.pos += moveAmount;
-                        if (this.pos >= maxScroll - 1) {
-                            this.pos = maxScroll - 1;
-                            this.direction = 'left';
+                    if (maxScroll > 0) { // 🎯 Jayga thakle tobei scroll korbe
+                        if (!this.initialized) {
+                            if (this.direction === 'left') {
+                                this.pos = maxScroll;
+                                this.container.scrollLeft = maxScroll;
+                            } else {
+                                this.pos = 0;
+                                this.container.scrollLeft = 0;
+                            }
+                            this.initialized = true; // Set done
                         }
-                    } else {
-                        this.pos -= moveAmount;
-                        if (this.pos <= 1) {
-                            this.pos = 1;
-                            this.direction = 'right';
+
+                        const moveAmount = this.speed * (deltaTime / 16.67);
+                        
+                        if (this.direction === 'right') {
+                            this.pos += moveAmount;
+                            if (this.pos >= maxScroll) {
+                                this.pos = maxScroll;
+                                this.direction = 'left';
+                            }
+                        } else {
+                            this.pos -= moveAmount;
+                            if (this.pos <= 0) {
+                                this.pos = 0;
+                                this.direction = 'right';
+                            }
                         }
+                        this.container.scrollLeft = this.pos;
                     }
-                    this.container.scrollLeft = this.pos;
+                } else {
+                    this.lastTime = null;
                 }
                 requestAnimationFrame(this.animate);
             }
@@ -2360,8 +2463,10 @@
                         preloader.style.display = 'none'; 
                         
                         try {
-                            const path = window.location.pathname.replace(/^\/|\/$/g, '');
-                            const targetId = path; 
+                            // 🎯 Fix: Pathname abong Hash duity k ek sathe check korbe (e.g. /#join)
+                            let path = window.location.pathname.replace(/^\/|\/$/g, '');
+                            let hash = window.location.hash.replace('#', '');
+                            let targetId = hash || path; // Hash k priority dibe
                             
                             if (targetId) {
                                 const target = document.getElementById(targetId);
@@ -2773,10 +2878,20 @@
                 if (e.key === 'Escape') window.closeLightbox();
             });
 
-            const galleryIds = ['gallery-saraswati', 'gallery-kali', 'gallery-holi', 'gallery-prayer', 'gallery-shivratri', 'gallery-bhaiphota'];
-            galleryIds.forEach((id, i) => {
-                new Scroller(id, i % 2 === 0 ? 'right' : 'left');
+            // 🎯 Specific manual scroll directions logic
+            const scrollSettings = {
+                'gallery-saraswati': 'left',
+                'gallery-kali': 'right',
+                'gallery-holi': 'left',
+                'gallery-prayer': 'right',
+                'gallery-shivratri': 'left',
+                'gallery-bhaiphota': 'right'
+            };
+            
+            Object.keys(scrollSettings).forEach(id => {
+                new Scroller(id, scrollSettings[id]);
             });
+
             const menuBtn = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             
@@ -2785,11 +2900,14 @@
             });
 
             window.addEventListener('popstate', () => {
+                let pushUrl = window.location.pathname + window.location.hash;
                 if (typeof updateDynamicMeta === 'function') {
-                    updateDynamicMeta(window.location.pathname);
+                    updateDynamicMeta(pushUrl);
                 }
-                const path = window.location.pathname.replace(/^\/|\/$/g, '');
-                const targetId = path || 'home';
+                let path = window.location.pathname.replace(/^\/|\/$/g, '');
+                let hash = window.location.hash.replace('#', '');
+                let targetId = hash || path || 'home';
+                
                 const target = document.getElementById(targetId);
                 if (target) {
                     const y = target.getBoundingClientRect().top + window.scrollY - 80;
@@ -2804,20 +2922,24 @@
                 let href = link.getAttribute('href');
                 if (href && (href.startsWith('/') || href.startsWith('#')) && !href.includes('.') && !href.startsWith('//')) {
                     
-                    if (href.startsWith('#')) {
-                        href = '/' + href.substring(1);
+                    // 🎯 Fix: Safely extract target ID from "/#join" or "/join" or "#join"
+                    let targetId = 'home';
+                    if (href.includes('#')) {
+                        targetId = href.split('#')[1] || 'home';
+                    } else if (href !== '/') {
+                        targetId = href.replace(/^\/|\/$/g, '');
                     }
                     
-                    const targetId = href === '/' ? 'home' : href.substring(1);
+                    let pushUrl = '/' + (targetId === 'home' ? '' : targetId);
                     const target = document.getElementById(targetId);
                     
-                    if (target || href === '/') {
+                    if (target || targetId === 'home') {
                         e.preventDefault();
                         try {
-                            if (history.pushState && window.location.pathname !== href) {
-                                history.pushState(null, null, href);
+                            if (history.pushState && window.location.pathname !== pushUrl) {
+                                history.pushState(null, null, pushUrl);
                             }
-                            if (typeof updateDynamicMeta === 'function') updateDynamicMeta(href);
+                            if (typeof updateDynamicMeta === 'function') updateDynamicMeta(pushUrl);
                         } catch(err) {}
                         
                         if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
