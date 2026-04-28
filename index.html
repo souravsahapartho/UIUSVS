@@ -138,7 +138,7 @@
         updateDynamicMeta(window.location.pathname + window.location.hash + window.location.search);
     </script>
 
-    <!-- 🎯 Global Image Handlers - Defined early to prevent ReferenceError -->
+    <!-- 🎯 Global Image Handlers -->
     <script>
         window.handleImageLoad = function(img) {
             img.dataset.failed = 'false';
@@ -403,7 +403,7 @@
             background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%); z-index: 5; overflow: hidden;
         }
         
-        /* 🎯 New UIUSVS Themed Loader */
+        /* 🎯 UIUSVS Themed Loader */
         .uiusvs-loader-wrapper {
             display: flex;
             flex-direction: column;
@@ -433,7 +433,7 @@
             border-radius: 50%; animation: spin 10s linear infinite;
         }
 
-        /* 🎯 Completely Hide Broken Alt Text & Image Icons globally */
+        /* Completely Hide Broken Alt Text & Image Icons globally */
         img { 
             color: transparent !important; 
             text-indent: -10000px !important; 
@@ -1332,7 +1332,7 @@
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-06-12", type: "other" },
             { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-06-13", type: "other" },
             { name: "Amavasya", bnName: "অমাবস্যা", date: "2026-06-15", type: "moon" },
-            { name: "Nirjala Ekadashi", bnName: "নির্জলা একাদশী", date: "2026-06-25", type: "ekadashi" },
+            { name: "Nirjala Ekadashi", bnName: "নির্জলা Ekadashi", date: "2026-06-25", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2026-06-27", type: "other" },
             { name: "Jyeshtha Purnima", bnName: "জ্যৈষ্ঠ পূর্ণিমা ব্রত", date: "2026-06-29", type: "moon" },
 
@@ -1368,6 +1368,7 @@
             { name: "Bhadrapada Amavasya", bnName: "ভাদ্রপদ অমাবস্যা", date: "2026-09-11", type: "moon" },
             { name: "Ganesh Chaturthi", bnName: "গণেশ চতুর্থী", date: "2026-09-14", type: "major" },
             { name: "Kanya Sankranti", bnName: "কন্যা সংক্রান্তি", date: "2026-09-17", type: "other" },
+            { name: "Mahalaya", bnName: "মহালয়া", date: "2026-09-20", type: "major" },
             { name: "Parivartini Ekadashi", bnName: "পরিবর্তিনী একাদশী", date: "2026-09-22", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-09-24", type: "other" },
             { name: "Anant Chaturdashi", bnName: "অনন্ত চতুর্দশী", date: "2026-09-25", type: "other" },
@@ -1379,13 +1380,15 @@
             { name: "Pradosh & Masik Shivaratri", bnName: "প্রদোষ ব্রত ও মাসিক শিবরাত্রি", date: "2026-10-08", type: "other" },
             { name: "Ashwin Amavasya", bnName: "আশ্বিন অমাবস্যা", date: "2026-10-10", type: "moon" },
             { name: "Sharad Navaratri", bnName: "শারদীয়া নবরাত্রি (ঘটস্থাপন)", date: "2026-10-11", type: "major" },
-            { name: "Kalparambha", bnName: "কল্পারম্ভ", date: "2026-10-16", type: "major" },
-            { name: "Navapatrika Puja", bnName: "নবপত্রিকা পূজা", date: "2026-10-17", type: "major" },
-            { name: "Durga Maha Navami/Ashtami", bnName: "দুর্গা মহা অষ্টমী ও নবমী", date: "2026-10-19", type: "major" },
-            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2026-10-20", type: "major" },
-            { name: "Durga Visarjan", bnName: "দুর্গা বিসর্জন", date: "2026-10-21", type: "major" },
+            { name: "Durga Puja (Maha Panchami)", bnName: "দুর্গা পূজা (মহাপঞ্চমী)", date: "2026-10-16", type: "major" },
+            { name: "Durga Puja (Maha Shashthi)", bnName: "দুর্গা পূজা (মহাষষ্ঠী)", date: "2026-10-17", type: "major" },
+            { name: "Durga Puja (Maha Saptami)", bnName: "দুর্গা পূজা (মহাসপ্তমী)", date: "2026-10-18", type: "major" },
+            { name: "Durga Puja (Maha Ashtami)", bnName: "দুর্গা পূজা (মহাষ্টমী)", date: "2026-10-19", type: "major" },
+            { name: "Durga Puja (Maha Navami)", bnName: "দুর্গা পূজা (মহানবমী)", date: "2026-10-20", type: "major" },
+            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2026-10-21", type: "major" },
             { name: "Papankusha Ekadashi", bnName: "পাপঙ্কুশা একাদশী", date: "2026-10-22", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (শুক্ল)", date: "2026-10-23", type: "other" },
+            { name: "Kojagari Lakshmi Puja", bnName: "কোজাগরী লক্ষ্মী পূজা", date: "2026-10-25", type: "major" },
             { name: "Ashwin Purnima", bnName: "আশ্বিন পূর্ণিমা ব্রত", date: "2026-10-26", type: "moon" },
             { name: "Karva Chauth", bnName: "করওয়া চৌথ / সংকষ্টী চতুর্থী", date: "2026-10-29", type: "other" },
 
@@ -1415,8 +1418,129 @@
             { name: "Margashirsha Purnima", bnName: "অগ্রহায়ণ পূর্ণিমা ব্রত", date: "2026-12-23", type: "moon" },
             { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-12-26", type: "other" },
             
-            // --- 2027 EVENTS ---
-            { name: "Saraswati Puja", bnName: "সরস্বতী পূজা", date: "2027-02-11", type: "major" }
+            // --- 2027 CHE EVENTS ---
+            { name: "Saphala Ekadashi", bnName: "সফলা একাদশী", date: "2027-01-03", type: "ekadashi" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-01-05", type: "other" },
+            { name: "Paush Amavasya", bnName: "পৌষ অমাবস্যা", date: "2027-01-07", type: "moon" },
+            { name: "Makar Sankranti", bnName: "মকর সংক্রান্তি / পৌষ পার্বন", date: "2027-01-15", type: "major" },
+            { name: "Putrada Ekadashi", bnName: "পুত্রদা একাদশী", date: "2027-01-19", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-01-20", type: "other" },
+            { name: "Paush Purnima", bnName: "পৌষ পূর্ণিমা", date: "2027-01-22", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-01-25", type: "other" },
+            { name: "Shattila Ekadashi", bnName: "ষটতিলা একাদশী", date: "2027-02-02", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-02-03", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-02-04", type: "other" },
+            { name: "Magha Amavasya", bnName: "মাঘ অমাবস্যা", date: "2027-02-06", type: "moon" },
+            { name: "Saraswati Puja", bnName: "সরস্বতী পূজা", date: "2027-02-11", type: "major" },
+            { name: "Kumbha Sankranti", bnName: "কুম্ভ সংক্রান্তি", date: "2027-02-13", type: "other" },
+            { name: "Jaya Ekadashi", bnName: "জয়া একাদশী", date: "2027-02-17", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-02-18", type: "other" },
+            { name: "Magha Purnima", bnName: "মাঘী পূর্ণিমা", date: "2027-02-20", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-02-24", type: "other" },
+            { name: "Vijaya Ekadashi", bnName: "বিজয়া একাদশী", date: "2027-03-04", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-03-05", type: "other" },
+            { name: "Maha Shivaratri", bnName: "মহা শিবরাত্রি", date: "2027-03-06", type: "major" },
+            { name: "Phalguna Amavasya", bnName: "ফাল্গুন অমাবস্যা", date: "2027-03-08", type: "moon" },
+            { name: "Meena Sankranti", bnName: "মীন সংক্রান্তি", date: "2027-03-15", type: "other" },
+            { name: "Amalaki Ekadashi", bnName: "আমলকী একাদশী", date: "2027-03-18", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-03-20", type: "other" },
+            { name: "Dol Purnima", bnName: "দোল পূর্ণিমা / হোলি", date: "2027-03-22", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-03-25", type: "other" },
+            { name: "Papmochani Ekadashi", bnName: "পাপমোচনী একাদশী", date: "2027-04-02", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-04-04", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-04-05", type: "other" },
+            { name: "Chaitra Amavasya", bnName: "চৈত্র অমাবস্যা", date: "2027-04-06", type: "moon" },
+            { name: "Chaitra Navratri", bnName: "চৈত্র নবরাত্রি", date: "2027-04-07", type: "major" },
+            { name: "Mesha Sankranti", bnName: "মেষ সংক্রান্তি / পয়লা বৈশাখ", date: "2027-04-14", type: "major" },
+            { name: "Ram Navami", bnName: "শ্রী রাম নবমী", date: "2027-04-15", type: "major" },
+            { name: "Kamada Ekadashi", bnName: "কামদা একাদশী", date: "2027-04-17", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-04-18", type: "other" },
+            { name: "Hanuman Jayanti", bnName: "হনুমান জয়ন্তী / চৈত্র পূর্ণিমা", date: "2027-04-20", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-04-24", type: "other" },
+            { name: "Varuthini Ekadashi", bnName: "বরূথিনী একাদশী", date: "2027-05-02", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-05-03", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-05-04", type: "other" },
+            { name: "Vaishakha Amavasya", bnName: "বৈশাখ অমাবস্যা", date: "2027-05-06", type: "moon" },
+            { name: "Akshaya Tritiya", bnName: "অক্ষয় তৃতীয়া", date: "2027-05-09", type: "major" },
+            { name: "Vrishabha Sankranti", bnName: "বৃষভ সংক্রান্তি", date: "2027-05-15", type: "other" },
+            { name: "Mohini Ekadashi", bnName: "মোহিনী একাদশী", date: "2027-05-16", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-05-17", type: "other" },
+            { name: "Buddha Purnima", bnName: "বুদ্ধ পূর্ণিমা", date: "2027-05-20", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-05-23", type: "other" },
+            { name: "Apara Ekadashi", bnName: "অপরা একাদশী", date: "2027-06-01", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-06-02", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-06-03", type: "other" },
+            { name: "Jyeshtha Amavasya", bnName: "জ্যৈষ্ঠ অমাবস্যা", date: "2027-06-04", type: "moon" },
+            { name: "Nirjala Ekadashi", bnName: "নির্জলা একাদশী", date: "2027-06-14", type: "ekadashi" },
+            { name: "Mithuna Sankranti", bnName: "মিথুন সংক্রান্তি", date: "2027-06-15", type: "other" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-06-16", type: "other" },
+            { name: "Snan Yatra", bnName: "স্নান যাত্রা / জ্যৈষ্ঠ পূর্ণিমা", date: "2027-06-18", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-06-22", type: "other" },
+            { name: "Yogini Ekadashi", bnName: "যোগিনী একাদশী", date: "2027-06-30", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-07-01", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-07-02", type: "other" },
+            { name: "Ashadha Amavasya", bnName: "আষাঢ় অমাবস্যা", date: "2027-07-04", type: "moon" },
+            { name: "Rath Yatra", bnName: "রথ যাত্রা", date: "2027-07-05", type: "major" },
+            { name: "Shayani Ekadashi", bnName: "শয়নী একাদশী", date: "2027-07-14", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-07-15", type: "other" },
+            { name: "Karka Sankranti", bnName: "কর্কট সংক্রান্তি", date: "2027-07-17", type: "other" },
+            { name: "Guru Purnima", bnName: "গুরু পূর্ণিমা", date: "2027-07-18", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-07-22", type: "other" },
+            { name: "Kamika Ekadashi", bnName: "কামিকা একাদশী", date: "2027-07-29", type: "ekadashi" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-07-31", type: "other" },
+            { name: "Shravana Amavasya", bnName: "শ্রাবণ অমাবস্যা", date: "2027-08-02", type: "moon" },
+            { name: "Nag Panchami", bnName: "নাগ পঞ্চমী", date: "2027-08-06", type: "other" },
+            { name: "Putrada Ekadashi", bnName: "পুত্রদা একাদশী", date: "2027-08-12", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-08-14", type: "other" },
+            { name: "Raksha Bandhan", bnName: "রাখী পূর্ণিমা", date: "2027-08-17", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-08-20", type: "other" },
+            { name: "Janmashtami", bnName: "কৃষ্ণ জন্মাষ্টমী", date: "2027-08-25", type: "major" },
+            { name: "Aja Ekadashi", bnName: "অজা একাদশী", date: "2027-08-28", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-08-29", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-08-30", type: "other" },
+            { name: "Bhadrapada Amavasya", bnName: "ভাদ্রপদ অমাবস্যা", date: "2027-08-31", type: "moon" },
+            { name: "Ganesh Chaturthi", bnName: "গণেশ চতুর্থী", date: "2027-09-04", type: "major" },
+            { name: "Parivartini Ekadashi", bnName: "পরিবর্তিনী একাদশী", date: "2027-09-11", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-09-13", type: "other" },
+            { name: "Anant Chaturdashi", bnName: "অনন্ত চতুর্দশী", date: "2027-09-14", type: "other" },
+            { name: "Bhadrapada Purnima", bnName: "ভাদ্রপদ পূর্ণিমা", date: "2027-09-15", type: "moon" },
+            { name: "Kanya Sankranti", bnName: "কন্যা সংক্রান্তি / বিশ্বকর্মা পূজা", date: "2027-09-17", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-09-19", type: "other" },
+            { name: "Indira Ekadashi", bnName: "ইন্দিরা একাদশী", date: "2027-09-26", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-09-27", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-09-28", type: "other" },
+            { name: "Mahalaya", bnName: "মহালয়া", date: "2027-09-30", type: "major" },
+            { name: "Kalparambha", bnName: "কল্পারম্ভ", date: "2027-10-05", type: "major" },
+            { name: "Durga Puja (Maha Shashthi)", bnName: "দুর্গা পূজা (মহাষষ্ঠী)", date: "2027-10-06", type: "major" },
+            { name: "Durga Puja (Maha Saptami)", bnName: "দুর্গা পূজা (মহাসপ্তমী)", date: "2027-10-07", type: "major" },
+            { name: "Durga Puja (Maha Ashtami)", bnName: "দুর্গা পূজা (মহাষ্টমী)", date: "2027-10-08", type: "major" },
+            { name: "Durga Puja (Maha Navami)", bnName: "দুর্গা পূজা (মহানবমী)", date: "2027-10-09", type: "major" },
+            { name: "Vijaya Dashami", bnName: "বিজয়া দশমী / দশেরা", date: "2027-10-10", type: "major" },
+            { name: "Papankusha Ekadashi", bnName: "পাপঙ্কুশা একাদশী", date: "2027-10-11", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-10-12", type: "other" },
+            { name: "Kojagari Lakshmi Puja", bnName: "কোজাগরী লক্ষ্মী পূজা", date: "2027-10-15", type: "major" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-10-18", type: "other" },
+            { name: "Rama Ekadashi", bnName: "রমা একাদশী", date: "2027-10-25", type: "ekadashi" },
+            { name: "Dhanteras", bnName: "ধনতেরাস", date: "2027-10-27", type: "other" },
+            { name: "Kali Puja / Diwali", bnName: "কালী পূজা / দীপাবলি", date: "2027-10-29", type: "major" },
+            { name: "Govardhan Puja", bnName: "গোবর্ধন পূজা", date: "2027-10-30", type: "major" },
+            { name: "Bhai Phota", bnName: "ভাইফোঁটা", date: "2027-10-31", type: "major" },
+            { name: "Chhath Puja", bnName: "ছট পূজা", date: "2027-11-04", type: "major" },
+            { name: "Devutthana Ekadashi", bnName: "দেবোত্থান একাদশী", date: "2027-11-10", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-11-11", type: "other" },
+            { name: "Kartik Purnima", bnName: "কার্তিক পূর্ণিমা / রাস যাত্রা", date: "2027-11-14", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-11-17", type: "other" },
+            { name: "Utpanna Ekadashi", bnName: "উৎপন্না একাদশী", date: "2027-11-24", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-11-25", type: "other" },
+            { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-11-26", type: "other" },
+            { name: "Margashirsha Amavasya", bnName: "অগ্রহায়ণ অমাবস্যা", date: "2027-11-28", type: "moon" },
+            { name: "Mokshada Ekadashi", bnName: "মোক্ষদা একাদশী", date: "2027-12-09", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-12-11", type: "other" },
+            { name: "Margashirsha Purnima", bnName: "অগ্রহায়ণ পূর্ণিমা", date: "2027-12-13", type: "moon" },
+            { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2027-12-16", type: "other" },
+            { name: "Saphala Ekadashi", bnName: "সফলা একাদশী", date: "2027-12-23", type: "ekadashi" },
+            { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-12-25", type: "other" },
+            { name: "Paush Amavasya", bnName: "পৌষ অমাবস্যা", date: "2027-12-27", type: "moon" }
         ];
 
         let currentFestFilter = 'all';
@@ -1430,9 +1554,10 @@
         }
 
         function getUpcomingFestivals() {
+            // Pudhil 365 divasanchya events filter kara
             return systemFestivalData
                 .map(f => ({ ...f, daysLeft: getDaysDiff(f.date) }))
-                .filter(f => f.daysLeft >= 0)
+                .filter(f => f.daysLeft >= 0 && f.daysLeft <= 365)
                 .sort((a, b) => a.daysLeft - b.daysLeft);
         }
 
@@ -2676,15 +2801,22 @@
                 const link = e.target.closest('a');
                 if (!link) return;
 
-                const href = link.getAttribute('href');
-                if (href && href.startsWith('/') && !href.includes('.') && !href.startsWith('//')) {
+                let href = link.getAttribute('href');
+                if (href && (href.startsWith('/') || href.startsWith('#')) && !href.includes('.') && !href.startsWith('//')) {
+                    
+                    if (href.startsWith('#')) {
+                        href = '/' + href.substring(1);
+                    }
+                    
                     const targetId = href === '/' ? 'home' : href.substring(1);
                     const target = document.getElementById(targetId);
                     
                     if (target || href === '/') {
                         e.preventDefault();
                         try {
-                            if (history.pushState) history.pushState(null, null, href);
+                            if (history.pushState && window.location.pathname !== href) {
+                                history.pushState(null, null, href);
+                            }
                             if (typeof updateDynamicMeta === 'function') updateDynamicMeta(href);
                         } catch(err) {}
                         
