@@ -138,6 +138,33 @@
         updateDynamicMeta(window.location.pathname + window.location.hash + window.location.search);
     </script>
 
+    <!-- 🎯 Global Image Handlers - Defined early to prevent ReferenceError -->
+    <script>
+        window.handleImageLoad = function(img) {
+            img.dataset.failed = 'false';
+            img.classList.remove('opacity-0');
+            if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
+                img.previousElementSibling.style.display = 'none';
+            }
+        };
+
+        window.handleImageError = function(img) {
+            img.dataset.failed = 'true';
+            img.classList.add('opacity-0'); // Ensure it stays hidden
+            if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
+                img.previousElementSibling.style.display = 'flex'; // Show loader
+            }
+        };
+
+        // Auto-retry loading images when internet comes back
+        window.addEventListener('online', function() {
+            document.querySelectorAll('img[data-failed="true"]').forEach(function(img) {
+                const currentSrc = img.src.split('?')[0]; // Remove previous cache buster if any
+                img.src = currentSrc + '?retry=' + Date.now();
+            });
+        });
+    </script>
+
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Lucide Icons -->
@@ -376,15 +403,29 @@
             background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%); z-index: 5; overflow: hidden;
         }
         
-        /* 🎯 Sleek Shimmer Loader */
-        .shimmer-loader {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(234, 88, 12, 0.15);
-            border-top-color: #ea580c;
-            border-right-color: #fbbf24;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.4));
+        /* 🎯 New UIUSVS Themed Loader */
+        .uiusvs-loader-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-glow 2s infinite alternate ease-in-out;
+        }
+        .uiusvs-loader-icon {
+            font-size: 1.5rem;
+            margin-bottom: 2px;
+            animation: spin 3s linear infinite;
+        }
+        .uiusvs-loader-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            background: linear-gradient(90deg, #b91c1c, #f59e0b, #b91c1c);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sweep-shine 2s linear infinite;
+            letter-spacing: 0.15em;
         }
 
         .media-placeholder::before {
