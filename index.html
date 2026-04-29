@@ -708,7 +708,8 @@
                 <div class="animate-on-scroll is-visible w-full px-2 sm:px-4">
                     <h1 class="font-extrabold text-gray-900 leading-tight md:leading-none mb-3 sm:mb-4 tracking-tighter w-full">
                         <span class="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 text-gray-600">UIU</span>
-                        <span class="text-gradient block whitespace-normal text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[5vw] 2xl:text-[4.5vw] max-w-full text-center pb-1">Sanatani Vidyarthi Samsad</span>
+                        <!-- 🎯 Update: Sanatani Vidyarthi Samsad is now strictly on one line and perfectly responsive -->
+                        <span class="text-gradient block whitespace-nowrap text-[5.8vw] sm:text-[5vw] md:text-[4.5vw] lg:text-[4vw] xl:text-[3.5vw] 2xl:text-[3vw] max-w-full text-center pb-1">Sanatani Vidyarthi Samsad</span>
                     </h1>
                     <h2 class="text-[4.5vw] sm:text-[3.2vw] md:text-[2.2vw] lg:text-[1.8vw] xl:text-[1.5vw] 2xl:text-[1.2vw] text-red-800/90 w-full mx-auto mb-10 sm:mb-12 font-medium font-serif tracking-wide leading-snug">
                         UIUSVS is the official Sanatani student community of United International University.
@@ -1842,7 +1843,17 @@
             }
         }
 
+        window.hasUserClosedNotif = false;
+
         window.closeNotification = () => {
+            window.hasUserClosedNotif = true;
+            
+            // Store event ID so it never shows again for this specific festival
+            if (pendingFestivalNotification) {
+                const eventId = pendingFestivalNotification.name + '_' + pendingFestivalNotification.date;
+                localStorage.setItem('notified_event_id', eventId);
+            }
+
             const notifBox = document.getElementById('festival-notification');
             if(notifBox) {
                 notifBox.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
@@ -2937,70 +2948,78 @@
 
                         const scrollPercent = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
                         
-                        // 🎯 15% Scroll - Event Notification (One user, One event, Single time)
-                        if (scrollPercent >= 0.15 && pendingFestivalNotification) {
+                        // 🎯 5% to Festival Section Scroll Logic (Dynamic Show/Hide)
+                        if (pendingFestivalNotification && !window.hasUserClosedNotif) {
                             const eventId = pendingFestivalNotification.name + '_' + pendingFestivalNotification.date;
-                            const storedEventId = localStorage.getItem('notified_event_id');
-
-                            if (storedEventId !== eventId) {
+                            
+                            if (localStorage.getItem('notified_event_id') !== eventId) {
                                 const notifBox = document.getElementById('festival-notification');
-                                const notifHeader = document.getElementById('notif-fest-header');
-                                const notifName = document.getElementById('notif-fest-name');
-                                const notifDays = document.getElementById('notif-fest-days');
-                                const notifIcon = document.getElementById('notif-fest-icon');
-
-                                if (notifBox) {
-                                    if (isFlagshipNotif) {
-                                        if (notifIcon) {
-                                            notifIcon.textContent = '🌸';
-                                            notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-red-50 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
-                                        }
-                                        if (notifHeader) {
-                                            notifHeader.textContent = "👑 FLAGSHIP EVENT";
-                                            notifHeader.className = "text-[9px] sm:text-[10px] font-extrabold uppercase text-red-600 tracking-widest leading-none mb-0.5";
-                                        }
-                                        if (notifName) notifName.textContent = pendingFestivalNotification.name;
-                                        
-                                        if (notifDays) {
-                                            notifDays.classList.remove('truncate');
-                                            notifDays.innerHTML = pendingFestivalNotification.daysLeft === 0 
-                                                ? "🎉 <span class='font-bold text-red-600'>Happening today! Joy Maa Saraswati!</span>" 
-                                                : `আসছে আমাদের প্রাণের পুজো!<br><span class="font-bold text-red-600">⏳ Only ${pendingFestivalNotification.daysLeft} Days Left!</span>`;
-                                        }
-                                        notifBox.classList.remove('border-orange-200');
-                                        notifBox.classList.add('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
-                                        
-                                        notifBox.classList.remove('hidden');
-                                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
-                                    } else {
-                                        if (notifIcon) {
-                                            notifIcon.textContent = '🪔';
-                                            notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner";
-                                        }
-                                        if (notifHeader) {
-                                            notifHeader.textContent = "Next Festival";
-                                            notifHeader.className = "text-[9px] sm:text-[10px] font-bold uppercase text-orange-600 tracking-wider leading-none mb-0.5";
-                                        }
-                                        if (notifName) notifName.textContent = pendingFestivalNotification.name;
-                                        
-                                        if (notifDays) {
-                                            notifDays.classList.add('truncate');
-                                            notifDays.textContent = pendingFestivalNotification.daysLeft === 0 ? "Happening today! 🙏" : `${pendingFestivalNotification.daysLeft} days remaining`;
-                                        }
-                                        
-                                        notifBox.classList.remove('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
-                                        notifBox.classList.add('border-orange-200');
-
-                                        notifBox.classList.remove('hidden');
-                                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
-                                        
-                                        setTimeout(window.closeNotification, 8000); 
-                                    }
+                                const festivalsSection = document.getElementById('festivals');
+                                
+                                if (notifBox && festivalsSection) {
+                                    const rect = festivalsSection.getBoundingClientRect();
+                                    // 5% scroll theke shuru hobe, abong Festival section half-visible hole theme jabe
+                                    const inZone = scrollPercent >= 0.05 && rect.top > (window.innerHeight * 0.4);
                                     
-                                    localStorage.setItem('notified_event_id', eventId);
+                                    if (inZone && notifBox.classList.contains('hidden')) {
+                                        // Populate Data
+                                        const notifHeader = document.getElementById('notif-fest-header');
+                                        const notifName = document.getElementById('notif-fest-name');
+                                        const notifDays = document.getElementById('notif-fest-days');
+                                        const notifIcon = document.getElementById('notif-fest-icon');
+
+                                        if (isFlagshipNotif) {
+                                            if (notifIcon) {
+                                                notifIcon.textContent = '🌸';
+                                                notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-red-50 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
+                                            }
+                                            if (notifHeader) {
+                                                notifHeader.textContent = "👑 FLAGSHIP EVENT";
+                                                notifHeader.className = "text-[9px] sm:text-[10px] font-extrabold uppercase text-red-600 tracking-widest leading-none mb-0.5";
+                                            }
+                                            if (notifName) notifName.textContent = pendingFestivalNotification.name;
+                                            
+                                            if (notifDays) {
+                                                notifDays.classList.remove('truncate');
+                                                notifDays.innerHTML = pendingFestivalNotification.daysLeft === 0 
+                                                    ? "🎉 <span class='font-bold text-red-600'>Happening today! Joy Maa Saraswati!</span>" 
+                                                    : `আসছে আমাদের প্রাণের পুজো!<br><span class="font-bold text-red-600">⏳ Only ${pendingFestivalNotification.daysLeft} Days Left!</span>`;
+                                            }
+                                            notifBox.classList.remove('border-orange-200');
+                                            notifBox.classList.add('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                                        } else {
+                                            if (notifIcon) {
+                                                notifIcon.textContent = '🪔';
+                                                notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner";
+                                            }
+                                            if (notifHeader) {
+                                                notifHeader.textContent = "Next Festival";
+                                                notifHeader.className = "text-[9px] sm:text-[10px] font-bold uppercase text-orange-600 tracking-wider leading-none mb-0.5";
+                                            }
+                                            if (notifName) notifName.textContent = pendingFestivalNotification.name;
+                                            
+                                            if (notifDays) {
+                                                notifDays.classList.add('truncate');
+                                                notifDays.textContent = pendingFestivalNotification.daysLeft === 0 ? "Happening today! 🙏" : `${pendingFestivalNotification.daysLeft} days remaining`;
+                                            }
+                                            notifBox.classList.remove('border-red-400', 'shadow-[0_0_20px_rgba(220,38,38,0.25)]', 'bg-gradient-to-r', 'from-white', 'to-red-50/50');
+                                            notifBox.classList.add('border-orange-200');
+                                        }
+                                        
+                                        notifBox.classList.remove('hidden');
+                                        notifBox.classList.add('flex');
+                                        setTimeout(() => { notifBox.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none'); }, 50);
+                                        
+                                    } else if (!inZone && !notifBox.classList.contains('hidden')) {
+                                        // Hide logically
+                                        notifBox.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                                        setTimeout(() => {
+                                            notifBox.classList.add('hidden');
+                                            notifBox.classList.remove('flex');
+                                        }, 500);
+                                    }
                                 }
                             }
-                            pendingFestivalNotification = null; // Clear to prevent running again in this session
                         }
 
                         if (scrollPercent >= 0.45 && !quizSuggestionShown && !sessionStorage.getItem('quiz_suggested')) {
