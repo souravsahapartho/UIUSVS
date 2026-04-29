@@ -492,8 +492,8 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
-    <!-- 🎯 Daily Festival Notification Popup (Compact & Left-Aligned for ALL devices) -->
-    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit min-w-[240px] max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden flex items-center">
+    <!-- 🎯 Daily Festival Notification Popup (Compact, Left-Aligned & Fixed Class Bug) -->
+    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit min-w-[240px] max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden items-center">
         <button onclick="closeNotification()" class="absolute top-1.5 right-1.5 text-gray-400 hover:text-red-500 transition-colors p-1 z-10" aria-label="Close">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
@@ -758,7 +758,7 @@
                             </div>
                         </div>
                         <div class="flex-shrink-0 w-full sm:w-auto text-center sm:text-right">
-                             <div id="flagship-countdown" class="inline-block bg-white text-red-700 font-bold px-5 py-2 rounded-full text-sm border border-red-200 shadow-sm whitespace-nowrap anim-breath w-full sm:w-auto">
+                             <div id="flagship-countdown" class="inline-block bg-white text-red-700 font-bold px-5 py-2 rounded-full text-sm border border-red-200 shadow-sm whitespace-nowrap anim-breath w-full sm:w-auto tracking-wide">
                                  Calculating...
                              </div>
                         </div>
@@ -1479,7 +1479,7 @@
             { name: "Kamika Ekadashi", bnName: "কামিকা একাদশী", date: "2027-07-29", type: "ekadashi" },
             { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2027-07-31", type: "other" },
             { name: "Shravana Amavasya", bnName: "শ্রাবণ অমাবস্যা", date: "2027-08-02", type: "moon" },
-            { name: "Nag Panchami", bnName: "নাগ পঞ্চমী", date: "2027-08-06", type: "other" },
+            { name: "Nag Panchami", bnName: "না নাগ পঞ্চমী", date: "2027-08-06", type: "other" },
             { name: "Putrada Ekadashi", bnName: "পুত্রদা একাদশী", date: "2027-08-12", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত", date: "2027-08-14", type: "other" },
             { name: "Raksha Bandhan", bnName: "রাখী পূর্ণিমা", date: "2027-08-17", type: "major" },
@@ -1846,7 +1846,10 @@
             const notifBox = document.getElementById('festival-notification');
             if(notifBox) {
                 notifBox.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
-                setTimeout(() => notifBox.classList.add('hidden'), 500);
+                setTimeout(() => {
+                    notifBox.classList.add('hidden');
+                    notifBox.classList.remove('flex');
+                }, 500);
             }
         };
 
