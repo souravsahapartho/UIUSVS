@@ -492,32 +492,32 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
-    <!-- Daily Festival Notification Popup -->
-    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
-        <button onclick="closeNotification()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1 z-10">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <!-- 🎯 Daily Festival Notification Popup (Compact & Left-Aligned for ALL devices) -->
+    <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit min-w-[240px] max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden flex items-center">
+        <button onclick="closeNotification()" class="absolute top-1.5 right-1.5 text-gray-400 hover:text-red-500 transition-colors p-1 z-10" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
-        <div class="flex items-center gap-3">
-            <div id="notif-fest-icon" class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🪔</div>
+        <div class="flex items-center gap-2 sm:gap-3 w-full">
+            <div id="notif-fest-icon" class="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner">🪔</div>
             <div class="flex-1 min-w-0 pr-4">
-                <p id="notif-fest-header" class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Next Festival</p>
-                <p id="notif-fest-name" class="font-bold text-gray-900 text-sm leading-tight mt-0.5 truncate">...</p>
-                <p id="notif-fest-days" class="text-xs text-gray-600 mt-1 font-medium truncate">...</p>
+                <p id="notif-fest-header" class="text-[9px] sm:text-[10px] font-bold uppercase text-orange-600 tracking-wider leading-none mb-0.5">Next Festival</p>
+                <p id="notif-fest-name" class="font-bold text-gray-900 text-xs sm:text-sm leading-tight truncate">...</p>
+                <p id="notif-fest-days" class="text-[10px] sm:text-xs text-gray-600 font-medium truncate mt-0.5">...</p>
             </div>
         </div>
     </div>
     
     <!-- Quiz Suggestion Popup (Scroll Triggered) -->
-    <div id="quiz-suggestion-toast" class="fixed bottom-24 sm:bottom-6 left-0 right-0 sm:left-auto sm:right-6 mx-4 sm:mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-4 w-[calc(100vw-2rem)] sm:w-auto sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
-        <button onclick="closeQuizSuggestion()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <div id="quiz-suggestion-toast" class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 left-auto mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden">
+        <button onclick="closeQuizSuggestion()" class="absolute top-1.5 right-1.5 text-gray-400 hover:text-red-500 transition-colors p-1 z-10">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner">🧠</div>
-            <div class="flex-1 min-w-0 pr-2">
-                <p class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">Knowledge Test</p>
-                <p id="quiz-toast-text" class="font-bold text-gray-900 text-sm leading-tight mt-0.5 mb-2">How much do you know about Sanatan Dharma?</p>
-                <button onclick="scrollToQuiz()" class="text-xs font-bold text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-4 py-1.5 rounded-full transition-colors shadow-sm w-full sm:w-auto text-center block">Play Now</button>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner">🧠</div>
+            <div class="flex-1 min-w-0 pr-4">
+                <p class="text-[9px] sm:text-[10px] font-bold uppercase text-orange-600 tracking-wider leading-none mb-0.5">Knowledge Test</p>
+                <p id="quiz-toast-text" class="font-bold text-gray-900 text-xs sm:text-sm leading-tight mt-0.5 mb-2 truncate">How much do you know?</p>
+                <button onclick="scrollToQuiz()" class="text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-3 py-1 rounded-full transition-colors shadow-sm w-full text-center block">Play Now</button>
             </div>
         </div>
     </div>
@@ -1561,6 +1561,7 @@
 
         window.openAllFestivalsPopup = () => {
             const popup = document.getElementById('all-festivals-popup');
+            if (!popup) return;
             
             let allUpcoming = getUpcomingFestivals();
             if (currentFestFilter !== 'all') allUpcoming = allUpcoming.filter(f => f.type === currentFestFilter);
@@ -1610,6 +1611,7 @@
 
         function renderPopupList(festivals) {
             const listContainer = document.getElementById('all-festivals-list');
+            if (!listContainer) return; // Fixed possible null error
 
             if (festivals.length === 0) {
                 listContainer.innerHTML = `<p class="text-center text-gray-500 py-6 italic text-sm">No matching events found.</p>`;
@@ -1660,8 +1662,10 @@
 
         window.closeAllFestivalsPopup = () => {
             const popup = document.getElementById('all-festivals-popup');
-            popup.classList.add('hidden');
-            popup.classList.remove('flex');
+            if (popup) {
+                popup.classList.add('hidden');
+                popup.classList.remove('flex');
+            }
             document.body.style.overflow = '';
         };
 
@@ -2457,7 +2461,7 @@
             initVideoSyncAndLoading();
             
             initFestivalSystem();
-            filterFestivals(currentFestFilter); // 🎯 Fix: Eita add kora hoyeche jate load howar sathei festivals show kore!
+            filterFestivals(currentFestFilter);
             initSanatanQuiz(); // 🎯 Render the 50 questions
             
             setInterval(() => { filterFestivals(currentFestFilter); }, 60000);
@@ -2946,11 +2950,11 @@
                                     if (isFlagshipNotif) {
                                         if (notifIcon) {
                                             notifIcon.textContent = '🌸';
-                                            notifIcon.className = "w-10 h-10 bg-red-50 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
+                                            notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-red-50 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner border border-red-200 anim-breath";
                                         }
                                         if (notifHeader) {
                                             notifHeader.textContent = "👑 FLAGSHIP EVENT";
-                                            notifHeader.className = "text-[10px] font-extrabold uppercase text-red-600 tracking-widest";
+                                            notifHeader.className = "text-[9px] sm:text-[10px] font-extrabold uppercase text-red-600 tracking-widest leading-none mb-0.5";
                                         }
                                         if (notifName) notifName.textContent = pendingFestivalNotification.name;
                                         
@@ -2968,11 +2972,11 @@
                                     } else {
                                         if (notifIcon) {
                                             notifIcon.textContent = '🪔';
-                                            notifIcon.className = "w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl flex-shrink-0 shadow-inner";
+                                            notifIcon.className = "w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-inner";
                                         }
                                         if (notifHeader) {
                                             notifHeader.textContent = "Next Festival";
-                                            notifHeader.className = "text-[10px] font-bold uppercase text-orange-600 tracking-wider";
+                                            notifHeader.className = "text-[9px] sm:text-[10px] font-bold uppercase text-orange-600 tracking-wider leading-none mb-0.5";
                                         }
                                         if (notifName) notifName.textContent = pendingFestivalNotification.name;
                                         
