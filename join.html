@@ -21,9 +21,10 @@
     <meta name="twitter:description" content="Step into a vibrant legacy! Join UIU Sanatani Vidyarthi Samsad to celebrate our rich culture, unite with fellow students, and grow together at UIU. Apply today!">
     <meta name="twitter:image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/2026_5.jpeg">
 
-    <!-- Instant Redirect to Main SPA Application -->
+    <!-- 🎯 Smart Clean Redirect without Hash -->
     <script>
-        window.location.replace("/#join");
+        sessionStorage.setItem("svs_redirect_path", "join");
+        window.location.replace("/");
     </script>
 </head>
 <body style="background-color: #fffaf0; text-align: center; font-family: sans-serif; padding-top: 50px;">
