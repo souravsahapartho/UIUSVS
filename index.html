@@ -2407,6 +2407,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // 🎯 Handle Clean Redirects from SEO pages smoothly
+            const redirectPath = sessionStorage.getItem("svs_redirect_path");
+            if (redirectPath) {
+                sessionStorage.removeItem("svs_redirect_path");
+                if (history.replaceState) {
+                    history.replaceState(null, '', '/' + redirectPath);
+                }
+            }
+
             let isPageLoaded = false;
             const preloader = document.getElementById('page-preloader');
             const hideLoader = () => {
