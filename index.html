@@ -139,9 +139,8 @@
         updateDynamicMeta(window.location.pathname + window.location.hash + window.location.search);
     </script>
 
-    <!-- 🎯 Global Image Handlers (Bomb-Proof Update) -->
+    <!-- 🎯 Global Image Handlers (Bomb-Proof & Enhanced Loader Update) -->
     <script>
-        // Fallback global functions to prevent ReferenceErrors from any lingering cached inline attributes
         window.handleImageLoad = function(img) {
             if(img && img.classList) {
                 img.dataset.failed = 'false';
@@ -157,17 +156,13 @@
                 img.dataset.failed = 'true';
                 img.classList.add('opacity-0');
                 if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
+                    // Gracefully keep showing the UIUSVS loader as a clean placeholder
                     img.previousElementSibling.style.display = 'flex';
-                    const loaderIcon = img.previousElementSibling.querySelector('.uiusvs-loader-icon');
-                    if (loaderIcon) { loaderIcon.textContent = '⚠️'; loaderIcon.style.animation = 'none'; }
-                    const loaderText = img.previousElementSibling.querySelector('.uiusvs-loader-text');
-                    if (loaderText) { loaderText.textContent = 'FAILED'; loaderText.style.animation = 'none'; }
                 }
             }
         };
 
         // Advanced Global Event Delegation (Capturing Phase)
-        // This catches ALL load/error events seamlessly
         document.addEventListener('load', function(e) {
             if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
                 window.handleImageLoad(e.target);
@@ -193,7 +188,7 @@
         // Auto-retry loading images when internet comes back
         window.addEventListener('online', function() {
             document.querySelectorAll('img[data-failed="true"]').forEach(function(img) {
-                const currentSrc = img.src.split('?')[0]; // Remove previous cache buster if any
+                const currentSrc = img.src.split('?')[0]; 
                 img.src = currentSrc + '?retry=' + Date.now();
             });
         });
@@ -436,35 +431,51 @@
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
             background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%); z-index: 5; overflow: hidden;
         }
+
+        .media-placeholder::before {
+            content: ''; 
+            position: absolute; 
+            width: 70px; 
+            height: 70px; 
+            border: 2px solid rgba(234, 88, 12, 0.1);
+            border-top: 2px solid #ea580c;
+            border-radius: 50%; 
+            animation: spin 1s linear infinite;
+        }
         
-        /* 🎯 UIUSVS Themed Loader */
+        /* 🎯 UIUSVS Themed Loader - Updated Design */
         .uiusvs-loader-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            animation: pulse-glow 2s infinite alternate ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+        .uiusvs-loader-wrapper::after {
+            content: 'LOADING';
+            font-size: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            color: #ea580c;
+            margin-top: 4px;
+            animation: placeholder-pulse 0.8s infinite alternate;
         }
         .uiusvs-loader-icon {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             margin-bottom: 2px;
-            animation: spin 3s linear infinite;
+            animation: float 2s ease-in-out infinite;
         }
         .uiusvs-loader-text {
             font-family: 'Playfair Display', serif;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             background: linear-gradient(90deg, #b91c1c, #f59e0b, #b91c1c);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: sweep-shine 2s linear infinite;
             letter-spacing: 0.15em;
-        }
-
-        .media-placeholder::before {
-            content: ''; position: absolute; width: 80%; height: 80%; border: 1px solid rgba(185, 28, 28, 0.05);
-            border-radius: 50%; animation: spin 10s linear infinite;
         }
 
         /* Completely Hide Broken Alt Text & Image Icons globally */
