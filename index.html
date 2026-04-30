@@ -1865,7 +1865,12 @@
         };
 
         // 🎯 Quiz Suggestion Handlers
+        window.quizSuggestionClosed = false;
+
         window.closeQuizSuggestion = () => {
+            window.quizSuggestionClosed = true;
+            localStorage.setItem('quiz_suggested_date', new Date().toDateString());
+            
             const toast = document.getElementById('quiz-suggestion-toast');
             if(toast) {
                 toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
@@ -2929,7 +2934,6 @@
             });
 
             let isScrolling = false;
-            let quizSuggestionShown = false; 
             let lastScrollY = window.scrollY; 
             
             // Catchy phrases for Quiz Toast
@@ -3031,34 +3035,40 @@
                             }
                         }
 
-                        if (scrollPercent >= 0.45 && !quizSuggestionShown && !sessionStorage.getItem('quiz_suggested')) {
-                            quizSuggestionShown = true;
-                            sessionStorage.setItem('quiz_suggested', 'true');
-                            
-                            if (typeof window.closeNotification === 'function') {
-                                window.closeNotification();
-                            }
+                        // 🎯 Smart Knowledge Test Popup Logic (Gallery to Quiz, Once per day)
+                        const todayStr = new Date().toDateString();
+                        const isQuizNotifiedToday = localStorage.getItem('quiz_suggested_date') === todayStr;
 
+                        if (!isQuizNotifiedToday && !window.quizSuggestionClosed) {
+                            const gallerySection = document.getElementById('gallery');
+                            const quizSection = document.getElementById('quiz');
                             const toast = document.getElementById('quiz-suggestion-toast');
                             const toastText = document.getElementById('quiz-toast-text');
-                            
-                            if (toast && toastText) {
-                                // Randomly pick a catchy phrase
-                                const randomPhrase = quizCatchyPhrases[Math.floor(Math.random() * quizCatchyPhrases.length)];
-                                toastText.textContent = randomPhrase;
 
-                                toast.classList.remove('hidden');
-                                setTimeout(() => {
-                                    toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
-                                }, 50);
-                                setTimeout(window.closeQuizSuggestion, 12000);
-                            }
-                        }
+                            if (gallerySection && quizSection && toast && toastText) {
+                                const galleryRect = gallerySection.getBoundingClientRect();
+                                const quizRect = quizSection.getBoundingClientRect();
 
-                        if (quizSuggestionShown && isScrollingUp) {
-                            const toast = document.getElementById('quiz-suggestion-toast');
-                            if (toast && !toast.classList.contains('hidden') && !toast.classList.contains('opacity-0')) {
-                                window.closeQuizSuggestion();
+                                // Check if user is past Gallery half-way and hasn't reached Quiz half-way
+                                const inZone = galleryRect.top <= (window.innerHeight * 0.5) && quizRect.top > (window.innerHeight * 0.5);
+
+                                if (inZone && toast.classList.contains('hidden')) {
+                                    const randomPhrase = quizCatchyPhrases[Math.floor(Math.random() * quizCatchyPhrases.length)];
+                                    toastText.textContent = randomPhrase;
+
+                                    toast.classList.remove('hidden');
+                                    setTimeout(() => {
+                                        toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+                                    }, 50);
+                                } else if (!inZone && !toast.classList.contains('hidden')) {
+                                    toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                                    setTimeout(() => toast.classList.add('hidden'), 500);
+                                    
+                                    // If user scrolled past the Quiz section, mark as shown for today
+                                    if (quizRect.top <= (window.innerHeight * 0.5)) {
+                                        localStorage.setItem('quiz_suggested_date', todayStr);
+                                    }
+                                }
                             }
                         }
 
