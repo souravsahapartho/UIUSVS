@@ -117,6 +117,7 @@
 
                 document.title = title;
                 
+                document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
                 document.querySelector('meta[name="title"]')?.setAttribute("content", title);
                 document.querySelector('meta[name="description"]')?.setAttribute("content", desc);
                 
@@ -666,13 +667,13 @@
             </a>
             <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-sans">
                 <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
-                <a href="/festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
-                <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
-                <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
-                <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
+                <a href="#festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
+                <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
+                <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
+                <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
             <div class="flex items-center gap-3 sm:gap-4">
-                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
+                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors" aria-label="Toggle Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
@@ -682,11 +683,11 @@
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50 max-h-[85vh] overflow-y-auto">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
                 <a href="/" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Home</a>
-                <a href="/festivals" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Festivals</a>
-                <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Gallery</a>
-                <a href="/about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">About</a>
-                <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Videos</a>
-                <a href="/join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors">Join SVS</a>
+                <a href="#festivals" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Festivals</a>
+                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Gallery</a>
+                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">About</a>
+                <a href="#latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Videos</a>
+                <a href="#join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors">Join SVS</a>
             </nav>
         </div>
     </header>
@@ -708,7 +709,6 @@
                 <div class="animate-on-scroll is-visible w-full px-2 sm:px-4">
                     <h1 class="font-extrabold text-gray-900 leading-tight md:leading-none mb-3 sm:mb-4 tracking-tighter w-full">
                         <span class="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 text-gray-600">UIU</span>
-                        <!-- 🎯 Update: Sanatani Vidyarthi Samsad is now strictly on one line and perfectly responsive -->
                         <span class="text-gradient block whitespace-nowrap text-[5.8vw] sm:text-[5vw] md:text-[4.5vw] lg:text-[4vw] xl:text-[3.5vw] 2xl:text-[3vw] max-w-full text-center pb-1">Sanatani Vidyarthi Samsad</span>
                     </h1>
                     <h2 class="text-[4.5vw] sm:text-[3.2vw] md:text-[2.2vw] lg:text-[1.8vw] xl:text-[1.5vw] 2xl:text-[1.2vw] text-red-800/90 w-full mx-auto mb-10 sm:mb-12 font-medium font-serif tracking-wide leading-snug">
@@ -717,8 +717,8 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
-                    <a href="/festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
+                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
+                    <a href="#festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
                 </div>
             </div>
         </section>
@@ -1399,7 +1399,7 @@
             { name: "Sankashti Chaturthi", bnName: "সংকষ্টী চতুর্থী", date: "2026-11-27", type: "other" },
 
             // --- DECEMBER 2026 ---
-            { name: "Utpanna Ekadashi", bnName: "উৎপন্না একাদশী", date: "2026-12-04", type: "ekadashi" },
+            { name: "Utpanna Ekadashi", bnName: "উৎপন্না Ekadashi", date: "2026-12-04", type: "ekadashi" },
             { name: "Pradosh Vrat", bnName: "প্রদোষ ব্রত (কৃষ্ণ)", date: "2026-12-06", type: "other" },
             { name: "Masik Shivaratri", bnName: "মাসিক শিবরাত্রি", date: "2026-12-07", type: "other" },
             { name: "Margashirsha Amavasya", bnName: "অগ্রহায়ণ অমাবস্যা", date: "2026-12-08", type: "moon" },
@@ -2085,7 +2085,7 @@
             { text: "ভক্তি ছাড়া ঈশ্বর লাভ হয় গঠন না।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
             { text: "শিক্ষাই মানুষের প্রকৃত শক্তি।", author: "স্বামী বিবেকানন্দ" },
             { text: "মনই মানুষের বন্ধু, মনই তৃতীয় মানুষের শত্রু।", author: "শ্রীমদ্ভগবদ্গীতা" },
-            { text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ী।", author: "শ্রীমদ্ভগবদ্গীতা" },
+            { text: "যে নিজেকে জয় করেছে, বসু, সে-ই প্রকৃত বিজয়ীর।", author: "শ্রীমদ্ভগবদ্গীতা" },
             { text: "ধৈর্য, সহনশীলতা ও ভালোবাসাই জীবনের মূলমন্ত্র।", author: "মা সারদা দেবী" },
             { text: "সব ধর্মের লক্ষ্য এক—ঈশ্বর লাভ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" }
         ];
