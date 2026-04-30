@@ -21,9 +21,10 @@
     <meta name="twitter:description" content="Explore the beautiful memories, colorful festivals, and vibrant celebrations of the UIU Sanatani Vidyarthi Samsad.">
     <meta name="twitter:image" content="https://uiusvs.netlify.app/Saraswati_Puja_2025/13.jpg">
 
-    <!-- Instant Redirect to Main SPA Application -->
+    <!-- 🎯 Smart Clean Redirect without Hash -->
     <script>
-        window.location.replace("/#gallery");
+        sessionStorage.setItem("svs_redirect_path", "gallery");
+        window.location.replace("/");
     </script>
 </head>
 <body style="background-color: #fffaf0; text-align: center; font-family: sans-serif; padding-top: 50px;">
