@@ -504,6 +504,120 @@
 </head>
 <body class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active" oncontextmenu="return false;">
 
+    <!-- 🎯 Saraswati Puja Flagship Central Modal (Ultra Premium Classic Theme) -->
+    <div id="saraswati-modal-overlay" class="fixed inset-0 bg-black/90 z-[9999] hidden items-center justify-center p-4 backdrop-blur-md transition-opacity duration-500 opacity-0">
+        <div id="saraswati-modal-card" class="bg-[#fcfaf2] rounded-xl w-full max-w-[280px] sm:max-w-xs overflow-hidden shadow-[0_20px_50px_rgba(139,0,0,0.5)] transform scale-90 transition-all duration-500 relative border-2 border-[#d4af37] ring-4 ring-[#8b0000]/80">
+            
+            <!-- 🌸 Thematic Background Elements (Golden/Brown Opacity) -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none z-0 mix-blend-multiply opacity-[0.06]">
+                <div class="absolute top-12 left-0 text-6xl -rotate-12">🪕</div>
+                <div class="absolute bottom-16 right-0 text-6xl rotate-12">📚</div>
+                <div class="absolute top-20 right-2 text-5xl rotate-45">🦢</div>
+                <div class="absolute bottom-20 left-2 text-5xl -rotate-12">🪷</div>
+                <!-- Mandala fading -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 border-2 border-[#8b0000] rounded-full border-dashed animate-[spin_25s_linear_infinite]"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border-2 border-[#d4af37] rounded-full border-dotted animate-[spin_15s_linear_infinite_reverse]"></div>
+            </div>
+
+            <!-- Close Button (Classic Style) -->
+            <button onclick="closeSaraswatiModal()" class="absolute top-2 right-2 text-[#fde68a] hover:text-white rounded-full p-1.5 transition-colors z-30 bg-[#4a0404]/60 backdrop-blur-md shadow-md border border-[#d4af37]" aria-label="Close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            
+            <!-- 🎯 Custom CSS Royal Banner -->
+            <div class="w-full h-32 sm:h-36 relative overflow-hidden flex flex-col items-center justify-center bg-gradient-to-b from-[#5c0000] via-[#8b0000] to-[#4a0404] z-10 border-b-[3px] border-[#d4af37] shadow-[0_4px_15px_rgba(0,0,0,0.3)]">
+                <!-- Royal Sunburst -->
+                <div class="absolute inset-0 opacity-20" style="background: repeating-conic-gradient(from 0deg, #d4af37 0deg 10deg, transparent 10deg 20deg);"></div>
+                
+                <!-- Glowing Halo (Prabha) -->
+                <div class="absolute w-24 h-24 bg-gradient-to-tr from-[#ffe066] to-[#d4af37] rounded-full opacity-50 blur-lg animate-pulse"></div>
+                <div class="absolute w-20 h-20 border-[2px] border-[#fde68a] rounded-full opacity-30 border-dashed animate-[spin_10s_linear_infinite]"></div>
+                
+                <!-- Central Goddess Motifs -->
+                <div class="relative z-20 flex flex-col items-center mt-3">
+                    <div class="flex items-end justify-center gap-1 drop-shadow-[0_5px_5px_rgba(0,0,0,0.6)] text-4xl sm:text-5xl">
+                        <!-- Swan -->
+                        <span class="transform -scale-x-100 rotate-12 translate-y-2 translate-x-3 z-10 text-[28px] sm:text-[32px] opacity-90">🦢</span>
+                        <!-- Lotus -->
+                        <span class="text-[55px] sm:text-[65px] z-20 relative">🪷</span>
+                        <!-- Veena -->
+                        <span class="transform rotate-12 translate-y-2 -translate-x-3 z-30 text-[28px] sm:text-[32px] drop-shadow-[0_2px_4px_rgba(255,215,0,0.5)]">🪕</span>
+                    </div>
+                    <!-- Golden Gradient Text -->
+                    <span class="text-[10px] sm:text-[11px] font-black tracking-[0.3em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] border-t border-b border-[#d4af37]/50 py-0.5 mt-1 px-3 bg-gradient-to-r from-[#fef08a] via-[#d4af37] to-[#fef08a] text-transparent bg-clip-text">Joy Maa Saraswati</span>
+                </div>
+                
+                <!-- Flagship Golden Tag -->
+                <div class="absolute top-2 left-2 z-20 bg-[#3f0000]/90 px-2 py-0.5 rounded text-[8px] font-bold text-[#fde68a] tracking-wider shadow-md uppercase border border-[#d4af37] flex items-center gap-1">
+                    <span class="live-dot !w-1.5 !h-1.5 !mr-0 !bg-[#fde68a] shadow-[0_0_5px_#fde68a]"></span> Flagship
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="px-5 pb-5 text-center relative z-20 -mt-6">
+                <!-- Golden Icon Overlap -->
+                <div class="w-12 h-12 mx-auto bg-gradient-to-br from-[#fffaf0] to-[#fef3c7] rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.2)] border-2 border-[#d4af37] flex items-center justify-center text-xl mb-1.5 relative z-30 animate-float">📚</div>
+                
+                <h3 id="saraswati-modal-title" class="text-xl sm:text-2xl font-black text-[#6b0f1a] font-serif mb-0 leading-tight">Saraswati Puja</h3>
+                <p id="saraswati-modal-date" class="text-[9px] sm:text-[10px] font-extrabold text-[#b45309] mb-4 tracking-widest uppercase">...</p>
+                
+                <!-- Royal Live Countdown Grid -->
+                <div class="grid grid-cols-4 gap-1.5 mb-5 text-[#8b0000]" id="saraswati-live-countdown">
+                    <div class="bg-gradient-to-b from-white to-[#fef3c7] border border-[#d4af37] rounded-lg py-1.5 shadow-[0_2px_5px_rgba(212,175,55,0.3)]">
+                        <div class="text-base sm:text-lg font-black leading-none drop-shadow-sm" id="sm-days">00</div>
+                        <div class="text-[7px] sm:text-[8px] font-bold uppercase tracking-wider text-[#92400e] mt-0.5">Days</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-white to-[#fef3c7] border border-[#d4af37] rounded-lg py-1.5 shadow-[0_2px_5px_rgba(212,175,55,0.3)]">
+                        <div class="text-base sm:text-lg font-black leading-none drop-shadow-sm" id="sm-hours">00</div>
+                        <div class="text-[7px] sm:text-[8px] font-bold uppercase tracking-wider text-[#92400e] mt-0.5">Hrs</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-white to-[#fef3c7] border border-[#d4af37] rounded-lg py-1.5 shadow-[0_2px_5px_rgba(212,175,55,0.3)]">
+                        <div class="text-base sm:text-lg font-black leading-none drop-shadow-sm" id="sm-mins">00</div>
+                        <div class="text-[7px] sm:text-[8px] font-bold uppercase tracking-wider text-[#92400e] mt-0.5">Min</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-white to-[#fef3c7] border border-[#d4af37] rounded-lg py-1.5 shadow-[0_2px_5px_rgba(212,175,55,0.3)]">
+                        <div class="text-base sm:text-lg font-black leading-none drop-shadow-sm" id="sm-secs">00</div>
+                        <div class="text-[7px] sm:text-[8px] font-bold uppercase tracking-wider text-[#92400e] mt-0.5">Sec</div>
+                    </div>
+                </div>
+
+                <button onclick="openPdfModal()" class="w-full bg-gradient-to-r from-[#8b0000] to-[#5c0000] hover:from-[#a52a2a] hover:to-[#8b0000] border border-[#d4af37] text-[#fde68a] rounded-full py-2.5 shadow-[0_4px_15px_rgba(139,0,0,0.4)] text-xs sm:text-sm font-bold tracking-widest uppercase transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Explore Details
+                </button>
+            </div>
+            
+            <!-- 10 Sec Golden Progress Bar -->
+            <div class="w-full h-1.5 bg-[#4a0404] absolute bottom-0 left-0 z-20">
+                <div id="saraswati-modal-progress" class="h-full bg-gradient-to-r from-[#fef08a] via-[#d4af37] to-[#f59e0b] w-full origin-left shadow-[0_0_10px_#d4af37]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎯 Details PDF Modal -->
+    <div id="pdf-modal-overlay" class="fixed inset-0 bg-black/90 z-[99999] hidden items-center justify-center p-2 sm:p-4 backdrop-blur-md transition-opacity duration-500 opacity-0">
+        <div id="pdf-modal-card" class="bg-white rounded-2xl w-full max-w-4xl h-[85vh] sm:h-[90vh] flex flex-col overflow-hidden shadow-2xl transform scale-90 transition-all duration-500 relative border-2 border-orange-300">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-gradient-to-r from-orange-50 to-red-50 p-3 sm:p-4 border-b border-orange-200">
+                <h3 class="font-serif font-bold text-red-900 flex items-center gap-2 text-sm sm:text-lg">
+                    <span class="text-xl">🪕</span> Saraswati Puja - Event Details
+                </h3>
+                <button onclick="closePdfModal()" class="text-gray-500 hover:text-red-600 bg-white rounded-full p-1.5 shadow-sm border border-orange-100 transition-colors" aria-label="Close PDF">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <!-- PDF Frame -->
+            <div class="flex-1 w-full relative bg-gray-100">
+                <!-- 🎯 Updated PDF Link (Ensure souravsahacv.pdf is in your project directory) -->
+                <iframe src="souravsahacv.pdf" class="w-full h-full border-none relative z-10" title="Saraswati Puja Details PDF"></iframe>
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
+                    <div class="spinner border-orange-200 border-l-orange-500 mb-3"></div>
+                    <p class="text-orange-800 text-sm font-bold animate-pulse">Loading Sacred Details...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 🎯 Daily Festival Notification Popup (Compact, Left-Aligned & Fixed Class Bug) -->
     <div id="festival-notification" class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit min-w-[240px] max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden items-center">
         <button onclick="closeNotification()" class="absolute top-1.5 right-1.5 text-gray-400 hover:text-red-500 transition-colors p-1 z-10" aria-label="Close">
@@ -678,13 +792,13 @@
             </a>
             <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-sans">
                 <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
-                <a href="#festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
-                <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
-                <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
-                <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
+                <a href="/festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
+                <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
+                <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
+                <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
             <div class="flex items-center gap-3 sm:gap-4">
-                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
+                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors" aria-label="Toggle Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
@@ -694,11 +808,11 @@
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50 max-h-[85vh] overflow-y-auto">
             <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
                 <a href="/" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Home</a>
-                <a href="#festivals" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Festivals</a>
-                <a href="#gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Gallery</a>
-                <a href="#about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">About</a>
-                <a href="#latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Videos</a>
-                <a href="#join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors">Join SVS</a>
+                <a href="/festivals" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Festivals</a>
+                <a href="/gallery" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Gallery</a>
+                <a href="/about" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">About</a>
+                <a href="/latest-videos" class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg">Videos</a>
+                <a href="/join" class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors">Join SVS</a>
             </nav>
         </div>
     </header>
@@ -728,8 +842,8 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none mx-auto animate-on-scroll delay-100 is-visible mb-16">
-                    <a href="#join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
-                    <a href="#festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
+                    <a href="/join" class="btn-base btn-puja w-full sm:w-auto btn-pulse">Become a Member</a>
+                    <a href="/festivals" class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500">Explore Festivals</a>
                 </div>
             </div>
         </section>
@@ -1233,7 +1347,7 @@
                     <h4 class="font-bold text-red-900 mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="/" class="hover:text-red-600 transition-colors">Home</a></li>
-                        <li><a href="#festivals" class="hover:text-red-600 transition-colors">Festivals</a></li>
+                        <li><a href="/festivals" class="hover:text-red-600 transition-colors">Festivals</a></li>
                         <li><a href="/about" class="hover:text-red-700 transition-colors">About</a></li>
                         <li><a href="/join" class="hover:text-red-700 transition-colors">Join Now</a></li>
                     </ul>
@@ -1311,6 +1425,9 @@
 
         // 🎯 Sampurna 2026 Festival Data
         const systemFestivalData = [
+            // --- MAY 2026 (For Testing Saraswati Puja Modal) ---
+            { name: "Saraswati Puja", bnName: "সরস্বতী পূজা", date: "2026-05-11", type: "major" },
+            
             // --- APRIL 2026 (Upcoming) ---
             { name: "Vaishakha Amavasya", bnName: "বৈশাখ অমাবস্যা", date: "2026-04-17", type: "moon" },
             { name: "Akshaya Tritiya", bnName: "অক্ষয় তৃতীয়া", date: "2026-04-19", type: "major" },
@@ -1776,6 +1893,7 @@
             // 🎯 Flagship Event Countdown (Simple style with live ticking time & Auto Year Update)
             function updateFlagship() {
                 const flagshipEvents = [
+                    { title: 'Saraswati Puja 2026', dateStr: '2026-05-11', label: '11 May, Monday' },
                     { title: 'Saraswati Puja 2027', dateStr: '2027-02-11', label: '11 February, Thursday' },
                     { title: 'Saraswati Puja 2028', dateStr: '2028-01-31', label: '31 January, Monday' }
                 ];
@@ -1844,17 +1962,181 @@
             
             // 🎯 Store Next Festival details for Scroll Trigger
             const saraswatiPuja = upcoming.find(f => f.name === "Saraswati Puja");
+            let upcomingForScroll = [...upcoming];
 
             if (saraswatiPuja && saraswatiPuja.daysLeft <= 50 && saraswatiPuja.daysLeft >= 0) {
-                pendingFestivalNotification = saraswatiPuja;
-                isFlagshipNotif = true;
-            } else if (upcoming.length > 0) {
-                pendingFestivalNotification = upcoming[0];
+                // Trigger Central Modal instead of bottom-left EVERY TIME
+                setTimeout(() => {
+                    if (typeof window.openSaraswatiModal === 'function') {
+                        window.openSaraswatiModal(saraswatiPuja);
+                    }
+                }, 1500);
+                
+                // Exclude Saraswati Puja from regular bottom-left notification
+                upcomingForScroll = upcomingForScroll.filter(f => f.name !== "Saraswati Puja");
+            } 
+            
+            if (upcomingForScroll.length > 0) {
+                pendingFestivalNotification = upcomingForScroll[0];
                 isFlagshipNotif = false;
+            } else {
+                pendingFestivalNotification = null;
             }
         }
 
         window.hasUserClosedNotif = false;
+        let saraswatiModalTimer = null;
+        let saraswatiCountdownInterval = null;
+
+        window.openSaraswatiModal = (fest) => {
+            const overlay = document.getElementById('saraswati-modal-overlay');
+            const card = document.getElementById('saraswati-modal-card');
+            const dateEl = document.getElementById('saraswati-modal-date');
+            
+            if(overlay && card && dateEl) {
+                const festDate = new Date(fest.date);
+                dateEl.textContent = festDate.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                
+                // Live Countdown Engine for Modal
+                const updateModalCountdown = () => {
+                    const now = new Date();
+                    const target = new Date(festDate.getFullYear(), festDate.getMonth(), festDate.getDate());
+                    const diff = target.getTime() - now.getTime();
+                    
+                    if (diff <= 0) {
+                        document.getElementById('saraswati-live-countdown').innerHTML = `<div class="col-span-4 text-base font-bold text-red-600 anim-breath py-2">🎉 Happening Today! 🙏</div>`;
+                        if(saraswatiCountdownInterval) clearInterval(saraswatiCountdownInterval);
+                        return;
+                    }
+
+                    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    const pad = num => num.toString().padStart(2, '0');
+
+                    const dEl = document.getElementById('sm-days');
+                    const hEl = document.getElementById('sm-hours');
+                    const mEl = document.getElementById('sm-mins');
+                    const sEl = document.getElementById('sm-secs');
+
+                    if(dEl) dEl.textContent = pad(d);
+                    if(hEl) hEl.textContent = pad(h);
+                    if(mEl) mEl.textContent = pad(m);
+                    if(sEl) sEl.textContent = pad(s);
+                };
+
+                updateModalCountdown(); // Initial call
+                if(saraswatiCountdownInterval) clearInterval(saraswatiCountdownInterval);
+                saraswatiCountdownInterval = setInterval(updateModalCountdown, 1000);
+
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                
+                // Progress bar animation config
+                const progress = document.getElementById('saraswati-modal-progress');
+                if (progress) {
+                    progress.style.transition = 'none';
+                    progress.style.transform = 'scaleX(1)';
+                    void progress.offsetWidth; // Force reflow
+                }
+
+                window.requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        overlay.classList.remove('opacity-0');
+                        card.classList.remove('scale-90', 'opacity-0');
+                        card.classList.add('scale-100', 'opacity-100');
+                        
+                        // Start 10s width reduction animation
+                        if (progress) {
+                            progress.style.transition = 'transform 10s linear';
+                            progress.style.transform = 'scaleX(0)';
+                        }
+                    }, 50);
+                });
+                
+                document.body.style.overflow = 'hidden';
+
+                // Auto-close after exactly 10 seconds
+                if(saraswatiModalTimer) clearTimeout(saraswatiModalTimer);
+                saraswatiModalTimer = setTimeout(() => {
+                    window.closeSaraswatiModal();
+                }, 10000);
+            }
+        };
+
+        window.closeSaraswatiModal = () => {
+            const overlay = document.getElementById('saraswati-modal-overlay');
+            const card = document.getElementById('saraswati-modal-card');
+
+            if(saraswatiCountdownInterval) clearInterval(saraswatiCountdownInterval);
+            if(saraswatiModalTimer) clearTimeout(saraswatiModalTimer);
+
+            if(overlay && card) {
+                overlay.classList.add('opacity-0');
+                card.classList.remove('scale-100', 'opacity-100');
+                card.classList.add('scale-90', 'opacity-0');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                    document.body.style.overflow = '';
+                }, 500);
+            }
+        };
+
+        window.closeSaraswatiModalAndScroll = () => {
+            window.closeSaraswatiModal();
+            setTimeout(() => {
+                const festivalsSection = document.getElementById('festivals');
+                if (festivalsSection) {
+                    const y = festivalsSection.getBoundingClientRect().top + window.scrollY - 80;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }
+            }, 500);
+        };
+
+        // 🎯 PDF Modal Logic
+        window.openPdfModal = () => {
+            // Close the main compact modal first
+            window.closeSaraswatiModal();
+            
+            const overlay = document.getElementById('pdf-modal-overlay');
+            const card = document.getElementById('pdf-modal-card');
+            
+            if(overlay && card) {
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                
+                window.requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        overlay.classList.remove('opacity-0');
+                        card.classList.remove('scale-90', 'opacity-0');
+                        card.classList.add('scale-100', 'opacity-100');
+                    }, 50);
+                });
+                
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closePdfModal = () => {
+            const overlay = document.getElementById('pdf-modal-overlay');
+            const card = document.getElementById('pdf-modal-card');
+            
+            if(overlay && card) {
+                overlay.classList.add('opacity-0');
+                card.classList.remove('scale-100', 'opacity-100');
+                card.classList.add('scale-90', 'opacity-0');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                    document.body.style.overflow = '';
+                }, 500);
+            }
+        };
 
         window.closeNotification = () => {
             window.hasUserClosedNotif = true;
@@ -1862,7 +2144,7 @@
             // Store event ID so it never shows again for this specific festival
             if (pendingFestivalNotification) {
                 const eventId = pendingFestivalNotification.name + '_' + pendingFestivalNotification.date;
-                localStorage.setItem('notified_event_id', eventId);
+                localStorage.setItem('notified_event_id_final', eventId);
             }
 
             const notifBox = document.getElementById('festival-notification');
@@ -1880,7 +2162,7 @@
 
         window.closeQuizSuggestion = () => {
             window.quizSuggestionClosed = true;
-            localStorage.setItem('quiz_suggested_date', new Date().toDateString());
+            localStorage.setItem('quiz_suggested_date_final', new Date().toDateString());
             
             const toast = document.getElementById('quiz-suggestion-toast');
             if(toast) {
@@ -2976,7 +3258,7 @@
                         if (pendingFestivalNotification && !window.hasUserClosedNotif) {
                             const eventId = pendingFestivalNotification.name + '_' + pendingFestivalNotification.date;
                             
-                            if (localStorage.getItem('notified_event_id') !== eventId) {
+                            if (localStorage.getItem('notified_event_id_final') !== eventId) {
                                 const notifBox = document.getElementById('festival-notification');
                                 const festivalsSection = document.getElementById('festivals');
                                 
@@ -3048,7 +3330,7 @@
 
                         // 🎯 Smart Knowledge Test Popup Logic (Gallery to Quiz, Once per day)
                         const todayStr = new Date().toDateString();
-                        const isQuizNotifiedToday = localStorage.getItem('quiz_suggested_date') === todayStr;
+                        const isQuizNotifiedToday = localStorage.getItem('quiz_suggested_date_final') === todayStr;
 
                         if (!isQuizNotifiedToday && !window.quizSuggestionClosed) {
                             const gallerySection = document.getElementById('gallery');
@@ -3077,7 +3359,7 @@
                                     
                                     // If user scrolled past the Quiz section, mark as shown for today
                                     if (quizRect.top <= (window.innerHeight * 0.5)) {
-                                        localStorage.setItem('quiz_suggested_date', todayStr);
+                                        localStorage.setItem('quiz_suggested_date_final', todayStr);
                                     }
                                 }
                             }
