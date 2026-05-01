@@ -274,14 +274,39 @@
             transform: translateZ(0); 
         }
 
-        /* 🎯 Classic Royal Logo Animations */
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) skewX(-15deg); }
-            50% { transform: translateX(200%) skewX(-15deg); }
-            100% { transform: translateX(200%) skewX(-15deg); }
+        /* 🎯 Saraswati's Pond Custom Animations (Waves, Lotus, Swan) */
+        @keyframes wave-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
-        .animate-shimmer {
-            animation: shimmer 4s infinite;
+        .animate-wave-front {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C250,100 250,0 500,50 C750,100 750,0 1000,50 L1000,100 L0,100 Z' fill='%2338bdf8' opacity='0.4'/%3E%3C/svg%3E");
+            background-size: 50% 100%;
+            animation: wave-scroll 5s linear infinite;
+        }
+        .animate-wave-back {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C250,0 250,100 500,50 C750,0 750,100 1000,50 L1000,100 L0,100 Z' fill='%230284c7' opacity='0.3'/%3E%3C/svg%3E");
+            background-size: 50% 100%;
+            animation: wave-scroll 8s linear infinite reverse;
+        }
+        @keyframes swan-cruise {
+            0% { transform: translateX(-20px) translateY(3px) rotate(-3deg) scaleX(-1); opacity: 0; }
+            10% { opacity: 0.9; }
+            40% { transform: translateX(60px) translateY(-1px) rotate(1deg) scaleX(-1); opacity: 1; }
+            70% { transform: translateX(130px) translateY(2px) rotate(-2deg) scaleX(-1); opacity: 1; }
+            90% { opacity: 0.9; }
+            100% { transform: translateX(190px) translateY(0px) rotate(3deg) scaleX(-1); opacity: 0; }
+        }
+        .animate-swan-cruise {
+            animation: swan-cruise 12s linear infinite;
+            will-change: transform, opacity;
+        }
+        @keyframes lotus-bob {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-3px) rotate(3deg); }
+        }
+        .animate-lotus-bob {
+            animation: lotus-bob 4s ease-in-out infinite;
         }
 
         .text-shadow-white {
@@ -800,39 +825,53 @@
 
     <!-- Header -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center">
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             
-            <!-- 🎯 Premium Classic Animated Logo Area (Theme Matched) -->
-            <a href="/" class="flex items-center gap-2 sm:gap-3 group cursor-pointer relative overflow-hidden py-1.5 pl-1.5 pr-4 sm:pr-6 rounded-full bg-gradient-to-r from-orange-50 to-red-50/80 border border-orange-200 shadow-sm transition-all hover:shadow-md hover:border-orange-300">
+            <!-- 🎯 Saraswati's Pond Animated Logo Area (Enhanced Theme) -->
+            <a href="/" class="flex items-center gap-2 sm:gap-3 group cursor-pointer relative overflow-hidden py-1 pl-1.5 pr-5 rounded-2xl bg-gradient-to-r from-yellow-50 to-white/60 border border-yellow-200 shadow-sm transition-all hover:shadow-md h-12 sm:h-14 min-w-[170px] sm:min-w-[195px]">
                 
-                <!-- Shimmer Light Reflection -->
-                <div class="absolute inset-0 z-0">
-                    <div class="w-1/2 h-full bg-gradient-to-r from-transparent via-white/70 to-transparent animate-shimmer"></div>
+                <!-- Divine Basanti Glow -->
+                <div class="absolute inset-0 bg-gradient-to-r from-yellow-300/30 to-transparent pointer-events-none z-0"></div>
+
+                <!-- Subtle Background Elements -->
+                <div class="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+                    <span class="absolute right-4 top-0 text-3xl opacity-15 rotate-12">🪕</span>
+                    <span class="absolute left-10 top-1 text-sm opacity-50 animate-pulse text-yellow-500 drop-shadow-sm">✨</span>
+                    <span class="absolute right-12 top-2 text-[10px] opacity-40 animate-pulse text-orange-400 drop-shadow-sm" style="animation-delay: 1s;">✨</span>
                 </div>
 
-                <!-- Subtle Rotating Mandala Motif -->
-                <div class="absolute right-[-10px] top-1/2 -translate-y-1/2 opacity-[0.06] text-4xl sm:text-5xl animate-[spin_15s_linear_infinite] pointer-events-none text-red-900 z-0">
-                    ❁
+                <!-- Animated Water Waves -->
+                <div class="absolute bottom-0 left-0 w-[200%] h-[40%] pointer-events-none z-0 overflow-hidden border-b-2 border-orange-100 rounded-b-2xl">
+                    <div class="absolute bottom-0 left-0 w-full h-full animate-wave-back"></div>
+                    <div class="absolute bottom-[-2px] left-0 w-full h-[85%] animate-wave-front"></div>
                 </div>
 
-                <!-- Static Logo -->
-                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded-full shadow-sm border-[2px] border-orange-200 relative z-10 bg-white group-hover:scale-105 transition-transform flex-shrink-0">
-                
-                <!-- Text -->
-                <div class="relative flex items-center h-full z-10">
-                    <span class="text-base sm:text-xl font-black tracking-tight text-red-900 font-serif drop-shadow-sm group-hover:text-orange-700 transition-colors whitespace-nowrap">UIU SVS</span>
+                <!-- Floating Elements on Water -->
+                <div class="absolute inset-0 pointer-events-none z-0 flex items-end">
+                    <!-- Floating Lotus Flowers -->
+                    <span class="absolute left-9 bottom-0 text-[16px] opacity-95 animate-lotus-bob drop-shadow-sm z-10">🪷</span>
+                    <span class="absolute right-4 bottom-1 text-[13px] opacity-80 animate-lotus-bob z-10" style="animation-delay: -2s;">🪷</span>
+                    
+                    <!-- Cruising Royal Swan -->
+                    <span class="absolute left-0 bottom-1.5 text-xl sm:text-2xl animate-swan-cruise drop-shadow-md z-20">🦢</span>
+                </div>
+
+                <!-- Static Logo & Text -->
+                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-9 w-9 sm:h-11 sm:w-11 object-contain rounded-full shadow-md border-[2px] border-yellow-400 relative z-30 bg-white group-hover:scale-105 transition-transform">
+                <div class="relative flex items-center h-full z-30">
+                    <span class="text-lg sm:text-xl font-black tracking-tight text-red-900 font-serif text-shadow-white group-hover:text-orange-700 transition-colors">UIU SVS</span>
                 </div>
             </a>
 
             <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-sans">
                 <a href="/" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Home</a>
-                <a href="/festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
-                <a href="/gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
-                <a href="/about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
-                <a href="/latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
+                <a href="#festivals" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Festivals</a>
+                <a href="#gallery" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Gallery</a>
+                <a href="#about" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">About</a>
+                <a href="#latest-videos" class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors">Videos</a>
             </nav>
-            <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-                <a href="/join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
+            <div class="flex items-center gap-3 sm:gap-4">
+                <a href="#join" class="hidden md:inline-flex btn-puja rounded-full px-5 lg:px-6 py-2 font-bold text-sm shadow-md transition-all whitespace-nowrap" aria-label="Join UIUSVS">Join SVS</a>
                 <button id="mobile-menu-button" class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors" aria-label="Toggle Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
