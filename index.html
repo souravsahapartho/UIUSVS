@@ -1965,12 +1965,13 @@
 
         function initFestivalSystem() {
             const upcoming = getUpcomingFestivals();
+            let activeFlagshipEvent = null;
             
             // 🎯 Flagship Event Countdown (Simple style with live ticking time & Auto Year Update)
             function updateFlagship() {
                 const flagshipEvents = [
-                    { title: 'Saraswati Puja 2027', dateStr: '2027-02-11', label: '11 February, Thursday' },
-                    { title: 'Saraswati Puja 2028', dateStr: '2028-01-31', label: '31 January, Monday' }
+                    { title: 'Saraswati Puja 2027', name: 'Saraswati Puja', date: '2027-02-11', label: '11 February, Thursday' },
+                    { title: 'Saraswati Puja 2028', name: 'Saraswati Puja', date: '2028-01-31', label: '31 January, Monday' }
                 ];
                 
                 function refreshCountdown() {
@@ -1981,17 +1982,23 @@
 
                     // Find the first event that is either today or in the future
                     for (let evt of flagshipEvents) {
-                        const [y, m, d] = evt.dateStr.split('-');
+                        const [y, m, d] = evt.date.split('-');
                         const target = new Date(y, m - 1, d); // Safely parse local date
                         const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
                         
                         if (diffDays >= 0) {
-                            activeEvent = evt;
-                            activeEvent.parsedDate = target;
+                            activeEvent = { ...evt, parsedDate: target, daysLeft: diffDays };
                             break; 
                         }
                     }
+                    if(!activeEvent.parsedDate) {
+                        const [y, m, d] = activeEvent.date.split('-');
+                        activeEvent.parsedDate = new Date(y, m - 1, d);
+                        activeEvent.daysLeft = Math.ceil((activeEvent.parsedDate - today) / (1000 * 60 * 60 * 24));
+                    }
                     
+                    activeFlagshipEvent = activeEvent; // Make globally accessible to modal
+
                     const titleEl = document.getElementById('flagship-title');
                     const dateEl = document.getElementById('flagship-date');
                     const countdownEl = document.getElementById('flagship-countdown');
@@ -2003,7 +2010,7 @@
                         // Keep the simple rounded style
                         countdownEl.className = "inline-block bg-white text-red-700 font-bold px-5 py-2 rounded-full text-sm border border-red-200 shadow-sm whitespace-nowrap anim-breath w-full sm:w-auto tracking-wide";
                         
-                        const evtDate = activeEvent.parsedDate || new Date(activeEvent.dateStr.split('-')[0], activeEvent.dateStr.split('-')[1] - 1, activeEvent.dateStr.split('-')[2]);
+                        const evtDate = activeEvent.parsedDate;
                         
                         if (evtDate.getTime() === today.getTime()) {
                             countdownEl.innerHTML = `<span class="live-dot"></span>🎉 Happening Today (Ongoing)`;
@@ -2036,28 +2043,28 @@
             updateFlagship();
             
             // 🎯 Store Next Festival details for Scroll Trigger
-            const saraswatiPuja = upcoming.find(f => f.name === "Saraswati Puja");
             let upcomingForScroll = [...upcoming];
 
-            if (saraswatiPuja && saraswatiPuja.daysLeft <= 50 && saraswatiPuja.daysLeft >= 0) {
+            // 🎯 Check if flagship event is within 50 days
+            if (activeFlagshipEvent && activeFlagshipEvent.daysLeft <= 50 && activeFlagshipEvent.daysLeft >= 0) {
                 // 🎯 Show max 2 times per day logic
                 const todayStr = new Date().toDateString();
-                const viewCountKey = 'saraswati_modal_views_' + todayStr;
+                const viewCountKey = 'flagship_modal_views_' + todayStr;
                 let viewCount = parseInt(localStorage.getItem(viewCountKey) || '0');
 
                 if (viewCount < 2) {
                     // Set pending callback to be fired by hideLoader
                     window.pendingSaraswatiModalCallback = () => {
                         if (typeof window.openSaraswatiModal === 'function') {
-                            window.openSaraswatiModal(saraswatiPuja);
+                            window.openSaraswatiModal(activeFlagshipEvent);
                             // Ekbar modal dekhale count bariye save kore rakhbe
                             localStorage.setItem(viewCountKey, (viewCount + 1).toString());
                         }
                     };
                 }
                 
-                // Exclude Saraswati Puja from regular bottom-left notification
-                upcomingForScroll = upcomingForScroll.filter(f => f.name !== "Saraswati Puja");
+                // Exclude Flagship from regular bottom-left notification
+                upcomingForScroll = upcomingForScroll.filter(f => f.name !== activeFlagshipEvent.name);
             } 
             
             if (upcomingForScroll.length > 0) {
@@ -2076,8 +2083,10 @@
             const overlay = document.getElementById('saraswati-modal-overlay');
             const card = document.getElementById('saraswati-modal-card');
             const dateEl = document.getElementById('saraswati-modal-date');
+            const titleEl = document.getElementById('saraswati-modal-title');
             
             if(overlay && card && dateEl) {
+                if (titleEl && fest.title) titleEl.textContent = fest.title;
                 const festDate = new Date(fest.date);
                 dateEl.textContent = festDate.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
                 
