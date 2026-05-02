@@ -156,13 +156,12 @@
                 img.dataset.failed = 'true';
                 img.classList.add('opacity-0');
                 if (img.previousElementSibling && img.previousElementSibling.classList.contains('media-placeholder')) {
-                    // Gracefully keep showing the UIUSVS loader as a clean placeholder
                     img.previousElementSibling.style.display = 'flex';
                 }
             }
         };
 
-        // Advanced Global Event Delegation (Capturing Phase)
+        // Advanced Global Event Delegation
         document.addEventListener('load', function(e) {
             if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
                 window.handleImageLoad(e.target);
@@ -178,14 +177,12 @@
         document.addEventListener('error', function(e) {
             if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
                 window.handleImageError(e.target);
-                // Fallback for Blog images if they fail
                 if (e.target.classList.contains('blog-thumb-img') && !e.target.src.includes('placehold.co')) {
                     e.target.src = 'https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Blog';
                 }
             }
         }, true);
 
-        // Auto-retry loading images when internet comes back
         window.addEventListener('online', function() {
             document.querySelectorAll('img[data-failed="true"]').forEach(function(img) {
                 const currentSrc = img.src.split('?')[0]; 
@@ -196,11 +193,8 @@
 
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- YouTube IFrame API -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -232,7 +226,6 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Custom Scrollbar for Quiz & Modals */
         .custom-scrollbar::-webkit-scrollbar { width: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #fff7ed; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #fdba74; border-radius: 10px; }
@@ -290,18 +283,22 @@
             animation: wave-scroll 10s linear infinite reverse;
         }
 
-        @keyframes swan-cruise {
-            0% { transform: translateX(-20px) translateY(3px) rotate(-3deg) scaleX(-1); opacity: 0; }
-            10% { opacity: 0.9; }
-            40% { transform: translateX(60px) translateY(-1px) rotate(1deg) scaleX(-1); opacity: 1; }
-            70% { transform: translateX(130px) translateY(2px) rotate(-2deg) scaleX(-1); opacity: 1; }
-            90% { opacity: 0.9; }
-            100% { transform: translateX(190px) translateY(0px) rotate(3deg) scaleX(-1); opacity: 0; }
+        /* 🎯 Realistic Swan Animation (Synced with Water Flow) */
+        @keyframes swan-move {
+            0% { transform: translateX(-50px); opacity: 0; }
+            5% { transform: translateX(-35px); opacity: 1; }
+            92.5% { transform: translateX(235px); opacity: 1; }
+            97.5% { transform: translateX(250px); opacity: 0; }
+            98.5% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(-50px); opacity: 0; }
         }
-        .animate-swan-cruise {
-            animation: swan-cruise 12s linear infinite;
-            will-change: transform, opacity;
+        .animate-swan-move { animation: swan-move 20s linear infinite; will-change: transform, opacity; }
+
+        @keyframes swan-bob {
+            0%, 100% { transform: translateY(3px) rotate(-3deg) scaleX(-1); }
+            50% { transform: translateY(-2px) rotate(2deg) scaleX(-1); }
         }
+        .animate-swan-bob { animation: swan-bob 3s ease-in-out infinite; display: inline-block; will-change: transform; }
 
         @keyframes lotus-bob {
             0%, 100% { transform: translateY(0px) rotate(-2deg); }
@@ -639,7 +636,7 @@
         </div>
     </div>
 
-    <!-- 🎯 Details Image Modal (Replaced PDF with Image) -->
+    <!-- 🎯 Details Image Modal (With Download Button) -->
     <div id="details-modal-overlay" class="fixed inset-0 bg-black/20 z-[99999] hidden items-center justify-center p-2 sm:p-4 backdrop-blur-sm transition-opacity duration-500 opacity-0">
         <div id="details-modal-card" class="bg-white rounded-2xl w-full max-w-4xl h-[85vh] sm:h-[90vh] flex flex-col overflow-hidden shadow-2xl transform scale-90 transition-all duration-500 relative border-2 border-orange-300">
             <!-- Header -->
@@ -651,11 +648,16 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            <!-- Image Frame -->
-            <div class="flex-1 w-full h-full relative bg-[#fffaf0] flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+            <!-- Image Frame with Interactive Download Button -->
+            <div class="flex-1 w-full h-full relative bg-[#fffaf0] flex items-center justify-center p-2 sm:p-4 overflow-hidden group">
                 <!-- 🎯 Dynamic auto-resizing image setup with loader -->
                 <div class="media-placeholder absolute inset-0 z-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div><div class="uiusvs-loader-text">UIUSVS</div></div></div>
                 <img src="saraswatipuja_event_details.jpg" class="w-auto h-auto max-w-full max-h-full object-contain relative z-10 drop-shadow-lg opacity-0 transition-opacity duration-500" alt="Saraswati Puja Event Details">
+                
+                <!-- 🎯 Download Button -->
+                <a href="saraswatipuja_event_details.jpg" download="Saraswati_Puja_Event_Details.jpg" class="absolute bottom-4 right-4 z-20 bg-white/90 hover:bg-white text-orange-600 hover:text-red-700 p-2 sm:p-3 rounded-full shadow-lg border border-orange-200 transition-all transform hover:scale-110 flex items-center justify-center gap-2 group-hover:opacity-100" title="Download Image">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
             </div>
         </div>
     </div>
@@ -829,8 +831,8 @@
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <div class="container mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center">
             
-            <!-- 🎯 Saraswati's Pond Animated Logo Area (Low Opacity Blue Water) -->
-            <a href="/" class="flex items-center gap-1.5 sm:gap-3 group cursor-pointer relative overflow-hidden py-1 sm:py-1.5 pl-1 sm:pl-1.5 pr-3 sm:pr-5 rounded-xl sm:rounded-2xl bg-white/70 border border-blue-100 shadow-sm transition-all hover:shadow-md h-10 sm:h-14 min-w-[130px] sm:min-w-[195px] max-w-[65vw]">
+            <!-- 🎯 Saraswati's Pond Animated Logo Area (Fully Restored & Enhanced) -->
+            <a href="/" class="flex items-center gap-1.5 sm:gap-3 group cursor-pointer relative overflow-hidden py-1 sm:py-1.5 pl-1 sm:pl-1.5 pr-3 sm:pr-5 rounded-xl sm:rounded-2xl bg-white/70 border border-orange-200 shadow-sm transition-all hover:shadow-md h-10 sm:h-14 min-w-[130px] sm:min-w-[195px] max-w-[65vw]">
                 
                 <!-- Animated Water Waves (Reduced Opacity) -->
                 <div class="absolute bottom-0 left-0 w-[200%] h-[45%] pointer-events-none z-0 overflow-hidden opacity-60 mix-blend-multiply">
@@ -838,20 +840,29 @@
                     <div class="absolute bottom-[-2px] left-0 w-full h-[85%] animate-wave-front"></div>
                 </div>
 
+                <!-- Subtle Background Elements (Restored Veena & Sparkles) -->
+                <div class="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+                    <span class="absolute right-2 sm:right-4 top-0 text-xl sm:text-3xl opacity-15 rotate-12 grayscale-[0.5]">🪕</span>
+                    <span class="absolute left-7 sm:left-10 top-1 text-[10px] sm:text-sm opacity-50 animate-pulse text-yellow-500 drop-shadow-sm">✨</span>
+                    <span class="absolute right-6 sm:right-12 top-2 text-[8px] sm:text-[10px] opacity-40 animate-pulse text-orange-400 drop-shadow-sm" style="animation-delay: 1s;">✨</span>
+                </div>
+
                 <!-- Floating Elements on Water -->
                 <div class="absolute inset-0 pointer-events-none z-0 flex items-end">
                     <!-- Floating Lotus Flowers -->
                     <span class="absolute left-7 sm:left-9 bottom-0 text-[13px] sm:text-[16px] opacity-90 animate-lotus-bob drop-shadow-sm z-10">🪷</span>
                     <span class="absolute right-2 sm:right-4 bottom-0.5 sm:bottom-1 text-[10px] sm:text-[13px] opacity-70 animate-lotus-bob z-10" style="animation-delay: -2s;">🪷</span>
-                    
-                    <!-- Cruising Royal Swan -->
-                    <span class="absolute left-0 bottom-1 sm:bottom-1.5 text-[16px] sm:text-2xl animate-swan-cruise drop-shadow-md z-20">🦢</span>
                 </div>
 
                 <!-- Static Logo & Text -->
-                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-7 w-7 sm:h-11 sm:w-11 object-contain rounded-full shadow-md border-[2px] border-blue-200 relative z-30 bg-white group-hover:scale-105 transition-transform flex-shrink-0">
+                <img src="logo.jpg" alt="UIUSVS Official Logo" class="h-7 w-7 sm:h-11 sm:w-11 object-contain rounded-full shadow-md border-[2px] border-orange-300 relative z-30 bg-white group-hover:scale-105 transition-transform flex-shrink-0">
                 <div class="relative flex items-center h-full z-30">
-                    <span class="text-base sm:text-xl font-black tracking-tight text-red-900 font-serif text-shadow-white group-hover:text-blue-800 transition-colors whitespace-nowrap">UIU SVS</span>
+                    <span class="text-base sm:text-xl font-black tracking-tight text-red-900 font-serif text-shadow-white group-hover:text-orange-700 transition-colors whitespace-nowrap">UIU SVS</span>
+                </div>
+
+                <!-- Continuous Cruising Royal Swan (Realistic wave-bob, 0.5s gap, OVER the text) -->
+                <div class="absolute left-0 bottom-1 sm:bottom-1.5 z-[50] pointer-events-none animate-swan-move">
+                    <span class="animate-swan-bob drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-[18px] sm:text-2xl">🦢</span>
                 </div>
             </a>
 
@@ -1427,7 +1438,7 @@
                 </div>
             </div>
             <div class="border-t border-red-100 pt-6 sm:pt-8 pb-4 sm:pb-10 text-center text-xs sm:text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-2">
-                <span>&copy; 2026 UIUSVS. All rights reserved.</span>
+                <span>&copy; <span id="current-year">2026</span> UIUSVS. All rights reserved.</span>
                 <span>Developed by <a href="https://www.sourav.com.bd" target="_blank" class="font-bold text-red-700 hover:text-red-900 transition-colors">Sourav Saha</a></span>
             </div>
         </div>
@@ -1958,7 +1969,6 @@
             // 🎯 Flagship Event Countdown (Simple style with live ticking time & Auto Year Update)
             function updateFlagship() {
                 const flagshipEvents = [
-                    { title: 'Saraswati Puja 2026', dateStr: '2026-05-11', label: '11 May, Monday' },
                     { title: 'Saraswati Puja 2027', dateStr: '2027-02-11', label: '11 February, Thursday' },
                     { title: 'Saraswati Puja 2028', dateStr: '2028-01-31', label: '31 January, Monday' }
                 ];
@@ -2779,6 +2789,12 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // 🎯 Dynamic Footer Year
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+
             // 🎯 Handle Clean Redirects from SEO pages smoothly
             const redirectPath = sessionStorage.getItem("svs_redirect_path");
             if (redirectPath) {
@@ -2985,9 +3001,12 @@
                             document.querySelector("[name='department']").value = f.department;
                             hasData = true;
                             if (f.department === 'Other') {
-                                otherDeptInput.classList.remove('hidden');
-                                otherDeptInput.required = true;
-                                if (f.otherDepartment) otherDeptInput.value = f.otherDepartment;
+                                const otherInput = document.getElementById('otherDepartmentInput');
+                                if (otherInput) {
+                                    otherInput.classList.remove('hidden');
+                                    otherInput.required = true;
+                                    if (f.otherDepartment) otherInput.value = f.otherDepartment;
+                                }
                             }
                         }
                         if (f.trimester) { document.querySelector("[name='trimester']").value = f.trimester; hasData = true; }
