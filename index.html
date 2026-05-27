@@ -361,6 +361,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
         transition:
           opacity 0.5s ease-out,
           visibility 0.5s ease-out;
@@ -1226,7 +1227,7 @@
     <!-- 🎯 Daily Festival Notification Popup (Compact, Left-Aligned & Fixed Class Bug) -->
     <div
       id="festival-notification"
-      class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit min-w-[240px] max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden items-center"
+      class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 max-w-[calc(100vw-2rem)] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden items-center"
     >
       <button
         onclick="closeNotification()"
@@ -1967,7 +1968,7 @@
                 >UIU</span
               >
               <span
-                class="text-gradient block whitespace-nowrap text-[5.8vw] sm:text-[5vw] md:text-[4.5vw] lg:text-[4vw] xl:text-[3.5vw] 2xl:text-[3vw] max-w-full text-center pb-1"
+                class="text-gradient block text-[5.8vw] sm:text-[5vw] md:text-[4.5vw] lg:text-[4vw] xl:text-[3.5vw] 2xl:text-[3vw] max-w-full text-center pb-1"
                 >Sanatani Vidyarthi Samsad</span
               >
             </h1>
