@@ -161,9 +161,6 @@ app.put("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   }
 });
 
-// ============================================
-// 6. DELETE
-// ============================================
 app.delete("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   try {
     const [rows] = await pool.query(
