@@ -287,18 +287,29 @@
         overlay.classList.toggle("hidden");
       }
 
-      const API_BASE = "https://uiusvs.onrender.com";
+      const API_BASE = "https://uiusvs.onrender.com/api";
       let mockGallery = [];
 
-      async function loadGalleryFromDB() {
+      async function loadGalleryFromDB(isBackgroundRefresh = false) {
         try {
           const res = await fetch(`${API_BASE}/gallery/public`);
-          mockGallery = await res.json();
+          const newData = await res.json();
+
+          // Only re-render if data actually changed (avoids unnecessary flicker)
+          const newDataStr = JSON.stringify(newData);
+          const oldDataStr = JSON.stringify(mockGallery);
+
+          if (newDataStr !== oldDataStr) {
+            mockGallery = newData;
+            renderFilters();
+            renderGallery();
+          }
         } catch (e) {
           console.warn("Failed to load gallery from DB", e);
-        } finally {
-          renderFilters();
-          renderGallery();
+          if (!isBackgroundRefresh) {
+            renderFilters();
+            renderGallery();
+          }
         }
       }
 
@@ -399,6 +410,11 @@
       });
 
       loadGalleryFromDB();
+
+      // 🎯 Auto-refresh gallery every 15 seconds to reflect DB changes instantly
+      setInterval(() => {
+        loadGalleryFromDB();
+      }, 15000); // 15 second cycle — dorkar hole 5000 (5s) o kora jay
     </script>
   </body>
 </html>
