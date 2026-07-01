@@ -40,21 +40,31 @@ module.exports = (pool) => {
         [u.id],
       );
 
-      await appendApprovedMember([
-        u.id,
-        u.name,
-        u.student_id,
-        u.email,
-        u.contact,
-        u.gender,
-        u.type,
-        u.department,
-        u.batch,
-        u.designation,
-        new Date().toISOString(),
-      ]);
+      let sheetSynced = true;
+      try {
+        await appendApprovedMember({
+          id: u.id,
+          name: u.name,
+          studentId: u.student_id,
+          email: u.email,
+          contact: u.contact,
+          gender: u.gender,
+          type: u.type,
+          department: u.department,
+          batch: u.batch,
+          designation: u.designation,
+          bloodGroup: u.blood_group,
+        });
+      } catch (sheetErr) {
+        console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);
+        sheetSynced = false;
+      }
 
-      res.json({ message: "Approved and synced to sheet" });
+      res.json({
+        message: sheetSynced
+          ? "Approved, synced to sheet, and ID email sent"
+          : "Approved (sheet/email sync failed — check server logs)",
+      });
     } catch (error) {
       console.error("❌ Approve user failed:", error);
       res.status(500).json({ error: error.message });

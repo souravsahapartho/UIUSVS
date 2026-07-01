@@ -1,20 +1,22 @@
-const { google } = require("googleapis");
+async function appendApprovedMember(member) {
+  const scriptUrl = process.env.GOOGLE_SCRIPT_URL;
+  if (!scriptUrl) {
+    throw new Error("GOOGLE_SCRIPT_URL is not set");
+  }
 
-async function appendApprovedMember(row) {
-  const auth = new google.auth.JWT(
-    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    null,
-    process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    ["https://www.googleapis.com/auth/spreadsheets"],
-  );
-  const sheets = google.sheets({ version: "v4", auth });
-
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: "Members!A1",
-    valueInputOption: "USER_ENTERED",
-    requestBody: { values: [row] },
+  const res = await fetch(scriptUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(member),
   });
+
+  const result = await res.json().catch(() => null);
+  if (!result || result.status !== "success") {
+    throw new Error(
+      "Apps Script sync failed: " + (result?.message || "Unknown error"),
+    );
+  }
+  return result;
 }
 
 module.exports = { appendApprovedMember };
