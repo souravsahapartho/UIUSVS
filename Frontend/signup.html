@@ -556,6 +556,7 @@
       lucide.createIcons();
       const API_BASE = "https://uiusvs.onrender.com/api";
       let signupEmail = "";
+      let uploadedAvatarUrl = null;
 
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
@@ -623,18 +624,44 @@
       }
 
       // Profile pic select korle preview
-      document.getElementById("profilePic").addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            document.getElementById("avatar-preview").src = ev.target.result;
-          };
-          reader.readAsDataURL(file);
-        } else {
-          updateAvatarPreview();
-        }
-      });
+      // Profile pic select korle preview + Cloudinary te upload
+      document
+        .getElementById("profilePic")
+        .addEventListener("change", async (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              document.getElementById("avatar-preview").src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            try {
+              const formData = new FormData();
+              formData.append("media", file);
+              const res = await fetch(`${API_BASE}/upload-avatar`, {
+                method: "POST",
+                body: formData,
+              });
+              const data = await res.json();
+              if (res.ok) {
+                uploadedAvatarUrl = data.url;
+              } else {
+                showToast(
+                  "Image upload failed, default avatar will be used",
+                  "error",
+                );
+                uploadedAvatarUrl = null;
+              }
+            } catch (err) {
+              showToast("Image upload failed", "error");
+              uploadedAvatarUrl = null;
+            }
+          } else {
+            uploadedAvatarUrl = null;
+            updateAvatarPreview();
+          }
+        });
 
       // Signup Submit → OTP পাঠায়
       document
@@ -668,7 +695,7 @@
             designation:
               document.getElementById("designation").value || "Member",
             password: document.getElementById("password").value,
-            profilePicUrl: null, // note: file upload সরাসরি Cloudinary তে করতে চাইলে আলাদা endpoint লাগবে
+            profilePicUrl: uploadedAvatarUrl,
           };
 
           btn.innerHTML =

@@ -65,6 +65,21 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
 app.use("/api/profile", profileRoutes);
 
+// ============================================
+// AVATAR UPLOAD — signup form থেকে profile picture Cloudinary তে পাঠাতে
+// (login লাগে না, কারণ signup এর সময় user এখনো account-ই নেই)
+// ============================================
+app.post("/api/upload-avatar", upload.single("media"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    res.status(200).json({ url: req.file.path });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post(
   "/api/gallery",
   verifySession,
