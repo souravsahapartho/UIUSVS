@@ -443,13 +443,22 @@
                   >
                   <select
                     id="prof-dept"
+                    onchange="toggleOtherDepartment()"
                     class="smooth-select w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   >
-                    <option value="CSE" selected>CSE</option>
+                    <option value="" disabled>Select Department</option>
+                    <option value="CSE">CSE</option>
                     <option value="EEE">EEE</option>
                     <option value="BBA">BBA</option>
-                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Pharmacy">Pharmacy</option>
+                    <option value="Others">Others</option>
                   </select>
+                  <input
+                    type="text"
+                    id="prof-dept-other"
+                    placeholder="Type your department"
+                    class="hidden w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all mt-2"
+                  />
                 </div>
                 <!-- Batch/Trimester -->
                 <div>
@@ -589,6 +598,17 @@
         overlay.classList.toggle("hidden");
       }
 
+      function toggleOtherDepartment() {
+        const dept = document.getElementById("prof-dept").value;
+        const otherBox = document.getElementById("prof-dept-other");
+        if (dept === "Others") {
+          otherBox.classList.remove("hidden");
+        } else {
+          otherBox.classList.add("hidden");
+          otherBox.value = "";
+        }
+      }
+
       function showToast(message, type = "success") {
         const toast = document.getElementById("toast");
         const toastContent = document.getElementById("toast-content");
@@ -655,7 +675,17 @@
           document.getElementById("prof-email").value = u.email || "";
           document.getElementById("prof-phone").value = u.contact || "";
           document.getElementById("prof-blood").value = u.blood_group || "O+";
-          document.getElementById("prof-dept").value = u.department || "CSE";
+          const knownDepts = ["CSE", "EEE", "BBA", "Pharmacy"];
+          const userDept = u.department || "";
+          if (userDept && !knownDepts.includes(userDept)) {
+            document.getElementById("prof-dept").value = "Others";
+            document.getElementById("prof-dept-other").value = userDept;
+            document
+              .getElementById("prof-dept-other")
+              .classList.remove("hidden");
+          } else {
+            document.getElementById("prof-dept").value = userDept || "CSE";
+          }
           document.getElementById("prof-batch").value = u.batch || "";
           document.getElementById("prof-designation").value =
             u.designation || "Member";
@@ -712,7 +742,10 @@
               credentials: "include",
               body: JSON.stringify({
                 name: document.getElementById("prof-name").value,
-                department: document.getElementById("prof-dept").value,
+                department:
+                  document.getElementById("prof-dept").value === "Others"
+                    ? document.getElementById("prof-dept-other").value.trim()
+                    : document.getElementById("prof-dept").value,
                 batch: document.getElementById("prof-batch").value,
                 designation: document.getElementById("prof-designation").value,
                 address: document.getElementById("prof-address").value,

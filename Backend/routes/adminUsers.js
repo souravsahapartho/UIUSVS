@@ -29,6 +29,8 @@ module.exports = (pool) => {
       if (!rows.length) return res.status(404).json({ error: "Not found" });
       const u = rows[0];
 
+      const isFirstTimeApproval = u.is_approved === 0; // নতুন লাইন
+
       await pool.query(
         `UPDATE users SET is_approved=1,
        name=COALESCE(pending_name, name),
@@ -54,6 +56,7 @@ module.exports = (pool) => {
           batch: u.batch,
           designation: u.designation,
           bloodGroup: u.blood_group,
+          sendEmail: isFirstTimeApproval, // শুধু নতুন signup এ true
         });
       } catch (sheetErr) {
         console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);
