@@ -800,19 +800,16 @@
                 <p class="text-xs text-gray-500 mb-5">
                   JPG, PNG, WEBP, MP4 supported
                 </p>
-
                 <label
                   class="cursor-pointer bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
                 >
                   Browse Device
                   <input
                     type="file"
+                    id="gal-file-input"
                     class="hidden"
                     accept="image/*,video/mp4"
-                    onchange="
-                      document.getElementById('gal-file-name').textContent =
-                        this.files[0]?.name || 'No file chosen'
-                    "
+                    onchange="handleGalleryFileSelect(this)"
                   />
                 </label>
                 <span id="gal-file-name" class="text-gray-400 text-xs mt-3"
@@ -829,6 +826,7 @@
                   >
                   <input
                     type="text"
+                    id="gal-title"
                     placeholder="e.g. Saraswati Puja Aarti 2026"
                     class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
                   />
@@ -838,6 +836,7 @@
                     >Category / Event <span class="text-red-500">*</span></label
                   >
                   <select
+                    id="gal-category"
                     class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
                   >
                     <option value="" disabled selected>Select Category</option>
@@ -1272,42 +1271,75 @@
           targetView.classList.add("block");
         }
       }
-      const API_BASE = "https://uiusvs.onrender.com";
+
+      const API_BASE = "https://uiusvs.onrender.com/api";
+      let selectedGalleryFile = null;
+
+      function handleGalleryFileSelect(input) {
+        const nameSpan = document.getElementById("gal-file-name");
+        if (input.files && input.files.length > 0) {
+          selectedGalleryFile = input.files[0];
+          nameSpan.textContent = selectedGalleryFile.name;
+          nameSpan.classList.remove("text-gray-400");
+          nameSpan.classList.add("text-green-600", "font-bold");
+        } else {
+          selectedGalleryFile = null;
+          nameSpan.textContent = "No file chosen";
+          nameSpan.classList.add("text-gray-400");
+          nameSpan.classList.remove("text-green-600", "font-bold");
+        }
+      }
 
       async function uploadGalleryMedia() {
-        const fileInput = document.querySelector(
-          '#view-gallery input[type="file"]',
-        );
-        const title = document.querySelector(
-          '#view-gallery input[placeholder*="Aarti"]',
-        );
-        const category = document.querySelector("#view-gallery select");
+        const title = document.getElementById("gal-title");
+        const category = document.getElementById("gal-category");
         const date = document.getElementById("gal-date");
         const pinned = document.getElementById("pin-media");
 
-        if (!fileInput.files[0] || !title.value || !category.value) {
-          showToast("Please fill title, category and select a file", "error");
+        if (!selectedGalleryFile) {
+          showToast("Please select a photo or video first!", "error");
+          return;
+        }
+        if (!title.value.trim()) {
+          showToast("Please enter a caption/title!", "error");
+          return;
+        }
+        if (!category.value) {
+          showToast("Please select a category!", "error");
           return;
         }
 
         const formData = new FormData();
-        formData.append("media", fileInput.files[0]);
+        formData.append("media", selectedGalleryFile);
         formData.append("title", title.value);
         formData.append("caption", title.value);
         formData.append("category", category.value);
-        formData.append("event_date", date.value);
+        formData.append("event_date", date.value || "");
         formData.append("is_pinned", pinned.checked);
 
         try {
+          showToast("Uploading, please wait...");
           const res = await fetch(`${API_BASE}/gallery`, {
             method: "POST",
             body: formData,
           });
-          if (!res.ok) throw new Error();
+          if (!res.ok) throw new Error("Upload failed on server");
           showToast("Media Uploaded successfully!");
+
+          // Reset form
+          selectedGalleryFile = null;
+          document.getElementById("gal-file-input").value = "";
+          document.getElementById("gal-file-name").textContent =
+            "No file chosen";
+          title.value = "";
+          category.value = "";
+          date.value = "";
+          pinned.checked = false;
+
           loadGalleryTable();
         } catch (e) {
-          showToast("Upload failed!", "error");
+          console.error(e);
+          showToast("Upload failed! Check backend connection.", "error");
         }
       }
 

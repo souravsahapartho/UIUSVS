@@ -28,9 +28,17 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "uiusvs_uploads",
-    allowed_formats: ["jpg", "png", "jpeg", "webp", "mp4"],
+  params: async (req, file) => {
+    const isVideo = file.mimetype.startsWith("video/");
+    return {
+      folder: "uiusvs_uploads",
+      allowed_formats: ["jpg", "png", "jpeg", "webp", "gif", "mp4"],
+      resource_type: isVideo ? "video" : "image",
+      format: isVideo ? undefined : "webp", // শুধু ছবি হলে webp এ convert
+      transformation: isVideo
+        ? undefined
+        : [{ quality: "auto", fetch_format: "webp" }],
+    };
   },
 });
 const upload = multer({ storage: storage });
