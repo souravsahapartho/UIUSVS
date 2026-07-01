@@ -47,7 +47,7 @@ function verifySession(req, res, next) {
 
 // Admin-only route gulo te: router.get('/x', verifySession, verifyAdmin, handler)
 function verifyAdmin(req, res, next) {
-  if (req.user?.role !== "admin") {
+  if (req.user?.role !== "admin" && req.user?.role !== "superadmin") {
     return res.status(403).json({ error: "Admin access only" });
   }
   next();
