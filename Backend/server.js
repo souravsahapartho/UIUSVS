@@ -145,9 +145,6 @@ app.get("/api/gallery/featured", async (req, res) => {
   }
 });
 
-// ============================================
-// 5. UPDATE
-// ============================================
 app.put("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   try {
     const { title, caption, category, event_date, is_pinned } = req.body;
