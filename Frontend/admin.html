@@ -1556,7 +1556,8 @@
           );
           if (!res.ok) throw new Error();
           const data = await res.json();
-          if (data.user.role !== "admin") throw new Error();
+          if (data.user.role !== "admin" && data.user.role !== "superadmin")
+            throw new Error();
         } catch {
           window.location.href = "login.html";
         }
