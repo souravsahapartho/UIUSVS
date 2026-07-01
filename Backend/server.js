@@ -10,13 +10,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ---- DB Connection Pool ----
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: true }, // TiDB Cloud এর জন্য দরকার হতে পারে
+  host: process.env.TIDB_HOST,
+  port: process.env.TIDB_PORT,
+  user: process.env.TIDB_USER,
+  password: process.env.TIDB_PASSWORD,
+  database: process.env.TIDB_DATABASE,
+  ssl: { minVersion: "TLSv1.2", rejectUnauthorized: true },
 });
 
 // ---- Cloudinary Config ----
@@ -58,13 +58,11 @@ app.post("/api/gallery", upload.single("media"), async (req, res) => {
       ],
     );
 
-    res
-      .status(200)
-      .json({
-        message: "Uploaded successfully!",
-        id: result.insertId,
-        url: imageUrl,
-      });
+    res.status(200).json({
+      message: "Uploaded successfully!",
+      id: result.insertId,
+      url: imageUrl,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
