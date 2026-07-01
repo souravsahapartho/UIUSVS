@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UIUSVS Admin Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              dark: {
+                900: "#0F172A", // Main bg (Slate 900)
+                800: "#1E293B", // Sidebar/Card bg (Slate 800)
+                700: "#334155", // Borders/Hovers
+              },
+              primary: "#0D9488", // Teal
+              accent: "#F97316", // Orange for UIUSVS branding
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #0f172a;
+        color: #f8fafc;
+        font-family: "Inter", sans-serif;
+      }
+      /* Custom Scrollbar for a premium look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .upload-dashed {
+        border: 2px dashed #334155;
+        transition: all 0.3s;
+      }
+      .upload-dashed:hover {
+        border-color: #0d9488;
+        background: rgba(13, 148, 136, 0.05);
+      }
+    </style>
+  </head>
+  <body class="flex h-screen overflow-hidden antialiased">
+    <aside
+      class="w-64 bg-dark-800 border-r border-dark-700 flex flex-col hidden md:flex transition-all"
+    >
+      <!-- Logo Area -->
+      <div class="h-16 flex items-center px-6 border-b border-dark-700">
+        <i data-lucide="shield-check" class="text-primary w-6 h-6 mr-3"></i>
+        <span class="text-primary font-bold text-lg tracking-wide"
+          >Admin Panel</span
+        >
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="flex-1 py-6 px-3 space-y-2 overflow-y-auto">
+        <a
+          href="#"
+          onclick="switchTab('dashboard')"
+          id="nav-dashboard"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg bg-dark-700/50 text-primary border-l-4 border-primary font-medium transition-colors"
+        >
+          <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('about')"
+          id="nav-about"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="file-text" class="w-5 h-5 mr-3"></i> Home 'About' Page
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('events')"
+          id="nav-events"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="git-merge" class="w-5 h-5 mr-3"></i> Events (Projects)
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('gallery')"
+          id="nav-gallery"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="image" class="w-5 h-5 mr-3"></i> Gallery
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('advisors')"
+          id="nav-advisors"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="quote" class="w-5 h-5 mr-3"></i> Advisors (Recs)
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('users')"
+          id="nav-users"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="wrench" class="w-5 h-5 mr-3"></i> Users (Skills)
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('blogs')"
+          id="nav-blogs"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="map" class="w-5 h-5 mr-3"></i> Blogs (Journey)
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('announcement')"
+          id="nav-announcement"
+          class="nav-btn flex items-center px-3 py-2.5 rounded-lg text-slate-400 hover:bg-dark-700 hover:text-white transition-colors"
+        >
+          <i data-lucide="megaphone" class="w-5 h-5 mr-3"></i> Announcement
+        </a>
+      </nav>
+
+      <!-- Bottom Action -->
+      <div class="p-4 border-t border-dark-700">
+        <a
+          href="/"
+          target="_blank"
+          class="flex items-center justify-center w-full px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-lg transition-colors font-medium text-sm"
+        >
+          <i data-lucide="external-link" class="w-4 h-4 mr-2"></i> View Live
+          Site
+        </a>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen relative">
+      <!-- Header -->
+      <header
+        class="h-16 bg-dark-900 border-b border-dark-700 flex items-center justify-between px-6"
+      >
+        <div class="flex items-center">
+          <button class="md:hidden text-slate-400 hover:text-white mr-4">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <span
+            class="text-sm font-medium text-slate-400"
+            id="current-time"
+          ></span>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center">
+            <div
+              class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm mr-3 shadow-lg"
+            >
+              SS
+            </div>
+            <span class="font-semibold text-sm">Sourav Saha</span>
+          </div>
+          <button
+            class="flex items-center px-3 py-1.5 border border-red-500/50 text-red-400 hover:bg-red-500/10 rounded-lg text-sm transition-colors"
+          >
+            <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic View Container -->
+      <div class="flex-1 overflow-y-auto p-6 lg:p-8" id="view-container">
+        <!-- VIEW: DASHBOARD (Based on image_b853e1.png) -->
+        <div id="view-dashboard" class="tab-view block">
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">
+              System Overview
+            </h1>
+            <p class="text-sm text-slate-400">
+              Last updated: <span id="last-updated-date"></span>
+            </p>
+          </div>
+
+          <!-- Stats Grid -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6"
+          >
+            <!-- Events Card -->
+            <div
+              class="glass-card rounded-xl p-5 border-t-4 border-t-blue-500 hover:-translate-y-1 transition-transform"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >EVENTS</span
+                >
+                <i data-lucide="git-merge" class="w-5 h-5 text-blue-400"></i>
+              </div>
+              <h2 class="text-4xl font-extrabold text-white mb-1">5</h2>
+              <p class="text-sm text-slate-400">1 pinned</p>
+            </div>
+            <!-- Gallery Card -->
+            <div
+              class="glass-card rounded-xl p-5 border-t-4 border-t-green-500 hover:-translate-y-1 transition-transform"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >GALLERY</span
+                >
+                <i data-lucide="image" class="w-5 h-5 text-green-400"></i>
+              </div>
+              <h2 class="text-4xl font-extrabold text-white mb-1">33</h2>
+              <p class="text-sm text-slate-400">5 pinned</p>
+            </div>
+            <!-- Users Card -->
+            <div
+              class="glass-card rounded-xl p-5 border-t-4 border-t-purple-500 hover:-translate-y-1 transition-transform"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >USERS</span
+                >
+                <i data-lucide="users" class="w-5 h-5 text-purple-400"></i>
+              </div>
+              <h2 class="text-4xl font-extrabold text-white mb-1">210</h2>
+              <p class="text-sm text-slate-400">12 pending verification</p>
+            </div>
+            <!-- Advisors Card -->
+            <div
+              class="glass-card rounded-xl p-5 border-t-4 border-t-orange-500 hover:-translate-y-1 transition-transform"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >ADVISORS</span
+                >
+                <i data-lucide="quote" class="w-5 h-5 text-orange-400"></i>
+              </div>
+              <h2 class="text-4xl font-extrabold text-white mb-1">6</h2>
+              <p class="text-sm text-slate-400">Active panel</p>
+            </div>
+          </div>
+
+          <!-- Secondary Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >PINNED PHOTOS</span
+                >
+                <i data-lucide="pin" class="w-4 h-4 text-yellow-500"></i>
+              </div>
+              <h2 class="text-3xl font-bold text-white mb-1">5</h2>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >BLOG ENTRIES</span
+                >
+                <i data-lucide="map" class="w-4 h-4 text-cyan-400"></i>
+              </div>
+              <h2 class="text-3xl font-bold text-white mb-1">12</h2>
+            </div>
+            <div class="glass-card rounded-xl p-5 border border-red-500/20">
+              <div class="flex justify-between items-start mb-2">
+                <span
+                  class="text-xs font-bold text-slate-400 tracking-widest uppercase"
+                  >ANNOUNCEMENT</span
+                >
+                <i data-lucide="megaphone" class="w-4 h-4 text-red-400"></i>
+              </div>
+              <h2 class="text-lg font-bold text-slate-300 mt-2">None set</h2>
+            </div>
+          </div>
+
+          <!-- Quick Actions Section -->
+          <div class="glass-card rounded-xl p-6 border-t-2 border-t-primary">
+            <h3 class="text-lg font-bold text-primary flex items-center mb-6">
+              <i data-lucide="zap" class="w-5 h-5 mr-2"></i> Quick Actions
+            </h3>
+            <div class="flex flex-wrap gap-4">
+              <button
+                onclick="switchTab('announcement')"
+                class="bg-dark-700 hover:bg-dark-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition flex items-center border border-dark-600"
+              >
+                <i data-lucide="plus" class="w-4 h-4 mr-2 text-primary"></i> New
+                Announcement
+              </button>
+              <button
+                class="bg-dark-700 hover:bg-dark-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition flex items-center border border-dark-600"
+              >
+                <i
+                  data-lucide="check-circle"
+                  class="w-4 h-4 mr-2 text-green-400"
+                ></i>
+                Verify Users (12)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-announcement" class="tab-view hidden">
+          <div class="max-w-4xl">
+            <div class="mb-6">
+              <h1 class="text-3xl font-bold text-white tracking-tight">
+                Manage Announcement
+              </h1>
+              <p class="text-sm text-slate-400 mt-1">
+                Set the popup modal announcement for the UIUSVS homepage.
+              </p>
+            </div>
+
+            <form id="announcement-form" class="space-y-6">
+              <!-- File Upload Area -->
+              <div
+                class="upload-dashed rounded-xl p-8 flex flex-col items-center justify-center bg-dark-800/50"
+              >
+                <i
+                  data-lucide="image-plus"
+                  class="w-10 h-10 text-slate-500 mb-3"
+                ></i>
+                <p class="text-white font-medium mb-1">
+                  Click, drag & drop, or
+                  <span class="bg-dark-700 px-2 py-0.5 rounded text-xs mx-1"
+                    >Ctrl+V</span
+                  >
+                  to paste
+                </p>
+                <p class="text-xs text-slate-400 mb-4">
+                  JPG, PNG, WEBP supported
+                </p>
+
+                <div
+                  class="flex items-center w-full max-w-sm bg-dark-900 rounded-lg overflow-hidden border border-dark-700 p-1"
+                >
+                  <label
+                    class="cursor-pointer bg-primary hover:bg-teal-500 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors whitespace-nowrap"
+                  >
+                    Choose File
+                    <input
+                      type="file"
+                      id="announcementFile"
+                      class="hidden"
+                      accept="image/*"
+                    />
+                  </label>
+                  <span
+                    id="file-name-display"
+                    class="text-slate-400 text-sm px-4 truncate"
+                    >No file chosen</span
+                  >
+                </div>
+              </div>
+
+              <!-- Grid Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Show From -->
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Show From Date</label
+                  >
+                  <div class="relative">
+                    <input
+                      type="date"
+                      id="showFrom"
+                      class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none"
+                      style="color-scheme: dark"
+                    />
+                  </div>
+                </div>
+                <!-- Show Until -->
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Show Until Date</label
+                  >
+                  <div class="relative">
+                    <input
+                      type="date"
+                      id="showUntil"
+                      class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none"
+                      style="color-scheme: dark"
+                    />
+                  </div>
+                </div>
+                <!-- Display Duration -->
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Display Duration (seconds)</label
+                  >
+                  <input
+                    type="number"
+                    id="displayDuration"
+                    value="10"
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors"
+                  />
+                  <p class="text-xs text-slate-500 mt-1">
+                    How long the modal stays open
+                  </p>
+                </div>
+                <!-- Show For -->
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Show For (Hours)</label
+                  >
+                  <select
+                    id="showFor"
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none"
+                  >
+                    <option value="always">Always show</option>
+                    <option value="24">Once every 24 hours</option>
+                    <option value="12">Once every 12 hours</option>
+                  </select>
+                  <p class="text-xs text-slate-500 mt-1">
+                    Auto-expire after this duration per user
+                  </p>
+                </div>
+              </div>
+
+              <!-- Active Toggle -->
+              <div
+                class="bg-dark-800/80 border border-dark-700 rounded-xl p-4 flex items-center"
+              >
+                <label class="flex items-center cursor-pointer">
+                  <div class="relative">
+                    <input
+                      type="checkbox"
+                      id="isActive"
+                      class="sr-only"
+                      checked
+                    />
+                    <div
+                      class="block w-5 h-5 bg-primary rounded shadow flex items-center justify-center border border-primary"
+                      id="checkbox-bg"
+                    >
+                      <i
+                        data-lucide="check"
+                        class="w-3 h-3 text-white"
+                        id="checkbox-icon"
+                      ></i>
+                    </div>
+                  </div>
+                  <div class="ml-3 text-white font-bold text-sm">
+                    Set Active (visitors will see this)
+                  </div>
+                </label>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex justify-end pt-4 border-t border-dark-700">
+                <button
+                  type="submit"
+                  class="bg-primary hover:bg-teal-500 text-white px-6 py-3 rounded-lg font-bold transition-colors shadow-lg shadow-teal-500/20 flex items-center"
+                >
+                  Save Announcement
+                  <i data-lucide="save" class="w-4 h-4 ml-2"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- VIEW: ABOUT PAGE CONTENT -->
+        <div id="view-about" class="tab-view hidden">
+          <div class="max-w-4xl">
+            <div class="mb-6">
+              <h1 class="text-3xl font-bold text-white tracking-tight">
+                Edit 'About Us' Content
+              </h1>
+              <p class="text-sm text-slate-400 mt-1">
+                This text is displayed directly on the UIUSVS Homepage.
+              </p>
+            </div>
+
+            <form id="about-form" class="space-y-6">
+              <!-- Content Paragraph 1 -->
+              <div>
+                <label class="block text-sm font-bold text-slate-300 mb-2"
+                  >Primary Description (Paragraph 1)</label
+                >
+                <textarea
+                  id="about-p1"
+                  rows="3"
+                  required
+                  class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors resize-y"
+                  placeholder="The UIU Sanatani Vidyarthi Samsad (SVS) is..."
+                ></textarea>
+              </div>
+
+              <!-- Content Paragraph 2 -->
+              <div>
+                <label class="block text-sm font-bold text-slate-300 mb-2"
+                  >Secondary Description (Paragraph 2)</label
+                >
+                <textarea
+                  id="about-p2"
+                  rows="3"
+                  required
+                  class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors resize-y"
+                  placeholder="We believe in the power of unity..."
+                ></textarea>
+              </div>
+
+              <!-- Statistics Update -->
+              <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-dark-700"
+              >
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-1"
+                    >Years Legacy</label
+                  >
+                  <input
+                    type="number"
+                    id="stat-years"
+                    value="6"
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-1"
+                    >Yearly Events</label
+                  >
+                  <input
+                    type="number"
+                    id="stat-events"
+                    value="7"
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-1"
+                    >Active Members</label
+                  >
+                  <input
+                    type="number"
+                    id="stat-members"
+                    value="250"
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex justify-end pt-6 border-t border-dark-700 mt-6">
+                <button
+                  type="submit"
+                  class="bg-primary hover:bg-teal-500 text-white px-6 py-3 rounded-lg font-bold transition-colors shadow-lg shadow-teal-500/20 flex items-center"
+                >
+                  Update About Page
+                  <i data-lucide="upload-cloud" class="w-4 h-4 ml-2"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- VIEW: GALLERY UPLOAD -->
+        <div id="view-gallery" class="tab-view hidden">
+          <div class="max-w-4xl">
+            <div class="mb-6 flex justify-between items-end">
+              <div>
+                <h1 class="text-3xl font-bold text-white tracking-tight">
+                  Gallery Management
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">
+                  Upload photos/videos and assign captions for the Gallery page.
+                </p>
+              </div>
+            </div>
+
+            <form id="gallery-form" class="space-y-6">
+              <!-- File Upload Area -->
+              <div
+                class="upload-dashed rounded-xl p-8 flex flex-col items-center justify-center bg-dark-800/50"
+              >
+                <i
+                  data-lucide="image-plus"
+                  class="w-10 h-10 text-slate-500 mb-3"
+                ></i>
+                <p class="text-white font-medium mb-1">Select Media File</p>
+                <p class="text-xs text-slate-400 mb-4">
+                  JPG, PNG, WEBP, MP4 supported
+                </p>
+
+                <div
+                  class="flex items-center w-full max-w-sm bg-dark-900 rounded-lg overflow-hidden border border-dark-700 p-1"
+                >
+                  <label
+                    class="cursor-pointer bg-primary hover:bg-teal-500 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors whitespace-nowrap"
+                  >
+                    Choose File
+                    <input
+                      type="file"
+                      id="galleryFile"
+                      required
+                      class="hidden"
+                      accept="image/*,video/mp4"
+                    />
+                  </label>
+                  <span
+                    id="gallery-file-name"
+                    class="text-slate-400 text-sm px-4 truncate"
+                    >No file chosen</span
+                  >
+                </div>
+              </div>
+
+              <!-- Details Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Caption / Title <span class="text-red-500">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="galleryCaption"
+                    required
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors"
+                    placeholder="e.g. Saraswati Puja Aarti 2026"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-slate-300 mb-2"
+                    >Category <span class="text-red-500">*</span></label
+                  >
+                  <select
+                    id="galleryCategory"
+                    required
+                    class="w-full bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none"
+                  >
+                    <option value="" disabled selected>
+                      Select an Event Category
+                    </option>
+                    <option value="Saraswati Puja">Saraswati Puja</option>
+                    <option value="Kali Puja">Kali Puja</option>
+                    <option value="Holi">Holi</option>
+                    <option value="Prayer">Monthly Prayer</option>
+                    <option value="Other">Other Events</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Pin to Top -->
+              <div
+                class="bg-dark-800/80 border border-dark-700 rounded-xl p-4 flex items-center mt-4"
+              >
+                <label class="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="galleryIsPinned"
+                    class="w-5 h-5 accent-primary rounded bg-dark-900 border-dark-700"
+                  />
+                  <div
+                    class="ml-3 text-white font-bold text-sm flex items-center"
+                  >
+                    Pin this media
+                    <i
+                      data-lucide="pin"
+                      class="w-4 h-4 ml-2 text-yellow-500"
+                    ></i>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex justify-end pt-4 border-t border-dark-700">
+                <button
+                  type="submit"
+                  class="bg-primary hover:bg-teal-500 text-white px-6 py-3 rounded-lg font-bold transition-colors shadow-lg shadow-teal-500/20 flex items-center"
+                >
+                  Upload Media <i data-lucide="upload" class="w-4 h-4 ml-2"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Placeholder for other tabs -->
+        <div
+          id="view-placeholder"
+          class="tab-view hidden flex-col items-center justify-center h-full text-center"
+        >
+          <i
+            data-lucide="construction"
+            class="w-16 h-16 text-slate-600 mb-4"
+          ></i>
+          <h2 class="text-2xl font-bold text-white mb-2">Under Construction</h2>
+          <p class="text-slate-400">
+            This module is being built using the new UIUSVS backend.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Initialize Icons
+      lucide.createIcons();
+
+      // Top bar clock
+      function updateTime() {
+        const now = new Date();
+        document.getElementById("current-time").textContent =
+          now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        document.getElementById("last-updated-date").textContent =
+          now.toLocaleString();
+      }
+      setInterval(updateTime, 1000);
+      updateTime();
+
+      // File Input UI Logic
+      const fileInput = document.getElementById("announcementFile");
+      const fileNameDisplay = document.getElementById("file-name-display");
+
+      fileInput.addEventListener("change", function (e) {
+        if (e.target.files.length > 0) {
+          fileNameDisplay.textContent = e.target.files[0].name;
+          fileNameDisplay.classList.add("text-white");
+        } else {
+          fileNameDisplay.textContent = "No file chosen";
+          fileNameDisplay.classList.remove("text-white");
+        }
+      });
+
+      // Gallery File Input UI Logic
+      const galFileInput = document.getElementById("galleryFile");
+      const galFileNameDisplay = document.getElementById("gallery-file-name");
+
+      galFileInput.addEventListener("change", function (e) {
+        if (e.target.files.length > 0) {
+          galFileNameDisplay.textContent = e.target.files[0].name;
+          galFileNameDisplay.classList.add("text-white");
+        } else {
+          galFileNameDisplay.textContent = "No file chosen";
+          galFileNameDisplay.classList.remove("text-white");
+        }
+      });
+
+      // Custom Checkbox Logic
+      const isActiveCheck = document.getElementById("isActive");
+      const checkboxBg = document.getElementById("checkbox-bg");
+      const checkboxIcon = document.getElementById("checkbox-icon");
+
+      isActiveCheck.addEventListener("change", function () {
+        if (this.checked) {
+          checkboxBg.classList.replace("bg-dark-900", "bg-primary");
+          checkboxBg.classList.add("border-primary");
+          checkboxIcon.classList.remove("hidden");
+        } else {
+          checkboxBg.classList.replace("bg-primary", "bg-dark-900");
+          checkboxBg.classList.remove("border-primary");
+          checkboxIcon.classList.add("hidden");
+        }
+      });
+
+      // Tab Switching Logic
+      function switchTab(tabId) {
+        // Update Sidebar UI
+        document.querySelectorAll(".nav-btn").forEach((btn) => {
+          btn.classList.remove(
+            "bg-dark-700/50",
+            "text-primary",
+            "border-l-4",
+            "border-primary",
+          );
+          btn.classList.add("text-slate-400");
+        });
+        const activeBtn = document.getElementById(`nav-${tabId}`);
+        if (activeBtn) {
+          activeBtn.classList.remove("text-slate-400");
+          activeBtn.classList.add(
+            "bg-dark-700/50",
+            "text-primary",
+            "border-l-4",
+            "border-primary",
+          );
+        }
+
+        // Update Views
+        document.querySelectorAll(".tab-view").forEach((view) => {
+          view.classList.add("hidden");
+          view.classList.remove("block");
+        });
+
+        const targetView = document.getElementById(`view-${tabId}`);
+        if (targetView) {
+          targetView.classList.remove("hidden");
+          targetView.classList.add("block");
+        } else {
+          // Show placeholder for unfinished tabs
+          const placeholder = document.getElementById("view-placeholder");
+          placeholder.classList.remove("hidden");
+          placeholder.classList.add("flex");
+        }
+      }
+
+      // Form Submission Logic (Connects to server.js)
+      document
+        .getElementById("announcement-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = "Saving...";
+          btn.disabled = true;
+
+          // Prepare FormData for the Backend
+          const formData = new FormData();
+          if (fileInput.files[0]) formData.append("media", fileInput.files[0]);
+          formData.append(
+            "showFromDate",
+            document.getElementById("showFrom").value,
+          );
+          formData.append(
+            "showUntilDate",
+            document.getElementById("showUntil").value,
+          );
+          formData.append(
+            "displayDuration",
+            document.getElementById("displayDuration").value,
+          );
+          formData.append(
+            "showForHours",
+            document.getElementById("showFor").value,
+          );
+          formData.append(
+            "isActive",
+            document.getElementById("isActive").checked,
+          );
+
+          try {
+            // Example Fetch Call (Requires backend to be running)
+            /*
+                const response = await fetch('https://your-render-backend-url.com/api/announcements', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer YOUR_ADMIN_TOKEN_HERE' },
+                    body: formData
+                });
+                if(!response.ok) throw new Error('Upload failed');
+                */
+
+            // Simulating network delay for preview purposes
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            alert(
+              "Announcement Saved Successfully! It will now appear on the UIUSVS homepage.",
+            );
+          } catch (error) {
+            alert("Error saving announcement: " + error.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+
+      // About Form Submission
+      document
+        .getElementById("about-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = "Updating...";
+          btn.disabled = true;
+
+          const payload = {
+            p1: document.getElementById("about-p1").value,
+            p2: document.getElementById("about-p2").value,
+            years: document.getElementById("stat-years").value,
+            events: document.getElementById("stat-events").value,
+            members: document.getElementById("stat-members").value,
+          };
+
+          try {
+            // await fetch('/api/about', { method: 'POST', body: JSON.stringify(payload), ... });
+            await new Promise((resolve) => setTimeout(resolve, 800));
+            alert("About page content updated successfully on the homepage!");
+          } catch (error) {
+            alert("Update failed: " + error.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+
+      // Gallery Form Submission
+      document
+        .getElementById("gallery-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = "Uploading...";
+          btn.disabled = true;
+
+          const formData = new FormData();
+          formData.append("media", galFileInput.files[0]);
+          formData.append(
+            "title",
+            document.getElementById("galleryCaption").value,
+          ); // This is the caption!
+          formData.append(
+            "category",
+            document.getElementById("galleryCategory").value,
+          );
+          formData.append(
+            "isPinned",
+            document.getElementById("galleryIsPinned").checked,
+          );
+
+          try {
+            // await fetch('/api/gallery', { method: 'POST', body: formData, ... });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            alert("Media uploaded successfully to the Gallery!");
+            e.target.reset();
+            galFileNameDisplay.textContent = "No file chosen";
+          } catch (error) {
+            alert("Upload failed: " + error.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+    </script>
+  </body>
+</html>
