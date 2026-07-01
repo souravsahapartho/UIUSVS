@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join UIUSVS | Registration</title>
+    <meta
+      name="description"
+      content="Register as a member of the UIU Sanatani Vidyarthi Samsad. Join our vibrant community today."
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fffaf0",
+                100: "#ffedd5",
+                500: "#ea580c",
+                700: "#b91c1c",
+                900: "#4a0404",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fffaf0;
+        color: #4a0404;
+        overflow-x: hidden;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+      }
+      .glass-nav {
+        background: rgba(255, 250, 240, 0.9);
+        backdrop-filter: blur(12px);
+        border-bottom: 2px solid #fbbf24;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fffaf0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ea580c;
+        border-radius: 4px;
+      }
+
+      /* Sanatani Animated Background */
+      .mandala-pattern {
+        background-image:
+          radial-gradient(
+            circle at 50% 0%,
+            rgba(255, 215, 0, 0.08) 0%,
+            transparent 70%
+          ),
+          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+        background-attachment: fixed;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-15px) rotate(5deg);
+        }
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* Mobile Drawer transition */
+      #mobile-drawer {
+        transition: transform 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col antialiased mandala-pattern relative">
+    <header class="glass-nav sticky top-0 z-50 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-white rounded-full shadow border border-orange-200 flex items-center justify-center text-xl overflow-hidden relative"
+          >
+            <span
+              class="absolute inset-0 flex items-center justify-center animate-pulse opacity-20 bg-orange-100"
+            ></span>
+            <span class="relative z-10 text-orange-600">🕉️</span>
+          </div>
+          <span
+            class="font-serif font-bold text-xl text-brand-900 tracking-tight"
+            >UIUSVS</span
+          >
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex gap-6 items-center">
+          <a
+            href="index.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Home</a
+          >
+          <a
+            href="alumni.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Members</a
+          >
+          <a
+            href="gallery.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Blog</a
+          >
+          <a
+            href="login.html"
+            class="text-sm font-bold text-white bg-brand-700 px-4 py-1.5 rounded-full hover:bg-brand-900 transition shadow-sm"
+            >My Profile</a
+          >
+        </nav>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="md:hidden text-brand-900 p-2" onclick="toggleDrawer()">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div
+      id="mobile-drawer"
+      class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl z-[100] transform translate-x-full md:hidden flex flex-col"
+    >
+      <div
+        class="p-4 border-b border-orange-100 flex justify-between items-center bg-brand-50"
+      >
+        <span class="font-serif font-bold text-lg text-brand-900">Menu</span>
+        <button
+          onclick="toggleDrawer()"
+          class="text-gray-500 hover:text-red-500"
+        >
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <nav class="flex flex-col p-4 gap-4">
+        <a
+          href="index.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Home</a
+        >
+        <a
+          href="alumni.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Members</a
+        >
+        <a
+          href="gallery.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Gallery</a
+        >
+        <a href="blog.html" class="font-bold text-gray-700 hover:text-brand-700"
+          >Blog</a
+        >
+        <hr class="border-orange-100" />
+        <a
+          href="login.html"
+          class="font-bold text-white bg-brand-700 text-center py-2 rounded-xl shadow-sm"
+          >My Profile</a
+        >
+      </nav>
+    </div>
+    <!-- Drawer Overlay -->
+    <div
+      id="drawer-overlay"
+      class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden"
+      onclick="toggleDrawer()"
+    ></div>
+
+    <main
+      class="flex-1 flex items-center justify-center p-4 relative z-10 my-10"
+    >
+      <!-- Floating Elements -->
+      <div
+        class="absolute -top-10 -left-10 text-6xl opacity-10 animate-float text-orange-500 pointer-events-none"
+      >
+        🪷
+      </div>
+      <div
+        class="absolute bottom-10 right-10 text-6xl opacity-10 animate-float text-red-500 pointer-events-none"
+        style="animation-delay: 2s"
+      >
+        🪔
+      </div>
+
+      <div
+        class="glass-card w-full max-w-2xl rounded-3xl shadow-xl border border-orange-200 p-8 sm:p-10 transform transition-all relative overflow-hidden"
+      >
+        <!-- Decorative Top Border -->
+        <div
+          class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-red-500 to-orange-400"
+        ></div>
+
+        <div class="text-center mb-8">
+          <h1
+            class="text-3xl sm:text-4xl font-serif font-extrabold text-brand-900 mb-2"
+          >
+            Join the Legacy
+          </h1>
+          <p class="text-sm text-gray-600">
+            Register as a member of the UIU Sanatani Vidyarthi Samsad.
+          </p>
+        </div>
+
+        <form id="signup-form" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Full Name -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >Full Name <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                id="name"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                placeholder="e.g. Joy Das"
+              />
+            </div>
+            <!-- Student ID -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >UIU Student ID <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                id="studentId"
+                required
+                pattern="[0-9]*"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                placeholder="e.g. 011243000"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >Email Address <span class="text-red-500">*</span></label
+              >
+              <input
+                type="email"
+                id="email"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                placeholder="your.email@example.com"
+              />
+            </div>
+            <!-- Contact Number -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >Contact Number <span class="text-red-500">*</span></label
+              >
+              <input
+                type="tel"
+                id="contact"
+                required
+                pattern="[0-9]*"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                placeholder="e.g. 017xxxxxxxx"
+              />
+              <p class="text-[10px] text-gray-500 mt-1">
+                *Kept completely private
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Gender -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >Gender <span class="text-red-500">*</span></label
+              >
+              <select
+                id="gender"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all bg-white"
+              >
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <!-- Membership Type -->
+            <div>
+              <label class="block text-sm font-bold text-brand-900 mb-1.5"
+                >Membership Status <span class="text-red-500">*</span></label
+              >
+              <select
+                id="type"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all bg-white"
+              >
+                <option value="" disabled selected>Select Status</option>
+                <option value="current">Current Student</option>
+                <option value="ex">Alumni (Ex-Student)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Past UIUSVS Role -->
+          <div>
+            <label class="block text-sm font-bold text-brand-900 mb-1.5"
+              >UIUSVS Designation (If any)</label
+            >
+            <input
+              type="text"
+              id="designation"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+              placeholder="e.g. Former General Secretary, Executive Member"
+            />
+            <p class="text-[10px] text-gray-500 mt-1">
+              If you held multiple positions, mention your highest/best role.
+            </p>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label class="block text-sm font-bold text-brand-900 mb-1.5"
+              >Password <span class="text-red-500">*</span></label
+            >
+            <input
+              type="password"
+              id="password"
+              required
+              minlength="6"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+              placeholder="Create a secure password (Min. 6 chars)"
+            />
+          </div>
+
+          <!-- Profile Pic Info -->
+          <div
+            class="bg-brand-50 rounded-xl p-4 border border-brand-100 flex items-start gap-3 mt-4"
+          >
+            <i
+              data-lucide="info"
+              class="w-5 h-5 text-brand-700 flex-shrink-0 mt-0.5"
+            ></i>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              After registration, an admin must verify your account. If you
+              don't upload a profile picture later, a beautiful thematic avatar
+              will be auto-assigned based on your gender.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full bg-gradient-to-r from-brand-700 to-brand-500 hover:from-brand-900 hover:to-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex justify-center items-center gap-2 mt-4"
+          >
+            Submit Application <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+
+          <p
+            class="text-center text-sm text-gray-600 mt-6 pt-4 border-t border-gray-200"
+          >
+            Already part of the family?
+            <a
+              href="login.html"
+              class="text-brand-700 font-bold hover:underline"
+              >Sign in here</a
+            >
+          </p>
+        </form>
+      </div>
+    </main>
+
+    <footer
+      class="bg-white border-t border-orange-200 py-8 mt-auto z-10 relative"
+    >
+      <div class="container mx-auto px-4 text-center">
+        <div class="flex justify-center items-center gap-2 mb-4">
+          <span class="text-orange-600 text-2xl">🕉️</span>
+          <span class="font-serif font-bold text-xl text-brand-900"
+            >UIU SVS</span
+          >
+        </div>
+        <p class="text-sm text-gray-600 mb-4">
+          United International University, Dhaka
+        </p>
+        <p class="text-xs text-gray-400">
+          &copy; 2026 UIUSVS. Developed by Sourav Saha.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Custom Toast -->
+    <div
+      id="toast"
+      class="fixed top-20 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-x-10"
+    >
+      <div
+        id="toast-content"
+        class="px-6 py-3 rounded-lg shadow-xl font-bold text-sm text-white flex items-center gap-3"
+      >
+        <span id="toast-icon" class="text-lg"></span>
+        <span id="toast-message">Message</span>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // Drawer logic
+      function toggleDrawer() {
+        const drawer = document.getElementById("mobile-drawer");
+        const overlay = document.getElementById("drawer-overlay");
+        if (drawer.classList.contains("translate-x-full")) {
+          drawer.classList.remove("translate-x-full");
+          overlay.classList.remove("hidden");
+        } else {
+          drawer.classList.add("translate-x-full");
+          overlay.classList.add("hidden");
+        }
+      }
+
+      // Toast logic
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastContent = document.getElementById("toast-content");
+
+        document.getElementById("toast-message").textContent = message;
+
+        if (type === "success") {
+          toastContent.className =
+            "px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3 bg-green-600 border-l-4 border-green-300";
+          document.getElementById("toast-icon").innerHTML = "✅";
+        } else {
+          toastContent.className =
+            "px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3 bg-red-600 border-l-4 border-red-300";
+          document.getElementById("toast-icon").innerHTML = "⚠️";
+        }
+
+        toast.classList.remove(
+          "opacity-0",
+          "translate-x-10",
+          "pointer-events-none",
+        );
+        setTimeout(() => {
+          toast.classList.add(
+            "opacity-0",
+            "translate-x-10",
+            "pointer-events-none",
+          );
+        }, 4000);
+      }
+
+      // Form Submit
+      document
+        .getElementById("signup-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("submit-btn");
+          const originalText = btn.innerHTML;
+
+          // Gather data
+          const payload = {
+            name: document.getElementById("name").value,
+            studentId: document.getElementById("studentId").value,
+            email: document.getElementById("email").value,
+            contact: document.getElementById("contact").value,
+            gender: document.getElementById("gender").value,
+            type: document.getElementById("type").value,
+            designation:
+              document.getElementById("designation").value || "Member",
+            password: document.getElementById("password").value,
+          };
+
+          btn.innerHTML =
+            '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...';
+          btn.disabled = true;
+          lucide.createIcons();
+
+          try {
+            // Simulate Backend Wait
+            await new Promise((r) => setTimeout(r, 1500));
+
+            // Show Success
+            showToast(
+              "Application sent successfully! Pending Admin Approval.",
+              "success",
+            );
+            e.target.reset();
+
+            setTimeout(() => {
+              window.location.href = "login.html";
+            }, 2000);
+          } catch (err) {
+            showToast(err.message, "error");
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+    </script>
+  </body>
+</html>
