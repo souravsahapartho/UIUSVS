@@ -94,7 +94,10 @@ module.exports = (pool) => {
         return res.status(400).json({ error: "Invalid or expired OTP" });
       }
 
-      const d = JSON.parse(pending.payload);
+      const d =
+        typeof pending.payload === "string"
+          ? JSON.parse(pending.payload)
+          : pending.payload;
       await pool.query(
         `INSERT INTO users (name, student_id, email, contact, gender, type, designation, password, avatar_url, email_verified, is_approved)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
