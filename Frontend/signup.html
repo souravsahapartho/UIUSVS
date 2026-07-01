@@ -650,6 +650,11 @@
           const btn = document.getElementById("submit-btn");
           const originalText = btn.innerHTML;
 
+          const deptValue =
+            document.getElementById("department").value === "Others"
+              ? document.getElementById("department-other").value.trim()
+              : document.getElementById("department").value;
+
           const payload = {
             name: document.getElementById("name").value,
             studentId: document.getElementById("studentId").value,
