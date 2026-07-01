@@ -13,99 +13,110 @@ module.exports = (pool) => {
 
   // --- STEP 1: Signup request → send OTP ---
   router.post("/signup", async (req, res) => {
-    const {
-      name,
-      studentId,
-      email,
-      contact,
-      gender,
-      type,
-      designation,
-      password,
-      profilePicUrl,
-    } = req.body;
+    try {
+      const {
+        name,
+        studentId,
+        email,
+        contact,
+        gender,
+        type,
+        designation,
+        password,
+        profilePicUrl,
+      } = req.body;
 
-    const [existing] = await pool.query("SELECT id FROM users WHERE email=?", [
-      email,
-    ]);
-    if (existing.length)
-      return res.status(400).json({ error: "Email already registered" });
+      const [existing] = await pool.query(
+        "SELECT id FROM users WHERE email=?",
+        [email],
+      );
+      if (existing.length)
+        return res.status(400).json({ error: "Email already registered" });
 
-    const hashed = await bcrypt.hash(password, 10);
-    const otp = generateOtp();
-    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+      const hashed = await bcrypt.hash(password, 10);
+      const otp = generateOtp();
+      const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 
-    const avatarUrl =
-      profilePicUrl ||
-      (gender === "Female"
-        ? `https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(name)}&backgroundColor=ffd5dc`
-        : `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(name)}&backgroundColor=b6e3f4`);
+      const avatarUrl =
+        profilePicUrl ||
+        (gender === "Female"
+          ? `https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(name)}&backgroundColor=ffd5dc`
+          : `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(name)}&backgroundColor=b6e3f4`);
 
-    const payload = {
-      name,
-      studentId,
-      email,
-      contact,
-      gender,
-      type,
-      designation,
-      hashed,
-      avatarUrl,
-    };
+      const payload = {
+        name,
+        studentId,
+        email,
+        contact,
+        gender,
+        type,
+        designation,
+        hashed,
+        avatarUrl,
+      };
 
-    await pool.query(
-      `INSERT INTO pending_signups (email, payload, otp_code, otp_expires_at)
+      await pool.query(
+        `INSERT INTO pending_signups (email, payload, otp_code, otp_expires_at)
      VALUES (?, ?, ?, ?)
      ON DUPLICATE KEY UPDATE payload=VALUES(payload), otp_code=VALUES(otp_code), otp_expires_at=VALUES(otp_expires_at)`,
-      [email, JSON.stringify(payload), otp, expires],
-    );
+        [email, JSON.stringify(payload), otp, expires],
+      );
 
-    await sendEmail({
-      to: email,
-      subject: "UIUSVS - Your Verification Code",
-      htmlContent: `<p>Apnar verification code: <b>${otp}</b> (valid 10 minutes)</p>`,
-    });
+      await sendEmail({
+        to: email,
+        subject: "UIUSVS - Your Verification Code",
+        htmlContent: `<p>Apnar verification code: <b>${otp}</b> (valid 10 minutes)</p>`,
+      });
 
-    res.json({ message: "OTP sent to email" });
+      res.json({ message: "OTP sent to email" });
+    } catch (error) {
+      console.error("❌ Signup failed:", error);
+      res.status(500).json({ error: error.message });
+    }
   });
 
   // --- STEP 2: Verify OTP → actually create user (pending admin approval) ---
   router.post("/verify-otp", async (req, res) => {
-    const { email, otp } = req.body;
-    const [rows] = await pool.query(
-      "SELECT * FROM pending_signups WHERE email=?",
-      [email],
-    );
-    if (!rows.length)
-      return res.status(400).json({ error: "No pending signup found" });
+    try {
+      const { email, otp } = req.body;
+      const [rows] = await pool.query(
+        "SELECT * FROM pending_signups WHERE email=?",
+        [email],
+      );
+      if (!rows.length)
+        return res.status(400).json({ error: "No pending signup found" });
 
-    const pending = rows[0];
-    if (
-      pending.otp_code !== otp ||
-      new Date(pending.otp_expires_at) < new Date()
-    ) {
-      return res.status(400).json({ error: "Invalid or expired OTP" });
-    }
+      const pending = rows[0];
+      if (
+        pending.otp_code !== otp ||
+        new Date(pending.otp_expires_at) < new Date()
+      ) {
+        return res.status(400).json({ error: "Invalid or expired OTP" });
+      }
 
-    const d = JSON.parse(pending.payload);
-    await pool.query(
-      `INSERT INTO users (name, student_id, email, contact, gender, type, designation, password, avatar_url, email_verified, is_approved)
+      const d = JSON.parse(pending.payload);
+      await pool.query(
+        `INSERT INTO users (name, student_id, email, contact, gender, type, designation, password, avatar_url, email_verified, is_approved)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
-      [
-        d.name,
-        d.studentId,
-        d.email,
-        d.contact,
-        d.gender,
-        d.type,
-        d.designation,
-        d.hashed,
-        d.avatarUrl,
-      ],
-    );
-    await pool.query("DELETE FROM pending_signups WHERE email=?", [email]);
+        [
+          d.name,
+          d.studentId,
+          d.email,
+          d.contact,
+          d.gender,
+          d.type,
+          d.designation,
+          d.hashed,
+          d.avatarUrl,
+        ],
+      );
+      await pool.query("DELETE FROM pending_signups WHERE email=?", [email]);
 
-    res.json({ message: "Verified! Waiting for admin approval." });
+      res.json({ message: "Verified! Waiting for admin approval." });
+    } catch (error) {
+      console.error("❌ Verify OTP failed:", error);
+      res.status(500).json({ error: error.message });
+    }
   });
 
   router.post("/login", async (req, res) => {
