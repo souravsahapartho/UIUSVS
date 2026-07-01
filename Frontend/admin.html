@@ -410,40 +410,46 @@
             >
               <!-- Image Upload -->
               <div
-                class="upload-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+                id="gallery-dropzone"
+                tabindex="0"
+                class="upload-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center outline-none focus:ring-2 focus:ring-brand-400"
               >
                 <div
-                  class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-orange-200"
+                  class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-orange-200 text-brand-500"
                 >
-                  <i
-                    data-lucide="image-plus"
-                    class="w-8 h-8 text-brand-500"
-                  ></i>
+                  <i data-lucide="camera" class="w-8 h-8"></i>
                 </div>
                 <p class="text-brand-900 font-bold mb-1">
-                  Upload Announcement Banner
+                  Select or Paste Media
                 </p>
-                <p class="text-xs text-gray-500 mb-5">
-                  Recommended ratio: 4:3 or Square (JPG, PNG)
+                <p class="text-xs text-gray-500 mb-2">
+                  JPG, PNG, WEBP, MP4 supported
                 </p>
-
-                <label
-                  class="cursor-pointer bg-brand-50 border border-brand-200 hover:bg-brand-100 text-brand-700 px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
+                <p
+                  class="text-[11px] text-brand-600 font-semibold mb-5 flex items-center gap-1"
                 >
-                  Choose File
+                  <i data-lucide="clipboard" class="w-3.5 h-3.5"></i> Click here
+                  then press Ctrl+V to paste an image
+                </p>
+                <label
+                  class="cursor-pointer bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
+                >
+                  Browse Device
                   <input
                     type="file"
+                    id="gal-file-input"
                     class="hidden"
-                    accept="image/*"
-                    onchange="
-                      document.getElementById('annc-file-name').textContent =
-                        this.files[0]?.name || 'No file chosen'
-                    "
+                    accept="image/*,video/mp4"
+                    onchange="handleGalleryFileSelect(this)"
                   />
                 </label>
-                <span id="annc-file-name" class="text-gray-400 text-xs mt-3"
+                <span id="gal-file-name" class="text-gray-400 text-xs mt-3"
                   >No file chosen</span
                 >
+                <img
+                  id="gal-preview-img"
+                  class="hidden mt-4 max-h-40 rounded-lg border border-orange-200 shadow-sm"
+                />
               </div>
 
               <!-- Settings Grid -->
@@ -818,7 +824,7 @@
               </div>
 
               <div
-                class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-2xl border border-gray-100"
+                class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50/50 p-6 rounded-2xl border border-gray-100"
               >
                 <div>
                   <label class="block text-sm font-bold text-gray-700 mb-2"
@@ -845,16 +851,16 @@
                     <option value="Holi">Holi</option>
                     <option value="Prayer">Monthly Prayer</option>
                   </select>
-                  <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2"
-                      >Event Date</label
-                    >
-                    <input
-                      type="date"
-                      id="gal-date"
-                      class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
-                    />
-                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2"
+                    >Event Date</label
+                  >
+                  <input
+                    type="date"
+                    id="gal-date"
+                    class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+                  />
                 </div>
               </div>
 
@@ -1275,21 +1281,93 @@
       const API_BASE = "https://uiusvs.onrender.com/api";
       let selectedGalleryFile = null;
 
-      function handleGalleryFileSelect(input) {
+      function setSelectedGalleryFile(file, previewUrl) {
+        selectedGalleryFile = file;
         const nameSpan = document.getElementById("gal-file-name");
-        if (input.files && input.files.length > 0) {
-          selectedGalleryFile = input.files[0];
-          nameSpan.textContent = selectedGalleryFile.name;
-          nameSpan.classList.remove("text-gray-400");
-          nameSpan.classList.add("text-green-600", "font-bold");
+        const previewImg = document.getElementById("gal-preview-img");
+
+        nameSpan.textContent = file.name || "Pasted image";
+        nameSpan.classList.remove("text-gray-400");
+        nameSpan.classList.add("text-green-600", "font-bold");
+
+        if (previewUrl && file.type.startsWith("image/")) {
+          previewImg.src = previewUrl;
+          previewImg.classList.remove("hidden");
         } else {
-          selectedGalleryFile = null;
-          nameSpan.textContent = "No file chosen";
-          nameSpan.classList.add("text-gray-400");
-          nameSpan.classList.remove("text-green-600", "font-bold");
+          previewImg.classList.add("hidden");
         }
       }
 
+      function handleGalleryFileSelect(input) {
+        if (input.files && input.files.length > 0) {
+          const file = input.files[0];
+          const previewUrl = file.type.startsWith("image/")
+            ? URL.createObjectURL(file)
+            : null;
+          setSelectedGalleryFile(file, previewUrl);
+        } else {
+          selectedGalleryFile = null;
+          document.getElementById("gal-file-name").textContent =
+            "No file chosen";
+          document.getElementById("gal-preview-img").classList.add("hidden");
+        }
+      }
+
+      // 🎯 Paste (Ctrl+V) support for gallery upload
+      document.addEventListener("DOMContentLoaded", () => {
+        const dropzone = document.getElementById("gallery-dropzone");
+        if (!dropzone) return;
+
+        dropzone.addEventListener("click", () => dropzone.focus());
+
+        dropzone.addEventListener("paste", (e) => {
+          const items = e.clipboardData?.items;
+          if (!items) return;
+          for (let item of items) {
+            if (item.type.startsWith("image/")) {
+              const file = item.getAsFile();
+              if (file) {
+                const ext = item.type.split("/")[1] || "png";
+                const renamedFile = new File(
+                  [file],
+                  `pasted-image-${Date.now()}.${ext}`,
+                  { type: item.type },
+                );
+                const previewUrl = URL.createObjectURL(renamedFile);
+                setSelectedGalleryFile(renamedFile, previewUrl);
+                showToast("Image pasted successfully!");
+              }
+              e.preventDefault();
+              break;
+            }
+          }
+        });
+
+        document.addEventListener("paste", (e) => {
+          const galleryTab = document.getElementById("view-gallery");
+          if (galleryTab && !galleryTab.classList.contains("hidden")) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (let item of items) {
+              if (item.type.startsWith("image/")) {
+                const file = item.getAsFile();
+                if (file) {
+                  const ext = item.type.split("/")[1] || "png";
+                  const renamedFile = new File(
+                    [file],
+                    `pasted-image-${Date.now()}.${ext}`,
+                    { type: item.type },
+                  );
+                  const previewUrl = URL.createObjectURL(renamedFile);
+                  setSelectedGalleryFile(renamedFile, previewUrl);
+                  showToast("Image pasted successfully!");
+                }
+                break;
+              }
+            }
+          }
+        });
+      });
       async function uploadGalleryMedia() {
         const title = document.getElementById("gal-title");
         const category = document.getElementById("gal-category");
