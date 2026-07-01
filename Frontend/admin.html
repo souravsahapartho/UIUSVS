@@ -1479,8 +1479,11 @@
           const res = await fetch(`${API_BASE}/admin-users/pending`, {
             credentials: "include",
           });
+          if (!res.ok) {
+            container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-red-500 text-sm">Session error (${res.status}) — please re-login</td></tr>`;
+            return;
+          }
           const items = await res.json();
-
           if (!items.length) {
             container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-gray-400 text-sm">No pending members 🎉</td></tr>`;
             return;
@@ -1558,7 +1561,8 @@
           const data = await res.json();
           if (data.user.role !== "admin" && data.user.role !== "superadmin")
             throw new Error();
-        } catch {
+        } catch (err) {
+          console.error("Auth check failed:", err); // <-- browser console এ real reason দেখাবে
           window.location.href = "login.html";
         }
       })();
