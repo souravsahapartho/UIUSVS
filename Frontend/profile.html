@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile | UIUSVS</title>
+    <meta name="description" content="Manage your UIUSVS member profile." />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fffaf0",
+                100: "#ffedd5",
+                500: "#ea580c",
+                700: "#b91c1c",
+                900: "#4a0404",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fffaf0;
+        color: #4a0404;
+        overflow-x: hidden;
+      }
+      .glass-nav {
+        background: rgba(255, 250, 240, 0.9);
+        backdrop-filter: blur(12px);
+        border-bottom: 2px solid #fbbf24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #ffedd5;
+        box-shadow: 0 10px 30px rgba(234, 88, 12, 0.05);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fffaf0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ea580c;
+        border-radius: 4px;
+      }
+
+      .mandala-pattern {
+        background-image:
+          radial-gradient(
+            circle at 0% 0%,
+            rgba(255, 215, 0, 0.08) 0%,
+            transparent 60%
+          ),
+          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+        background-attachment: fixed;
+      }
+
+      .smooth-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ea580c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2em;
+        padding-right: 2.5rem;
+      }
+
+      #mobile-drawer {
+        transition: transform 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col mandala-pattern">
+    <!-- Navbar -->
+    <header class="glass-nav sticky top-0 z-50 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-white rounded-full shadow border border-orange-200 flex items-center justify-center text-xl overflow-hidden relative"
+          >
+            <span
+              class="absolute inset-0 flex items-center justify-center animate-pulse opacity-20 bg-orange-100"
+            ></span>
+            <span class="relative z-10 text-orange-600">🕉️</span>
+          </div>
+          <span
+            class="font-serif font-bold text-xl text-brand-900 tracking-tight"
+            >UIUSVS</span
+          >
+        </a>
+
+        <nav class="hidden md:flex gap-6 items-center">
+          <a
+            href="index.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Home</a
+          >
+          <a
+            href="alumni.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Members</a
+          >
+          <a
+            href="gallery.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Blog</a
+          >
+
+          <div class="relative group">
+            <button
+              class="text-sm font-bold text-white bg-brand-700 px-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-brand-500"
+            >
+              My Profile <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
+            <div
+              class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-orange-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+            >
+              <a
+                href="profile.html"
+                class="block px-4 py-2 text-sm font-bold text-brand-900 hover:bg-orange-50 rounded-t-xl"
+                ><i data-lucide="user" class="w-4 h-4 inline mr-1"></i>
+                Dashboard</a
+              >
+              <button
+                onclick="handleLogout()"
+                class="w-full text-left px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 rounded-b-xl border-t border-orange-50"
+              >
+                <i data-lucide="log-out" class="w-4 h-4 inline mr-1"></i> Logout
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <button class="md:hidden text-brand-900 p-2" onclick="toggleDrawer()">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div
+      id="mobile-drawer"
+      class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl z-[100] transform translate-x-full md:hidden flex flex-col"
+    >
+      <div
+        class="p-4 border-b border-orange-100 flex justify-between items-center bg-brand-50"
+      >
+        <span class="font-serif font-bold text-lg text-brand-900">Menu</span>
+        <button
+          onclick="toggleDrawer()"
+          class="text-gray-500 hover:text-red-500"
+        >
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <nav class="flex flex-col p-4 gap-4">
+        <a
+          href="index.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Home</a
+        >
+        <a
+          href="alumni.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Members</a
+        >
+        <a
+          href="gallery.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Gallery</a
+        >
+        <a href="blog.html" class="font-bold text-gray-700 hover:text-brand-700"
+          >Blog</a
+        >
+        <hr class="border-orange-100" />
+        <a
+          href="profile.html"
+          class="font-bold text-brand-700 flex items-center"
+          ><i data-lucide="user" class="w-4 h-4 mr-2"></i> My Dashboard</a
+        >
+        <button
+          onclick="handleLogout()"
+          class="font-bold text-red-600 text-left flex items-center"
+        >
+          <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Logout
+        </button>
+      </nav>
+    </div>
+    <div
+      id="drawer-overlay"
+      class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden"
+      onclick="toggleDrawer()"
+    ></div>
+
+    <main
+      class="container mx-auto px-4 py-8 lg:py-12 flex-1 relative z-10 max-w-6xl"
+    >
+      <div
+        class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-3xl md:text-4xl font-serif font-extrabold text-brand-900"
+          >
+            Member Dashboard
+          </h1>
+          <p class="text-gray-600 mt-1">
+            Manage your identity in the UIUSVS Family directory.
+          </p>
+        </div>
+        <div
+          class="bg-green-50 border border-green-200 text-green-700 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm inline-flex items-center w-fit"
+        >
+          <span
+            class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"
+          ></span>
+          Verified Member
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column: Avatar & Quick Info -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Avatar Card -->
+          <div
+            class="glass-card rounded-3xl p-6 text-center border-t-4 border-t-brand-500 relative overflow-hidden"
+          >
+            <div
+              class="w-32 h-32 mx-auto rounded-full border-4 border-orange-100 shadow-md relative overflow-hidden mb-4 bg-white group"
+            >
+              <img
+                id="profile-img"
+                src="https://api.dicebear.com/7.x/adventurer/svg?seed=M1&backgroundColor=ffdfbf"
+                alt="Profile"
+                class="w-full h-full object-cover"
+              />
+
+              <!-- Upload Overlay -->
+              <label
+                for="avatar-upload"
+                class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              >
+                <i data-lucide="camera" class="w-6 h-6 mb-1"></i>
+                <span class="text-xs font-bold">Change</span>
+              </label>
+              <input
+                type="file"
+                id="avatar-upload"
+                class="hidden"
+                accept="image/jpeg, image/png, image/webp"
+                onchange="handleImageChange(this)"
+              />
+            </div>
+
+            <h2
+              class="text-xl font-bold text-brand-900 font-serif mb-1"
+              id="display-name"
+            >
+              Joy Das
+            </h2>
+            <p class="text-sm font-bold text-gray-500 mb-3">
+              ID: <span id="display-id">011243000</span>
+            </p>
+
+            <div
+              class="inline-block bg-brand-50 text-brand-700 px-3 py-1 rounded text-xs font-extrabold uppercase tracking-widest border border-brand-200"
+            >
+              Current Student
+            </div>
+
+            <!-- Profile Pic Warning Note -->
+            <div
+              class="mt-6 text-left bg-orange-50 p-3 rounded-xl border border-orange-200 relative"
+            >
+              <i
+                data-lucide="lock"
+                class="absolute top-3 right-3 w-4 h-4 text-orange-400"
+              ></i>
+              <p
+                class="text-[10px] font-bold text-orange-800 uppercase tracking-widest mb-1"
+              >
+                Picture Policy
+              </p>
+              <p class="text-xs text-gray-600 leading-tight">
+                To maintain directory consistency, you can change your profile
+                picture <strong>only once a year</strong>.
+              </p>
+              <p
+                id="pic-status"
+                class="text-xs font-bold text-green-600 mt-2 flex items-center gap-1"
+              >
+                <i data-lucide="check-circle" class="w-3 h-3"></i> You can
+                change it now.
+              </p>
+            </div>
+          </div>
+
+          <!-- Digital ID Card Hint -->
+          <div
+            class="bg-gradient-to-br from-brand-900 to-brand-700 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden"
+          >
+            <div
+              class="absolute -right-4 -bottom-4 text-8xl opacity-10 font-serif"
+            >
+              🕉️
+            </div>
+            <h3 class="font-bold text-lg mb-2">Digital ID Card</h3>
+            <p class="text-sm text-brand-100 mb-4 leading-snug">
+              Your official UIUSVS Digital Identity Card is generated based on
+              this profile data.
+            </p>
+            <button
+              class="text-xs font-bold bg-white text-brand-900 px-4 py-2 rounded-lg shadow hover:bg-brand-50 transition-colors flex items-center gap-2"
+            >
+              <i data-lucide="download" class="w-4 h-4"></i> Download ID
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Settings Form -->
+        <div class="lg:col-span-2">
+          <div class="glass-card rounded-3xl p-6 sm:p-8">
+            <div
+              class="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-2xl mb-8"
+            >
+              <i
+                data-lucide="shield-alert"
+                class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5"
+              ></i>
+              <div>
+                <p class="text-sm font-bold text-yellow-800 mb-0.5">
+                  Admin Verification Required
+                </p>
+                <p class="text-xs text-yellow-700 leading-relaxed">
+                  Any changes made to your Name, Batch, Department, or
+                  Designation will not be visible on the public directory
+                  immediately. An admin must verify and approve the changes.
+                </p>
+              </div>
+            </div>
+
+            <form id="profile-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    id="prof-name"
+                    value="Joy Das"
+                    required
+                    class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  />
+                </div>
+                <!-- Email -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    id="prof-email"
+                    value="joy@example.com"
+                    required
+                    class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Contact -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Contact Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="prof-phone"
+                    value="01700000000"
+                    required
+                    class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  />
+                  <p class="text-[10px] text-gray-500 mt-1">
+                    Kept private. Not shown in directory.
+                  </p>
+                </div>
+                <!-- Blood Group -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Blood Group</label
+                  >
+                  <select
+                    id="prof-blood"
+                    class="smooth-select w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  >
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+" selected>O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Department -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Department</label
+                  >
+                  <select
+                    id="prof-dept"
+                    class="smooth-select w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  >
+                    <option value="CSE" selected>CSE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="BBA">BBA</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                  </select>
+                </div>
+                <!-- Batch/Trimester -->
+                <div>
+                  <label
+                    class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >Batch / Trimester</label
+                  >
+                  <input
+                    type="text"
+                    id="prof-batch"
+                    value="Spring 2024"
+                    required
+                    class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <!-- UIUSVS Designation -->
+              <div>
+                <label
+                  class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                  >UIUSVS Designation</label
+                >
+                <input
+                  type="text"
+                  id="prof-designation"
+                  value="Member"
+                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                />
+                <p class="text-[10px] text-gray-500 mt-1">
+                  If you hold or held a position (e.g., General Secretary,
+                  Executive Member). Leave as "Member" otherwise.
+                </p>
+              </div>
+
+              <!-- Address -->
+              <div>
+                <label
+                  class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                  >Present Address</label
+                >
+                <input
+                  type="text"
+                  id="prof-address"
+                  value="Vatara, Dhaka"
+                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                />
+              </div>
+
+              <hr class="border-gray-200" />
+
+              <!-- Password Change (Optional) -->
+              <div>
+                <h4 class="font-bold text-brand-900 mb-4 font-serif text-lg">
+                  Change Password
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      id="prof-new-pwd"
+                      placeholder="Leave blank to keep current"
+                      class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                      >Confirm New Password</label
+                    >
+                    <input
+                      type="password"
+                      id="prof-conf-pwd"
+                      placeholder="Confirm new password"
+                      class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end pt-4">
+                <button
+                  type="submit"
+                  id="save-btn"
+                  class="bg-gradient-to-r from-brand-700 to-brand-500 hover:from-brand-900 hover:to-brand-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+                >
+                  <i data-lucide="save" class="w-4 h-4"></i> Save Profile
+                  Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="bg-white border-t border-orange-200 py-8 relative z-10 mt-auto"
+    >
+      <div class="container mx-auto px-4 text-center">
+        <p class="text-sm text-gray-600 mb-2">
+          United International University, Dhaka
+        </p>
+        <p class="text-xs text-gray-400">
+          &copy; 2026 UIUSVS. Developed by Sourav Saha.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Custom Toast -->
+    <div
+      id="toast"
+      class="fixed bottom-10 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-y-10"
+    >
+      <div
+        id="toast-content"
+        class="px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3"
+      >
+        <span id="toast-icon" class="text-lg"></span>
+        <span id="toast-message">Message</span>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      function toggleDrawer() {
+        const drawer = document.getElementById("mobile-drawer");
+        const overlay = document.getElementById("drawer-overlay");
+        drawer.classList.toggle("translate-x-full");
+        overlay.classList.toggle("hidden");
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastContent = document.getElementById("toast-content");
+
+        document.getElementById("toast-message").textContent = message;
+
+        if (type === "success") {
+          toastContent.className =
+            "px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3 bg-green-600 border-l-4 border-green-300";
+          document.getElementById("toast-icon").innerHTML = "✅";
+        } else if (type === "warning") {
+          toastContent.className =
+            "px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3 bg-yellow-500 border-l-4 border-yellow-200";
+          document.getElementById("toast-icon").innerHTML = "⚠️";
+        } else {
+          toastContent.className =
+            "px-6 py-4 rounded-xl shadow-2xl font-bold text-sm text-white flex items-center gap-3 bg-red-600 border-l-4 border-red-300";
+          document.getElementById("toast-icon").innerHTML = "❌";
+        }
+
+        toast.classList.remove(
+          "opacity-0",
+          "translate-y-10",
+          "pointer-events-none",
+        );
+        setTimeout(() => {
+          toast.classList.add(
+            "opacity-0",
+            "translate-y-10",
+            "pointer-events-none",
+          );
+        }, 4000);
+      }
+
+      function handleLogout() {
+        showToast("Logging out...", "success");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
+      }
+
+      // Logic to simulate Profile Pic Upload rules
+      let hasChangedPicThisYear = false; // Mock DB state
+
+      function handleImageChange(input) {
+        if (hasChangedPicThisYear) {
+          showToast(
+            "You have already changed your picture this year.",
+            "error",
+          );
+          input.value = ""; // Reset file input
+          return;
+        }
+
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("profile-img").src = e.target.result;
+            showToast(
+              "New profile picture selected! Save changes to apply.",
+              "success",
+            );
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      // Form Submit
+      document
+        .getElementById("profile-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("save-btn");
+          const originalText = btn.innerHTML;
+
+          // Basic Pwd Check
+          const pwd1 = document.getElementById("prof-new-pwd").value;
+          const pwd2 = document.getElementById("prof-conf-pwd").value;
+          if (pwd1 || pwd2) {
+            if (pwd1 !== pwd2) {
+              return showToast("Passwords do not match!", "error");
+            }
+            if (pwd1.length < 6) {
+              return showToast(
+                "Password must be at least 6 characters.",
+                "error",
+              );
+            }
+          }
+
+          btn.innerHTML =
+            '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...';
+          btn.disabled = true;
+          lucide.createIcons();
+
+          try {
+            // Simulate Backend Wait
+            await new Promise((r) => setTimeout(r, 1500));
+
+            // Update Name on UI for mock visual
+            document.getElementById("display-name").textContent =
+              document.getElementById("prof-name").value;
+
+            // Show Success
+            showToast("Changes submitted for Admin Approval!", "warning");
+
+            // Clear password fields
+            document.getElementById("prof-new-pwd").value = "";
+            document.getElementById("prof-conf-pwd").value = "";
+          } catch (err) {
+            showToast("Failed to save profile.", "error");
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+    </script>
+  </body>
+</html>

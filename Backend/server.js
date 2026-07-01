@@ -3,12 +3,19 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cors = require("cors");
+const cookieParser = require("cookie-parser"); // NEW
 const mysql = require("mysql2/promise");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // NEW: must be exact origin (not "*") so cookies work
+    credentials: true, // NEW: allow cookies cross-origin
+  }),
+);
 app.use(express.json());
+app.use(cookieParser()); // NEW: read/write httpOnly cookies
 
 const pool = mysql.createPool({
   host: process.env.TIDB_HOST,
@@ -40,7 +47,7 @@ const storage = new CloudinaryStorage({
       folder: "uiusvs_uploads",
       allowed_formats: ["jpg", "png", "jpeg", "webp", "gif", "mp4"],
       resource_type: isVideo ? "video" : "image",
-      format: isVideo ? undefined : "webp", // শুধু ছবি হলে webp এ convert
+      format: isVideo ? undefined : "webp",
       transformation: isVideo
         ? undefined
         : [{ quality: "auto", fetch_format: "webp" }],
@@ -49,43 +56,63 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
+// =========================================================
+// NEW: Auth + Admin management routes
+// =========================================================
+const authRoutes = require("./routes/auth")(pool);
+const adminUsersRoutes = require("./routes/adminUsers")(pool);
+const { verifySession } = require("./middleware/auth");
+
+app.use("/api/auth", authRoutes);
+app.use("/api/admin-users", adminUsersRoutes);
+
+// =========================================================
+// NEW: protect the gallery WRITE endpoints with verifySession
+// (public GET endpoints stay open for the live site)
+// =========================================================
+
 // ============================================
 // 1. CREATE — Admin panel থেকে ছবি upload
 // ============================================
-app.post("/api/gallery", upload.single("media"), async (req, res) => {
-  try {
-    const { title, caption, category, event_date, is_pinned } = req.body;
-    const imageUrl = req.file.path;
-    const cloudinaryId = req.file.filename; // public_id
+app.post(
+  "/api/gallery",
+  verifySession,
+  upload.single("media"),
+  async (req, res) => {
+    try {
+      const { title, caption, category, event_date, is_pinned } = req.body;
+      const imageUrl = req.file.path;
+      const cloudinaryId = req.file.filename;
 
-    const [result] = await pool.query(
-      `INSERT INTO gallery (title, caption, category, image_url, cloudinary_id, event_date, is_pinned)
+      const [result] = await pool.query(
+        `INSERT INTO gallery (title, caption, category, image_url, cloudinary_id, event_date, is_pinned)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        title,
-        caption || "",
-        category,
-        imageUrl,
-        cloudinaryId,
-        event_date || null,
-        is_pinned === "true",
-      ],
-    );
+        [
+          title,
+          caption || "",
+          category,
+          imageUrl,
+          cloudinaryId,
+          event_date || null,
+          is_pinned === "true",
+        ],
+      );
 
-    res.status(200).json({
-      message: "Uploaded successfully!",
-      id: result.insertId,
-      url: imageUrl,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+      res.status(200).json({
+        message: "Uploaded successfully!",
+        id: result.insertId,
+        url: imageUrl,
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
 // ============================================
 // 2. READ — Admin panel এর টেবিলের জন্য (সব ছবি)
 // ============================================
-app.get("/api/gallery", async (req, res) => {
+app.get("/api/gallery", verifySession, async (req, res) => {
   try {
     const [rows] = await pool.query(
       "SELECT * FROM gallery ORDER BY is_pinned DESC, created_at DESC",
@@ -97,7 +124,7 @@ app.get("/api/gallery", async (req, res) => {
 });
 
 // ============================================
-// 3. READ — gallery.html পাবলিক পেজের জন্য
+// 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
 // ============================================
 app.get("/api/gallery/public", async (req, res) => {
   try {
@@ -112,7 +139,7 @@ app.get("/api/gallery/public", async (req, res) => {
 });
 
 // ============================================
-// 4. READ — index.html হোমপেজের জন্য (pinned + recent, limited)
+// 4. READ — index.html হোমপেজের জন্য (open, no login)
 // ============================================
 app.get("/api/gallery/featured", async (req, res) => {
   try {
@@ -127,9 +154,9 @@ app.get("/api/gallery/featured", async (req, res) => {
 });
 
 // ============================================
-// 5. UPDATE — Edit caption/category/date/pin (নতুন ছবি ছাড়া)
+// 5. UPDATE
 // ============================================
-app.put("/api/gallery/:id", async (req, res) => {
+app.put("/api/gallery/:id", verifySession, async (req, res) => {
   try {
     const { title, caption, category, event_date, is_pinned } = req.body;
     await pool.query(
@@ -143,9 +170,9 @@ app.put("/api/gallery/:id", async (req, res) => {
 });
 
 // ============================================
-// 6. DELETE — DB + Cloudinary দুই জায়গা থেকেই মুছবে
+// 6. DELETE
 // ============================================
-app.delete("/api/gallery/:id", async (req, res) => {
+app.delete("/api/gallery/:id", verifySession, async (req, res) => {
   try {
     const [rows] = await pool.query(
       "SELECT cloudinary_id FROM gallery WHERE id=?",
@@ -163,7 +190,6 @@ app.delete("/api/gallery/:id", async (req, res) => {
   }
 });
 
-// 🎯 Health check route — DB connection test korar jonno
 app.get("/api/health", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT 1 + 1 AS result");
