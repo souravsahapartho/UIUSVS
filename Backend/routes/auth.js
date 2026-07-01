@@ -21,6 +21,9 @@ module.exports = (pool) => {
         contact,
         gender,
         type,
+        department,
+        batch,
+        bloodGroup,
         designation,
         password,
         profilePicUrl,
@@ -50,6 +53,9 @@ module.exports = (pool) => {
         contact,
         gender,
         type,
+        department, // NEW
+        batch, // NEW
+        bloodGroup, // NEW
         designation,
         hashed,
         avatarUrl,
@@ -99,8 +105,8 @@ module.exports = (pool) => {
           ? JSON.parse(pending.payload)
           : pending.payload;
       await pool.query(
-        `INSERT INTO users (name, student_id, email, contact, gender, type, designation, password, avatar_url, email_verified, is_approved)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
+        `INSERT INTO users (name, student_id, email, contact, gender, type, department, batch, blood_group, designation, password, avatar_url, is_verified, is_approved)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
         [
           d.name,
           d.studentId,
@@ -108,6 +114,9 @@ module.exports = (pool) => {
           d.contact,
           d.gender,
           d.type,
+          d.department,
+          d.batch,
+          d.bloodGroup,
           d.designation,
           d.hashed,
           d.avatarUrl,
