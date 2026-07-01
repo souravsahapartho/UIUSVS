@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UIUSVS Family | Directory</title>
+    <meta
+      name="description"
+      content="Discover the proud members and alumni who make up the UIU Sanatani Vidyarthi Samsad family."
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#fffaf0",
+                100: "#ffedd5",
+                500: "#ea580c",
+                700: "#b91c1c",
+                900: "#4a0404",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fffaf0;
+        color: #4a0404;
+        overflow-x: hidden;
+      }
+      .glass-nav {
+        background: rgba(255, 250, 240, 0.9);
+        backdrop-filter: blur(12px);
+        border-bottom: 2px solid #fbbf24;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fffaf0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ea580c;
+        border-radius: 4px;
+      }
+
+      .mandala-pattern {
+        background-image:
+          radial-gradient(
+            circle at 0% 50%,
+            rgba(234, 88, 12, 0.05) 0%,
+            transparent 50%
+          ),
+          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+        background-attachment: fixed;
+      }
+
+      .shimmer {
+        background: #f6f7f8;
+        background-image: linear-gradient(
+          to right,
+          #f6f7f8 0%,
+          #edeef1 20%,
+          #f6f7f8 40%,
+          #f6f7f8 100%
+        );
+        background-repeat: no-repeat;
+        background-size: 800px 100%;
+        animation-duration: 1.5s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: placeholderShimmer;
+        animation-timing-function: linear;
+      }
+      @keyframes placeholderShimmer {
+        0% {
+          background-position: -468px 0;
+        }
+        100% {
+          background-position: 468px 0;
+        }
+      }
+      #mobile-drawer {
+        transition: transform 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col mandala-pattern">
+    <header class="glass-nav sticky top-0 z-50 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-white rounded-full shadow border border-orange-200 flex items-center justify-center text-xl overflow-hidden relative"
+          >
+            <span
+              class="absolute inset-0 flex items-center justify-center animate-pulse opacity-20 bg-orange-100"
+            ></span>
+            <span class="relative z-10 text-orange-600">🕉️</span>
+          </div>
+          <span
+            class="font-serif font-bold text-xl text-brand-900 tracking-tight"
+            >UIUSVS</span
+          >
+        </a>
+
+        <nav class="hidden md:flex gap-6 items-center">
+          <a
+            href="index.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Home</a
+          >
+          <a
+            href="alumni.html"
+            class="text-sm font-bold text-brand-700 border-b-2 border-brand-700 pb-1"
+            >Members</a
+          >
+          <a
+            href="gallery.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="text-sm font-bold text-gray-700 hover:text-brand-700 transition"
+            >Blog</a
+          >
+          <a
+            href="login.html"
+            class="text-sm font-bold text-white bg-brand-700 px-4 py-1.5 rounded-full hover:bg-brand-900 transition shadow-sm"
+            >My Profile</a
+          >
+        </nav>
+
+        <button class="md:hidden text-brand-900 p-2" onclick="toggleDrawer()">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </header>
+
+    <div
+      id="mobile-drawer"
+      class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl z-[100] transform translate-x-full md:hidden flex flex-col"
+    >
+      <div
+        class="p-4 border-b border-orange-100 flex justify-between items-center bg-brand-50"
+      >
+        <span class="font-serif font-bold text-lg text-brand-900">Menu</span>
+        <button
+          onclick="toggleDrawer()"
+          class="text-gray-500 hover:text-red-500"
+        >
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <nav class="flex flex-col p-4 gap-4">
+        <a
+          href="index.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Home</a
+        >
+        <a href="alumni.html" class="font-bold text-brand-700">Members</a>
+        <a
+          href="gallery.html"
+          class="font-bold text-gray-700 hover:text-brand-700"
+          >Gallery</a
+        >
+        <a href="blog.html" class="font-bold text-gray-700 hover:text-brand-700"
+          >Blog</a
+        >
+        <hr class="border-orange-100" />
+        <a
+          href="login.html"
+          class="font-bold text-white bg-brand-700 text-center py-2 rounded-xl shadow-sm"
+          >My Profile</a
+        >
+      </nav>
+    </div>
+    <div
+      id="drawer-overlay"
+      class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden"
+      onclick="toggleDrawer()"
+    ></div>
+
+    <main class="container mx-auto px-4 py-12 flex-1 relative z-10">
+      <div class="text-center mb-10">
+        <h1
+          class="text-4xl md:text-5xl font-serif font-extrabold text-brand-900 mb-4"
+        >
+          UIUSVS Family
+        </h1>
+        <p class="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
+          Discover the proud members and alumni who make up the UIU Sanatani
+          Vidyarthi Samsad family. <br /><span
+            class="text-brand-500 font-semibold"
+            >*Emails and Contact Numbers are hidden for privacy.</span
+          >
+        </p>
+        <div
+          class="w-24 h-1 bg-gradient-to-r from-brand-700 to-brand-500 mx-auto mt-6 rounded-full"
+        ></div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="max-w-xl mx-auto mb-8 relative">
+        <i
+          data-lucide="search"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+        ></i>
+        <input
+          type="text"
+          id="member-search"
+          oninput="handleMemberSearch(this.value)"
+          class="w-full pl-12 pr-4 py-3.5 rounded-full border border-orange-200 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm text-sm font-medium"
+          placeholder="Search by name, designation, or batch..."
+        />
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <button
+          onclick="filterMembers('all')"
+          id="btn-all"
+          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md"
+        >
+          All Community
+        </button>
+        <button
+          onclick="filterMembers('current')"
+          id="btn-current"
+          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+        >
+          Current Students
+        </button>
+        <button
+          onclick="filterMembers('ex')"
+          id="btn-ex"
+          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+        >
+          Alumni
+        </button>
+      </div>
+
+      <div
+        id="members-grid"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      >
+        <!-- Skeletons -->
+        <div
+          class="bg-white rounded-2xl p-6 border border-orange-100 shadow-sm flex flex-col items-center"
+        >
+          <div
+            class="w-24 h-24 rounded-full shimmer mb-4 border-4 border-white"
+          ></div>
+          <div class="w-3/4 h-5 shimmer rounded mb-2"></div>
+          <div class="w-1/2 h-4 shimmer rounded mb-4"></div>
+          <div class="w-full h-8 shimmer rounded mt-auto"></div>
+        </div>
+        <div
+          class="bg-white rounded-2xl p-6 border border-orange-100 shadow-sm flex flex-col items-center"
+        >
+          <div
+            class="w-24 h-24 rounded-full shimmer mb-4 border-4 border-white"
+          ></div>
+          <div class="w-3/4 h-5 shimmer rounded mb-2"></div>
+          <div class="w-1/2 h-4 shimmer rounded mb-4"></div>
+          <div class="w-full h-8 shimmer rounded mt-auto"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-orange-200 py-8 relative z-10">
+      <div class="container mx-auto px-4 text-center">
+        <p class="text-sm text-gray-600 mb-2">
+          United International University, Dhaka
+        </p>
+        <p class="text-xs text-gray-400">
+          &copy; 2026 UIUSVS. Developed by Sourav Saha.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+      function toggleDrawer() {
+        const drawer = document.getElementById("mobile-drawer");
+        const overlay = document.getElementById("drawer-overlay");
+        drawer.classList.toggle("translate-x-full");
+        overlay.classList.toggle("hidden");
+      }
+
+      // Thematic Predefined Avatars (Using Dicebear for clean representations)
+      const maleAvatars = [
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M1&backgroundColor=ffdfbf",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M2&backgroundColor=ffdfbf",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M3&backgroundColor=ffdfbf",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M4&backgroundColor=ffdfbf",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M5&backgroundColor=ffdfbf",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=M6&backgroundColor=ffdfbf",
+      ];
+
+      const femaleAvatars = [
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F1&backgroundColor=ffd1dc",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F2&backgroundColor=ffd1dc",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F3&backgroundColor=ffd1dc",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F4&backgroundColor=ffd1dc",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F5&backgroundColor=ffd1dc",
+        "https://api.dicebear.com/7.x/adventurer/svg?seed=F6&backgroundColor=ffd1dc",
+      ];
+
+      function getRandomAvatar(gender) {
+        const arr = gender === "Male" ? maleAvatars : femaleAvatars;
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      // Mock Members Data (Some with uploaded pics, some without to show avatar logic)
+      const mockMembers = [
+        {
+          id: 1,
+          name: "Sourav Saha",
+          role: "Alumni",
+          designation: "Former President",
+          gender: "Male",
+          type: "ex",
+          batch: "Fall 2018",
+          pic: "https://placehold.co/400x400/ea580c/fff?text=SS",
+        },
+        {
+          id: 2,
+          name: "Priya Das",
+          role: "Current Student",
+          designation: "General Secretary",
+          gender: "Female",
+          type: "current",
+          batch: "Spring 2022",
+          pic: null,
+        }, // Will use Female Avatar
+        {
+          id: 3,
+          name: "Amit Roy",
+          role: "Alumni",
+          designation: "Executive Member",
+          gender: "Male",
+          type: "ex",
+          batch: "Summer 2019",
+          pic: null,
+        }, // Will use Male Avatar
+        {
+          id: 4,
+          name: "Sneha Sen",
+          role: "Current Student",
+          designation: "Member",
+          gender: "Female",
+          type: "current",
+          batch: "Fall 2023",
+          pic: null,
+        },
+        {
+          id: 5,
+          name: "Binoy Sarker",
+          role: "Current Student",
+          designation: "Vice President",
+          gender: "Male",
+          type: "current",
+          batch: "Spring 2024",
+          pic: "https://placehold.co/400x400/b91c1c/fff?text=BS",
+        },
+      ];
+
+      let currentFilter = "all";
+      let searchQuery = "";
+
+      function renderMembers() {
+        const grid = document.getElementById("members-grid");
+
+        // Apply Filters and Search
+        const filtered = mockMembers.filter((m) => {
+          const matchesFilter =
+            currentFilter === "all" || m.type === currentFilter;
+          const searchStr =
+            `${m.name} ${m.designation} ${m.batch}`.toLowerCase();
+          const matchesSearch = searchStr.includes(searchQuery.toLowerCase());
+          return matchesFilter && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">No members found in this category.</div>`;
+          return;
+        }
+
+        grid.innerHTML = filtered
+          .map((m) => {
+            // Apply the Custom Avatar Logic
+            const finalPic = m.pic ? m.pic : getRandomAvatar(m.gender);
+
+            return `
+                <div class="bg-white/80 backdrop-blur rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col items-center text-center group">
+                    <div class="relative mb-4">
+                        <div class="w-24 h-24 rounded-full border-[3px] border-brand-200 overflow-hidden shadow-md group-hover:border-brand-500 transition-colors p-1 bg-white">
+                            <img src="${finalPic}" alt="${m.name}" class="w-full h-full object-cover rounded-full">
+                        </div>
+                        ${m.type === "ex" ? '<div class="absolute -bottom-2 right-0 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white shadow-sm">Alumni</div>' : ""}
+                    </div>
+                    <h3 class="font-serif font-bold text-lg text-brand-900 mb-1 leading-tight">${m.name}</h3>
+                    
+                    ${m.designation && m.designation !== "Member" ? `<p class="text-xs font-bold text-red-600 mb-1 px-2 py-0.5 bg-red-50 rounded border border-red-100">${m.designation}</p>` : ""}
+                    
+                    <p class="text-xs text-brand-500 font-medium mb-4">${m.role}</p>
+                    
+                    <div class="w-full mt-auto bg-brand-50 py-2 rounded-lg text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1">
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Batch: ${m.batch}
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+        lucide.createIcons();
+      }
+
+      window.filterMembers = (type) => {
+        currentFilter = type;
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.className =
+            "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50";
+        });
+        document.getElementById(`btn-${type}`).className =
+          "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md";
+
+        renderMembers();
+      };
+
+      window.handleMemberSearch = (query) => {
+        searchQuery = query;
+        renderMembers();
+      };
+
+      // Simulate network load
+      setTimeout(renderMembers, 800);
+    </script>
+  </body>
+</html>

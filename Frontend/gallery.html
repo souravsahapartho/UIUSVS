@@ -287,44 +287,20 @@
         overlay.classList.toggle("hidden");
       }
 
-      const mockGallery = [
-        {
-          id: 1,
-          title: "Saraswati Puja Aarti",
-          category: "Saraswati Puja",
-          url: "https://placehold.co/600x800/ea580c/fff?text=Puja+1",
-        },
-        {
-          id: 2,
-          title: "Decoration Team",
-          category: "Saraswati Puja",
-          url: "https://placehold.co/800x600/b91c1c/fff?text=Decor",
-        },
-        {
-          id: 3,
-          title: "Kali Puja Night",
-          category: "Kali Puja",
-          url: "https://placehold.co/600x600/4a0404/fff?text=Kali+Puja",
-        },
-        {
-          id: 4,
-          title: "Holi Colors",
-          category: "Holi",
-          url: "https://placehold.co/600x900/e879f9/fff?text=Holi",
-        },
-        {
-          id: 5,
-          title: "Alpona Making",
-          category: "Saraswati Puja",
-          url: "https://placehold.co/800x500/fcd34d/000?text=Alpona",
-        },
-        {
-          id: 6,
-          title: "Monthly Prayer",
-          category: "Prayer",
-          url: "https://placehold.co/600x700/f59e0b/fff?text=Prayer",
-        },
-      ];
+      const API_BASE = "https://uiusvs.onrender.com";
+      let mockGallery = [];
+
+      async function loadGalleryFromDB() {
+        try {
+          const res = await fetch(`${API_BASE}/gallery/public`);
+          mockGallery = await res.json();
+        } catch (e) {
+          console.warn("Failed to load gallery from DB", e);
+        } finally {
+          renderFilters();
+          renderGallery();
+        }
+      }
 
       let currentCat = "All";
       let gallerySearchQuery = "";
@@ -422,10 +398,7 @@
         if (e.key === "Escape") closeLightbox();
       });
 
-      setTimeout(() => {
-        renderFilters();
-        renderGallery();
-      }, 500);
+      loadGalleryFromDB();
     </script>
   </body>
 </html>

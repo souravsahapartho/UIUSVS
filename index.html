@@ -2136,7 +2136,8 @@
               Memories & Moments
             </h2>
           </div>
-
+          <!-- Dynamic Admin-Uploaded Photos -->
+          <div id="dynamic-uploads-container"></div>
           <!-- 1. Saraswati Puja -->
           <div class="mb-12 animate-on-scroll relative group/section">
             <div class="flex items-center mb-4">
@@ -3497,6 +3498,7 @@
     </footer>
 
     <script type="module">
+      const API_BASE = "https://uiusvs.onrender.com/api";
       // 🎯 Sanatan Quiz 50 Questions Data
       const sanatanQuizData = [
         {
@@ -6217,6 +6219,54 @@
           .forEach((el) => contentObserver.observe(el));
       }
 
+      async function fetchDynamicGalleryUploads() {
+        const container = document.getElementById("dynamic-uploads-container");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/gallery/featured`);
+          if (!res.ok) throw new Error();
+          const items = await res.json();
+          if (items.length === 0) return;
+
+          // Group by category
+          const grouped = items.reduce((acc, item) => {
+            if (!acc[item.category]) acc[item.category] = [];
+            acc[item.category].push(item);
+            return acc;
+          }, {});
+
+          let html = "";
+          Object.keys(grouped).forEach((category) => {
+            html += `
+        <div class="mb-12 animate-on-scroll relative group/section">
+          <div class="flex items-center mb-4">
+            <div class="h-8 w-1 bg-orange-500 rounded-full mr-3"></div>
+            <h3 class="text-2xl font-bold text-gray-900 font-serif">${category}</h3>
+          </div>
+          <div class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
+            ${grouped[category]
+              .map(
+                (item) => `
+              <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-orange-100 relative">
+                <img src="${item.url}" class="w-full h-full object-cover gallery-img" alt="${item.title}" loading="lazy" />
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        </div>
+      `;
+          });
+
+          container.innerHTML = html;
+          container
+            .querySelectorAll(".animate-on-scroll")
+            .forEach((el) => contentObserver.observe(el));
+        } catch (e) {
+          console.warn("No dynamic gallery uploads found.");
+        }
+      }
+
       async function fetchBlogs() {
         const grid = document.getElementById("blog-grid");
         if (!grid) return;
@@ -6507,6 +6557,7 @@
         displayRandomQuote();
         fetchYouTube();
         fetchBlogs();
+        fetchDynamicGalleryUploads();
         initVideoSyncAndLoading();
 
         initFestivalSystem();

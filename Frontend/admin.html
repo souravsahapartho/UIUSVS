@@ -846,6 +846,16 @@
                     <option value="Holi">Holi</option>
                     <option value="Prayer">Monthly Prayer</option>
                   </select>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2"
+                      >Event Date</label
+                    >
+                    <input
+                      type="date"
+                      id="gal-date"
+                      class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -871,7 +881,7 @@
               <div class="flex justify-end pt-2">
                 <button
                   type="button"
-                  onclick="showToast('Media Uploaded successfully!')"
+                  onclick="uploadGalleryMedia()"
                   class="btn-puja flex items-center"
                 >
                   Upload to Gallery
@@ -879,6 +889,21 @@
                 </button>
               </div>
             </form>
+            <div
+              class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+            >
+              <table class="w-full text-left">
+                <thead>
+                  <tr>
+                    <th class="py-3 px-5">Image</th>
+                    <th class="py-3 px-5">Info</th>
+                    <th class="py-3 px-5">Pin</th>
+                    <th class="py-3 px-5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="gallery-admin-list"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -1247,6 +1272,97 @@
           targetView.classList.add("block");
         }
       }
+      const API_BASE = "https://uiusvs.onrender.com";
+
+      async function uploadGalleryMedia() {
+        const fileInput = document.querySelector(
+          '#view-gallery input[type="file"]',
+        );
+        const title = document.querySelector(
+          '#view-gallery input[placeholder*="Aarti"]',
+        );
+        const category = document.querySelector("#view-gallery select");
+        const date = document.getElementById("gal-date");
+        const pinned = document.getElementById("pin-media");
+
+        if (!fileInput.files[0] || !title.value || !category.value) {
+          showToast("Please fill title, category and select a file", "error");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("media", fileInput.files[0]);
+        formData.append("title", title.value);
+        formData.append("caption", title.value);
+        formData.append("category", category.value);
+        formData.append("event_date", date.value);
+        formData.append("is_pinned", pinned.checked);
+
+        try {
+          const res = await fetch(`${API_BASE}/gallery`, {
+            method: "POST",
+            body: formData,
+          });
+          if (!res.ok) throw new Error();
+          showToast("Media Uploaded successfully!");
+          loadGalleryTable();
+        } catch (e) {
+          showToast("Upload failed!", "error");
+        }
+      }
+
+      async function loadGalleryTable() {
+        const container = document.getElementById("gallery-admin-list");
+        if (!container) return;
+        const res = await fetch(`${API_BASE}/gallery`);
+        const items = await res.json();
+
+        container.innerHTML = items
+          .map(
+            (item) => `
+    <tr>
+      <td class="py-3 px-5"><img src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg"></td>
+      <td class="py-3 px-5">
+        <p class="font-bold text-sm">${item.title}</p>
+        <p class="text-xs text-gray-500">${item.category} • ${item.event_date || "—"}</p>
+      </td>
+      <td class="py-3 px-5">${item.is_pinned ? "📌 Pinned" : "—"}</td>
+      <td class="py-3 px-5 text-right space-x-2">
+        <button onclick="editGalleryItem(${item.id})" class="text-blue-500"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+        <button onclick="deleteGalleryItem(${item.id})" class="text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </td>
+    </tr>
+  `,
+          )
+          .join("");
+        lucide.createIcons();
+      }
+
+      async function deleteGalleryItem(id) {
+        if (!confirm("Delete this photo permanently?")) return;
+        await fetch(`${API_BASE}/gallery/${id}`, { method: "DELETE" });
+        showToast("Deleted!");
+        loadGalleryTable();
+      }
+
+      async function editGalleryItem(id) {
+        const newCaption = prompt("New caption:");
+        if (newCaption === null) return;
+        await fetch(`${API_BASE}/gallery/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: newCaption,
+            caption: newCaption,
+            category: "",
+            is_pinned: false,
+          }),
+        });
+        showToast("Updated!");
+        loadGalleryTable();
+      }
+
+      document.addEventListener("DOMContentLoaded", loadGalleryTable);
     </script>
   </body>
 </html>
