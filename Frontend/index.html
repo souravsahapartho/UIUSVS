@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UIUSVS | UIU Sanatani Vidyarthi Samsad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #fffaf0;
+        color: #4a0404;
+      }
+      .glass-nav {
+        background: rgba(255, 250, 240, 0.9);
+        backdrop-filter: blur(12px);
+        border-bottom: 2px solid #fbbf24;
+      }
+      .mandala-pattern {
+        background-image:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 215, 0, 0.05) 0%,
+            transparent 70%
+          ),
+          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+      }
+    </style>
+  </head>
+  <body class="mandala-pattern">
+    <header class="glass-nav sticky top-0 z-50 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-white rounded-full shadow border border-orange-200 flex items-center justify-center text-xl"
+          >
+            🕉️
+          </div>
+          <span
+            class="font-serif font-bold text-xl text-brand-900 tracking-tight"
+            >UIUSVS</span
+          >
+        </a>
+
+        <nav class="hidden md:flex gap-6 items-center">
+          <a
+            href="index.html"
+            class="text-sm font-bold text-red-700 border-b-2 border-red-700"
+            >Home</a
+          >
+          <a
+            href="alumni.html"
+            class="text-sm font-bold text-gray-700 hover:text-red-700 transition"
+            >UIUSVS Family</a
+          >
+          <a
+            href="gallery.html"
+            class="text-sm font-bold text-gray-700 hover:text-red-700 transition"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="text-sm font-bold text-gray-700 hover:text-red-700 transition"
+            >Blog</a
+          >
+          <a
+            href="login.html"
+            class="text-sm font-bold text-white bg-red-700 px-4 py-1.5 rounded-full hover:bg-red-900 transition shadow-sm"
+            >My Profile</a
+          >
+        </nav>
+
+        <button class="md:hidden text-brand-900" onclick="toggleDrawer()">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </header>
+
+    <section class="py-20 text-center relative overflow-hidden">
+      <h1 class="text-5xl font-serif font-extrabold text-red-900 mb-6">
+        Welcome to UIUSVS
+      </h1>
+      <p class="text-lg text-gray-700 max-w-2xl mx-auto px-4">
+        The official Sanatani student community of United International
+        University. Celebrating heritage, devotion, and unity.
+      </p>
+      <div class="mt-10">
+        <a
+          href="signup.html"
+          class="bg-red-700 text-white px-8 py-3 rounded-full font-bold hover:bg-red-900 transition shadow-lg"
+          >Join the Family</a
+        >
+      </div>
+    </section>
+
+    <section id="announcement-container" class="py-10 container mx-auto px-4">
+      <!-- Announcements dynamically loaded via API here -->
+    </section>
+
+    <section class="py-16 container mx-auto px-4">
+      <h2 class="text-3xl font-serif font-bold text-center mb-10">
+        Recent Journey
+      </h2>
+      <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Dynamic content -->
+      </div>
+    </section>
+
+    <section class="py-16 bg-white/50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-serif font-bold text-center mb-10">Moments</h2>
+        <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <!-- Dynamic content -->
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-white border-t border-orange-200 py-12 text-center">
+      <p class="text-gray-600">&copy; 2026 UIUSVS. All rights reserved.</p>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+
+      // 🎯 API Integration Logic (Connects to server.js)
+      async function loadHomepageData() {
+        try {
+          // Fetch Active Announcement
+          const annRes = await fetch(
+            "https://your-backend-url.onrender.com/api/announcements/active",
+          );
+          if (annRes.ok) {
+            const data = await annRes.json();
+            // Code to display modal for 8-10s
+          }
+
+          // Fetch Top 3 Blogs
+          const blogRes = await fetch(
+            "https://your-backend-url.onrender.com/api/blogs?limit=3",
+          );
+          const blogs = await blogRes.json();
+
+          // Render blogs logic here...
+        } catch (err) {
+          console.error("Data loading error", err);
+        }
+      }
+
+      window.onload = loadHomepageData;
+
+      function toggleDrawer() {
+        // Hamburger menu toggle logic
+      }
+    </script>
+  </body>
+</html>
