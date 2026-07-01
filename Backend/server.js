@@ -56,27 +56,19 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
-// =========================================================
-// NEW: Auth + Admin management routes
-// =========================================================
 const authRoutes = require("./routes/auth")(pool);
 const adminUsersRoutes = require("./routes/adminUsers")(pool);
-const { verifySession } = require("./middleware/auth");
+const profileRoutes = require("./routes/profile")(pool);
+const { verifySession, verifyAdmin } = require("./middleware/auth");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
+app.use("/api/profile", profileRoutes);
 
-// =========================================================
-// NEW: protect the gallery WRITE endpoints with verifySession
-// (public GET endpoints stay open for the live site)
-// =========================================================
-
-// ============================================
-// 1. CREATE — Admin panel থেকে ছবি upload
-// ============================================
 app.post(
   "/api/gallery",
   verifySession,
+  verifyAdmin,
   upload.single("media"),
   async (req, res) => {
     try {
@@ -156,7 +148,7 @@ app.get("/api/gallery/featured", async (req, res) => {
 // ============================================
 // 5. UPDATE
 // ============================================
-app.put("/api/gallery/:id", verifySession, async (req, res) => {
+app.put("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   try {
     const { title, caption, category, event_date, is_pinned } = req.body;
     await pool.query(
@@ -172,7 +164,7 @@ app.put("/api/gallery/:id", verifySession, async (req, res) => {
 // ============================================
 // 6. DELETE
 // ============================================
-app.delete("/api/gallery/:id", verifySession, async (req, res) => {
+app.delete("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   try {
     const [rows] = await pool.query(
       "SELECT cloudinary_id FROM gallery WHERE id=?",

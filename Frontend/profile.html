@@ -579,6 +579,8 @@
 
     <script>
       lucide.createIcons();
+      const API_BASE = "https://uiusvs.onrender.com/api";
+      let currentUser = null;
 
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
@@ -590,7 +592,6 @@
       function showToast(message, type = "success") {
         const toast = document.getElementById("toast");
         const toastContent = document.getElementById("toast-content");
-
         document.getElementById("toast-message").textContent = message;
 
         if (type === "success") {
@@ -622,25 +623,58 @@
       }
 
       function handleLogout() {
-        showToast("Logging out...", "success");
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1000);
+        fetch(`${API_BASE}/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+        }).finally(() => {
+          showToast("Logging out...", "success");
+          setTimeout(() => (window.location.href = "login.html"), 800);
+        });
       }
 
-      // Logic to simulate Profile Pic Upload rules
-      let hasChangedPicThisYear = false; // Mock DB state
+      // ---- Load Profile Data ----
+      async function loadProfile() {
+        try {
+          const res = await fetch(`${API_BASE}/profile`, {
+            credentials: "include",
+          });
+          if (res.status === 401) {
+            window.location.href = "login.html";
+            return;
+          }
+          const u = await res.json();
+          currentUser = u;
 
-      function handleImageChange(input) {
-        if (hasChangedPicThisYear) {
-          showToast(
-            "You have already changed your picture this year.",
-            "error",
-          );
-          input.value = ""; // Reset file input
-          return;
+          document.getElementById("display-name").textContent = u.name;
+          document.getElementById("display-id").textContent = u.student_id;
+          document.getElementById("profile-img").src =
+            u.avatar_url ||
+            `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
+
+          document.getElementById("prof-name").value = u.name || "";
+          document.getElementById("prof-email").value = u.email || "";
+          document.getElementById("prof-phone").value = u.contact || "";
+          document.getElementById("prof-blood").value = u.blood_group || "O+";
+          document.getElementById("prof-dept").value = u.department || "CSE";
+          document.getElementById("prof-batch").value = u.batch || "";
+          document.getElementById("prof-designation").value =
+            u.designation || "Member";
+          document.getElementById("prof-address").value = u.address || "";
+
+          if (u.needs_admin_review) {
+            showToast(
+              "আপনার আগের পরিবর্তন এখনো Admin Approval এর অপেক্ষায় আছে।",
+              "warning",
+            );
+          }
+        } catch (err) {
+          showToast("Failed to load profile", "error");
         }
+      }
 
+      // ---- Profile Pic Upload (once/year rule handled server-side eventually;
+      //      for now this just previews — actual upload needs a dedicated endpoint) ----
+      function handleImageChange(input) {
         if (input.files && input.files[0]) {
           const reader = new FileReader();
           reader.onload = function (e) {
@@ -654,7 +688,7 @@
         }
       }
 
-      // Form Submit
+      // ---- Save Profile (name/dept/batch/designation/address/blood/contact) ----
       document
         .getElementById("profile-form")
         .addEventListener("submit", async (e) => {
@@ -662,20 +696,8 @@
           const btn = document.getElementById("save-btn");
           const originalText = btn.innerHTML;
 
-          // Basic Pwd Check
           const pwd1 = document.getElementById("prof-new-pwd").value;
           const pwd2 = document.getElementById("prof-conf-pwd").value;
-          if (pwd1 || pwd2) {
-            if (pwd1 !== pwd2) {
-              return showToast("Passwords do not match!", "error");
-            }
-            if (pwd1.length < 6) {
-              return showToast(
-                "Password must be at least 6 characters.",
-                "error",
-              );
-            }
-          }
 
           btn.innerHTML =
             '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...';
@@ -683,26 +705,64 @@
           lucide.createIcons();
 
           try {
-            // Simulate Backend Wait
-            await new Promise((r) => setTimeout(r, 1500));
+            // 1) Profile info update (rate-limited, needs admin review)
+            const profileRes = await fetch(`${API_BASE}/profile`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
+                name: document.getElementById("prof-name").value,
+                department: document.getElementById("prof-dept").value,
+                batch: document.getElementById("prof-batch").value,
+                designation: document.getElementById("prof-designation").value,
+                address: document.getElementById("prof-address").value,
+                bloodGroup: document.getElementById("prof-blood").value,
+                contact: document.getElementById("prof-phone").value,
+              }),
+            });
+            const profileData = await profileRes.json();
+            if (!profileRes.ok) throw new Error(profileData.error);
 
-            // Update Name on UI for mock visual
+            // 2) Password change (separate limit, no admin review)
+            if (pwd1 || pwd2) {
+              if (pwd1 !== pwd2) throw new Error("Passwords do not match!");
+              if (pwd1.length < 6)
+                throw new Error("Password must be at least 6 characters.");
+
+              const currentPwd = prompt(
+                "Security check: enter your CURRENT password to confirm change",
+              );
+              if (!currentPwd) throw new Error("Password change cancelled.");
+
+              const pwdRes = await fetch(`${API_BASE}/auth/change-password`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({
+                  currentPassword: currentPwd,
+                  newPassword: pwd1,
+                }),
+              });
+              const pwdData = await pwdRes.json();
+              if (!pwdRes.ok) throw new Error(pwdData.error);
+            }
+
             document.getElementById("display-name").textContent =
               document.getElementById("prof-name").value;
 
-            // Show Success
             showToast("Changes submitted for Admin Approval!", "warning");
-
-            // Clear password fields
             document.getElementById("prof-new-pwd").value = "";
             document.getElementById("prof-conf-pwd").value = "";
           } catch (err) {
-            showToast("Failed to save profile.", "error");
+            showToast(err.message, "error");
           } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
+            lucide.createIcons();
           }
         });
+
+      loadProfile();
     </script>
   </body>
 </html>

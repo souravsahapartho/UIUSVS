@@ -361,6 +361,28 @@
               placeholder="Create a secure password (Min. 6 chars)"
             />
           </div>
+          <!-- Profile Picture (optional) -->
+          <div>
+            <label class="block text-sm font-bold text-brand-900 mb-1.5"
+              >Profile Picture (Optional)</label
+            >
+            <div class="flex items-center gap-4">
+              <img
+                id="avatar-preview"
+                src="https://api.dicebear.com/7.x/adventurer/svg?seed=preview&backgroundColor=b6e3f4"
+                class="w-16 h-16 rounded-full border-2 border-orange-200 object-cover"
+              />
+              <input
+                type="file"
+                id="profilePic"
+                accept="image/jpeg, image/png, image/webp"
+                class="text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100"
+              />
+            </div>
+            <p class="text-[10px] text-gray-500 mt-1">
+              না দিলে gender অনুযায়ী auto avatar বসবে।
+            </p>
+          </div>
 
           <!-- Profile Pic Info -->
           <div
@@ -431,28 +453,55 @@
         <span id="toast-message">Message</span>
       </div>
     </div>
-
+    <!-- OTP Verification Modal -->
+    <div
+      id="otp-modal"
+      class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div class="bg-white rounded-2xl w-full max-w-sm p-6 sm:p-8 shadow-2xl">
+        <h3 class="text-xl font-serif font-bold text-brand-900 mb-2">
+          Verify Your Email
+        </h3>
+        <p class="text-xs text-gray-600 mb-5">
+          আপনার ইমেইলে একটা ৬-সংখ্যার কোড পাঠানো হয়েছে।
+        </p>
+        <input
+          type="text"
+          id="otp-input"
+          maxlength="6"
+          placeholder="Enter OTP"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none text-center text-lg tracking-widest font-bold"
+        />
+        <button
+          id="otp-verify-btn"
+          onclick="verifyOtp()"
+          class="w-full bg-brand-700 text-white font-bold py-3 rounded-xl mt-4 hover:bg-brand-900 transition-colors"
+        >
+          Verify & Create Account
+        </button>
+        <button
+          onclick="closeOtpModal()"
+          class="w-full text-gray-500 text-xs font-bold mt-3"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
     <script>
       lucide.createIcons();
+      const API_BASE = "https://uiusvs.onrender.com/api";
+      let signupEmail = "";
 
-      // Drawer logic
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
         const overlay = document.getElementById("drawer-overlay");
-        if (drawer.classList.contains("translate-x-full")) {
-          drawer.classList.remove("translate-x-full");
-          overlay.classList.remove("hidden");
-        } else {
-          drawer.classList.add("translate-x-full");
-          overlay.classList.add("hidden");
-        }
+        drawer.classList.toggle("translate-x-full");
+        overlay.classList.toggle("hidden");
       }
 
-      // Toast logic
       function showToast(message, type = "success") {
         const toast = document.getElementById("toast");
         const toastContent = document.getElementById("toast-content");
-
         document.getElementById("toast-message").textContent = message;
 
         if (type === "success") {
@@ -479,7 +528,37 @@
         }, 4000);
       }
 
-      // Form Submit
+      // Gender change hole avatar preview update
+      document.getElementById("gender").addEventListener("change", (e) => {
+        updateAvatarPreview();
+      });
+
+      function updateAvatarPreview() {
+        const gender = document.getElementById("gender").value;
+        const name = document.getElementById("name").value || "preview";
+        const seed = encodeURIComponent(name);
+        const url =
+          gender === "Female"
+            ? `https://api.dicebear.com/7.x/lorelei/svg?seed=${seed}&backgroundColor=ffd5dc`
+            : `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4`;
+        document.getElementById("avatar-preview").src = url;
+      }
+
+      // Profile pic select korle preview
+      document.getElementById("profilePic").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            document.getElementById("avatar-preview").src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          updateAvatarPreview();
+        }
+      });
+
+      // Signup Submit → OTP পাঠায়
       document
         .getElementById("signup-form")
         .addEventListener("submit", async (e) => {
@@ -487,7 +566,6 @@
           const btn = document.getElementById("submit-btn");
           const originalText = btn.innerHTML;
 
-          // Gather data
           const payload = {
             name: document.getElementById("name").value,
             studentId: document.getElementById("studentId").value,
@@ -498,6 +576,7 @@
             designation:
               document.getElementById("designation").value || "Member",
             password: document.getElementById("password").value,
+            profilePicUrl: null, // note: file upload সরাসরি Cloudinary তে করতে চাইলে আলাদা endpoint লাগবে
           };
 
           btn.innerHTML =
@@ -506,26 +585,69 @@
           lucide.createIcons();
 
           try {
-            // Simulate Backend Wait
-            await new Promise((r) => setTimeout(r, 1500));
+            const res = await fetch(`${API_BASE}/auth/signup`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+              credentials: "include",
+            });
+            const data = await res.json();
 
-            // Show Success
-            showToast(
-              "Application sent successfully! Pending Admin Approval.",
-              "success",
-            );
-            e.target.reset();
+            if (!res.ok) throw new Error(data.error || "Signup failed");
 
-            setTimeout(() => {
-              window.location.href = "login.html";
-            }, 2000);
+            signupEmail = payload.email;
+            showToast("OTP sent to your email!", "success");
+            document.getElementById("otp-modal").classList.remove("hidden");
+            document.getElementById("otp-modal").classList.add("flex");
           } catch (err) {
             showToast(err.message, "error");
           } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
+            lucide.createIcons();
           }
         });
+
+      async function verifyOtp() {
+        const otp = document.getElementById("otp-input").value.trim();
+        if (!otp) return showToast("Enter the OTP", "error");
+
+        const btn = document.getElementById("otp-verify-btn");
+        btn.disabled = true;
+        btn.textContent = "Verifying...";
+
+        try {
+          const res = await fetch(`${API_BASE}/auth/verify-otp`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: signupEmail, otp }),
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Verification failed");
+
+          showToast(
+            "Application sent successfully! Pending Admin Approval.",
+            "success",
+          );
+          closeOtpModal();
+          document.getElementById("signup-form").reset();
+
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1800);
+        } catch (err) {
+          showToast(err.message, "error");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Verify & Create Account";
+        }
+      }
+
+      function closeOtpModal() {
+        document.getElementById("otp-modal").classList.add("hidden");
+        document.getElementById("otp-modal").classList.remove("flex");
+      }
     </script>
   </body>
 </html>

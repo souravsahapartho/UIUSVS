@@ -1040,70 +1040,7 @@
                       <th class="py-3 px-5 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr class="hover:bg-brand-50 transition-colors">
-                      <td class="py-3 px-5">
-                        <p class="font-bold text-gray-900 text-sm">Joy Das</p>
-                        <p class="text-xs text-gray-500">011243000</p>
-                      </td>
-                      <td class="py-3 px-5 text-sm text-gray-700">
-                        CSE (Spring 2024)
-                      </td>
-                      <td class="py-3 px-5">
-                        <span
-                          class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase"
-                          >Current</span
-                        >
-                      </td>
-                      <td class="py-3 px-5 text-center space-x-2">
-                        <button
-                          onclick="showToast('Member Approved!')"
-                          class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors"
-                          title="Approve"
-                        >
-                          <i data-lucide="check" class="w-4 h-4"></i>
-                        </button>
-                        <button
-                          onclick="showToast('Request Rejected', 'error')"
-                          class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors"
-                          title="Reject"
-                        >
-                          <i data-lucide="x" class="w-4 h-4"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-brand-50 transition-colors">
-                      <td class="py-3 px-5">
-                        <p class="font-bold text-gray-900 text-sm">Sneha Roy</p>
-                        <p class="text-xs text-gray-500">111192000</p>
-                      </td>
-                      <td class="py-3 px-5 text-sm text-gray-700">
-                        BBA (Fall 2019)
-                      </td>
-                      <td class="py-3 px-5">
-                        <span
-                          class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-[10px] font-bold uppercase"
-                          >Alumni</span
-                        >
-                      </td>
-                      <td class="py-3 px-5 text-center space-x-2">
-                        <button
-                          onclick="showToast('Member Approved!')"
-                          class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors"
-                          title="Approve"
-                        >
-                          <i data-lucide="check" class="w-4 h-4"></i>
-                        </button>
-                        <button
-                          onclick="showToast('Request Rejected', 'error')"
-                          class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors"
-                          title="Reject"
-                        >
-                          <i data-lucide="x" class="w-4 h-4"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody id="pending-users-list"></tbody>
                 </table>
               </div>
             </div>
@@ -1454,6 +1391,7 @@
           const res = await fetch(`${API_BASE}/gallery`, {
             method: "POST",
             body: formData,
+            credentials: "include",
           });
           if (!res.ok) throw new Error("Upload failed on server");
           showToast("Media Uploaded successfully!");
@@ -1478,7 +1416,9 @@
       async function loadGalleryTable() {
         const container = document.getElementById("gallery-admin-list");
         if (!container) return;
-        const res = await fetch(`${API_BASE}/gallery`);
+        const res = await fetch(`${API_BASE}/gallery`, {
+          credentials: "include",
+        });
         const items = await res.json();
 
         container.innerHTML = items
@@ -1504,7 +1444,10 @@
 
       async function deleteGalleryItem(id) {
         if (!confirm("Delete this photo permanently?")) return;
-        await fetch(`${API_BASE}/gallery/${id}`, { method: "DELETE" });
+        await fetch(`${API_BASE}/gallery/${id}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
         showToast("Deleted!");
         loadGalleryTable();
       }
@@ -1521,12 +1464,103 @@
             category: "",
             is_pinned: false,
           }),
+          credentials: "include",
         });
         showToast("Updated!");
         loadGalleryTable();
       }
 
       document.addEventListener("DOMContentLoaded", loadGalleryTable);
+      // ---- Member Verification ----
+      async function loadPendingUsers() {
+        const container = document.getElementById("pending-users-list");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/pending`, {
+            credentials: "include",
+          });
+          const items = await res.json();
+
+          if (!items.length) {
+            container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-gray-400 text-sm">No pending members 🎉</td></tr>`;
+            return;
+          }
+
+          container.innerHTML = items
+            .map(
+              (u) => `
+    <tr class="hover:bg-brand-50 transition-colors">
+      <td class="py-3 px-5">
+        <p class="font-bold text-gray-900 text-sm">${u.name}</p>
+        <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
+      </td>
+      <td class="py-3 px-5 text-sm text-gray-700">${u.department || "-"} (${u.batch || "-"})</td>
+      <td class="py-3 px-5">
+        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
+      </td>
+      <td class="py-3 px-5 text-center space-x-2">
+        <button onclick="approveUser(${u.id})" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Approve">
+          <i data-lucide="check" class="w-4 h-4"></i>
+        </button>
+        <button onclick="rejectUser(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Reject">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </td>
+    </tr>
+  `,
+            )
+            .join("");
+          lucide.createIcons();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      async function approveUser(id) {
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/approve`, {
+            method: "PUT",
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Approve failed");
+          showToast("Member Approved!");
+          loadPendingUsers();
+        } catch (err) {
+          showToast("Failed to approve", "error");
+        }
+      }
+
+      async function rejectUser(id) {
+        if (!confirm("Reject and remove this signup request?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/reject`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Reject failed");
+          showToast("Request Rejected", "error");
+          loadPendingUsers();
+        } catch (err) {
+          showToast("Failed to reject", "error");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadPendingUsers);
+      (async function checkAdminAuth() {
+        try {
+          const res = await fetch(
+            `${API_BASE.replace("/api", "")}/api/auth/me`,
+            {
+              credentials: "include",
+            },
+          );
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          if (data.user.role !== "admin") throw new Error();
+        } catch {
+          window.location.href = "login.html";
+        }
+      })();
     </script>
   </body>
 </html>
