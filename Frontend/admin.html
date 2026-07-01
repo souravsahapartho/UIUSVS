@@ -410,20 +410,23 @@
             >
               <!-- Image Upload -->
               <div
-                id="gallery-dropzone"
+                id="annc-dropzone"
                 tabindex="0"
                 class="upload-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center outline-none focus:ring-2 focus:ring-brand-400"
               >
                 <div
-                  class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-orange-200 text-brand-500"
+                  class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-orange-200"
                 >
-                  <i data-lucide="camera" class="w-8 h-8"></i>
+                  <i
+                    data-lucide="image-plus"
+                    class="w-8 h-8 text-brand-500"
+                  ></i>
                 </div>
                 <p class="text-brand-900 font-bold mb-1">
-                  Select or Paste Media
+                  Upload Announcement Banner
                 </p>
                 <p class="text-xs text-gray-500 mb-2">
-                  JPG, PNG, WEBP, MP4 supported
+                  Recommended ratio: 4:3 or Square (JPG, PNG)
                 </p>
                 <p
                   class="text-[11px] text-brand-600 font-semibold mb-5 flex items-center gap-1"
@@ -432,22 +435,28 @@
                   then press Ctrl+V to paste an image
                 </p>
                 <label
-                  class="cursor-pointer bg-white border border-brand-200 hover:bg-brand-50 text-brand-700 px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
+                  class="cursor-pointer bg-brand-50 border border-brand-200 hover:bg-brand-100 text-brand-700 px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
                 >
-                  Browse Device
+                  Choose File
                   <input
                     type="file"
-                    id="gal-file-input"
+                    id="annc-file-input"
                     class="hidden"
-                    accept="image/*,video/mp4"
-                    onchange="handleGalleryFileSelect(this)"
+                    accept="image/*"
+                    onchange="
+                      previewSelectedImage(
+                        this,
+                        'annc-file-name',
+                        'annc-preview-img',
+                      )
+                    "
                   />
                 </label>
-                <span id="gal-file-name" class="text-gray-400 text-xs mt-3"
+                <span id="annc-file-name" class="text-gray-400 text-xs mt-3"
                   >No file chosen</span
                 >
                 <img
-                  id="gal-preview-img"
+                  id="annc-preview-img"
                   class="hidden mt-4 max-h-40 rounded-lg border border-orange-200 shadow-sm"
                 />
               </div>
@@ -959,7 +968,15 @@
                 >
                 <input
                   type="file"
+                  accept="image/*"
+                  onchange="
+                    previewSelectedImage(this, null, 'advisor-preview-img')
+                  "
                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-all cursor-pointer"
+                />
+                <img
+                  id="advisor-preview-img"
+                  class="hidden mt-3 w-24 h-24 object-cover rounded-full border-2 border-orange-200 shadow-sm"
                 />
               </div>
 
@@ -1113,12 +1130,19 @@
             >
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
-                  >Blog Title</label
+                  >Thumbnail Image</label
                 >
                 <input
-                  type="text"
-                  placeholder="e.g. The Significance of Saraswati Puja"
-                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
+                  type="file"
+                  accept="image/*"
+                  onchange="
+                    previewSelectedImage(this, null, 'blog-preview-img')
+                  "
+                  class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-all cursor-pointer"
+                />
+                <img
+                  id="blog-preview-img"
+                  class="hidden mt-3 max-h-32 rounded-lg border border-orange-200 shadow-sm"
                 />
               </div>
 
@@ -1314,10 +1338,39 @@
       }
 
       // 🎯 Paste (Ctrl+V) support for gallery upload
+      // 🎯 Universal image preview for Announcement / Advisor / Blog file inputs
+      function previewSelectedImage(input, fileNameSpanId, previewImgId) {
+        const previewImg = document.getElementById(previewImgId);
+        const nameSpan = fileNameSpanId
+          ? document.getElementById(fileNameSpanId)
+          : null;
+
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          if (nameSpan) {
+            nameSpan.textContent = file.name;
+            nameSpan.classList.remove("text-gray-400");
+            nameSpan.classList.add("text-green-600", "font-bold");
+          }
+          if (file.type.startsWith("image/") && previewImg) {
+            const url = URL.createObjectURL(file);
+            previewImg.src = url;
+            previewImg.classList.remove("hidden");
+          }
+        } else {
+          if (nameSpan) nameSpan.textContent = "No file chosen";
+          if (previewImg) previewImg.classList.add("hidden");
+        }
+      }
+
+      // 🎯 Paste (Ctrl+V) support ONLY for Gallery upload box
       document.addEventListener("DOMContentLoaded", () => {
-        const dropzone = document.getElementById("gallery-dropzone");
+        const dropzone = document
+          .getElementById("gal-file-input")
+          ?.closest(".upload-dashed");
         if (!dropzone) return;
 
+        dropzone.setAttribute("tabindex", "0");
         dropzone.addEventListener("click", () => dropzone.focus());
 
         dropzone.addEventListener("paste", (e) => {
@@ -1343,6 +1396,7 @@
           }
         });
 
+        // Global paste fallback while Gallery tab is active
         document.addEventListener("paste", (e) => {
           const galleryTab = document.getElementById("view-gallery");
           if (galleryTab && !galleryTab.classList.contains("hidden")) {

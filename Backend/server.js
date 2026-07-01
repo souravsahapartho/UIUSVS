@@ -163,6 +163,20 @@ app.delete("/api/gallery/:id", async (req, res) => {
   }
 });
 
-app.listen(4000, () => {
-  console.log("Server running on port 4000");
+// 🎯 Health check route — DB connection test korar jonno
+app.get("/api/health", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT 1 + 1 AS result");
+    res.json({ status: "ok", db: "connected", test: rows[0].result });
+  } catch (error) {
+    console.error("❌ Health check failed:", error);
+    res
+      .status(500)
+      .json({ status: "error", message: error.message, code: error.code });
+  }
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
