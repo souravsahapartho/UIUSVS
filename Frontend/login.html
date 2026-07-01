@@ -584,7 +584,7 @@
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Login failed");
 
-            if (data.user.role === "admin") {
+           if (data.user.role === "admin" || data.user.role === "superadmin") {
               showToast("Welcome Admin!", "success");
               setTimeout(() => (window.location.href = "admin.html"), 1000);
             } else {
