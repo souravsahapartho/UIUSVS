@@ -263,6 +263,20 @@
         class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
         onclick="event.stopPropagation()"
       />
+      <img
+        id="lightbox-img"
+        src=""
+        class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
+        onclick="event.stopPropagation()"
+      />
+      <video
+        id="lightbox-video"
+        src=""
+        controls
+        autoplay
+        class="hidden max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
+        onclick="event.stopPropagation()"
+      ></video>
 
       <div
         class="absolute bottom-8 left-0 w-full text-center pointer-events-none"
@@ -348,19 +362,28 @@
         const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
 
         grid.innerHTML = pageItems
-          .map(
-            (img) => `
-          <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title}')">
-              <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
-                  <img src="${img.url}" alt="${img.title}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                      <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
-                  </div>
-              </div>
+          .map((img) => {
+            const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(img.url);
+            const mediaTag = isVideo
+              ? `<video src="${img.url}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" muted playsinline></video>`
+              : `<img src="${img.url}" alt="${img.title}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">`;
+            const playBadge = isVideo
+              ? `<div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 z-10"><i data-lucide="play" class="w-4 h-4"></i></div>`
+              : "";
+            return `
+  <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title}')">
+      <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
+          ${playBadge}
+          ${mediaTag}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+              <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
           </div>
-      `,
-          )
+      </div>
+  </div>
+`;
+          })
           .join("");
+        lucide.createIcons();
 
         renderPagination(totalPages);
       }
@@ -438,15 +461,32 @@
       window.openLightbox = (url, title) => {
         const lb = document.getElementById("lightbox");
         const img = document.getElementById("lightbox-img");
+        const video = document.getElementById("lightbox-video");
+        const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(url);
+
         document.getElementById("lightbox-caption").textContent = title;
-        img.src = url;
+
+        if (isVideo) {
+          img.classList.add("hidden");
+          img.src = "";
+          video.src = url;
+          video.classList.remove("hidden");
+        } else {
+          video.classList.add("hidden");
+          video.pause();
+          video.src = "";
+          img.src = url;
+          img.classList.remove("hidden");
+        }
+
+        const activeEl = isVideo ? video : img;
 
         lb.classList.remove("hidden");
         lb.classList.add("flex");
         setTimeout(() => {
           lb.classList.remove("opacity-0");
-          img.classList.remove("scale-95");
-          img.classList.add("scale-100");
+          activeEl.classList.remove("scale-95");
+          activeEl.classList.add("scale-100");
         }, 10);
         document.body.style.overflow = "hidden";
       };
@@ -454,13 +494,18 @@
       window.closeLightbox = () => {
         const lb = document.getElementById("lightbox");
         const img = document.getElementById("lightbox-img");
+        const video = document.getElementById("lightbox-video");
+
         lb.classList.add("opacity-0");
         img.classList.remove("scale-100");
         img.classList.add("scale-95");
+        video.classList.remove("scale-100");
+        video.classList.add("scale-95");
 
         setTimeout(() => {
           lb.classList.add("hidden");
           lb.classList.remove("flex");
+          video.pause();
           document.body.style.overflow = "";
         }, 300);
       };
