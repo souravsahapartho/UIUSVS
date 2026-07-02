@@ -310,6 +310,41 @@
       </div>
     </footer>
 
+    <!-- Member Detail Modal -->
+    <div
+      id="member-modal"
+      class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity"
+    >
+      <div
+        id="member-modal-card"
+        class="bg-white rounded-2xl w-full max-w-md p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-300 border-2 border-brand-200 relative"
+      >
+        <button
+          onclick="closeMemberModal()"
+          class="absolute top-4 right-4 text-gray-400 hover:text-red-500"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <div class="flex flex-col items-center text-center mb-5">
+          <img
+            id="modal-avatar"
+            class="w-24 h-24 rounded-full border-[3px] border-brand-200 object-cover shadow-md mb-3"
+          />
+          <h3
+            id="modal-name"
+            class="font-serif font-bold text-xl text-brand-900"
+          ></h3>
+          <p
+            id="modal-type"
+            class="text-xs text-brand-500 font-medium mt-1"
+          ></p>
+        </div>
+
+        <div class="space-y-3 text-sm" id="modal-details"></div>
+      </div>
+    </div>
+
     <script>
       lucide.createIcons();
       function toggleDrawer() {
@@ -327,6 +362,21 @@
       let batchFilter = "";
       let deptFilter = "";
 
+      // 🎯 Batch code decode: "181" -> Spring 2018, "253" -> Fall 2025
+      function decodeBatch(code) {
+        if (!code) return "-";
+        const str = String(code).trim();
+        if (!/^\d{2,3}$/.test(str)) return str; // already plain text, show as-is
+
+        const semDigit = str.slice(-1);
+        const yearDigits = str.slice(0, -1);
+        const year = "20" + yearDigits.padStart(2, "0");
+        const semMap = { 1: "Spring", 2: "Summer", 3: "Fall" };
+        const sem = semMap[semDigit];
+
+        return sem ? `${sem} ${year}` : str;
+      }
+
       async function loadMembers() {
         try {
           const res = await fetch(`${API_BASE}/members/public`);
@@ -342,16 +392,25 @@
       }
 
       function populateFilterOptions() {
-        const batches = [
-          ...new Set(allMembers.map((m) => m.batch).filter(Boolean)),
-        ].sort();
+        // raw batch code -> {value, label} unique map
+        const batchMap = new Map();
+        allMembers.forEach((m) => {
+          if (m.batch) batchMap.set(m.batch, decodeBatch(m.batch));
+        });
+        // sort by raw code
+        const batches = [...batchMap.entries()].sort((a, b) =>
+          a[0].localeCompare(b[0]),
+        );
+
         const depts = [
           ...new Set(allMembers.map((m) => m.department).filter(Boolean)),
         ].sort();
 
         document.getElementById("batch-filter").innerHTML =
           `<option value="">All Batches</option>` +
-          batches.map((b) => `<option value="${b}">${b}</option>`).join("");
+          batches
+            .map(([code, label]) => `<option value="${code}">${label}</option>`)
+            .join("");
 
         document.getElementById("department-filter").innerHTML =
           `<option value="">All Departments</option>` +
@@ -367,7 +426,7 @@
           const matchesBatch = !batchFilter || m.batch === batchFilter;
           const matchesDept = !deptFilter || m.department === deptFilter;
           const searchStr =
-            `${m.name} ${m.designation || ""} ${m.batch || ""} ${m.department || ""}`.toLowerCase();
+            `${m.name} ${m.designation || ""} ${decodeBatch(m.batch)} ${m.department || ""}`.toLowerCase();
           const matchesSearch = searchStr.includes(searchQuery.toLowerCase());
           return matchesFilter && matchesBatch && matchesDept && matchesSearch;
         });
@@ -386,7 +445,8 @@
               }`;
 
             return `
-            <div class="bg-white/80 backdrop-blur rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col items-center text-center group">
+            <div onclick='showMemberModal(${JSON.stringify(m).replace(/'/g, "&apos;")})'
+                 class="cursor-pointer bg-white/80 backdrop-blur rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col items-center text-center group">
                 <div class="relative mb-4">
                     <div class="w-24 h-24 rounded-full border-[3px] border-brand-200 overflow-hidden shadow-md group-hover:border-brand-500 transition-colors p-1 bg-white">
                         <img src="${finalPic}" alt="${m.name}" class="w-full h-full object-cover rounded-full">
@@ -400,7 +460,7 @@
                 <p class="text-xs text-brand-500 font-medium mb-4">${m.type === "ex" ? "Alumni" : "Current Student"}</p>
 
                 <div class="w-full mt-auto bg-brand-50 py-2 rounded-lg text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1">
-                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Batch: ${m.batch || "-"}
+                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Batch: ${decodeBatch(m.batch)}
                 </div>
             </div>
         `;
@@ -437,6 +497,65 @@
           deptFilter = e.target.value;
           renderMembers();
         });
+
+      // 🎯 Member Detail Modal
+      window.showMemberModal = (m) => {
+        const finalPic =
+          m.avatar_url ||
+          `https://api.dicebear.com/7.x/adventurer/svg?seed=${m.id}&backgroundColor=${
+            m.gender === "Male" ? "ffdfbf" : "ffd1dc"
+          }`;
+
+        document.getElementById("modal-avatar").src = finalPic;
+        document.getElementById("modal-name").textContent = m.name;
+        document.getElementById("modal-type").textContent =
+          m.type === "ex" ? "Alumni" : "Current Student";
+
+        const rows = [];
+        if (m.designation) rows.push(["Designation", m.designation]);
+        if (m.department) rows.push(["Department", m.department]);
+        if (m.batch) rows.push(["Batch", decodeBatch(m.batch)]);
+        if (m.blood_group) rows.push(["Blood Group", m.blood_group]);
+        if (m.type === "ex" && m.graduation_date)
+          rows.push([
+            "Graduation",
+            new Date(m.graduation_date).toLocaleDateString(),
+          ]);
+        if (m.address) rows.push(["Address", m.address]);
+
+        document.getElementById("modal-details").innerHTML = rows
+          .map(
+            ([label, value]) => `
+        <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+          <span class="text-gray-500 font-bold text-xs uppercase tracking-wide">${label}</span>
+          <span class="text-brand-900 font-semibold text-right">${value}</span>
+        </div>`,
+          )
+          .join("");
+
+        const modal = document.getElementById("member-modal");
+        const card = document.getElementById("member-modal-card");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        setTimeout(() => {
+          modal.classList.remove("opacity-0");
+          card.classList.remove("scale-95");
+          card.classList.add("scale-100");
+        }, 10);
+        lucide.createIcons();
+      };
+
+      window.closeMemberModal = () => {
+        const modal = document.getElementById("member-modal");
+        const card = document.getElementById("member-modal-card");
+        modal.classList.add("opacity-0");
+        card.classList.remove("scale-100");
+        card.classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }, 300);
+      };
 
       loadMembers();
     </script>

@@ -3,12 +3,11 @@ const express = require("express");
 module.exports = (pool) => {
   const router = express.Router();
 
-  // Public member directory — শুধু approved এবং block-না-করা মেম্বাররা দেখাবে
-  // ORDER BY RAND() দিয়ে প্রতিবার random order আসবে
   router.get("/public", async (req, res) => {
     try {
       const [rows] = await pool.query(
-        `SELECT id, name, designation, gender, type, batch, department, avatar_url
+        `SELECT id, name, designation, gender, type, batch, department,
+                blood_group, graduation_date, address, avatar_url
          FROM users
          WHERE is_approved = 1 AND is_blocked = 0
          ORDER BY RAND()`,
