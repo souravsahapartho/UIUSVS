@@ -257,6 +257,24 @@
       >
         <i data-lucide="x" class="w-6 h-6"></i>
       </button>
+      <button
+        class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/30 border border-white/20 p-2.5 sm:p-3 rounded-full transition-colors z-50 shadow-lg"
+        onclick="
+          event.stopPropagation();
+          navigateLightbox(-1);
+        "
+      >
+        <i data-lucide="chevron-left" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+      </button>
+      <button
+        class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/30 border border-white/20 p-2.5 sm:p-3 rounded-full transition-colors z-50 shadow-lg"
+        onclick="
+          event.stopPropagation();
+          navigateLightbox(1);
+        "
+      >
+        <i data-lucide="chevron-right" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+      </button>
       <img
         id="lightbox-img"
         src=""
@@ -332,6 +350,8 @@
       let currentCat = "All";
       let gallerySearchQuery = "";
       let currentPage = 1;
+      let lightboxItems = [];
+      let lightboxIndex = 0;
 
       function getItemsPerPage() {
         // desktop (>=1024px) e 30 ta, mobile e 20 ta
@@ -365,9 +385,10 @@
 
         const startIdx = (currentPage - 1) * itemsPerPage;
         const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
+        lightboxItems = pageItems; // 🎯 lightbox navigation এর জন্য save করা হচ্ছে
 
         grid.innerHTML = pageItems
-          .map((img) => {
+          .map((img, idx) => {
             const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(img.url);
             const mediaTag = isVideo
               ? `<video src="${img.url}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" muted playsinline></video>`
@@ -383,7 +404,7 @@
                 })
               : "";
             return `
-  <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title.replace(/'/g, "\\'")}', '${dateLabel}')">
+  <div class="masonry-item group cursor-zoom-in" onclick="openLightboxByIndex(${idx})">
       <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
           ${playBadge}
           ${mediaTag}
@@ -470,42 +491,68 @@
         renderGallery();
       };
 
-      window.openLightbox = (url, title, dateLabel) => {
+      window.openLightboxByIndex = (idx) => {
+        lightboxIndex = idx;
+        renderLightboxMedia();
+
         const lb = document.getElementById("lightbox");
-        const img = document.getElementById("lightbox-img");
-        const video = document.getElementById("lightbox-video");
-        const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(url);
-
-        document.getElementById("lightbox-caption").textContent = title;
-        const dateEl = document.getElementById("lightbox-date");
-        if (dateEl) {
-          dateEl.textContent = dateLabel || "";
-          dateEl.style.display = dateLabel ? "block" : "none";
-        }
-
-        if (isVideo) {
-          img.classList.add("hidden");
-          img.src = "";
-          video.src = url;
-          video.classList.remove("hidden");
-        } else {
-          video.classList.add("hidden");
-          video.pause();
-          video.src = "";
-          img.src = url;
-          img.classList.remove("hidden");
-        }
-
-        const activeEl = isVideo ? video : img;
-
         lb.classList.remove("hidden");
         lb.classList.add("flex");
         setTimeout(() => {
           lb.classList.remove("opacity-0");
-          activeEl.classList.remove("scale-95");
-          activeEl.classList.add("scale-100");
         }, 10);
         document.body.style.overflow = "hidden";
+      };
+
+      function renderLightboxMedia() {
+        const item = lightboxItems[lightboxIndex];
+        if (!item) return;
+
+        const img = document.getElementById("lightbox-img");
+        const video = document.getElementById("lightbox-video");
+        const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
+
+        document.getElementById("lightbox-caption").textContent = item.title;
+        const dateLabel = item.event_date
+          ? new Date(item.event_date).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
+          : "";
+        const dateEl = document.getElementById("lightbox-date");
+        if (dateEl) {
+          dateEl.textContent = dateLabel;
+          dateEl.style.display = dateLabel ? "block" : "none";
+        }
+
+        img.classList.remove("scale-100");
+        img.classList.add("scale-95");
+        video.classList.remove("scale-100");
+        video.classList.add("scale-95");
+
+        if (isVideo) {
+          img.classList.add("hidden");
+          img.src = "";
+          video.src = item.url;
+          video.classList.remove("hidden");
+          setTimeout(() => video.classList.add("scale-100"), 10);
+        } else {
+          video.classList.add("hidden");
+          video.pause();
+          video.src = "";
+          img.src = item.url;
+          img.classList.remove("hidden");
+          setTimeout(() => img.classList.add("scale-100"), 10);
+        }
+      }
+
+      window.navigateLightbox = (direction) => {
+        if (!lightboxItems.length) return;
+        lightboxIndex =
+          (lightboxIndex + direction + lightboxItems.length) %
+          lightboxItems.length;
+        renderLightboxMedia();
       };
 
       window.closeLightbox = () => {
@@ -529,6 +576,8 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") navigateLightbox(-1);
+        if (e.key === "ArrowRight") navigateLightbox(1);
       });
 
       // Desktop <-> mobile breakpoint cross korle items-per-page bodle jabe
