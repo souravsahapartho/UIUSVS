@@ -734,19 +734,56 @@
         }
       }
 
-      // ---- Profile Pic Upload (once/year rule handled server-side eventually;
-      //      for now this just previews — actual upload needs a dedicated endpoint) ----
-      function handleImageChange(input) {
-        if (input.files && input.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            document.getElementById("profile-img").src = e.target.result;
-            showToast(
-              "New profile picture selected! Save changes to apply.",
-              "success",
-            );
-          };
-          reader.readAsDataURL(input.files[0]);
+      // ---- Profile Pic Upload — Cloudinary তে upload + DB তে save, দুটোই এখানেই হয়ে যায় ----
+      async function handleImageChange(input) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+
+        // Local preview সাথে সাথে দেখানোর জন্য
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById("profile-img").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        showToast("Uploading profile picture...", "success");
+
+        try {
+          // ধাপ ১: Cloudinary তে upload
+          const formData = new FormData();
+          formData.append("media", file);
+
+          const uploadRes = await fetch(`${API_BASE}/upload-avatar`, {
+            method: "POST",
+            body: formData,
+          });
+          const uploadData = await uploadRes.json();
+          if (!uploadRes.ok)
+            throw new Error(uploadData.error || "Upload failed");
+
+          // ধাপ ২: নতুন URL DB তে save
+          const saveRes = await fetch(`${API_BASE}/profile/avatar`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ avatarUrl: uploadData.url }),
+          });
+          const saveData = await saveRes.json();
+          if (!saveRes.ok)
+            throw new Error(saveData.error || "Failed to save avatar");
+
+          document.getElementById("profile-img").src = uploadData.url;
+          showToast("Profile picture updated successfully!", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+          // Fail করলে DB-এর পুরনো ছবি ফিরিয়ে আনো
+          if (currentUser) {
+            document.getElementById("profile-img").src =
+              currentUser.avatar_url ||
+              `https://api.dicebear.com/7.x/adventurer/svg?seed=${currentUser.id}`;
+          }
+        } finally {
+          input.value = ""; // একই file আবার select করলেও onchange fire হবে
         }
       }
 

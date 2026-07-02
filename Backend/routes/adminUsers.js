@@ -31,39 +31,50 @@ module.exports = (pool) => {
       if (!rows.length) return res.status(404).json({ error: "Not found" });
       const u = rows[0];
 
-      // ইতিমধ্যে approved এবং কোনো pending review নেই — মানে আগের click ই কাজ করে ফেলেছে
       if (u.is_approved === 1 && u.needs_admin_review === 0) {
         return res.status(409).json({ error: "Already approved" });
       }
 
       const isFirstTimeApproval = u.is_approved === 0;
 
-      const needsIdCard = isFirstTimeApproval || !u.id_card_url;
+      // 🆕 pending_* গুলো merge করে ফাইনাল ভ্যালু হিসেব করে ফেলি — এইটাই DB এবং Sheet দুই জায়গায় যাবে
+      const finalName = u.pending_name || u.name;
+      const finalDepartment = u.pending_department || u.department;
+      const finalBatch = u.pending_batch || u.batch;
+      const finalDesignation = u.pending_designation || u.designation;
+
+      // 🆕 কোনো info আসলেই বদলেছে কিনা (pending fields ছিল কিনা)
+      const infoChanged = !!(
+        u.pending_name ||
+        u.pending_department ||
+        u.pending_batch ||
+        u.pending_designation
+      );
+
+      // 🆕 প্রথমবার approve, অথবা আগের ID card নেই, অথবা info বদলেছে — সব ক্ষেত্রেই নতুন ID card বানাতে হবে
+      const needsIdCard = isFirstTimeApproval || !u.id_card_url || infoChanged;
 
       await pool.query(
         `UPDATE users SET is_approved=1,
-       name=COALESCE(pending_name, name),
-       department=COALESCE(pending_department, department),
-       batch=COALESCE(pending_batch, batch),
-       designation=COALESCE(pending_designation, designation),
+       name=?, department=?, batch=?, designation=?,
        needs_admin_review=0, pending_name=NULL, pending_department=NULL, pending_batch=NULL, pending_designation=NULL
        WHERE id=?`,
-        [u.id],
+        [finalName, finalDepartment, finalBatch, finalDesignation, u.id],
       );
 
       let sheetSynced = true;
       try {
         const sheetResult = await appendApprovedMember({
           id: u.id,
-          name: u.name,
+          name: finalName, // 🆕 নতুন value
           studentId: u.student_id,
           email: u.email,
           contact: u.contact,
           gender: u.gender,
           type: u.type,
-          department: u.department,
-          batch: u.batch,
-          designation: u.designation,
+          department: finalDepartment, // 🆕 নতুন value
+          batch: finalBatch, // 🆕 নতুন value
+          designation: finalDesignation, // 🆕 নতুন value
           bloodGroup: u.blood_group,
           graduationDate: u.graduation_date,
           sendEmail: isFirstTimeApproval,
@@ -88,14 +99,14 @@ module.exports = (pool) => {
           ? "APPROVE_NEW_MEMBER"
           : "APPROVE_PROFILE_EDIT",
         targetUserId: u.id,
-        targetUserName: u.name,
-        details: `Approved ${u.name} (${u.student_id})`,
+        targetUserName: finalName,
+        details: `Approved ${finalName} (${u.student_id})`,
       });
 
       res.json({
         message: sheetSynced
-          ? "Approved, synced to sheet, and ID email sent"
-          : "Approved (sheet/email sync failed — check server logs)",
+          ? "Approved, synced to sheet, and ID card updated"
+          : "Approved (sheet/ID card sync failed — check server logs)",
       });
     } catch (error) {
       console.error("❌ Approve user failed:", error);

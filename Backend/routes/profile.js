@@ -61,6 +61,29 @@ module.exports = (pool) => {
     res.json({ message: "Submitted for admin approval" });
   });
 
+  // --- Update avatar (immediate, no admin approval needed) ---
+  router.put("/avatar", verifySession, async (req, res) => {
+    try {
+      const { avatarUrl } = req.body;
+      if (!avatarUrl) {
+        return res.status(400).json({ error: "avatarUrl is required" });
+      }
+
+      await pool.query("UPDATE users SET avatar_url=? WHERE id=?", [
+        avatarUrl,
+        req.user.id,
+      ]);
+
+      res.json({
+        message: "Avatar updated successfully",
+        avatar_url: avatarUrl,
+      });
+    } catch (error) {
+      console.error("❌ Avatar update failed:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // --- Download own Digital ID Card (force download, not open) ---
   router.get("/download-id", verifySession, async (req, res) => {
     try {
