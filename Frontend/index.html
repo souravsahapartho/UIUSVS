@@ -1331,6 +1331,24 @@
       >
         <i data-lucide="x" class="w-6 h-6"></i>
       </button>
+      <button
+        class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 text-white bg-white/5 backdrop-blur-md p-2.5 sm:p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[210] flex items-center justify-center shadow-lg"
+        onclick="
+          event.stopPropagation();
+          navigateIndexLightbox(-1);
+        "
+      >
+        <i data-lucide="chevron-left" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+      </button>
+      <button
+        class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 text-white bg-white/5 backdrop-blur-md p-2.5 sm:p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[210] flex items-center justify-center shadow-lg"
+        onclick="
+          event.stopPropagation();
+          navigateIndexLightbox(1);
+        "
+      >
+        <i data-lucide="chevron-right" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+      </button>
       <div
         class="relative w-full h-full flex flex-col items-center justify-center z-10 px-4 pt-10 pb-28"
       >
@@ -2344,6 +2362,8 @@
         },
       ];
 
+      let indexLightboxItems = [];
+      let indexLightboxIndex = 0;
       let currentFestFilter = "all";
       let activeFlagshipEvent = null;
       let pendingFestivalNotification = null;
@@ -2493,6 +2513,8 @@
         const container = document.getElementById("dynamic-gallery-container");
         if (!container || mediaItems.length === 0) return;
 
+        indexLightboxItems = mediaItems; // 🎯 navigation এর জন্য save করা হচ্ছে
+
         // Group by category
         const grouped = mediaItems.reduce((acc, item) => {
           if (!acc[item.category]) acc[item.category] = [];
@@ -2528,9 +2550,10 @@
                   year: "numeric",
                 })
               : "";
+            const globalIdx = mediaItems.indexOf(item);
             const mediaTag = isVideo
-              ? `<video src="${item.url}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
-              : `<img src="${item.url}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
+              ? `<video src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
+              : `<img src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
             const playBadge = isVideo
               ? `<div class="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1.5 z-20"><i data-lucide="play" class="w-3.5 h-3.5"></i></div>`
               : "";
@@ -3178,51 +3201,7 @@
           mobileMenu?.classList.toggle("hidden"),
         );
 
-        // Global Lightbox Actions
-        document.addEventListener("click", (e) => {
-          if (e.target.classList.contains("gallery-img")) {
-            const lightbox = document.getElementById("image-lightbox");
-            const lightboxImg = document.getElementById("lightbox-img");
-            if (!lightbox || !lightboxImg) return;
 
-            // 🎯 Caption & Date update
-            const captionEl = document.getElementById("lightbox-caption-index");
-            const dateEl = document.getElementById("lightbox-date-index");
-            if (captionEl) captionEl.textContent = e.target.dataset.title || "";
-            if (dateEl) {
-              dateEl.textContent = e.target.dataset.date || "";
-              dateEl.style.display = e.target.dataset.date ? "block" : "none";
-            }
-
-            if (e.target.tagName === "VIDEO") {
-              let lightboxVideo = document.getElementById("lightbox-video");
-              if (!lightboxVideo) {
-                lightboxVideo = document.createElement("video");
-                lightboxVideo.id = "lightbox-video";
-                lightboxVideo.controls = true;
-                lightboxVideo.autoplay = true;
-                lightboxVideo.className =
-                  "relative max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 z-10";
-                lightboxImg.insertAdjacentElement("afterend", lightboxVideo);
-              }
-              lightboxImg.classList.add("hidden");
-              lightboxVideo.src = e.target.src;
-              lightboxVideo.classList.remove("hidden");
-            } else {
-              const lightboxVideo = document.getElementById("lightbox-video");
-              if (lightboxVideo) {
-                lightboxVideo.pause();
-                lightboxVideo.classList.add("hidden");
-              }
-              lightboxImg.src = e.target.src;
-              lightboxImg.classList.remove("opacity-0", "hidden");
-            }
-
-            lightbox.classList.remove("hidden");
-            lightbox.classList.add("flex");
-            document.body.style.overflow = "hidden";
-          }
-        });
         window.closeLightbox = () => {
           const lightbox = document.getElementById("image-lightbox");
           const lightboxVideo = document.getElementById("lightbox-video");
