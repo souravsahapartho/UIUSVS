@@ -1,4 +1,3 @@
-const mysql = require("mysql2/promise");
 const cron = require("node-cron");
 const { appendApprovedMember } = require("./services/googleSheetsService");
 const express = require("express");
