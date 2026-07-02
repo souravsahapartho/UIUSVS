@@ -580,6 +580,54 @@
         if (e.key === "ArrowRight") navigateLightbox(1);
       });
 
+      // 🎯 Mobile Swipe Support for Lightbox
+      (function () {
+        const lightbox = document.getElementById("lightbox");
+        if (!lightbox) return;
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        lightbox.addEventListener(
+          "touchstart",
+          (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+          },
+          { passive: true },
+        );
+
+        lightbox.addEventListener(
+          "touchend",
+          (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipeGesture();
+          },
+          { passive: true },
+        );
+
+        function handleSwipeGesture() {
+          const deltaX = touchEndX - touchStartX;
+          const deltaY = touchEndY - touchStartY;
+          const minSwipeDistance = 50;
+
+          // Horizontal swipe hote hobe, vertical scroll na (tai deltaX > deltaY check)
+          if (
+            Math.abs(deltaX) > minSwipeDistance &&
+            Math.abs(deltaX) > Math.abs(deltaY)
+          ) {
+            if (deltaX > 0) {
+              navigateLightbox(-1); // Right swipe -> Previous
+            } else {
+              navigateLightbox(1); // Left swipe -> Next
+            }
+          }
+        }
+      })();
+
       // Desktop <-> mobile breakpoint cross korle items-per-page bodle jabe
       let resizeTimer;
       window.addEventListener("resize", () => {
