@@ -1430,10 +1430,10 @@
           <input type="hidden" id="edit-gal-id" />
 
           <div class="flex flex-col items-center">
-            <img
-              id="edit-gal-preview"
-              class="w-full max-h-48 object-cover rounded-xl border border-orange-200 shadow-sm mb-3"
-            />
+            <div
+              id="edit-gal-preview-container"
+              class="w-full max-h-48 mb-3 flex justify-center"
+            ></div>
             <label
               class="cursor-pointer bg-brand-50 border border-brand-200 hover:bg-brand-100 text-brand-700 px-5 py-2 rounded-full text-sm font-bold transition-colors shadow-sm"
             >
@@ -1442,7 +1442,7 @@
                 type="file"
                 accept="image/*,video/*"
                 class="hidden"
-                accept="image/*,video/mp4"
+                accept="image/*,video/*"
                 onchange="handleEditGalleryFileSelect(this)"
               />
             </label>
@@ -1634,6 +1634,15 @@
       let selectedGalleryFiles = [];
       let galleryItemsCache = [];
       let editingGalleryFile = null;
+      function renderEditPreview(url) {
+        const container = document.getElementById("edit-gal-preview-container");
+        const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(url || "");
+        container.innerHTML = url
+          ? isVideo
+            ? `<video src="${url}" controls class="w-full max-h-48 object-cover rounded-xl border border-orange-200 shadow-sm"></video>`
+            : `<img src="${url}" class="w-full max-h-48 object-cover rounded-xl border border-orange-200 shadow-sm" />`
+          : "";
+      }
 
       function handleGalleryFileSelect(input) {
         if (input.files && input.files.length > 0) {
@@ -1821,10 +1830,16 @@
         galleryItemsCache = items;
 
         container.innerHTML = items
-          .map(
-            (item) => `
+          .map((item) => {
+            const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(
+              item.image_url || "",
+            );
+            const mediaTag = isVideo
+              ? `<video src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg" muted></video>`
+              : `<img src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg">`;
+            return `
     <tr>
-      <td class="py-3 px-5"><img src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg"></td>
+      <td class="py-3 px-5">${mediaTag}</td>
       <td class="py-3 px-5">
         <p class="font-bold text-sm">${item.title}</p>
         <p class="text-xs text-gray-500">${item.category} • ${item.event_date || "—"}</p>
@@ -1839,8 +1854,8 @@
         <button onclick="deleteGalleryItem(${item.id})" class="text-red-500" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
       </td>
     </tr>
-  `,
-          )
+  `;
+          })
           .join("");
         lucide.createIcons();
       }
@@ -1895,7 +1910,7 @@
           ? item.event_date.split("T")[0]
           : "";
         document.getElementById("edit-gal-pin").checked = !!item.is_pinned;
-        document.getElementById("edit-gal-preview").src = item.image_url;
+        renderEditPreview(item.image_url);
         document.getElementById("edit-gal-file-input").value = "";
 
         const overlay = document.getElementById("edit-gallery-modal-overlay");
@@ -1912,8 +1927,7 @@
       function handleEditGalleryFileSelect(input) {
         if (input.files && input.files[0]) {
           editingGalleryFile = input.files[0];
-          document.getElementById("edit-gal-preview").src =
-            URL.createObjectURL(editingGalleryFile);
+          renderEditPreview(URL.createObjectURL(editingGalleryFile));
         }
       }
 
