@@ -318,6 +318,11 @@ module.exports = (pool) => {
   });
 
   // --- Permanently delete a member (from Manage Members table) ---
+  const {
+    appendApprovedMember,
+    removeMemberFromSheet,
+  } = require("../services/googleSheetsService");
+
   router.delete("/:id/delete", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -334,6 +339,16 @@ module.exports = (pool) => {
           .status(403)
           .json({ error: "Only superadmin can delete an admin" });
 
+      // 🆕 Sheet থেকেও remove করার চেষ্টা
+      try {
+        await removeMemberFromSheet(target.student_id);
+      } catch (sheetErr) {
+        console.error(
+          "⚠️ Sheet delete failed (user still deleted from DB):",
+          sheetErr,
+        );
+      }
+
       await pool.query("DELETE FROM users WHERE id=?", [target.id]);
 
       await logAdminAction(pool, {
@@ -345,7 +360,7 @@ module.exports = (pool) => {
         details: `Deleted ${target.name} (${target.student_id})`,
       });
 
-      res.json({ message: `${target.name} deleted permanently` });
+      res.json({ message: `${target.name} deleted permanently (DB + Sheet)` });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

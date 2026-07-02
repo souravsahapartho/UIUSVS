@@ -191,14 +191,21 @@ module.exports = (pool) => {
     if (!user.is_approved)
       return res.status(403).json({ error: "Account pending admin approval" });
 
-    createSession(res, user); // 👈 EITA JOG KORLAM — cookie e session boshbe
+    // 🆕 Block check
+    if (user.is_blocked) {
+      return res.status(403).json({
+        error:
+          "আপনার একাউন্ট ব্লক করা হয়েছে। বিস্তারিত জানতে UIUSVS-এর সাথে যোগাযোগ করুন।",
+      });
+    }
+
+    createSession(res, user);
 
     res.json({
       message: "Login successful",
       user: { id: user.id, name: user.name, role: user.role, type: user.type },
     });
   });
-
   // --- FORGOT PASSWORD: request OTP (same limits as change-password) ---
   router.post("/forgot-password", async (req, res) => {
     const { email, contact } = req.body;
@@ -220,7 +227,7 @@ module.exports = (pool) => {
       [otp, expires, user.id],
     );
 
-await sendEmail({
+    await sendEmail({
       to: email,
       subject: "🔑 Reset Your UIUSVS Password",
       htmlContent: `
