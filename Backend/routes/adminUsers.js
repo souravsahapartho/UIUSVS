@@ -31,6 +31,11 @@ module.exports = (pool) => {
       if (!rows.length) return res.status(404).json({ error: "Not found" });
       const u = rows[0];
 
+      // ইতিমধ্যে approved এবং কোনো pending review নেই — মানে আগের click ই কাজ করে ফেলেছে
+      if (u.is_approved === 1 && u.needs_admin_review === 0) {
+        return res.status(409).json({ error: "Already approved" });
+      }
+
       const isFirstTimeApproval = u.is_approved === 0;
 
       await pool.query(
@@ -221,6 +226,21 @@ module.exports = (pool) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, role FROM users WHERE is_approved=1 ORDER BY name ASC`,
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // --- All members (approved + pending) for admin browsing/search ---
+  router.get("/all-members", verifySession, verifyAdmin, async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        `SELECT id, name, student_id, email, contact, gender, type,
+                department, batch, designation, is_approved, needs_admin_review, avatar_url
+         FROM users
+         ORDER BY is_approved ASC, id DESC`,
       );
       res.json(rows);
     } catch (error) {
