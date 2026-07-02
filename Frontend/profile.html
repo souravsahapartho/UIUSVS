@@ -332,11 +332,13 @@
               Your official UIUSVS Digital Identity Card is generated based on
               this profile data.
             </p>
-            <button
-              class="text-xs font-bold bg-white text-brand-900 px-4 py-2 rounded-lg shadow hover:bg-brand-50 transition-colors flex items-center gap-2"
+            <a
+              id="download-id-btn"
+              href="#"
+              class="text-xs font-bold bg-white text-brand-900 px-4 py-2 rounded-lg shadow hover:bg-brand-50 transition-colors flex items-center gap-2 pointer-events-none opacity-50"
             >
               <i data-lucide="download" class="w-4 h-4"></i> Download ID
-            </button>
+            </a>
           </div>
         </div>
 
@@ -673,6 +675,16 @@
           document.getElementById("profile-img").src =
             u.avatar_url ||
             `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
+
+          const downloadBtn = document.getElementById("download-id-btn");
+          if (u.id_card_url) {
+            downloadBtn.href = `${API_BASE}/profile/download-id`;
+            downloadBtn.classList.remove("pointer-events-none", "opacity-50");
+          } else {
+            downloadBtn.href = "#";
+            downloadBtn.classList.add("pointer-events-none", "opacity-50");
+            downloadBtn.title = "ID card not generated yet — contact admin";
+          }
 
           document.getElementById("prof-name").value = u.name || "";
           document.getElementById("prof-email").value = u.email || "";

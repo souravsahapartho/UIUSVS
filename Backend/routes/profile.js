@@ -9,7 +9,7 @@ module.exports = (pool) => {
     const [rows] = await pool.query(
       `SELECT id, name, student_id, email, contact, gender, type,
               department, batch, designation, address, blood_group, avatar_url,
-              needs_admin_review
+              needs_admin_review, id_card_url
        FROM users WHERE id=?`,
       [req.user.id],
     );
@@ -59,6 +59,39 @@ module.exports = (pool) => {
     );
 
     res.json({ message: "Submitted for admin approval" });
+  });
+
+  // --- Download own Digital ID Card (force download, not open) ---
+  router.get("/download-id", verifySession, async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT id_card_url, student_id FROM users WHERE id=?",
+        [req.user.id],
+      );
+      if (!rows.length || !rows[0].id_card_url) {
+        return res.status(404).json({ error: "ID card not found" });
+      }
+
+      const fileRes = await fetch(rows[0].id_card_url);
+      if (!fileRes.ok) {
+        return res
+          .status(502)
+          .json({ error: "Failed to fetch ID card from storage" });
+      }
+
+      const buffer = Buffer.from(await fileRes.arrayBuffer());
+      const filename = `UIU_SVS_ID_${rows[0].student_id || req.user.id}.pdf`;
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`,
+      );
+      res.send(buffer);
+    } catch (error) {
+      console.error("❌ ID card download failed:", error);
+      res.status(500).json({ error: error.message });
+    }
   });
 
   return router;
