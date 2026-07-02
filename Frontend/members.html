@@ -319,98 +319,57 @@
         overlay.classList.toggle("hidden");
       }
 
-      // Thematic Predefined Avatars (Using Dicebear for clean representations)
-      const maleAvatars = [
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M1&backgroundColor=ffdfbf",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M2&backgroundColor=ffdfbf",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M3&backgroundColor=ffdfbf",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M4&backgroundColor=ffdfbf",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M5&backgroundColor=ffdfbf",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=M6&backgroundColor=ffdfbf",
-      ];
+      const API_BASE = "https://uiusvs.onrender.com/api";
 
-      const femaleAvatars = [
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F1&backgroundColor=ffd1dc",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F2&backgroundColor=ffd1dc",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F3&backgroundColor=ffd1dc",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F4&backgroundColor=ffd1dc",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F5&backgroundColor=ffd1dc",
-        "https://api.dicebear.com/7.x/adventurer/svg?seed=F6&backgroundColor=ffd1dc",
-      ];
-
-      function getRandomAvatar(gender) {
-        const arr = gender === "Male" ? maleAvatars : femaleAvatars;
-        return arr[Math.floor(Math.random() * arr.length)];
-      }
-
-      // Mock Members Data (Some with uploaded pics, some without to show avatar logic)
-      const mockMembers = [
-        {
-          id: 1,
-          name: "Sourav Saha",
-          role: "Alumni",
-          designation: "Former President",
-          gender: "Male",
-          type: "ex",
-          batch: "Fall 2018",
-          pic: "https://placehold.co/400x400/ea580c/fff?text=SS",
-        },
-        {
-          id: 2,
-          name: "Priya Das",
-          role: "Current Student",
-          designation: "General Secretary",
-          gender: "Female",
-          type: "current",
-          batch: "Spring 2022",
-          pic: null,
-        }, // Will use Female Avatar
-        {
-          id: 3,
-          name: "Amit Roy",
-          role: "Alumni",
-          designation: "Executive Member",
-          gender: "Male",
-          type: "ex",
-          batch: "Summer 2019",
-          pic: null,
-        }, // Will use Male Avatar
-        {
-          id: 4,
-          name: "Sneha Sen",
-          role: "Current Student",
-          designation: "Member",
-          gender: "Female",
-          type: "current",
-          batch: "Fall 2023",
-          pic: null,
-        },
-        {
-          id: 5,
-          name: "Binoy Sarker",
-          role: "Current Student",
-          designation: "Vice President",
-          gender: "Male",
-          type: "current",
-          batch: "Spring 2024",
-          pic: "https://placehold.co/400x400/b91c1c/fff?text=BS",
-        },
-      ];
-
+      let allMembers = [];
       let currentFilter = "all";
       let searchQuery = "";
+      let batchFilter = "";
+      let deptFilter = "";
+
+      async function loadMembers() {
+        try {
+          const res = await fetch(`${API_BASE}/members/public`);
+          if (!res.ok) throw new Error("Failed to fetch");
+          allMembers = await res.json();
+          populateFilterOptions();
+          renderMembers();
+        } catch (err) {
+          console.error(err);
+          document.getElementById("members-grid").innerHTML =
+            `<div class="col-span-full text-center text-red-500 py-10">মেম্বার লোড করতে সমস্যা হয়েছে। একটু পর আবার চেষ্টা করুন।</div>`;
+        }
+      }
+
+      function populateFilterOptions() {
+        const batches = [
+          ...new Set(allMembers.map((m) => m.batch).filter(Boolean)),
+        ].sort();
+        const depts = [
+          ...new Set(allMembers.map((m) => m.department).filter(Boolean)),
+        ].sort();
+
+        document.getElementById("batch-filter").innerHTML =
+          `<option value="">All Batches</option>` +
+          batches.map((b) => `<option value="${b}">${b}</option>`).join("");
+
+        document.getElementById("department-filter").innerHTML =
+          `<option value="">All Departments</option>` +
+          depts.map((d) => `<option value="${d}">${d}</option>`).join("");
+      }
 
       function renderMembers() {
         const grid = document.getElementById("members-grid");
 
-        // Apply Filters and Search
-        const filtered = mockMembers.filter((m) => {
+        const filtered = allMembers.filter((m) => {
           const matchesFilter =
             currentFilter === "all" || m.type === currentFilter;
+          const matchesBatch = !batchFilter || m.batch === batchFilter;
+          const matchesDept = !deptFilter || m.department === deptFilter;
           const searchStr =
-            `${m.name} ${m.designation} ${m.batch}`.toLowerCase();
+            `${m.name} ${m.designation || ""} ${m.batch || ""} ${m.department || ""}`.toLowerCase();
           const matchesSearch = searchStr.includes(searchQuery.toLowerCase());
-          return matchesFilter && matchesSearch;
+          return matchesFilter && matchesBatch && matchesDept && matchesSearch;
         });
 
         if (filtered.length === 0) {
@@ -420,28 +379,31 @@
 
         grid.innerHTML = filtered
           .map((m) => {
-            // Apply the Custom Avatar Logic
-            const finalPic = m.pic ? m.pic : getRandomAvatar(m.gender);
+            const finalPic =
+              m.avatar_url ||
+              `https://api.dicebear.com/7.x/adventurer/svg?seed=${m.id}&backgroundColor=${
+                m.gender === "Male" ? "ffdfbf" : "ffd1dc"
+              }`;
 
             return `
-                <div class="bg-white/80 backdrop-blur rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col items-center text-center group">
-                    <div class="relative mb-4">
-                        <div class="w-24 h-24 rounded-full border-[3px] border-brand-200 overflow-hidden shadow-md group-hover:border-brand-500 transition-colors p-1 bg-white">
-                            <img src="${finalPic}" alt="${m.name}" class="w-full h-full object-cover rounded-full">
-                        </div>
-                        ${m.type === "ex" ? '<div class="absolute -bottom-2 right-0 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white shadow-sm">Alumni</div>' : ""}
+            <div class="bg-white/80 backdrop-blur rounded-2xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col items-center text-center group">
+                <div class="relative mb-4">
+                    <div class="w-24 h-24 rounded-full border-[3px] border-brand-200 overflow-hidden shadow-md group-hover:border-brand-500 transition-colors p-1 bg-white">
+                        <img src="${finalPic}" alt="${m.name}" class="w-full h-full object-cover rounded-full">
                     </div>
-                    <h3 class="font-serif font-bold text-lg text-brand-900 mb-1 leading-tight">${m.name}</h3>
-                    
-                    ${m.designation && m.designation !== "Member" ? `<p class="text-xs font-bold text-red-600 mb-1 px-2 py-0.5 bg-red-50 rounded border border-red-100">${m.designation}</p>` : ""}
-                    
-                    <p class="text-xs text-brand-500 font-medium mb-4">${m.role}</p>
-                    
-                    <div class="w-full mt-auto bg-brand-50 py-2 rounded-lg text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1">
-                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Batch: ${m.batch}
-                    </div>
+                    ${m.type === "ex" ? '<div class="absolute -bottom-2 right-0 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white shadow-sm">Alumni</div>' : ""}
                 </div>
-            `;
+                <h3 class="font-serif font-bold text-lg text-brand-900 mb-1 leading-tight">${m.name}</h3>
+
+                ${m.designation && m.designation !== "Member" ? `<p class="text-xs font-bold text-red-600 mb-1 px-2 py-0.5 bg-red-50 rounded border border-red-100">${m.designation}</p>` : ""}
+
+                <p class="text-xs text-brand-500 font-medium mb-4">${m.type === "ex" ? "Alumni" : "Current Student"}</p>
+
+                <div class="w-full mt-auto bg-brand-50 py-2 rounded-lg text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1">
+                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Batch: ${m.batch || "-"}
+                </div>
+            </div>
+        `;
           })
           .join("");
         lucide.createIcons();
@@ -455,7 +417,6 @@
         });
         document.getElementById(`btn-${type}`).className =
           "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md";
-
         renderMembers();
       };
 
@@ -464,8 +425,20 @@
         renderMembers();
       };
 
-      // Simulate network load
-      setTimeout(renderMembers, 800);
+      document
+        .getElementById("batch-filter")
+        .addEventListener("change", (e) => {
+          batchFilter = e.target.value;
+          renderMembers();
+        });
+      document
+        .getElementById("department-filter")
+        .addEventListener("change", (e) => {
+          deptFilter = e.target.value;
+          renderMembers();
+        });
+
+      loadMembers();
     </script>
   </body>
 </html>
