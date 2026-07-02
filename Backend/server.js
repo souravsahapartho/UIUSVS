@@ -47,8 +47,17 @@ const storage = new CloudinaryStorage({
     const isVideo = file.mimetype.startsWith("video/");
     return {
       folder: "uiusvs_uploads",
-      allowed_formats: ["jpg", "png", "jpeg", "webp", "gif", "mp4"],
-      resource_type: isVideo ? "video" : "image",
+      resource_type: "auto", // 👈 change: fixed value diye Cloudinary nijei detect korbe
+      allowed_formats: [
+        "jpg",
+        "png",
+        "jpeg",
+        "webp",
+        "gif",
+        "mp4",
+        "mov",
+        "webm",
+      ],
       format: isVideo ? undefined : "webp",
       transformation: isVideo
         ? undefined
