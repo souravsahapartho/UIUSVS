@@ -1,3 +1,6 @@
+const mysql = require("mysql2/promise");
+const cron = require("node-cron");
+const { appendApprovedMember } = require("./services/googleSheetsService");
 const express = require("express");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
@@ -200,6 +203,49 @@ app.get("/api/health", async (req, res) => {
     res
       .status(500)
       .json({ status: "error", message: error.message, code: error.code });
+  }
+});
+
+// ============================================
+// AUTO-CONVERT: Graduation date পার হলে current → ex, Sheet sync
+// প্রতিদিন রাত ১২:০৫ এ চলবে
+// ============================================
+cron.schedule("5 0 * * *", async () => {
+  console.log("🎓 Running graduation auto-convert job...");
+  try {
+    const [dueUsers] = await pool.query(
+      `SELECT * FROM users
+       WHERE type = 'current'
+         AND graduation_date IS NOT NULL
+         AND graduation_date <= CURDATE()`,
+    );
+
+    for (const u of dueUsers) {
+      await pool.query("UPDATE users SET type='ex' WHERE id=?", [u.id]);
+
+      try {
+        await appendApprovedMember({
+          id: u.id,
+          name: u.name,
+          studentId: u.student_id,
+          email: u.email,
+          contact: u.contact,
+          gender: u.gender,
+          type: "ex",
+          department: u.department,
+          batch: u.batch,
+          designation: u.designation,
+          bloodGroup: u.blood_group,
+          graduationDate: u.graduation_date,
+          sendEmail: false,
+        });
+        console.log(`✅ Auto-converted to Alumni: ${u.name} (${u.student_id})`);
+      } catch (sheetErr) {
+        console.error(`⚠️ Sheet sync failed for ${u.student_id}:`, sheetErr);
+      }
+    }
+  } catch (err) {
+    console.error("❌ Graduation auto-convert job failed:", err);
   }
 });
 

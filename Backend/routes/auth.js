@@ -27,6 +27,7 @@ module.exports = (pool) => {
         designation,
         password,
         profilePicUrl,
+        graduationDate,
       } = req.body;
 
       const [existing] = await pool.query(
@@ -53,12 +54,13 @@ module.exports = (pool) => {
         contact,
         gender,
         type,
-        department, // NEW
-        batch, // NEW
-        bloodGroup, // NEW
+        department,
+        batch,
+        bloodGroup,
         designation,
         hashed,
         avatarUrl,
+        graduationDate: graduationDate || null,
       };
 
       await pool.query(
@@ -104,9 +106,9 @@ module.exports = (pool) => {
         typeof pending.payload === "string"
           ? JSON.parse(pending.payload)
           : pending.payload;
-      await pool.query(
-        `INSERT INTO users (name, student_id, email, contact, gender, type, department, batch, blood_group, designation, password, avatar_url, is_verified, is_approved)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
+await pool.query(
+        `INSERT INTO users (name, student_id, email, contact, gender, type, department, batch, blood_group, designation, password, avatar_url, graduation_date, is_verified, is_approved)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
         [
           d.name,
           d.studentId,
@@ -120,6 +122,7 @@ module.exports = (pool) => {
           d.designation,
           d.hashed,
           d.avatarUrl,
+          d.graduationDate,
         ],
       );
       await pool.query("DELETE FROM pending_signups WHERE email=?", [email]);

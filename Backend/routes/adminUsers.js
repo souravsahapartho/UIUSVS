@@ -56,7 +56,8 @@ module.exports = (pool) => {
           batch: u.batch,
           designation: u.designation,
           bloodGroup: u.blood_group,
-          sendEmail: isFirstTimeApproval, // শুধু নতুন signup এ true
+          graduationDate: u.graduation_date, // নতুন লাইন
+          sendEmail: isFirstTimeApproval,
         });
       } catch (sheetErr) {
         console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);

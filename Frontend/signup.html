@@ -331,6 +331,23 @@
             </div>
           </div>
 
+          <!-- Graduation Date (শুধু Current Student দের জন্য) -->
+          <div id="grad-date-wrapper" class="hidden">
+            <label class="block text-sm font-bold text-brand-900 mb-1.5"
+              >Expected Graduation Date
+              <span class="text-red-500">*</span></label
+            >
+            <input
+              type="date"
+              id="graduationDate"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+            />
+            <p class="text-[10px] text-gray-500 mt-1">
+              এই তারিখ পার হয়ে গেলে আপনার account স্বয়ংক্রিয়ভাবে Alumni তে
+              পরিণত হবে।
+            </p>
+          </div>
+
           <!-- Past UIUSVS Role -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
@@ -353,9 +370,9 @@
                 >Department <span class="text-red-500">*</span></label
               >
               <select
-                id="department"
+                id="type"
                 required
-                onchange="toggleOtherDepartment()"
+                onchange="toggleGradDate()"
                 class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all bg-white"
               >
                 <option value="" disabled selected>Select Department</option>
@@ -623,6 +640,28 @@
         }
       }
 
+      function toggleGradDate() {
+        const type = document.getElementById("type").value;
+        const wrapper = document.getElementById("grad-date-wrapper");
+        const input = document.getElementById("graduationDate");
+        if (type === "current") {
+          wrapper.classList.remove("hidden");
+          input.required = true;
+        } else {
+          wrapper.classList.add("hidden");
+          input.required = false;
+          input.value = "";
+        }
+      }
+
+      // Graduation date এ শুধু ভবিষ্যতের তারিখ select করা যাবে
+      document.addEventListener("DOMContentLoaded", () => {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const minDate = tomorrow.toISOString().split("T")[0];
+        document.getElementById("graduationDate").setAttribute("min", minDate);
+      });
+
       // Profile pic select korle preview
       // Profile pic select korle preview + Cloudinary te upload
       document
@@ -669,6 +708,15 @@
         .addEventListener("submit", async (e) => {
           e.preventDefault();
           if (
+            document.getElementById("type").value === "current" &&
+            !document.getElementById("graduationDate").value
+          ) {
+            return showToast(
+              "Please select your expected graduation date",
+              "error",
+            );
+          }
+          if (
             document.getElementById("department").value === "Others" &&
             !document.getElementById("department-other").value.trim()
           ) {
@@ -689,6 +737,8 @@
             contact: document.getElementById("contact").value,
             gender: document.getElementById("gender").value,
             type: document.getElementById("type").value,
+            graduationDate:
+              document.getElementById("graduationDate").value || null,
             department: deptValue, // NEW
             batch: document.getElementById("batch").value, // NEW
             bloodGroup: document.getElementById("bloodGroup").value,
