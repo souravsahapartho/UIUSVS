@@ -266,6 +266,7 @@
             </div>
           </div>
           <button
+            onclick="handleAdminLogout()"
             class="flex items-center px-3 py-1.5 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-semibold transition-colors"
           >
             <i data-lucide="log-out" class="w-4 h-4 mr-1.5"></i> Logout
@@ -1354,6 +1355,16 @@
             "pointer-events-none",
           );
         }, 3000);
+      }
+
+      function handleAdminLogout() {
+        fetch(`${API_BASE}/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+        }).finally(() => {
+          showToast("Logging out...");
+          setTimeout(() => (window.location.href = "login.html"), 800);
+        });
       }
 
       // Tab Switching Logic
