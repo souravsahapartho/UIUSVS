@@ -169,6 +169,178 @@ app.post(
 );
 
 // ============================================
+// FESTIVALS (Actual Timeline)
+// ============================================
+app.get("/api/festivals", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, name, bn_name AS bnName, event_date AS date, type,
+              image_url AS image, is_featured AS isFeatured
+       FROM festivals ORDER BY event_date ASC`,
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get(
+  "/api/festivals/admin",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM festivals ORDER BY event_date ASC",
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.post(
+  "/api/festivals",
+  verifySession,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const {
+        name,
+        bn_name,
+        event_date,
+        type,
+        is_featured,
+        template_image_url,
+      } = req.body;
+      const imageUrl = req.file ? req.file.path : template_image_url || null;
+      const cloudinaryId = req.file ? req.file.filename : null;
+
+      const [result] = await pool.query(
+        `INSERT INTO festivals (name, bn_name, event_date, type, image_url, cloudinary_id, is_featured)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          name,
+          bn_name || "",
+          event_date,
+          type || "major",
+          imageUrl,
+          cloudinaryId,
+          is_featured === "true" || is_featured === true,
+        ],
+      );
+      res.status(200).json({ message: "Event added!", id: result.insertId });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.put(
+  "/api/festivals/:id/feature",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const { is_featured } = req.body;
+      await pool.query("UPDATE festivals SET is_featured=? WHERE id=?", [
+        is_featured === true || is_featured === "true",
+        req.params.id,
+      ]);
+      res.json({ message: "Updated!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.delete(
+  "/api/festivals/:id",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT cloudinary_id FROM festivals WHERE id=?",
+        [req.params.id],
+      );
+      if (rows.length && rows[0].cloudinary_id) {
+        await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+      }
+      await pool.query("DELETE FROM festivals WHERE id=?", [req.params.id]);
+      res.json({ message: "Deleted!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// ============================================
+// FESTIVAL TEMPLATES (Admin's Suggestion Library)
+// ============================================
+app.get(
+  "/api/festival-templates",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM festival_templates ORDER BY name ASC",
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.post(
+  "/api/festival-templates",
+  verifySession,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, bn_name, type } = req.body;
+      const imageUrl = req.file ? req.file.path : null;
+      const cloudinaryId = req.file ? req.file.filename : null;
+      const [result] = await pool.query(
+        `INSERT INTO festival_templates (name, bn_name, type, image_url, cloudinary_id) VALUES (?, ?, ?, ?, ?)`,
+        [name, bn_name || "", type || "major", imageUrl, cloudinaryId],
+      );
+      res.status(200).json({ message: "Template saved!", id: result.insertId });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.delete(
+  "/api/festival-templates/:id",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT cloudinary_id FROM festival_templates WHERE id=?",
+        [req.params.id],
+      );
+      if (rows.length && rows[0].cloudinary_id) {
+        await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+      }
+      await pool.query("DELETE FROM festival_templates WHERE id=?", [
+        req.params.id,
+      ]);
+      res.json({ message: "Deleted!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// ============================================
 // 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
 // ============================================
 app.get("/api/gallery/public", async (req, res) => {

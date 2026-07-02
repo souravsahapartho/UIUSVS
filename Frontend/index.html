@@ -2717,12 +2717,25 @@
             const icon =
               f.type === "ekadashi" ? "🌾" : f.type === "moon" ? "🌕" : "🪔";
 
+            const iconHtml = f.image
+              ? `<img src="${f.image}" class="w-full h-full object-cover rounded-full" alt="${f.name}">`
+              : `<span>${icon}</span>`;
+
+            const featuredClass = f.isFeatured
+              ? "border-2 border-yellow-400 bg-gradient-to-br from-orange-50 via-white to-yellow-50 shadow-[0_8px_30px_rgba(234,179,8,0.25)] ring-2 ring-yellow-200 scale-[1.03] relative"
+              : highlightClass;
+
+            const featuredBadge = f.isFeatured
+              ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>`
+              : "";
+
             return `
-                <div class="p-6 rounded-2xl border transition-all duration-300 ${highlightClass} ${mobileHiddenClass}">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100">${icon}</div>
-                        ${timeBadge}
-                    </div>
+    <div class="p-6 rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
+        ${featuredBadge}
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100 overflow-hidden">${iconHtml}</div>
+            ${timeBadge}
+        </div>
                     <h3 class="font-bold text-gray-900 text-xl mb-0.5 font-serif">${f.name}</h3>
                     <p class="text-sm text-orange-700 font-medium font-serif mb-1.5">${f.bnName}</p>
                     <p class="text-sm text-gray-500 font-medium flex items-center gap-1">
