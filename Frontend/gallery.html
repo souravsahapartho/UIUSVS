@@ -279,13 +279,18 @@
       ></video>
 
       <div
-        class="absolute bottom-8 left-0 w-full text-center pointer-events-none"
+        class="absolute bottom-8 left-0 w-full text-center pointer-events-none px-4"
       >
-        <span
-          id="lightbox-caption"
-          class="bg-black/70 text-white px-5 py-2.5 rounded-full text-sm font-bold backdrop-blur-md border border-white/10"
-          >Caption</span
+        <div
+          class="inline-flex flex-col items-center gap-1 bg-black/70 text-white px-5 py-3 rounded-2xl backdrop-blur-md border border-white/10 max-w-[90vw]"
         >
+          <span id="lightbox-caption" class="text-sm sm:text-base font-bold"
+            >Caption</span
+          >
+          <span id="lightbox-date" class="text-xs text-orange-200 font-medium"
+            >Date</span
+          >
+        </div>
       </div>
     </div>
 
@@ -370,8 +375,15 @@
             const playBadge = isVideo
               ? `<div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 z-10"><i data-lucide="play" class="w-4 h-4"></i></div>`
               : "";
+            const dateLabel = img.event_date
+              ? new Date(img.event_date).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "";
             return `
-  <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title}')">
+  <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title.replace(/'/g, "\\'")}', '${dateLabel}')">
       <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
           ${playBadge}
           ${mediaTag}
@@ -458,13 +470,18 @@
         renderGallery();
       };
 
-      window.openLightbox = (url, title) => {
+      window.openLightbox = (url, title, dateLabel) => {
         const lb = document.getElementById("lightbox");
         const img = document.getElementById("lightbox-img");
         const video = document.getElementById("lightbox-video");
         const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(url);
 
         document.getElementById("lightbox-caption").textContent = title;
+        const dateEl = document.getElementById("lightbox-date");
+        if (dateEl) {
+          dateEl.textContent = dateLabel || "";
+          dateEl.style.display = dateLabel ? "block" : "none";
+        }
 
         if (isVideo) {
           img.classList.add("hidden");
