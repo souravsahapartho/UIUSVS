@@ -464,8 +464,11 @@
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
-                    >Batch / Trimester</label
-                  >
+                    >Batch / Trimester<span
+                      id="batch-decoded-hint"
+                      class="text-brand-600 normal-case font-normal"
+                    ></span
+                  ></label>
                   <input
                     type="text"
                     id="prof-batch"
@@ -687,6 +690,23 @@
             document.getElementById("prof-dept").value = userDept || "CSE";
           }
           document.getElementById("prof-batch").value = u.batch || "";
+          // Batch code থেকে readable trimester+year বের করা (e.g. "181" → "Spring 2018")
+          function decodeBatch(batchCode) {
+            if (!batchCode || batchCode.length < 3) return "";
+            const yearPart = batchCode.slice(0, -1);
+            const trimesterDigit = batchCode.slice(-1);
+            const trimesterMap = { 1: "Spring", 2: "Summer", 3: "Fall" };
+            const trimesterName = trimesterMap[trimesterDigit];
+            if (!trimesterName) return "";
+            const fullYear = "20" + yearPart.padStart(2, "0").slice(-2);
+            return `${trimesterName} ${fullYear}`;
+          }
+
+          const decodedBatch = decodeBatch(u.batch);
+          const batchHint = document.getElementById("batch-decoded-hint");
+          if (batchHint) {
+            batchHint.textContent = decodedBatch ? `(${decodedBatch})` : "";
+          }
           document.getElementById("prof-designation").value =
             u.designation || "Member";
           document.getElementById("prof-address").value = u.address || "";
