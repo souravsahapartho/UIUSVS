@@ -1354,6 +1354,22 @@
             onclick="event.stopPropagation()"
           />
         </div>
+        <div class="mt-4 text-center pointer-events-none px-4 z-20">
+          <div
+            class="inline-flex flex-col items-center gap-1 bg-black/70 text-white px-5 py-3 rounded-2xl backdrop-blur-md border border-white/10 max-w-[90vw]"
+          >
+            <span
+              id="lightbox-caption-index"
+              class="text-sm sm:text-base font-bold"
+              >Caption</span
+            >
+            <span
+              id="lightbox-date-index"
+              class="text-xs text-orange-200 font-medium"
+              >Date</span
+            >
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2504,9 +2520,17 @@
 
           grouped[category].forEach((item) => {
             const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
+            const safeTitle = (item.title || "").replace(/"/g, "&quot;");
+            const dateLabel = item.event_date
+              ? new Date(item.event_date).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "";
             const mediaTag = isVideo
-              ? `<video src="${item.url}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
-              : `<img src="${item.url}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
+              ? `<video src="${item.url}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
+              : `<img src="${item.url}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
             const playBadge = isVideo
               ? `<div class="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1.5 z-20"><i data-lucide="play" class="w-3.5 h-3.5"></i></div>`
               : "";
@@ -3155,12 +3179,20 @@
         );
 
         // Global Lightbox Actions
-        // Global Lightbox Actions
         document.addEventListener("click", (e) => {
           if (e.target.classList.contains("gallery-img")) {
             const lightbox = document.getElementById("image-lightbox");
             const lightboxImg = document.getElementById("lightbox-img");
             if (!lightbox || !lightboxImg) return;
+
+            // 🎯 Caption & Date update
+            const captionEl = document.getElementById("lightbox-caption-index");
+            const dateEl = document.getElementById("lightbox-date-index");
+            if (captionEl) captionEl.textContent = e.target.dataset.title || "";
+            if (dateEl) {
+              dateEl.textContent = e.target.dataset.date || "";
+              dateEl.style.display = e.target.dataset.date ? "block" : "none";
+            }
 
             if (e.target.tagName === "VIDEO") {
               let lightboxVideo = document.getElementById("lightbox-video");
