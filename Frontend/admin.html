@@ -256,11 +256,14 @@
               🕉️
             </div>
             <div class="flex flex-col pr-2">
-              <span class="font-bold text-sm text-brand-900 leading-none"
+              <span
+                class="font-bold text-sm text-brand-900 leading-none"
+                id="admin-name-display"
                 >UIUSVS Admin</span
               >
               <span
                 class="text-[9px] text-brand-600 font-bold uppercase tracking-widest mt-0.5"
+                id="admin-role-display"
                 >Superadmin</span
               >
             </div>
@@ -1094,6 +1097,7 @@
                       <th class="py-3 px-5">Department / Batch</th>
                       <th class="py-3 px-5">Type</th>
                       <th class="py-3 px-5">Status</th>
+                      <th class="py-3 px-5 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody id="all-members-list"></tbody>
@@ -1698,13 +1702,14 @@
       function renderAllMembers(list) {
         const container = document.getElementById("all-members-list");
         if (!list.length) {
-          container.innerHTML = `<tr><td colspan="6" class="py-6 px-5 text-center text-gray-400 text-sm">No members found</td></tr>`;
+          container.innerHTML = `<tr><td colspan="7" class="py-6 px-5 text-center text-gray-400 text-sm">No members found</td></tr>`;
           return;
         }
         container.innerHTML = list
           .map((u) => {
-            const statusBadge =
-              u.is_approved && !u.needs_admin_review
+            const statusBadge = u.is_blocked
+              ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Blocked</span>`
+              : u.is_approved && !u.needs_admin_review
                 ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Approved</span>`
                 : u.needs_admin_review
                   ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Pending</span>`
@@ -1713,6 +1718,10 @@
             const avatar =
               u.avatar_url ||
               `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
+
+            const blockBtn = u.is_blocked
+              ? `<button onclick="unblockMember(${u.id})" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Unblock"><i data-lucide="unlock" class="w-4 h-4"></i></button>`
+              : `<button onclick="blockMember(${u.id})" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-1.5 rounded transition-colors" title="Block"><i data-lucide="ban" class="w-4 h-4"></i></button>`;
 
             return `
     <tr class="hover:bg-brand-50 transition-colors">
@@ -1727,9 +1736,67 @@
         <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
       </td>
       <td class="py-3 px-5">${statusBadge}</td>
+      <td class="py-3 px-5 text-center space-x-1.5">
+        ${blockBtn}
+        <button onclick="deleteMember(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </td>
     </tr>`;
           })
           .join("");
+        lucide.createIcons();
+      }
+
+      async function blockMember(id) {
+        if (!confirm("এই মেম্বারকে ব্লক করতে চান? সে আর লগইন করতে পারবে না।"))
+          return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/block`, {
+            method: "PUT",
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadAllMembers();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function unblockMember(id) {
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/unblock`, {
+            method: "PUT",
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadAllMembers();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function deleteMember(id) {
+        if (
+          !confirm(
+            "এই মেম্বারকে স্থায়ীভাবে ডিলিট করতে চান? এটা আর ফিরিয়ে আনা যাবে না।",
+          )
+        )
+          return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/delete`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadAllMembers();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
       }
 
       function filterAllMembers() {
@@ -1945,19 +2012,23 @@
         try {
           const res = await fetch(
             `${API_BASE.replace("/api", "")}/api/auth/me`,
-            {
-              credentials: "include",
-            },
+            { credentials: "include" },
           );
           if (!res.ok) throw new Error();
           const data = await res.json();
           if (data.user.role !== "admin" && data.user.role !== "superadmin")
             throw new Error();
 
+          // 🎯 Dynamic name & role badge
+          document.getElementById("admin-name-display").textContent =
+            data.user.name;
+          document.getElementById("admin-role-display").textContent =
+            data.user.role === "superadmin" ? "Superadmin" : "Admin";
+
           if (data.user.role === "superadmin") {
-            document.querySelectorAll(".superadmin-only").forEach((el) => {
-              el.classList.remove("hidden");
-            });
+            document
+              .querySelectorAll(".superadmin-only")
+              .forEach((el) => el.classList.remove("hidden"));
           }
         } catch (err) {
           console.error("Auth check failed:", err);

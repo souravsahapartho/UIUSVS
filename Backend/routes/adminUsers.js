@@ -243,16 +243,109 @@ module.exports = (pool) => {
     }
   });
 
-  // --- All members (approved + pending) for admin browsing/search ---
   router.get("/all-members", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
-                department, batch, designation, is_approved, needs_admin_review, avatar_url
-         FROM users
-         ORDER BY is_approved ASC, id DESC`,
+              department, batch, designation, is_approved, needs_admin_review, is_blocked, avatar_url
+       FROM users
+       ORDER BY is_approved ASC, id DESC`,
       );
       res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // --- Block a member (they'll be denied login) ---
+  router.put("/:id/block", verifySession, verifyAdmin, async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT id, name, role FROM users WHERE id=?",
+        [req.params.id],
+      );
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      const target = rows[0];
+
+      if (target.role === "superadmin")
+        return res.status(400).json({ error: "Cannot block a superadmin" });
+      if (target.role === "admin" && req.user.role !== "superadmin")
+        return res
+          .status(403)
+          .json({ error: "Only superadmin can block an admin" });
+
+      await pool.query("UPDATE users SET is_blocked=1 WHERE id=?", [target.id]);
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: "BLOCK_MEMBER",
+        targetUserId: target.id,
+        targetUserName: target.name,
+        details: `Blocked ${target.name}`,
+      });
+
+      res.json({ message: `${target.name} has been blocked` });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // --- Unblock a member ---
+  router.put("/:id/unblock", verifySession, verifyAdmin, async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT id, name FROM users WHERE id=?", [
+        req.params.id,
+      ]);
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      const target = rows[0];
+
+      await pool.query("UPDATE users SET is_blocked=0 WHERE id=?", [target.id]);
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: "UNBLOCK_MEMBER",
+        targetUserId: target.id,
+        targetUserName: target.name,
+        details: `Unblocked ${target.name}`,
+      });
+
+      res.json({ message: `${target.name} has been unblocked` });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // --- Permanently delete a member (from Manage Members table) ---
+  router.delete("/:id/delete", verifySession, verifyAdmin, async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT id, name, student_id, role FROM users WHERE id=?",
+        [req.params.id],
+      );
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      const target = rows[0];
+
+      if (target.role === "superadmin")
+        return res.status(400).json({ error: "Cannot delete a superadmin" });
+      if (target.role === "admin" && req.user.role !== "superadmin")
+        return res
+          .status(403)
+          .json({ error: "Only superadmin can delete an admin" });
+
+      await pool.query("DELETE FROM users WHERE id=?", [target.id]);
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: "DELETE_MEMBER",
+        targetUserId: target.id,
+        targetUserName: target.name,
+        details: `Deleted ${target.name} (${target.student_id})`,
+      });
+
+      res.json({ message: `${target.name} deleted permanently` });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

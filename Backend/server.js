@@ -61,11 +61,13 @@ const upload = multer({ storage: storage });
 const authRoutes = require("./routes/auth")(pool);
 const adminUsersRoutes = require("./routes/adminUsers")(pool);
 const profileRoutes = require("./routes/profile")(pool);
+const membersRoutes = require("./routes/members")(pool); // 🆕
 const { verifySession, verifyAdmin } = require("./middleware/auth");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/members", membersRoutes); // 🆕
 
 // ============================================
 // AVATAR UPLOAD — signup form থেকে profile picture Cloudinary তে পাঠাতে
