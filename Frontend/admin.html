@@ -193,6 +193,22 @@
         </a>
         <a
           href="#"
+          onclick="switchTab('admins')"
+          id="nav-admins"
+          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors superadmin-only hidden"
+        >
+          <i data-lucide="shield" class="w-5 h-5 mr-3"></i> Manage Admins
+        </a>
+        <a
+          href="#"
+          onclick="switchTab('logs')"
+          id="nav-logs"
+          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors superadmin-only hidden"
+        >
+          <i data-lucide="history" class="w-5 h-5 mr-3"></i> Activity Logs
+        </a>
+        <a
+          href="#"
           onclick="switchTab('blogs')"
           id="nav-blogs"
           class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
@@ -1047,6 +1063,95 @@
           </div>
         </div>
 
+        <!-- VIEW: MANAGE ADMINS (Superadmin only) -->
+        <div
+          id="view-admins"
+          class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
+        >
+          <div class="max-w-6xl">
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-brand-900 font-serif">
+                Manage Admins
+              </h1>
+              <p class="text-sm text-gray-600 mt-1">
+                Promote approved members to Admin, or remove admin access.
+              </p>
+            </div>
+
+            <div
+              class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+            >
+              <div
+                class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center"
+              >
+                <span class="font-bold text-sm text-gray-700">All Members</span>
+                <div class="relative">
+                  <i
+                    data-lucide="search"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+                  ></i>
+                  <input
+                    type="text"
+                    id="admin-search-input"
+                    placeholder="Search by ID or Name"
+                    oninput="filterAdminList()"
+                    class="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                  />
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Name & ID</th>
+                      <th class="py-3 px-5">Email</th>
+                      <th class="py-3 px-5">Role</th>
+                      <th class="py-3 px-5 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-manage-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: ACTIVITY LOGS (Superadmin only) -->
+        <div
+          id="view-logs"
+          class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
+        >
+          <div class="max-w-6xl">
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-brand-900 font-serif">
+                Activity Logs
+              </h1>
+              <p class="text-sm text-gray-600 mt-1">
+                See which admin approved, rejected, or changed what — and when.
+              </p>
+            </div>
+
+            <div
+              class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+            >
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Admin</th>
+                      <th class="py-3 px-5">Action</th>
+                      <th class="py-3 px-5">Target</th>
+                      <th class="py-3 px-5">Details</th>
+                      <th class="py-3 px-5">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activity-logs-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- VIEW: BLOGS -->
         <div
           id="view-blogs"
@@ -1549,6 +1654,158 @@
       }
 
       document.addEventListener("DOMContentLoaded", loadPendingUsers);
+
+      // ---- Manage Admins ----
+      let allApprovedMembers = [];
+
+      async function loadAdminManageList() {
+        const container = document.getElementById("admin-manage-list");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/all-approved`, {
+            credentials: "include",
+          });
+          if (!res.ok) {
+            container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-red-500 text-sm">Failed to load (${res.status})</td></tr>`;
+            return;
+          }
+          allApprovedMembers = await res.json();
+          renderAdminManageList(allApprovedMembers);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      function renderAdminManageList(list) {
+        const container = document.getElementById("admin-manage-list");
+        if (!list.length) {
+          container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-gray-400 text-sm">No members found</td></tr>`;
+          return;
+        }
+        container.innerHTML = list
+          .map((u) => {
+            const roleLabel =
+              u.role === "superadmin"
+                ? `<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Superadmin</span>`
+                : u.role === "admin"
+                  ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Admin</span>`
+                  : `<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[10px] font-bold uppercase">Member</span>`;
+
+            let actionBtn = "";
+            if (u.role === "superadmin") {
+              actionBtn = `<span class="text-xs text-gray-400">—</span>`;
+            } else if (u.role === "admin") {
+              actionBtn = `<button onclick="demoteAdmin(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded text-xs font-bold transition-colors">Remove Admin</button>`;
+            } else {
+              actionBtn = `<button onclick="promoteToAdmin(${u.id})" class="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded text-xs font-bold transition-colors">Make Admin</button>`;
+            }
+
+            return `
+    <tr class="hover:bg-brand-50 transition-colors">
+      <td class="py-3 px-5">
+        <p class="font-bold text-gray-900 text-sm">${u.name}</p>
+        <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
+      </td>
+      <td class="py-3 px-5 text-sm text-gray-700">${u.email}</td>
+      <td class="py-3 px-5">${roleLabel}</td>
+      <td class="py-3 px-5 text-center">${actionBtn}</td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      function filterAdminList() {
+        const q = document
+          .getElementById("admin-search-input")
+          .value.trim()
+          .toLowerCase();
+        const filtered = allApprovedMembers.filter(
+          (u) =>
+            u.name.toLowerCase().includes(q) ||
+            (u.student_id || "").toLowerCase().includes(q),
+        );
+        renderAdminManageList(filtered);
+      }
+
+      async function promoteToAdmin(id) {
+        if (!confirm("Make this member an Admin?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/make-admin`, {
+            method: "PUT",
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadAdminManageList();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function demoteAdmin(id) {
+        if (!confirm("Remove Admin access from this user?")) return;
+        try {
+          const res = await fetch(
+            `${API_BASE}/admin-users/${id}/remove-admin`,
+            {
+              method: "PUT",
+              credentials: "include",
+            },
+          );
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadAdminManageList();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      // ---- Activity Logs ----
+      async function loadActivityLogs() {
+        const container = document.getElementById("activity-logs-list");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/logs`, {
+            credentials: "include",
+          });
+          if (!res.ok) {
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-red-500 text-sm">Failed to load (${res.status})</td></tr>`;
+            return;
+          }
+          const logs = await res.json();
+          if (!logs.length) {
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-gray-400 text-sm">No activity yet</td></tr>`;
+            return;
+          }
+          container.innerHTML = logs
+            .map((log) => {
+              const time = new Date(log.created_at).toLocaleString();
+              return `
+    <tr class="hover:bg-brand-50 transition-colors">
+      <td class="py-3 px-5 text-sm font-bold text-gray-800">${log.admin_email}</td>
+      <td class="py-3 px-5">
+        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${log.action}</span>
+      </td>
+      <td class="py-3 px-5 text-sm text-gray-700">${log.target_user_name || "-"}</td>
+      <td class="py-3 px-5 text-xs text-gray-500">${log.details || "-"}</td>
+      <td class="py-3 px-5 text-xs text-gray-400">${time}</td>
+    </tr>`;
+            })
+            .join("");
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      // "Manage Admins" বা "Activity Logs" ট্যাবে গেলে ডেটা লোড করো
+      const originalSwitchTab = switchTab;
+      switchTab = function (tabId) {
+        originalSwitchTab(tabId);
+        if (tabId === "admins") loadAdminManageList();
+        if (tabId === "logs") loadActivityLogs();
+      };
       (async function checkAdminAuth() {
         try {
           const res = await fetch(
@@ -1561,8 +1818,14 @@
           const data = await res.json();
           if (data.user.role !== "admin" && data.user.role !== "superadmin")
             throw new Error();
+
+          if (data.user.role === "superadmin") {
+            document.querySelectorAll(".superadmin-only").forEach((el) => {
+              el.classList.remove("hidden");
+            });
+          }
         } catch (err) {
-          console.error("Auth check failed:", err); // <-- browser console এ real reason দেখাবে
+          console.error("Auth check failed:", err);
           window.location.href = "login.html";
         }
       })();

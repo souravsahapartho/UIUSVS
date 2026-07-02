@@ -1,6 +1,7 @@
 const express = require("express");
 const { appendApprovedMember } = require("../services/googleSheetsService");
 const { verifySession, verifyAdmin } = require("../middleware/auth");
+const { logAdminAction } = require("../services/auditLog");
 
 module.exports = (pool) => {
   const router = express.Router();
@@ -21,6 +22,7 @@ module.exports = (pool) => {
     }
   });
 
+  // --- Approve a pending member (new signup OR profile-edit re-approval) ---
   router.put("/:id/approve", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [
@@ -29,7 +31,7 @@ module.exports = (pool) => {
       if (!rows.length) return res.status(404).json({ error: "Not found" });
       const u = rows[0];
 
-      const isFirstTimeApproval = u.is_approved === 0; // নতুন লাইন
+      const isFirstTimeApproval = u.is_approved === 0;
 
       await pool.query(
         `UPDATE users SET is_approved=1,
@@ -56,13 +58,24 @@ module.exports = (pool) => {
           batch: u.batch,
           designation: u.designation,
           bloodGroup: u.blood_group,
-          graduationDate: u.graduation_date, // নতুন লাইন
+          graduationDate: u.graduation_date,
           sendEmail: isFirstTimeApproval,
         });
       } catch (sheetErr) {
         console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);
         sheetSynced = false;
       }
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: isFirstTimeApproval
+          ? "APPROVE_NEW_MEMBER"
+          : "APPROVE_PROFILE_EDIT",
+        targetUserId: u.id,
+        targetUserName: u.name,
+        details: `Approved ${u.name} (${u.student_id})`,
+      });
 
       res.json({
         message: sheetSynced
@@ -74,20 +87,146 @@ module.exports = (pool) => {
       res.status(500).json({ error: error.message });
     }
   });
+
   // --- Reject a pending member (delete their account) ---
   router.delete("/:id/reject", verifySession, verifyAdmin, async (req, res) => {
     try {
-      const [rows] = await pool.query("SELECT id FROM users WHERE id=?", [
-        req.params.id,
-      ]);
+      const [rows] = await pool.query(
+        "SELECT id, name, student_id FROM users WHERE id=?",
+        [req.params.id],
+      );
       if (!rows.length) return res.status(404).json({ error: "Not found" });
+      const rejectedUser = rows[0];
 
       await pool.query("DELETE FROM users WHERE id=?", [req.params.id]);
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: "REJECT_MEMBER",
+        targetUserId: rejectedUser.id,
+        targetUserName: rejectedUser.name,
+        details: `Rejected ${rejectedUser.name} (${rejectedUser.student_id})`,
+      });
+
       res.json({ message: "Member rejected and removed" });
     } catch (error) {
       console.error("❌ Reject user failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
+
+  // --- Audit log (Superadmin only) ---
+  router.get("/logs", verifySession, verifyAdmin, async (req, res) => {
+    if (req.user.role !== "superadmin") {
+      return res.status(403).json({ error: "Superadmin access only" });
+    }
+    try {
+      const [rows] = await pool.query(
+        `SELECT * FROM admin_logs ORDER BY created_at DESC LIMIT 200`,
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // --- Superadmin: promote existing verified user to Admin ---
+  router.put(
+    "/:id/make-admin",
+    verifySession,
+    verifyAdmin,
+    async (req, res) => {
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({ error: "Superadmin access only" });
+      }
+      try {
+        const [rows] = await pool.query(
+          "SELECT id, name, email, role FROM users WHERE id=?",
+          [req.params.id],
+        );
+        if (!rows.length) return res.status(404).json({ error: "Not found" });
+        const target = rows[0];
+
+        if (target.role === "admin" || target.role === "superadmin") {
+          return res.status(400).json({ error: "User is already an admin" });
+        }
+
+        await pool.query("UPDATE users SET role='admin' WHERE id=?", [
+          target.id,
+        ]);
+
+        await logAdminAction(pool, {
+          adminId: req.user.id,
+          adminEmail: req.user.email,
+          action: "PROMOTE_TO_ADMIN",
+          targetUserId: target.id,
+          targetUserName: target.name,
+          details: `Promoted ${target.name} (${target.email}) to Admin`,
+        });
+
+        res.json({ message: `${target.name} is now an Admin` });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    },
+  );
+
+  // --- Superadmin: demote admin back to regular member ---
+  router.put(
+    "/:id/remove-admin",
+    verifySession,
+    verifyAdmin,
+    async (req, res) => {
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({ error: "Superadmin access only" });
+      }
+      try {
+        const [rows] = await pool.query(
+          "SELECT id, name, email, role FROM users WHERE id=?",
+          [req.params.id],
+        );
+        if (!rows.length) return res.status(404).json({ error: "Not found" });
+        const target = rows[0];
+
+        if (target.role === "superadmin") {
+          return res.status(400).json({ error: "Cannot demote a superadmin" });
+        }
+
+        await pool.query("UPDATE users SET role='user' WHERE id=?", [
+          target.id,
+        ]);
+
+        await logAdminAction(pool, {
+          adminId: req.user.id,
+          adminEmail: req.user.email,
+          action: "DEMOTE_ADMIN",
+          targetUserId: target.id,
+          targetUserName: target.name,
+          details: `Demoted ${target.name} (${target.email}) from Admin`,
+        });
+
+        res.json({ message: `${target.name} is no longer an Admin` });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    },
+  );
+
+  // --- Superadmin: list all approved members (to search & promote) ---
+  router.get("/all-approved", verifySession, verifyAdmin, async (req, res) => {
+    if (req.user.role !== "superadmin") {
+      return res.status(403).json({ error: "Superadmin access only" });
+    }
+    try {
+      const [rows] = await pool.query(
+        `SELECT id, name, student_id, email, role FROM users WHERE is_approved=1 ORDER BY name ASC`,
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   return router;
 };
