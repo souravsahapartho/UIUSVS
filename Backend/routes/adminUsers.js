@@ -51,7 +51,7 @@ module.exports = (pool) => {
 
       let sheetSynced = true;
       try {
-        await appendApprovedMember({
+        const sheetResult = await appendApprovedMember({
           id: u.id,
           name: u.name,
           studentId: u.student_id,
@@ -66,6 +66,13 @@ module.exports = (pool) => {
           graduationDate: u.graduation_date,
           sendEmail: isFirstTimeApproval,
         });
+
+        if (sheetResult && sheetResult.idCardUrl) {
+          await pool.query("UPDATE users SET id_card_url=? WHERE id=?", [
+            sheetResult.idCardUrl,
+            u.id,
+          ]);
+        }
       } catch (sheetErr) {
         console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);
         sheetSynced = false;
