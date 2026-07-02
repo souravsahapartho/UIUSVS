@@ -1292,6 +1292,126 @@
       </div>
     </main>
 
+    <!-- Edit Gallery Item Modal -->
+    <div
+      id="edit-gallery-modal-overlay"
+      class="fixed inset-0 bg-black/50 z-[300] hidden items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-orange-100"
+      >
+        <div
+          class="flex justify-between items-center p-5 border-b border-orange-100 bg-brand-50 rounded-t-3xl"
+        >
+          <h3 class="font-serif font-bold text-brand-900 text-lg">
+            Edit Gallery Item
+          </h3>
+          <button
+            onclick="closeEditGalleryModal()"
+            class="text-gray-400 hover:text-red-600 bg-white rounded-full p-1.5 shadow-sm border border-orange-100"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <input type="hidden" id="edit-gal-id" />
+
+          <div class="flex flex-col items-center">
+            <img
+              id="edit-gal-preview"
+              class="w-full max-h-48 object-cover rounded-xl border border-orange-200 shadow-sm mb-3"
+            />
+            <label
+              class="cursor-pointer bg-brand-50 border border-brand-200 hover:bg-brand-100 text-brand-700 px-5 py-2 rounded-full text-sm font-bold transition-colors shadow-sm"
+            >
+              Replace Image
+              <input
+                type="file"
+                id="edit-gal-file-input"
+                class="hidden"
+                accept="image/*,video/mp4"
+                onchange="handleEditGalleryFileSelect(this)"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2"
+              >Caption / Title</label
+            >
+            <input
+              type="text"
+              id="edit-gal-title"
+              class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2"
+                >Category</label
+              >
+              <select
+                id="edit-gal-category"
+                class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="Saraswati Puja">Saraswati Puja</option>
+                <option value="Kali Puja">Kali Puja</option>
+                <option value="Holi">Holi</option>
+                <option value="Prayer">Monthly Prayer</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2"
+                >Event Date</label
+              >
+              <input
+                type="date"
+                id="edit-gal-date"
+                class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 pl-1">
+            <input
+              type="checkbox"
+              id="edit-gal-pin"
+              class="w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500 accent-brand-600"
+            />
+            <label
+              for="edit-gal-pin"
+              class="text-sm font-bold text-gray-700 flex items-center"
+            >
+              Pin this media to top of Gallery
+              <i
+                data-lucide="pin"
+                class="w-3.5 h-3.5 ml-1.5 text-yellow-500"
+              ></i>
+            </label>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeEditGalleryModal()"
+              class="px-5 py-2.5 rounded-full text-sm font-bold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onclick="saveGalleryEdit()"
+              class="btn-puja !py-2.5 !px-6 text-sm"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Global Toast Notification -->
     <div
       id="admin-toast"
@@ -1400,6 +1520,8 @@
 
       const API_BASE = "https://uiusvs.onrender.com/api";
       let selectedGalleryFile = null;
+      let galleryItemsCache = [];
+      let editingGalleryFile = null;
 
       function setSelectedGalleryFile(file, previewUrl) {
         selectedGalleryFile = file;
@@ -1579,6 +1701,7 @@
           credentials: "include",
         });
         const items = await res.json();
+        galleryItemsCache = items;
 
         container.innerHTML = items
           .map(
@@ -1589,10 +1712,14 @@
         <p class="font-bold text-sm">${item.title}</p>
         <p class="text-xs text-gray-500">${item.category} • ${item.event_date || "—"}</p>
       </td>
-      <td class="py-3 px-5">${item.is_pinned ? "📌 Pinned" : "—"}</td>
+      <td class="py-3 px-5">
+        <button onclick="togglePinGalleryItem(${item.id})" class="${item.is_pinned ? "text-yellow-500" : "text-gray-300"} hover:text-yellow-500 transition-colors" title="${item.is_pinned ? "Unpin" : "Pin to top"}">
+          <i data-lucide="pin" class="w-4 h-4"></i>
+        </button>
+      </td>
       <td class="py-3 px-5 text-right space-x-2">
-        <button onclick="editGalleryItem(${item.id})" class="text-blue-500"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-        <button onclick="deleteGalleryItem(${item.id})" class="text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        <button onclick="openEditGalleryModal(${item.id})" class="text-blue-500" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+        <button onclick="deleteGalleryItem(${item.id})" class="text-red-500" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
       </td>
     </tr>
   `,
@@ -1611,22 +1738,108 @@
         loadGalleryTable();
       }
 
-      async function editGalleryItem(id) {
-        const newCaption = prompt("New caption:");
-        if (newCaption === null) return;
-        await fetch(`${API_BASE}/gallery/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: newCaption,
-            caption: newCaption,
-            category: "",
-            is_pinned: false,
-          }),
-          credentials: "include",
-        });
-        showToast("Updated!");
-        loadGalleryTable();
+      // ---- Quick Pin Toggle ----
+      async function togglePinGalleryItem(id) {
+        const item = galleryItemsCache.find((g) => g.id === id);
+        if (!item) return;
+
+        const formData = new FormData();
+        formData.append("title", item.title);
+        formData.append("caption", item.caption || "");
+        formData.append("category", item.category);
+        formData.append("event_date", item.event_date || "");
+        formData.append("is_pinned", (!item.is_pinned).toString());
+
+        try {
+          const res = await fetch(`${API_BASE}/gallery/${id}`, {
+            method: "PUT",
+            body: formData,
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Failed");
+          showToast(!item.is_pinned ? "Pinned to top!" : "Unpinned!");
+          loadGalleryTable();
+        } catch (err) {
+          showToast("Pin update failed!", "error");
+        }
+      }
+
+      // ---- Full Edit Modal (image, caption, category, date, pin) ----
+      function openEditGalleryModal(id) {
+        const item = galleryItemsCache.find((g) => g.id === id);
+        if (!item) return;
+
+        editingGalleryFile = null;
+        document.getElementById("edit-gal-id").value = item.id;
+        document.getElementById("edit-gal-title").value = item.title || "";
+        document.getElementById("edit-gal-category").value =
+          item.category || "";
+        document.getElementById("edit-gal-date").value = item.event_date
+          ? item.event_date.split("T")[0]
+          : "";
+        document.getElementById("edit-gal-pin").checked = !!item.is_pinned;
+        document.getElementById("edit-gal-preview").src = item.image_url;
+        document.getElementById("edit-gal-file-input").value = "";
+
+        const overlay = document.getElementById("edit-gallery-modal-overlay");
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+      }
+
+      function closeEditGalleryModal() {
+        const overlay = document.getElementById("edit-gallery-modal-overlay");
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+      }
+
+      function handleEditGalleryFileSelect(input) {
+        if (input.files && input.files[0]) {
+          editingGalleryFile = input.files[0];
+          document.getElementById("edit-gal-preview").src =
+            URL.createObjectURL(editingGalleryFile);
+        }
+      }
+
+      async function saveGalleryEdit() {
+        const id = document.getElementById("edit-gal-id").value;
+        const title = document.getElementById("edit-gal-title").value.trim();
+        const category = document.getElementById("edit-gal-category").value;
+        const date = document.getElementById("edit-gal-date").value;
+        const pinned = document.getElementById("edit-gal-pin").checked;
+
+        if (!title) {
+          showToast("Caption cannot be empty!", "error");
+          return;
+        }
+        if (!category) {
+          showToast("Please select a category!", "error");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("caption", title);
+        formData.append("category", category);
+        formData.append("event_date", date || "");
+        formData.append("is_pinned", pinned.toString());
+        if (editingGalleryFile) {
+          formData.append("media", editingGalleryFile);
+        }
+
+        try {
+          showToast("Saving changes...");
+          const res = await fetch(`${API_BASE}/gallery/${id}`, {
+            method: "PUT",
+            body: formData,
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Update failed");
+          showToast("Updated successfully!");
+          closeEditGalleryModal();
+          loadGalleryTable();
+        } catch (err) {
+          showToast("Update failed! Check backend connection.", "error");
+        }
       }
 
       document.addEventListener("DOMContentLoaded", loadGalleryTable);

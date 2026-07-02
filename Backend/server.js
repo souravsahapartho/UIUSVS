@@ -164,18 +164,59 @@ app.get("/api/gallery/featured", async (req, res) => {
   }
 });
 
-app.put("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const { title, caption, category, event_date, is_pinned } = req.body;
-    await pool.query(
-      `UPDATE gallery SET title=?, caption=?, category=?, event_date=?, is_pinned=? WHERE id=?`,
-      [title, caption, category, event_date || null, is_pinned, req.params.id],
-    );
-    res.json({ message: "Updated successfully!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+app.put(
+  "/api/gallery/:id",
+  verifySession,
+  verifyAdmin,
+  upload.single("media"),
+  async (req, res) => {
+    try {
+      const { title, caption, category, event_date, is_pinned } = req.body;
+      const pinnedValue = is_pinned === "true" || is_pinned === true;
+
+      if (req.file) {
+        // Notun image ashse, tai purono cloudinary image delete kore dao
+        const [rows] = await pool.query(
+          "SELECT cloudinary_id FROM gallery WHERE id=?",
+          [req.params.id],
+        );
+        if (rows.length > 0 && rows[0].cloudinary_id) {
+          await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+        }
+
+        await pool.query(
+          `UPDATE gallery SET title=?, caption=?, category=?, event_date=?, is_pinned=?, image_url=?, cloudinary_id=? WHERE id=?`,
+          [
+            title,
+            caption,
+            category,
+            event_date || null,
+            pinnedValue,
+            req.file.path,
+            req.file.filename,
+            req.params.id,
+          ],
+        );
+      } else {
+        await pool.query(
+          `UPDATE gallery SET title=?, caption=?, category=?, event_date=?, is_pinned=? WHERE id=?`,
+          [
+            title,
+            caption,
+            category,
+            event_date || null,
+            pinnedValue,
+            req.params.id,
+          ],
+        );
+      }
+
+      res.json({ message: "Updated successfully!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
 app.delete("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
   try {
