@@ -72,8 +72,51 @@ module.exports = (pool) => {
 
       await sendEmail({
         to: email,
-        subject: "UIUSVS - Your Verification Code",
-        htmlContent: `<p>Apnar verification code: <b>${otp}</b> (valid 10 minutes)</p>`,
+        subject: "🔐 Your UIUSVS Verification Code",
+        htmlContent: `
+        <div style="font-family:'Segoe UI',Arial,sans-serif;background:#fffaf0;padding:30px;">
+          <div style="max-width:480px;margin:auto;background:#ffffff;
+                      border-radius:16px;box-shadow:0 10px 25px rgba(185,28,28,0.08);
+                      overflow:hidden;border:1px solid #ffedd5;">
+
+            <div style="background:linear-gradient(135deg,#b91c1c 0%,#ea580c 100%);
+                        padding:24px;text-align:center;">
+              <p style="margin:0;color:#ffffff;font-size:22px;">🕉️</p>
+              <p style="margin:6px 0 0;color:#ffffff;font-weight:700;font-size:16px;letter-spacing:0.5px;">
+                UIU Sanatani Vidyarthi Samsad
+              </p>
+            </div>
+
+            <div style="padding:32px 30px;text-align:center;">
+              <h2 style="color:#5B1E1E;margin:0 0 10px;font-size:20px;">
+                Verify Your Email
+              </h2>
+              <p style="font-size:14px;color:#555;margin:0 0 24px;line-height:1.6;">
+                Thanks for joining UIUSVS! Please use the verification code below to complete your registration.
+              </p>
+
+              <div style="background:#FFF8E7;border:1px dashed #E3A008;border-radius:12px;
+                          padding:18px;margin:0 0 24px;">
+                <p style="margin:0;font-size:32px;font-weight:800;letter-spacing:8px;color:#b91c1c;">
+                  ${otp}
+                </p>
+              </div>
+
+              <p style="font-size:12px;color:#999;margin:0;">
+                ⏱️ This code will expire in <strong>10 minutes</strong>.
+              </p>
+              <p style="font-size:12px;color:#999;margin:8px 0 0;">
+                If you didn't request this, you can safely ignore this email.
+              </p>
+            </div>
+
+            <div style="background:#fffaf0;padding:16px;text-align:center;border-top:1px solid #ffedd5;">
+              <p style="margin:0;font-size:11px;color:#b91c1c;font-weight:700;">
+                ✨ Together we connect · Together we grow · Together we celebrate ✨
+              </p>
+            </div>
+          </div>
+        </div>`,
       });
 
       res.json({ message: "OTP sent to email" });
@@ -106,7 +149,7 @@ module.exports = (pool) => {
         typeof pending.payload === "string"
           ? JSON.parse(pending.payload)
           : pending.payload;
-await pool.query(
+      await pool.query(
         `INSERT INTO users (name, student_id, email, contact, gender, type, department, batch, blood_group, designation, password, avatar_url, graduation_date, is_verified, is_approved)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
         [
@@ -177,10 +220,53 @@ await pool.query(
       [otp, expires, user.id],
     );
 
-    await sendEmail({
+await sendEmail({
       to: email,
-      subject: "UIUSVS Password Reset Code",
-      htmlContent: `<p>Code: <b>${otp}</b></p>`,
+      subject: "🔑 Reset Your UIUSVS Password",
+      htmlContent: `
+      <div style="font-family:'Segoe UI',Arial,sans-serif;background:#fffaf0;padding:30px;">
+        <div style="max-width:480px;margin:auto;background:#ffffff;
+                    border-radius:16px;box-shadow:0 10px 25px rgba(185,28,28,0.08);
+                    overflow:hidden;border:1px solid #ffedd5;">
+
+          <div style="background:linear-gradient(135deg,#b91c1c 0%,#ea580c 100%);
+                      padding:24px;text-align:center;">
+            <p style="margin:0;color:#ffffff;font-size:22px;">🕉️</p>
+            <p style="margin:6px 0 0;color:#ffffff;font-weight:700;font-size:16px;letter-spacing:0.5px;">
+              UIU Sanatani Vidyarthi Samsad
+            </p>
+          </div>
+
+          <div style="padding:32px 30px;text-align:center;">
+            <h2 style="color:#5B1E1E;margin:0 0 10px;font-size:20px;">
+              Password Reset Request
+            </h2>
+            <p style="font-size:14px;color:#555;margin:0 0 24px;line-height:1.6;">
+              We received a request to reset your password. Use the code below to proceed.
+            </p>
+
+            <div style="background:#FFF8E7;border:1px dashed #E3A008;border-radius:12px;
+                        padding:18px;margin:0 0 24px;">
+              <p style="margin:0;font-size:32px;font-weight:800;letter-spacing:8px;color:#b91c1c;">
+                ${otp}
+              </p>
+            </div>
+
+            <p style="font-size:12px;color:#999;margin:0;">
+              ⏱️ This code will expire in <strong>10 minutes</strong>.
+            </p>
+            <p style="font-size:12px;color:#b91c1c;margin:8px 0 0;font-weight:600;">
+              ⚠️ If you didn't request a password reset, please secure your account immediately.
+            </p>
+          </div>
+
+          <div style="background:#fffaf0;padding:16px;text-align:center;border-top:1px solid #ffedd5;">
+            <p style="margin:0;font-size:11px;color:#b91c1c;font-weight:700;">
+              ✨ Together we connect · Together we grow · Together we celebrate ✨
+            </p>
+          </div>
+        </div>
+      </div>`,
     });
     res.json({ message: "Reset OTP sent" });
   });
