@@ -38,6 +38,8 @@ module.exports = (pool) => {
 
       const isFirstTimeApproval = u.is_approved === 0;
 
+      const needsIdCard = isFirstTimeApproval || !u.id_card_url;
+
       await pool.query(
         `UPDATE users SET is_approved=1,
        name=COALESCE(pending_name, name),
@@ -65,6 +67,7 @@ module.exports = (pool) => {
           bloodGroup: u.blood_group,
           graduationDate: u.graduation_date,
           sendEmail: isFirstTimeApproval,
+          generateIdCard: needsIdCard,
         });
 
         if (sheetResult && sheetResult.idCardUrl) {
