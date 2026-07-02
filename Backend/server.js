@@ -134,6 +134,40 @@ app.get("/api/gallery", verifySession, async (req, res) => {
   }
 });
 
+app.post(
+  "/api/gallery/bulk",
+  verifySession,
+  verifyAdmin,
+  upload.array("media", 20),
+  async (req, res) => {
+    try {
+      const { title, caption, category, event_date, is_pinned } = req.body;
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: "No files uploaded" });
+      }
+      const pinnedValue = is_pinned === "true";
+      const values = req.files.map((f) => [
+        title,
+        caption || title,
+        category,
+        f.path,
+        f.filename,
+        event_date || null,
+        pinnedValue,
+      ]);
+      await pool.query(
+        `INSERT INTO gallery (title, caption, category, image_url, cloudinary_id, event_date, is_pinned) VALUES ?`,
+        [values],
+      );
+      res.status(200).json({
+        message: `${req.files.length} images uploaded successfully!`,
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
 // ============================================
 // 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
 // ============================================

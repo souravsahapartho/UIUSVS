@@ -464,20 +464,13 @@
                     class="hidden"
                     accept="image/*"
                     onchange="
-                      previewSelectedImage(
-                        this,
-                        'annc-file-name',
-                        'annc-preview-img',
-                      )
+                      previewSelectedImage(this, null, 'annc-preview-img')
                     "
                   />
                 </label>
-                <span id="annc-file-name" class="text-gray-400 text-xs mt-3"
-                  >No file chosen</span
-                >
                 <img
                   id="annc-preview-img"
-                  class="hidden mt-4 max-h-40 rounded-lg border border-orange-200 shadow-sm"
+                  class="hidden mt-4 max-h-64 rounded-xl border border-orange-200 shadow-sm"
                 />
               </div>
 
@@ -844,12 +837,14 @@
                     id="gal-file-input"
                     class="hidden"
                     accept="image/*,video/mp4"
+                    multiple
                     onchange="handleGalleryFileSelect(this)"
                   />
                 </label>
-                <span id="gal-file-name" class="text-gray-400 text-xs mt-3"
-                  >No file chosen</span
-                >
+                <div
+                  id="gal-preview-grid"
+                  class="hidden mt-4 flex flex-wrap gap-2 justify-center"
+                ></div>
               </div>
 
               <div
@@ -1519,40 +1514,46 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
-      let selectedGalleryFile = null;
+      let selectedGalleryFiles = [];
       let galleryItemsCache = [];
       let editingGalleryFile = null;
 
-      function setSelectedGalleryFile(file, previewUrl) {
-        selectedGalleryFile = file;
-        const nameSpan = document.getElementById("gal-file-name");
-        const previewImg = document.getElementById("gal-preview-img");
-
-        nameSpan.textContent = file.name || "Pasted image";
-        nameSpan.classList.remove("text-gray-400");
-        nameSpan.classList.add("text-green-600", "font-bold");
-
-        if (previewUrl && file.type.startsWith("image/")) {
-          previewImg.src = previewUrl;
-          previewImg.classList.remove("hidden");
-        } else {
-          previewImg.classList.add("hidden");
+      function handleGalleryFileSelect(input) {
+        if (input.files && input.files.length > 0) {
+          selectedGalleryFiles = Array.from(input.files);
+          renderGalleryPreviews();
         }
       }
 
-      function handleGalleryFileSelect(input) {
-        if (input.files && input.files.length > 0) {
-          const file = input.files[0];
-          const previewUrl = file.type.startsWith("image/")
-            ? URL.createObjectURL(file)
-            : null;
-          setSelectedGalleryFile(file, previewUrl);
-        } else {
-          selectedGalleryFile = null;
-          document.getElementById("gal-file-name").textContent =
-            "No file chosen";
-          document.getElementById("gal-preview-img").classList.add("hidden");
+      function renderGalleryPreviews() {
+        const grid = document.getElementById("gal-preview-grid");
+        if (selectedGalleryFiles.length === 0) {
+          grid.classList.add("hidden");
+          grid.innerHTML = "";
+          return;
         }
+        grid.classList.remove("hidden");
+        grid.innerHTML = selectedGalleryFiles
+          .map((file, i) => {
+            const isVideo = file.type.startsWith("video/");
+            const url = URL.createObjectURL(file);
+            return `
+        <div class="relative w-20 h-20 rounded-lg overflow-hidden border border-orange-200 shadow-sm">
+          ${
+            isVideo
+              ? `<video src="${url}" class="w-full h-full object-cover"></video>`
+              : `<img src="${url}" class="w-full h-full object-cover" />`
+          }
+          <button type="button" onclick="removeGalleryFile(${i})"
+            class="absolute top-0.5 right-0.5 bg-black/60 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">✕</button>
+        </div>`;
+          })
+          .join("");
+      }
+
+      function removeGalleryFile(index) {
+        selectedGalleryFiles.splice(index, 1);
+        renderGalleryPreviews();
       }
 
       // 🎯 Paste (Ctrl+V) support for gallery upload
@@ -1604,8 +1605,8 @@
                   `pasted-image-${Date.now()}.${ext}`,
                   { type: item.type },
                 );
-                const previewUrl = URL.createObjectURL(renamedFile);
-                setSelectedGalleryFile(renamedFile, previewUrl);
+                selectedGalleryFiles.push(renamedFile);
+                renderGalleryPreviews();
                 showToast("Image pasted successfully!");
               }
               e.preventDefault();
@@ -1630,8 +1631,8 @@
                     `pasted-image-${Date.now()}.${ext}`,
                     { type: item.type },
                   );
-                  const previewUrl = URL.createObjectURL(renamedFile);
-                  setSelectedGalleryFile(renamedFile, previewUrl);
+                  selectedGalleryFiles.push(renamedFile);
+                  renderGalleryPreviews();
                   showToast("Image pasted successfully!");
                 }
                 break;
@@ -1640,14 +1641,15 @@
           }
         });
       });
+
       async function uploadGalleryMedia() {
         const title = document.getElementById("gal-title");
         const category = document.getElementById("gal-category");
         const date = document.getElementById("gal-date");
         const pinned = document.getElementById("pin-media");
 
-        if (!selectedGalleryFile) {
-          showToast("Please select a photo or video first!", "error");
+        if (selectedGalleryFiles.length === 0) {
+          showToast("Please select at least one photo or video!", "error");
           return;
         }
         if (!title.value.trim()) {
@@ -1660,7 +1662,7 @@
         }
 
         const formData = new FormData();
-        formData.append("media", selectedGalleryFile);
+        selectedGalleryFiles.forEach((file) => formData.append("media", file)); // same key বারবার
         formData.append("title", title.value);
         formData.append("caption", title.value);
         formData.append("category", category.value);
@@ -1668,20 +1670,18 @@
         formData.append("is_pinned", pinned.checked);
 
         try {
-          showToast("Uploading, please wait...");
-          const res = await fetch(`${API_BASE}/gallery`, {
+          showToast(`Uploading ${selectedGalleryFiles.length} image(s)...`);
+          const res = await fetch(`${API_BASE}/gallery/bulk`, {
             method: "POST",
             body: formData,
             credentials: "include",
           });
           if (!res.ok) throw new Error("Upload failed on server");
-          showToast("Media Uploaded successfully!");
+          showToast("All media Uploaded successfully!");
 
-          // Reset form
-          selectedGalleryFile = null;
+          selectedGalleryFiles = [];
           document.getElementById("gal-file-input").value = "";
-          document.getElementById("gal-file-name").textContent =
-            "No file chosen";
+          renderGalleryPreviews();
           title.value = "";
           category.value = "";
           date.value = "";
