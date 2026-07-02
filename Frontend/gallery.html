@@ -71,22 +71,18 @@
       }
 
       .masonry {
-        column-count: 1;
-        column-gap: 1.5rem;
-      }
-      @media (min-width: 640px) {
-        .masonry {
-          column-count: 2;
-        }
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
       }
       @media (min-width: 1024px) {
         .masonry {
-          column-count: 3;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 1.5rem;
         }
       }
       .masonry-item {
-        break-inside: avoid;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0;
       }
 
       #mobile-drawer {
@@ -235,6 +231,7 @@
           ></i>
         </div>
       </div>
+      <div id="gallery-pagination" class="mt-10"></div>
     </main>
 
     <footer class="bg-white border-t border-orange-200 py-8 relative z-10">
@@ -315,6 +312,12 @@
 
       let currentCat = "All";
       let gallerySearchQuery = "";
+      let currentPage = 1;
+
+      function getItemsPerPage() {
+        // desktop (>=1024px) e 30 ta, mobile e 20 ta
+        return window.innerWidth >= 1024 ? 30 : 20;
+      }
 
       function renderGallery() {
         const grid = document.getElementById("gallery-grid");
@@ -330,24 +333,79 @@
 
         if (filtered.length === 0) {
           grid.innerHTML = `<div class="text-center text-gray-500 py-10 col-span-full w-full font-medium">No images found.</div>`;
+          document.getElementById("gallery-pagination").innerHTML = "";
           return;
         }
 
-        grid.innerHTML = filtered
+        const itemsPerPage = getItemsPerPage();
+        const totalPages = Math.max(
+          1,
+          Math.ceil(filtered.length / itemsPerPage),
+        );
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIdx = (currentPage - 1) * itemsPerPage;
+        const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
+
+        grid.innerHTML = pageItems
           .map(
             (img) => `
-                <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title}')">
-                    <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
-                        <img src="${img.url}" alt="${img.title}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                            <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
-                        </div>
-                    </div>
-                </div>
-            `,
+          <div class="masonry-item group cursor-zoom-in" onclick="openLightbox('${img.url}', '${img.title}')">
+              <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
+                  <img src="${img.url}" alt="${img.title}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                      <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
+                  </div>
+              </div>
+          </div>
+      `,
           )
           .join("");
+
+        renderPagination(totalPages);
       }
+
+      function renderPagination(totalPages) {
+        const container = document.getElementById("gallery-pagination");
+        if (!container) return;
+
+        if (totalPages <= 1) {
+          container.innerHTML = "";
+          return;
+        }
+
+        let buttons = "";
+        for (let i = 1; i <= totalPages; i++) {
+          buttons += `
+      <button onclick="goToPage(${i})" class="w-9 h-9 rounded-full text-sm font-bold transition-all ${
+        i === currentPage
+          ? "bg-brand-700 text-white shadow-sm"
+          : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+      }">
+        ${i}
+      </button>`;
+        }
+
+        container.innerHTML = `
+    <div class="flex items-center justify-center gap-2 flex-wrap">
+      <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""} class="w-9 h-9 rounded-full flex items-center justify-center bg-white border border-brand-200 text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-50">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+      </button>
+      ${buttons}
+      <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""} class="w-9 h-9 rounded-full flex items-center justify-center bg-white border border-brand-200 text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-50">
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>`;
+        lucide.createIcons();
+      }
+
+      window.goToPage = (page) => {
+        currentPage = page;
+        renderGallery();
+        document
+          .getElementById("gallery-grid")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      };
 
       function renderFilters() {
         const container = document.getElementById("category-filters");
@@ -366,12 +424,14 @@
 
       window.setFilter = (cat) => {
         currentCat = cat;
+        currentPage = 1;
         renderFilters();
         renderGallery();
       };
 
       window.searchGallery = (query) => {
         gallerySearchQuery = query;
+        currentPage = 1;
         renderGallery();
       };
 
@@ -407,6 +467,16 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeLightbox();
+      });
+
+      // Desktop <-> mobile breakpoint cross korle items-per-page bodle jabe
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          currentPage = 1;
+          renderGallery();
+        }, 300);
       });
 
       loadGalleryFromDB();
