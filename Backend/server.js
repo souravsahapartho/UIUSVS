@@ -504,6 +504,294 @@ app.put(
   },
 );
 
+const BLOG_CATEGORIES = ["Announcement", "Puja-Parbon", "Spiritual Insights"];
+const MAX_PINNED_BLOGS = 3;
+
+function slugify(str) {
+  return str
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+async function generateUniqueBlogSlug(title, excludeId = null) {
+  const base = slugify(title) || "post";
+  let slug = base;
+  let counter = 2;
+  // keep trying until we find a slug nobody else is using
+  while (true) {
+    const [rows] = await pool.query(
+      excludeId
+        ? "SELECT id FROM blogs WHERE slug=? AND id!=?"
+        : "SELECT id FROM blogs WHERE slug=?",
+      excludeId ? [slug, excludeId] : [slug],
+    );
+    if (rows.length === 0) return slug;
+    slug = `${base}-${counter++}`;
+  }
+}
+
+// ---- PUBLIC: full list for blog.html ----
+app.get("/api/blogs/public", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, title, slug, excerpt, category, thumbnail_url AS img,
+              author_name AS author, created_at
+       FROM blogs ORDER BY created_at DESC`,
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---- PUBLIC: max 3 pinned blogs, for index.html home page ----
+app.get("/api/blogs/pinned", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, title, slug, excerpt, category, thumbnail_url AS img,
+              author_name AS author, created_at
+       FROM blogs WHERE is_pinned = TRUE
+       ORDER BY updated_at DESC LIMIT ${MAX_PINNED_BLOGS}`,
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---- PUBLIC: single blog by slug, for blog-detail.html ----
+app.get("/api/blogs/slug/:slug", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM blogs WHERE slug=?", [
+      req.params.slug,
+    ]);
+    if (!rows.length) return res.status(404).json({ error: "Not found" });
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---- ADMIN: full list with all fields ----
+app.get("/api/blogs/admin", verifySession, verifyAdmin, async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM blogs ORDER BY created_at DESC",
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---- ADMIN: create ----
+app.post(
+  "/api/blogs",
+  verifySession,
+  verifyAdmin,
+  upload.single("thumbnail"),
+  async (req, res) => {
+    try {
+      const {
+        title,
+        excerpt,
+        content,
+        category,
+        meta_description,
+        author_name,
+        is_pinned,
+      } = req.body;
+
+      if (!title || !content) {
+        return res.status(400).json({ error: "Title and content required" });
+      }
+      if (!BLOG_CATEGORIES.includes(category)) {
+        return res.status(400).json({ error: "Invalid category" });
+      }
+
+      const wantsPin = is_pinned === "true" || is_pinned === true;
+      if (wantsPin) {
+        const [[{ cnt }]] = await pool.query(
+          "SELECT COUNT(*) AS cnt FROM blogs WHERE is_pinned=TRUE",
+        );
+        if (cnt >= MAX_PINNED_BLOGS) {
+          return res.status(400).json({
+            error: `Only ${MAX_PINNED_BLOGS} blogs can be pinned at once. Unpin one first.`,
+          });
+        }
+      }
+
+      const slug = await generateUniqueBlogSlug(title);
+      const thumbnailUrl = req.file ? req.file.path : null;
+      const thumbnailId = req.file ? req.file.filename : null;
+
+      const [result] = await pool.query(
+        `INSERT INTO blogs
+         (title, slug, excerpt, content, category, thumbnail_url, thumbnail_cloudinary_id,
+          meta_description, author_name, is_pinned)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          title,
+          slug,
+          excerpt || "",
+          content,
+          category,
+          thumbnailUrl,
+          thumbnailId,
+          meta_description || "",
+          author_name || "",
+          wantsPin,
+        ],
+      );
+
+      res
+        .status(200)
+        .json({ message: "Blog published!", id: result.insertId, slug });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// ---- ADMIN: update ----
+app.put(
+  "/api/blogs/:id",
+  verifySession,
+  verifyAdmin,
+  upload.single("thumbnail"),
+  async (req, res) => {
+    try {
+      const {
+        title,
+        excerpt,
+        content,
+        category,
+        meta_description,
+        author_name,
+        is_pinned,
+      } = req.body;
+
+      if (!BLOG_CATEGORIES.includes(category)) {
+        return res.status(400).json({ error: "Invalid category" });
+      }
+
+      const wantsPin = is_pinned === "true" || is_pinned === true;
+      if (wantsPin) {
+        const [[{ cnt }]] = await pool.query(
+          "SELECT COUNT(*) AS cnt FROM blogs WHERE is_pinned=TRUE AND id!=?",
+          [req.params.id],
+        );
+        if (cnt >= MAX_PINNED_BLOGS) {
+          return res.status(400).json({
+            error: `Only ${MAX_PINNED_BLOGS} blogs can be pinned at once. Unpin one first.`,
+          });
+        }
+      }
+
+      const slug = await generateUniqueBlogSlug(title, req.params.id);
+
+      if (req.file) {
+        const [rows] = await pool.query(
+          "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
+          [req.params.id],
+        );
+        if (rows.length && rows[0].thumbnail_cloudinary_id) {
+          await cloudinary.uploader.destroy(rows[0].thumbnail_cloudinary_id);
+        }
+        await pool.query(
+          `UPDATE blogs SET title=?, slug=?, excerpt=?, content=?, category=?,
+           thumbnail_url=?, thumbnail_cloudinary_id=?, meta_description=?,
+           author_name=?, is_pinned=? WHERE id=?`,
+          [
+            title,
+            slug,
+            excerpt || "",
+            content,
+            category,
+            req.file.path,
+            req.file.filename,
+            meta_description || "",
+            author_name || "",
+            wantsPin,
+            req.params.id,
+          ],
+        );
+      } else {
+        await pool.query(
+          `UPDATE blogs SET title=?, slug=?, excerpt=?, content=?, category=?,
+           meta_description=?, author_name=?, is_pinned=? WHERE id=?`,
+          [
+            title,
+            slug,
+            excerpt || "",
+            content,
+            category,
+            meta_description || "",
+            author_name || "",
+            wantsPin,
+            req.params.id,
+          ],
+        );
+      }
+
+      res.json({ message: "Blog updated!", slug });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// ---- ADMIN: quick pin/unpin toggle (used by the pin icon in the table) ----
+app.put("/api/blogs/:id/pin", verifySession, verifyAdmin, async (req, res) => {
+  try {
+    const { is_pinned } = req.body;
+    const wantsPin = is_pinned === true || is_pinned === "true";
+
+    if (wantsPin) {
+      const [[{ cnt }]] = await pool.query(
+        "SELECT COUNT(*) AS cnt FROM blogs WHERE is_pinned=TRUE AND id!=?",
+        [req.params.id],
+      );
+      if (cnt >= MAX_PINNED_BLOGS) {
+        return res.status(400).json({
+          error: `Only ${MAX_PINNED_BLOGS} blogs can be pinned at once. Unpin one first.`,
+        });
+      }
+    }
+
+    await pool.query("UPDATE blogs SET is_pinned=? WHERE id=?", [
+      wantsPin,
+      req.params.id,
+    ]);
+    res.json({ message: wantsPin ? "Pinned to homepage!" : "Unpinned!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---- ADMIN: delete ----
+app.delete("/api/blogs/:id", verifySession, verifyAdmin, async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
+      [req.params.id],
+    );
+    if (!rows.length) return res.status(404).json({ error: "Not found" });
+    if (rows[0].thumbnail_cloudinary_id) {
+      await cloudinary.uploader.destroy(rows[0].thumbnail_cloudinary_id);
+    }
+    await pool.query("DELETE FROM blogs WHERE id=?", [req.params.id]);
+    res.json({ message: "Blog deleted!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ============================================
 // 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
 // ============================================

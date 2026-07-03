@@ -1338,14 +1338,16 @@
           </div>
         </div>
 
-        <!-- VIEW: BLOGS -->
         <div
           id="view-blogs"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
         >
           <div class="max-w-4xl">
             <div class="mb-8">
-              <h1 class="text-3xl font-bold text-brand-900 font-serif">
+              <h1
+                class="text-3xl font-bold text-brand-900 font-serif"
+                id="blog-form-heading"
+              >
                 Publish Blog Post
               </h1>
               <p class="text-sm text-gray-600 mt-1">
@@ -1353,15 +1355,71 @@
               </p>
             </div>
 
-            <form
+            <div
               class="space-y-6 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-orange-100"
             >
+              <input type="hidden" id="blog-editing-id" value="" />
+
+              <!-- Title -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
-                  >Thumbnail Image</label
+                  >Title <span class="text-red-500">*</span></label
+                >
+                <input
+                  type="text"
+                  id="blog-title"
+                  oninput="autoFillBlogSlug()"
+                  placeholder="e.g. The Significance of Saraswati Puja in Student Life"
+                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <!-- Slug + Category -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2"
+                    >URL Slug (link)</label
+                  >
+                  <div
+                    class="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5"
+                  >
+                    <span class="text-xs text-gray-400 mr-1">blog/</span>
+                    <input
+                      type="text"
+                      id="blog-slug"
+                      placeholder="durga-puja"
+                      class="flex-1 bg-transparent text-gray-800 text-sm outline-none"
+                    />
+                  </div>
+                  <p class="text-[11px] text-gray-400 mt-1">
+                    Auto-fills from title. Edit if you want a shorter link.
+                  </p>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2"
+                    >Category <span class="text-red-500">*</span></label
+                  >
+                  <select
+                    id="blog-category"
+                    class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  >
+                    <option value="Announcement">Announcement</option>
+                    <option value="Puja-Parbon">Puja-Parbon</option>
+                    <option value="Spiritual Insights">
+                      Spiritual Insights
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Thumbnail (separate from body images) -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2"
+                  >Thumbnail Image <span class="text-red-500">*</span></label
                 >
                 <input
                   type="file"
+                  id="blog-thumbnail-input"
                   accept="image/*"
                   onchange="
                     previewSelectedImage(this, null, 'blog-preview-img')
@@ -1370,67 +1428,362 @@
                 />
                 <img
                   id="blog-preview-img"
-                  class="hidden mt-3 max-h-32 rounded-lg border border-orange-200 shadow-sm"
+                  class="hidden mt-3 max-h-40 rounded-lg border border-orange-200 shadow-sm"
                 />
+                <p class="text-[11px] text-gray-400 mt-1">
+                  This shows on the blog card and at the top of the article. Not
+                  required when editing if you keep the existing one.
+                </p>
               </div>
 
+              <!-- Short excerpt -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
-                  >Short Excerpt (Shows on cards)</label
+                  >Short Excerpt (shows on cards)</label
                 >
                 <textarea
+                  id="blog-excerpt"
                   rows="2"
-                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow resize-none"
+                  maxlength="240"
+                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
                   placeholder="A brief summary..."
                 ></textarea>
               </div>
 
+              <!-- ===== RICH TEXT EDITOR (Design / Code) ===== -->
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2"
-                  >Full Content</label
-                >
-                <!-- Placeholder for Rich Text Editor -->
-                <textarea
-                  rows="8"
-                  class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-shadow"
-                  placeholder="Write the full article here... HTML tags are supported."
-                ></textarea>
+                <div class="flex items-center justify-between mb-2">
+                  <label class="block text-sm font-bold text-gray-700"
+                    >Core Content <span class="text-red-500">*</span></label
+                  >
+                  <div
+                    class="flex bg-gray-100 rounded-lg p-1 text-xs font-bold"
+                  >
+                    <button
+                      type="button"
+                      id="editor-tab-design"
+                      onclick="switchEditorMode('design')"
+                      class="px-3 py-1.5 rounded-md bg-brand-900 text-white"
+                    >
+                      Design
+                    </button>
+                    <button
+                      type="button"
+                      id="editor-tab-code"
+                      onclick="switchEditorMode('code')"
+                      class="px-3 py-1.5 rounded-md text-gray-500"
+                    >
+                      Code
+                    </button>
+                  </div>
+                </div>
+
+                <div class="border border-gray-300 rounded-xl overflow-hidden">
+                  <!-- Toolbar -->
+                  <div
+                    id="editor-toolbar"
+                    class="flex flex-wrap items-center gap-1 bg-gray-50 border-b border-gray-200 px-2 py-1.5"
+                  >
+                    <select
+                      onchange="execCmd('formatBlock', this.value)"
+                      class="text-xs border border-gray-300 rounded px-1.5 py-1 bg-white"
+                    >
+                      <option value="p">Normal</option>
+                      <option value="h1">Heading 1</option>
+                      <option value="h2">Heading 2</option>
+                      <option value="h3">Heading 3</option>
+                      <option value="blockquote">Quote</option>
+                    </select>
+                    <span class="w-px h-5 bg-gray-300 mx-1"></span>
+                    <button
+                      type="button"
+                      title="Bold"
+                      onclick="execCmd('bold')"
+                      class="toolbar-btn"
+                    >
+                      <b>B</b>
+                    </button>
+                    <button
+                      type="button"
+                      title="Italic"
+                      onclick="execCmd('italic')"
+                      class="toolbar-btn"
+                    >
+                      <i>I</i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Underline"
+                      onclick="execCmd('underline')"
+                      class="toolbar-btn"
+                    >
+                      <u>U</u>
+                    </button>
+                    <button
+                      type="button"
+                      title="Strikethrough"
+                      onclick="execCmd('strikeThrough')"
+                      class="toolbar-btn"
+                    >
+                      <s>S</s>
+                    </button>
+                    <span class="w-px h-5 bg-gray-300 mx-1"></span>
+                    <input
+                      type="color"
+                      title="Text color"
+                      onchange="execCmd('foreColor', this.value)"
+                      class="w-6 h-6 border-0 p-0 cursor-pointer"
+                    />
+                    <input
+                      type="color"
+                      title="Highlight"
+                      onchange="execCmd('hiliteColor', this.value)"
+                      class="w-6 h-6 border-0 p-0 cursor-pointer"
+                    />
+                    <button
+                      type="button"
+                      title="Subscript"
+                      onclick="execCmd('subscript')"
+                      class="toolbar-btn"
+                    >
+                      X<sub>2</sub>
+                    </button>
+                    <button
+                      type="button"
+                      title="Superscript"
+                      onclick="execCmd('superscript')"
+                      class="toolbar-btn"
+                    >
+                      X<sup>2</sup>
+                    </button>
+                    <span class="w-px h-5 bg-gray-300 mx-1"></span>
+                    <button
+                      type="button"
+                      title="Numbered list"
+                      onclick="execCmd('insertOrderedList')"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Bullet list"
+                      onclick="execCmd('insertUnorderedList')"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="list" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Indent"
+                      onclick="execCmd('indent')"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="indent" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Outdent"
+                      onclick="execCmd('outdent')"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="outdent" class="w-4 h-4"></i>
+                    </button>
+                    <span class="w-px h-5 bg-gray-300 mx-1"></span>
+                    <button
+                      type="button"
+                      title="Link"
+                      onclick="insertEditorLink()"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="link" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Insert image"
+                      onclick="
+                        document.getElementById('editor-image-input').click()
+                      "
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="image" class="w-4 h-4"></i>
+                    </button>
+                    <input
+                      type="file"
+                      id="editor-image-input"
+                      accept="image/*"
+                      class="hidden"
+                      onchange="insertEditorImage(this)"
+                    />
+                    <button
+                      type="button"
+                      title="Embed video (YouTube/URL)"
+                      onclick="insertEditorVideo()"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="film" class="w-4 h-4"></i>
+                    </button>
+                    <span class="w-px h-5 bg-gray-300 mx-1"></span>
+                    <button
+                      type="button"
+                      title="Insert table"
+                      onclick="insertEditorTable()"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="table" class="w-4 h-4"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Clear formatting"
+                      onclick="execCmd('removeFormat')"
+                      class="toolbar-btn"
+                    >
+                      <i data-lucide="eraser" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+
+                  <!-- Design mode -->
+                  <div
+                    id="editor-design"
+                    contenteditable="true"
+                    class="min-h-[260px] max-h-[500px] overflow-y-auto p-4 text-sm text-gray-800 leading-relaxed focus:outline-none prose prose-sm max-w-none"
+                    data-placeholder="Begin typing your intelligence brief..."
+                  ></div>
+
+                  <!-- Code mode (raw HTML) -->
+                  <textarea
+                    id="editor-code"
+                    rows="14"
+                    class="hidden w-full font-mono text-xs p-4 text-gray-800 focus:outline-none resize-y"
+                    placeholder="<p>Raw HTML...</p>"
+                  ></textarea>
+                </div>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <!-- Meta / Author / Pin -->
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-2xl border border-gray-100"
+              >
                 <div>
                   <label class="block text-sm font-bold text-gray-700 mb-2"
-                    >Thumbnail Image</label
+                    >Meta Description
+                    <span class="text-gray-400 font-normal"
+                      >(for search engines / share preview)</span
+                    ></label
                   >
-                  <input
-                    type="file"
-                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-all cursor-pointer"
-                  />
+                  <textarea
+                    id="blog-meta-description"
+                    rows="2"
+                    maxlength="300"
+                    class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
+                    placeholder="A short 1-2 line description shown on Google / when shared on Facebook..."
+                  ></textarea>
                 </div>
-                <div class="flex items-center gap-3 mt-4 md:mt-6">
-                  <input
-                    type="checkbox"
-                    id="pin-blog"
-                    class="w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500 accent-brand-600"
-                  />
-                  <label for="pin-blog" class="text-sm font-bold text-gray-700"
-                    >Pin to Homepage</label
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2"
+                    >Author Name
+                    <span class="text-gray-400 font-normal"
+                      >(optional, shows at end of article)</span
+                    ></label
                   >
+                  <input
+                    type="text"
+                    id="blog-author"
+                    placeholder="e.g. Sourav Saha"
+                    class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  />
                 </div>
               </div>
 
-              <div class="flex justify-end pt-4 border-t border-gray-100">
+              <div
+                class="border border-yellow-200 bg-yellow-50 rounded-2xl p-5 flex items-center justify-between"
+              >
+                <div>
+                  <p
+                    class="font-bold text-yellow-800 text-sm flex items-center gap-1.5"
+                  >
+                    <i data-lucide="pin" class="w-4 h-4"></i> Pin to Homepage
+                  </p>
+                  <p class="text-xs text-yellow-700 mt-0.5">
+                    Only 3 blogs can be pinned at a time — the pinned ones show
+                    on index.html.
+                  </p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="blog-pin-checkbox"
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"
+                  ></div>
+                </label>
+              </div>
+
+              <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
-                  onclick="showToast('Blog published successfully!')"
+                  id="blog-cancel-btn"
+                  onclick="resetBlogForm()"
+                  class="hidden px-5 py-2.5 rounded-full text-sm font-bold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  id="blog-submit-btn"
+                  onclick="saveBlogPost()"
                   class="btn-puja flex items-center"
                 >
                   Publish Post <i data-lucide="send" class="w-4 h-4 ml-2"></i>
                 </button>
               </div>
-            </form>
+            </div>
+
+            <!-- Blog list table -->
+            <div
+              class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+            >
+              <div class="p-4 bg-gray-50 border-b border-gray-200">
+                <span class="font-bold text-sm text-gray-700"
+                  >All Blog Posts</span
+                >
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Thumbnail</th>
+                      <th class="py-3 px-5">Title</th>
+                      <th class="py-3 px-5">Category</th>
+                      <th class="py-3 px-5 text-center">Pinned</th>
+                      <th class="py-3 px-5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="blogs-admin-list"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
+
+        <style>
+          .toolbar-btn {
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #4b5563;
+          }
+          .toolbar-btn:hover {
+            background: #ffedd5;
+            color: #b91c1c;
+          }
+          #editor-design:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+          }
+        </style>
       </div>
     </main>
 
@@ -2591,6 +2944,313 @@
         lucide.createIcons();
       }
 
+      function switchEditorMode(mode) {
+        const design = document.getElementById("editor-design");
+        const code = document.getElementById("editor-code");
+        const tabDesign = document.getElementById("editor-tab-design");
+        const tabCode = document.getElementById("editor-tab-code");
+        const toolbar = document.getElementById("editor-toolbar");
+
+        if (mode === "code") {
+          code.value = design.innerHTML.trim();
+          code.classList.remove("hidden");
+          design.classList.add("hidden");
+          toolbar.classList.add("hidden");
+          tabCode.classList.add("bg-brand-900", "text-white");
+          tabCode.classList.remove("text-gray-500");
+          tabDesign.classList.remove("bg-brand-900", "text-white");
+          tabDesign.classList.add("text-gray-500");
+        } else {
+          design.innerHTML = code.value;
+          code.classList.add("hidden");
+          design.classList.remove("hidden");
+          toolbar.classList.remove("hidden");
+          tabDesign.classList.add("bg-brand-900", "text-white");
+          tabDesign.classList.remove("text-gray-500");
+          tabCode.classList.remove("bg-brand-900", "text-white");
+          tabCode.classList.add("text-gray-500");
+        }
+      }
+
+      function getEditorHTML() {
+        const code = document.getElementById("editor-code");
+        if (!code.classList.contains("hidden")) return code.value.trim();
+        return document.getElementById("editor-design").innerHTML.trim();
+      }
+
+      function setEditorHTML(html) {
+        document.getElementById("editor-design").innerHTML = html || "";
+        document.getElementById("editor-code").value = html || "";
+      }
+
+      function insertEditorLink() {
+        const url = prompt("Link URL (https://...)");
+        if (url) execCmd("createLink", url);
+      }
+
+      function insertEditorVideo() {
+        const url = prompt("Video URL (YouTube embed link or direct .mp4)");
+        if (!url) return;
+        let embed;
+        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+          const id = url.includes("watch?v=")
+            ? url.split("watch?v=")[1].split("&")[0]
+            : url.split("/").pop();
+          embed = `<div class="my-4"><iframe width="100%" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`;
+        } else {
+          embed = `<video src="${url}" controls class="w-full rounded-xl my-4"></video>`;
+        }
+        execCmd("insertHTML", embed);
+      }
+
+      function insertEditorTable() {
+        const rows = parseInt(prompt("How many rows?", "2")) || 2;
+        const cols = parseInt(prompt("How many columns?", "2")) || 2;
+        let html = '<table class="w-full border border-gray-300 my-4">';
+        for (let r = 0; r < rows; r++) {
+          html += "<tr>";
+          for (let c = 0; c < cols; c++) {
+            html += '<td class="border border-gray-300 p-2">&nbsp;</td>';
+          }
+          html += "</tr>";
+        }
+        html += "</table>";
+        execCmd("insertHTML", html);
+      }
+
+      async function insertEditorImage(input) {
+        const file = input.files[0];
+        if (!file) return;
+        showToast("Uploading image...");
+        const formData = new FormData();
+        formData.append("media", file);
+        try {
+          const res = await fetch(`${API_BASE}/upload-avatar`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error();
+          execCmd(
+            "insertHTML",
+            `<img src="${data.url}" class="rounded-xl my-3 max-w-full" />`,
+          );
+        } catch (e) {
+          showToast("Image upload failed!", "error");
+        } finally {
+          input.value = "";
+        }
+      }
+
+      // ---------- Slug auto-fill ----------
+      function autoFillBlogSlug() {
+        const slugInput = document.getElementById("blog-slug");
+        if (slugInput.dataset.manual === "true") return; // user typed a custom slug
+        const title = document.getElementById("blog-title").value;
+        slugInput.value = title
+          .toString()
+          .trim()
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-");
+      }
+      document.getElementById("blog-slug")?.addEventListener("input", (e) => {
+        e.target.dataset.manual = "true";
+      });
+
+      // ---------- CRUD ----------
+      let blogsCache = [];
+      let selectedBlogThumbnail = null;
+      document
+        .getElementById("blog-thumbnail-input")
+        ?.addEventListener("change", (e) => {
+          selectedBlogThumbnail = e.target.files[0] || null;
+        });
+
+      async function loadBlogsAdmin() {
+        const container = document.getElementById("blogs-admin-list");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/blogs/admin`, {
+            credentials: "include",
+          });
+          if (!res.ok) {
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-red-500 text-sm">Failed to load (${res.status})</td></tr>`;
+            return;
+          }
+          blogsCache = await res.json();
+          if (!blogsCache.length) {
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-gray-400 text-sm">No blogs published yet.</td></tr>`;
+            return;
+          }
+          container.innerHTML = blogsCache
+            .map(
+              (b) => `
+    <tr class="hover:bg-brand-50 transition-colors">
+      <td class="py-3 px-5"><img src="${b.thumbnail_url || "https://placehold.co/60x60/fed7aa/991b1b?text=Blog"}" class="w-12 h-12 rounded-lg object-cover border border-orange-200"></td>
+      <td class="py-3 px-5">
+        <p class="font-bold text-sm text-gray-900">${b.title}</p>
+        <p class="text-xs text-gray-500">/blog/${b.slug}</p>
+      </td>
+      <td class="py-3 px-5"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${b.category}</span></td>
+      <td class="py-3 px-5 text-center">
+        <button onclick="toggleBlogPin(${b.id}, ${b.is_pinned ? "false" : "true"})" class="${b.is_pinned ? "text-yellow-500" : "text-gray-300"} hover:text-yellow-500" title="${b.is_pinned ? "Unpin" : "Pin to homepage"}">
+          <i data-lucide="pin" class="w-4 h-4"></i>
+        </button>
+      </td>
+      <td class="py-3 px-5 text-right space-x-2">
+        <button onclick="editBlogPost(${b.id})" class="text-blue-500" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+        <button onclick="deleteBlogPost(${b.id})" class="text-red-500" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </td>
+    </tr>`,
+            )
+            .join("");
+          lucide.createIcons();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function saveBlogPost() {
+        const editingId = document.getElementById("blog-editing-id").value;
+        const title = document.getElementById("blog-title").value.trim();
+        const slug = document.getElementById("blog-slug").value.trim();
+        const category = document.getElementById("blog-category").value;
+        const excerpt = document.getElementById("blog-excerpt").value.trim();
+        const metaDescription = document
+          .getElementById("blog-meta-description")
+          .value.trim();
+        const author = document.getElementById("blog-author").value.trim();
+        const pinned = document.getElementById("blog-pin-checkbox").checked;
+        const content = getEditorHTML();
+
+        if (!title) return showToast("Please enter a title!", "error");
+        if (!content || content === "<br>")
+          return showToast("Please write some content!", "error");
+        if (!editingId && !selectedBlogThumbnail)
+          return showToast("Please select a thumbnail!", "error");
+
+        const formData = new FormData();
+        formData.append("title", title);
+        if (slug) formData.append("slug", slug);
+        formData.append("category", category);
+        formData.append("excerpt", excerpt);
+        formData.append("content", content);
+        formData.append("meta_description", metaDescription);
+        formData.append("author_name", author);
+        formData.append("is_pinned", pinned);
+        if (selectedBlogThumbnail)
+          formData.append("thumbnail", selectedBlogThumbnail);
+
+        try {
+          showToast("Saving...");
+          const url = editingId
+            ? `${API_BASE}/blogs/${editingId}`
+            : `${API_BASE}/blogs`;
+          const method = editingId ? "PUT" : "POST";
+          const res = await fetch(url, {
+            method,
+            body: formData,
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(editingId ? "Blog updated!" : "Blog published!");
+          resetBlogForm();
+          loadBlogsAdmin();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      }
+
+      function editBlogPost(id) {
+        const b = blogsCache.find((x) => x.id === id);
+        if (!b) return;
+        document.getElementById("blog-editing-id").value = b.id;
+        document.getElementById("blog-title").value = b.title;
+        document.getElementById("blog-slug").value = b.slug;
+        document.getElementById("blog-slug").dataset.manual = "true";
+        document.getElementById("blog-category").value = b.category;
+        document.getElementById("blog-excerpt").value = b.excerpt || "";
+        document.getElementById("blog-meta-description").value =
+          b.meta_description || "";
+        document.getElementById("blog-author").value = b.author_name || "";
+        document.getElementById("blog-pin-checkbox").checked = !!b.is_pinned;
+        setEditorHTML(b.content);
+        selectedBlogThumbnail = null;
+        document.getElementById("blog-thumbnail-input").value = "";
+        const preview = document.getElementById("blog-preview-img");
+        if (b.thumbnail_url) {
+          preview.src = b.thumbnail_url;
+          preview.classList.remove("hidden");
+        }
+        document.getElementById("blog-form-heading").textContent =
+          "Edit Blog Post";
+        document.getElementById("blog-submit-btn").innerHTML =
+          'Update Post <i data-lucide="save" class="w-4 h-4 ml-2"></i>';
+        document.getElementById("blog-cancel-btn").classList.remove("hidden");
+        lucide.createIcons();
+        document
+          .getElementById("view-blogs")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function resetBlogForm() {
+        document.getElementById("blog-editing-id").value = "";
+        document.getElementById("blog-title").value = "";
+        document.getElementById("blog-slug").value = "";
+        document.getElementById("blog-slug").dataset.manual = "false";
+        document.getElementById("blog-category").value = "Announcement";
+        document.getElementById("blog-excerpt").value = "";
+        document.getElementById("blog-meta-description").value = "";
+        document.getElementById("blog-author").value = "";
+        document.getElementById("blog-pin-checkbox").checked = false;
+        setEditorHTML("");
+        switchEditorMode("design");
+        selectedBlogThumbnail = null;
+        document.getElementById("blog-thumbnail-input").value = "";
+        document.getElementById("blog-preview-img").classList.add("hidden");
+        document.getElementById("blog-form-heading").textContent =
+          "Publish Blog Post";
+        document.getElementById("blog-submit-btn").innerHTML =
+          'Publish Post <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
+        document.getElementById("blog-cancel-btn").classList.add("hidden");
+        lucide.createIcons();
+      }
+
+      async function toggleBlogPin(id, newValue) {
+        try {
+          const res = await fetch(`${API_BASE}/blogs/${id}/pin`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ is_pinned: newValue }),
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed");
+          showToast(data.message);
+          loadBlogsAdmin();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      }
+
+      async function deleteBlogPost(id) {
+        if (!confirm("Delete this blog post permanently?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/blogs/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Delete failed");
+          showToast("Blog deleted!");
+          loadBlogsAdmin();
+        } catch (e) {
+          showToast("Failed to delete", "error");
+        }
+      }
+
       async function blockMember(id) {
         if (!confirm("এই মেম্বারকে ব্লক করতে চান? সে আর লগইন করতে পারবে না।"))
           return;
@@ -2852,6 +3512,7 @@
         if (tabId === "admins") loadAdminManageList();
         if (tabId === "logs") loadActivityLogs();
         if (tabId === "advisors") loadAdvisorsAdmin();
+        if (tabId === "blogs") loadBlogsAdmin(); // 👈 এই লাইনটা add করো
       };
       (async function checkAdminAuth() {
         try {

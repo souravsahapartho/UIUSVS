@@ -341,6 +341,10 @@
       </div>
 
       <div
+        id="blog-category-tabs"
+        class="flex flex-wrap justify-center gap-2 mb-8"
+      ></div>
+      <div
         id="blog-grid"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
@@ -500,82 +504,66 @@
     </div>
 
     <script>
-      lucide.createIcons();
-      document.getElementById("current-year").textContent =
-        new Date().getFullYear();
-      function toggleDrawer() {
-        const drawer = document.getElementById("mobile-drawer");
-        const overlay = document.getElementById("drawer-overlay");
-        drawer.classList.toggle("translate-x-full");
-        overlay.classList.toggle("hidden");
-      }
+      const API_BASE = "https://uiusvs.onrender.com/api";
+      let allBlogsCache = [];
+      let activeCategory = "All";
 
-      function showToast(message) {
-        const toast = document.getElementById("toast");
-        document.getElementById("toast-message").textContent = message;
-        toast.classList.remove(
-          "opacity-0",
-          "translate-y-10",
-          "pointer-events-none",
-        );
-        setTimeout(() => {
-          toast.classList.add(
-            "opacity-0",
-            "translate-y-10",
-            "pointer-events-none",
-          );
-        }, 3000);
-      }
-
-      const mockBlogs = [
-        {
-          id: 1,
-          title: "The Significance of Saraswati Puja in Student Life",
-          excerpt:
-            "Understanding why Devi Saraswati holds a special place in the hearts of students.",
-          author: "Admin",
-          date: "Feb 5, 2026",
-          img: "https://placehold.co/600x400/ea580c/fff?text=Saraswati",
-          pinned: true,
-        },
-        {
-          id: 2,
-          title: "A Look Back at Our Holi 2025 Celebration",
-          excerpt:
-            "Colors, joy, and unity. Reminiscing the beautiful memories of Basanta Utsav on campus.",
-          author: "Sourav Saha",
-          date: "Mar 20, 2025",
-          img: "https://placehold.co/600x400/e879f9/fff?text=Holi",
-        },
-        {
-          id: 3,
-          title: "Understanding the Core of Bhagavad Gita",
-          excerpt:
-            "A simple breakdown of Karma Yoga and its application in our daily academic lives.",
-          author: "Admin",
-          date: "Jan 12, 2026",
-          img: "https://placehold.co/600x400/4a0404/fff?text=Gita",
-        },
+      const CATEGORIES = [
+        "All",
+        "Announcement",
+        "Puja-Parbon",
+        "Spiritual Insights",
       ];
+
+      function renderCategoryTabs() {
+        const wrap = document.getElementById("blog-category-tabs");
+        if (!wrap) return;
+        wrap.innerHTML = CATEGORIES.map(
+          (c) => `
+      <button onclick="filterBlogCategory('${c}')"
+        class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors ${
+          activeCategory === c
+            ? "bg-brand-700 text-white border-brand-700"
+            : "bg-white text-gray-600 border-gray-200 hover:border-brand-300"
+        }">
+        ${c}
+      </button>`,
+        ).join("");
+      }
+
+      function filterBlogCategory(cat) {
+        activeCategory = cat;
+        renderCategoryTabs();
+        renderBlogs();
+      }
 
       function renderBlogs() {
         const grid = document.getElementById("blog-grid");
+        const list =
+          activeCategory === "All"
+            ? allBlogsCache
+            : allBlogsCache.filter((b) => b.category === activeCategory);
 
-        grid.innerHTML = mockBlogs
+        if (!list.length) {
+          grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400 text-sm">No articles in this category yet.</div>`;
+          return;
+        }
+
+        grid.innerHTML = list
           .map(
             (b) => `
-                <article class="bg-white/90 backdrop-blur rounded-2xl border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col card-hover cursor-pointer hover:-translate-y-1" onclick="openBlogModal(${b.id})">
+                <article class="bg-white/90 backdrop-blur rounded-2xl border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col card-hover cursor-pointer hover:-translate-y-1" onclick="openBlogModal('${b.slug}')">
                     <div class="aspect-[16/9] w-full relative overflow-hidden bg-gray-100 p-1">
-                        <img src="${b.img}" alt="${b.title}" class="w-full h-full object-cover transition-transform duration-700 rounded-xl">
-                        ${b.pinned ? '<div class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1"><i data-lucide="pin" class="w-3 h-3"></i> PINNED</div>' : ""}
+                        <img src="${b.img || "https://placehold.co/600x400/ea580c/fff?text=Blog"}" alt="${b.title}" class="w-full h-full object-cover transition-transform duration-700 rounded-xl">
+                        <div class="absolute top-3 left-3 bg-white/90 text-brand-700 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">${b.category}</div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="text-[11px] text-gray-500 mb-3 flex items-center justify-between font-bold uppercase tracking-wider">
-                            <span>${b.date}</span>
-                            <span class="text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">By ${b.author}</span>
+                            <span>${new Date(b.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                            <span class="text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">By ${b.author || "Admin"}</span>
                         </div>
                         <h2 class="font-serif font-bold text-xl text-brand-900 mb-3 line-clamp-2 leading-snug">${b.title}</h2>
-                        <p class="text-gray-600 text-sm line-clamp-3 mb-5 flex-1">${b.excerpt}</p>
+                        <p class="text-gray-600 text-sm line-clamp-3 mb-5 flex-1">${b.excerpt || ""}</p>
                         <span class="text-brand-500 text-sm font-bold mt-auto group flex items-center transition-colors hover:text-brand-700">Read Article <i data-lucide="arrow-right" class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform"></i></span>
                     </div>
                 </article>
@@ -585,12 +573,24 @@
         lucide.createIcons();
       }
 
-      window.openBlogModal = (id) => {
-        showToast("Navigating to article ID: " + id);
-        // Dynamic URL routing handled by backend later
+      window.openBlogModal = (slug) => {
+        // Full article lives on its own page so the link is shareable: blog-detail.html?slug=...
+        window.location.href = `blog-detail.html?slug=${encodeURIComponent(slug)}`;
       };
 
-      setTimeout(renderBlogs, 600);
+      async function loadBlogs() {
+        try {
+          const res = await fetch(`${API_BASE}/blogs/public`);
+          allBlogsCache = await res.json();
+          renderCategoryTabs();
+          renderBlogs();
+        } catch (e) {
+          document.getElementById("blog-grid").innerHTML =
+            `<div class="col-span-full text-center py-10 text-red-400 text-sm">Failed to load articles. Please try again later.</div>`;
+        }
+      }
+
+      loadBlogs();
     </script>
   </body>
 </html>

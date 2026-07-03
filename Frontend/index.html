@@ -2941,14 +2941,14 @@
         if (!grid) return;
         try {
           // Attempting to fetch from your node backend directly
-          const res = await fetch(`${API_BASE}/blogs?limit=3`);
+          const res = await fetch(`${API_BASE}/blogs/pinned`);
           if (res.ok) {
             const blogs = await res.json();
             if (blogs.length > 0) {
               grid.innerHTML = blogs
                 .map(
                   (b) => `
-                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog.html'">
+                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog-detail.html?slug=${b.slug}'">
                             <div class="aspect-video w-full relative overflow-hidden bg-gray-100 p-1">
                                 <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
                                 <img src="${b.img}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
