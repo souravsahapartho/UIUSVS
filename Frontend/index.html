@@ -2259,1164 +2259,1184 @@
     </footer>
 
     <script type="module">
-      lucide.createIcons();
+          lucide.createIcons();
 
-      // ==========================================
-      // GLOBAL CONFIGURATION (Connect to Render API)
-      // ==========================================
-      const API_BASE = "https://uiusvs.onrender.com/api";
+          // ==========================================
+          // GLOBAL CONFIGURATION (Connect to Render API)
+          // ==========================================
+          const API_BASE = "https://uiusvs.onrender.com/api";
 
-      // Initialize UI Observer for animations
-      const contentObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              contentObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.1 },
-      );
+          // Initialize UI Observer for animations
+          const contentObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  contentObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.1 },
+          );
 
-      // Apply observer to all animatable elements initially
-      document
-        .querySelectorAll(".animate-on-scroll")
-        .forEach((el) => contentObserver.observe(el));
+          // Apply observer to all animatable elements initially
+          document
+            .querySelectorAll(".animate-on-scroll")
+            .forEach((el) => contentObserver.observe(el));
 
-      // ==========================================
-      // 1. DATA FETCHING ARCHITECTURE
-      // ==========================================
+          // ==========================================
+          // 1. DATA FETCHING ARCHITECTURE
+          // ==========================================
 
-      // Fallback Data Arrays (In case Backend is offline/not deployed yet)
-      let systemFestivalData = [
-        {
-          name: "Saraswati Puja",
-          bnName: "সরস্বতী পূজা",
-          date: "2027-02-11",
-          type: "major",
-          title: "Saraswati Puja 2027",
-          label: "11 February, Thursday",
-        },
-        {
-          name: "Akshaya Tritiya",
-          bnName: "অক্ষয় তৃতীয়া",
-          date: "2027-05-09",
-          type: "major",
-        },
-        {
-          name: "Mohini Ekadashi",
-          bnName: "মোহিনী একাদশী",
-          date: "2027-05-16",
-          type: "ekadashi",
-        },
-        {
-          name: "Kali Puja / Diwali",
-          bnName: "কালী পূজা / দীপাবলি",
-          date: "2027-10-29",
-          type: "major",
-        },
-        {
-          name: "Durga Puja (Maha Ashtami)",
-          bnName: "দুর্গা পূজা (মহাষ্টমী)",
-          date: "2027-10-08",
-          type: "major",
-        },
-      ];
+          // Fallback Data Arrays (In case Backend is offline/not deployed yet)
+          let systemFestivalData = [
+            {
+              name: "Saraswati Puja",
+              bnName: "সরস্বতী পূজা",
+              date: "2027-02-11",
+              type: "major",
+              title: "Saraswati Puja 2027",
+              label: "11 February, Thursday",
+            },
+            {
+              name: "Akshaya Tritiya",
+              bnName: "অক্ষয় তৃতীয়া",
+              date: "2027-05-09",
+              type: "major",
+            },
+            {
+              name: "Mohini Ekadashi",
+              bnName: "মোহিনী একাদশী",
+              date: "2027-05-16",
+              type: "ekadashi",
+            },
+            {
+              name: "Kali Puja / Diwali",
+              bnName: "কালী পূজা / দীপাবলি",
+              date: "2027-10-29",
+              type: "major",
+            },
+            {
+              name: "Durga Puja (Maha Ashtami)",
+              bnName: "দুর্গা পূজা (মহাষ্টমী)",
+              date: "2027-10-08",
+              type: "major",
+            },
+          ];
 
-      const fallbackGallery = [
-        {
-          id: 1,
-          title: "Saraswati Puja 2026",
-          category: "Saraswati Puja",
-          url: "https://placehold.co/600x400/ea580c/fff?text=Puja+1",
-        },
-        {
-          id: 2,
-          title: "Kali Puja Setup",
-          category: "Kali Puja",
-          url: "https://placehold.co/600x400/b91c1c/fff?text=Kali",
-        },
-        {
-          id: 3,
-          title: "Holi Festival",
-          category: "Holi",
-          url: "https://placehold.co/600x400/e879f9/fff?text=Holi",
-        },
-        {
-          id: 4,
-          title: "Prayer Gathering",
-          category: "Prayer",
-          url: "https://placehold.co/600x400/f59e0b/fff?text=Prayer",
-        },
-      ];
+          const fallbackGallery = [
+            {
+              id: 1,
+              title: "Saraswati Puja 2026",
+              category: "Saraswati Puja",
+              url: "https://placehold.co/600x400/ea580c/fff?text=Puja+1",
+            },
+            {
+              id: 2,
+              title: "Kali Puja Setup",
+              category: "Kali Puja",
+              url: "https://placehold.co/600x400/b91c1c/fff?text=Kali",
+            },
+            {
+              id: 3,
+              title: "Holi Festival",
+              category: "Holi",
+              url: "https://placehold.co/600x400/e879f9/fff?text=Holi",
+            },
+            {
+              id: 4,
+              title: "Prayer Gathering",
+              category: "Prayer",
+              url: "https://placehold.co/600x400/f59e0b/fff?text=Prayer",
+            },
+          ];
 
-      const fallbackAdvisors = [
-        {
-          name: "Dr. Jashodhan Saha",
-          designation: "Chief Advisor",
-          pic: "https://placehold.co/200x200/ea580c/fff?text=JS",
-        },
-        {
-          name: "Mallika Datta",
-          designation: "Senior Advisor",
-          pic: "https://placehold.co/200x200/b91c1c/fff?text=MD",
-        },
-        {
-          name: "Rajib Das",
-          designation: "Senior Advisor",
-          pic: "https://placehold.co/200x200/f59e0b/fff?text=RD",
-        },
-      ];
+          const fallbackAdvisors = [
+            {
+              name: "Dr. Jashodhan Saha",
+              designation: "Chief Advisor",
+              pic: "https://placehold.co/200x200/ea580c/fff?text=JS",
+            },
+            {
+              name: "Mallika Datta",
+              designation: "Senior Advisor",
+              pic: "https://placehold.co/200x200/b91c1c/fff?text=MD",
+            },
+            {
+              name: "Rajib Das",
+              designation: "Senior Advisor",
+              pic: "https://placehold.co/200x200/f59e0b/fff?text=RD",
+            },
+          ];
 
-      let indexLightboxItems = [];
-      let indexLightboxIndex = 0;
-      let currentFestFilter = "all";
-      let activeFlagshipEvent = null;
-      let pendingFestivalNotification = null;
-      let isFlagshipNotif = false;
-      let saraswatiModalTimer = null;
-      let saraswatiCountdownInterval = null;
+          let indexLightboxItems = [];
+          let indexLightboxIndex = 0;
+          let currentFestFilter = "all";
+          let activeFlagshipEvent = null;
+          let pendingFestivalNotification = null;
+          let isFlagshipNotif = false;
+          let saraswatiModalTimer = null;
+          let saraswatiCountdownInterval = null;
 
-      // 🎯 Master Loader
-      async function loadAllDatabaseData() {
-        try {
-          // 1. Fetch About Us Stats
-          try {
-            const res = await fetch(`${API_BASE}/about`);
-            if (res.ok) {
-              const data = await res.json();
-              document.getElementById("about-p1").textContent =
-                data.p1 ||
-                "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community...";
-              document.getElementById("about-p2").textContent =
-                data.p2 || "We believe in the power of unity and wisdom.";
-              document.getElementById("stat-years").textContent =
-                (data.years || 6) + "+";
-              document.getElementById("stat-events").textContent =
-                (data.events || 7) + "+";
-              document.getElementById("stat-members").textContent =
-                (data.members || 250) + "+";
-            } else throw new Error();
-          } catch (e) {
-            // Apply Fallbacks silently
-            document.getElementById("about-p1").textContent =
-              "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community dedicated to preserving and celebrating the rich spiritual and cultural heritage of Sanatana Dharma at United International University.";
-            document.getElementById("about-p2").textContent =
-              "We believe in the power of unity and the light of wisdom. Our mission is to create a nurturing environment where students can connect with their roots.";
-            document.getElementById("stat-years").textContent = "6+";
-            document.getElementById("stat-events").textContent = "7+";
-            document.getElementById("stat-members").textContent = "250+";
-          }
-
-          // 2. Fetch Advisors
-          try {
-            const res = await fetch(`${API_BASE}/advisors`);
-            if (res.ok) {
-              const data = await res.json();
-              renderAdvisors(data);
-            } else throw new Error();
-          } catch (e) {
-            renderAdvisors(fallbackAdvisors);
-          }
-
-          // 3. Fetch Gallery
-          try {
-            const res = await fetch(`${API_BASE}/gallery/featured`);
-            if (res.ok) {
-              const data = await res.json();
-              renderDynamicGallery(data);
-            } else throw new Error();
-          } catch (e) {
-            renderDynamicGallery(fallbackGallery);
-          }
-
-          // 4. Fetch Festivals (replaces huge array)
-          try {
-            const res = await fetch(`${API_BASE}/festivals`);
-            if (res.ok) {
-              systemFestivalData = await res.json();
-            }
-          } catch (e) {
-            console.warn("Using offline festival schedule.");
-          }
-
-          initFestivalSystem();
-          filterFestivals("all");
-
-          // 5. Fetch Active Modal Announcement
-          try {
-            const res = await fetch(`${API_BASE}/announcements/active`);
-            if (res.ok) {
-              const announcement = await res.json();
-              if (announcement && announcement.media_url) {
-                setupFlagshipModal(announcement);
+          // 🎯 Master Loader
+          async function loadAllDatabaseData() {
+            try {
+              // 1. Fetch About Us Stats
+              try {
+                const res = await fetch(`${API_BASE}/about`);
+                if (res.ok) {
+                  const data = await res.json();
+                  document.getElementById("about-p1").textContent =
+                    data.p1 ||
+                    "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community...";
+                  document.getElementById("about-p2").textContent =
+                    data.p2 || "We believe in the power of unity and wisdom.";
+                  document.getElementById("stat-years").textContent =
+                    (data.years || 6) + "+";
+                  document.getElementById("stat-events").textContent =
+                    (data.events || 7) + "+";
+                  document.getElementById("stat-members").textContent =
+                    (data.members || 250) + "+";
+                } else throw new Error();
+              } catch (e) {
+                // Apply Fallbacks silently
+                document.getElementById("about-p1").textContent =
+                  "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community dedicated to preserving and celebrating the rich spiritual and cultural heritage of Sanatana Dharma at United International University.";
+                document.getElementById("about-p2").textContent =
+                  "We believe in the power of unity and the light of wisdom. Our mission is to create a nurturing environment where students can connect with their roots.";
+                document.getElementById("stat-years").textContent = "6+";
+                document.getElementById("stat-events").textContent = "7+";
+                document.getElementById("stat-members").textContent = "250+";
               }
+
+              // 2. Fetch Advisors
+              try {
+                const res = await fetch(`${API_BASE}/advisors`);
+                if (res.ok) {
+                  const data = await res.json();
+                  renderAdvisors(data);
+                } else throw new Error();
+              } catch (e) {
+                renderAdvisors(fallbackAdvisors);
+              }
+
+              // 3. Fetch Gallery
+              try {
+                const res = await fetch(`${API_BASE}/gallery/featured`);
+                if (res.ok) {
+                  const data = await res.json();
+                  renderDynamicGallery(data);
+                } else throw new Error();
+              } catch (e) {
+                renderDynamicGallery(fallbackGallery);
+              }
+
+              // 4. Fetch Festivals (replaces huge array)
+              try {
+                const res = await fetch(`${API_BASE}/festivals`);
+                if (res.ok) {
+                  systemFestivalData = await res.json();
+                }
+              } catch (e) {
+                console.warn("Using offline festival schedule.");
+              }
+
+              initFestivalSystem();
+              filterFestivals("all");
+
+              // 5. Fetch Active Modal Announcement
+              try {
+                const res = await fetch(`${API_BASE}/announcements/active`);
+                if (res.ok) {
+                  const announcement = await res.json();
+                  if (announcement && announcement.media_url) {
+                    setupFlagshipModal(announcement);
+                  }
+                }
+              } catch (e) {
+                console.warn("No active announcement overrides found.");
+              }
+            } catch (e) {
+              console.error("Global Database Fetch Issue:", e);
             }
-          } catch (e) {
-            console.warn("No active announcement overrides found.");
           }
-        } catch (e) {
-          console.error("Global Database Fetch Issue:", e);
-        }
-      }
 
-      // ==========================================
-      // UI RENDER HELPERS
-      // ==========================================
+          // ==========================================
+          // UI RENDER HELPERS
+          // ==========================================
 
-      function renderAdvisors(advisors) {
-        const container = document.getElementById("advisors-container");
-        if (!container) return;
+          function renderAdvisors(advisors) {
+            const container = document.getElementById("advisors-container");
+            if (!container) return;
 
-        if (advisors.length === 0) {
-          container.innerHTML = `<p class="text-gray-500 italic">Advisor panel updating soon.</p>`;
-          return;
-        }
+            if (advisors.length === 0) {
+              container.innerHTML = `<p class="text-gray-500 italic">Advisor panel updating soon.</p>`;
+              return;
+            }
 
-        const chief = advisors[0]; // Assuming 1st is Chief
-        const others = advisors.slice(1);
+            const chief = advisors[0]; // Assuming 1st is Chief
+            const others = advisors.slice(1);
 
-        let html = `
-            <div class="relative z-10 animate-on-scroll">
-              <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-48 sm:w-56 text-center group">
-                <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform relative">
-                  <img src="${chief.pic}" class="w-full h-full object-cover relative z-10" alt="${chief.name}">
+            let html = `
+                <div class="relative z-10 animate-on-scroll">
+                  <div class="bg-white p-4 rounded-2xl shadow-md border-2 border-red-100 w-48 sm:w-56 text-center group">
+                    <div class="w-20 h-20 rounded-full overflow-hidden mb-3 border-4 border-orange-100 mx-auto group-hover:scale-105 transition-transform relative">
+                      <img src="${chief.pic}" class="w-full h-full object-cover relative z-10" alt="${chief.name}">
+                    </div>
+                    <h3 class="text-sm sm:text-base font-bold text-red-900">${chief.name}</h3>
+                    <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">${chief.designation}</p>
+                  </div>
                 </div>
-                <h3 class="text-sm sm:text-base font-bold text-red-900">${chief.name}</h3>
-                <p class="text-[9px] font-bold uppercase tracking-wider mt-1 text-red-600">${chief.designation}</p>
-              </div>
-            </div>
-          `;
-
-        if (others.length > 0) {
-          html += `
-              <div class="w-full max-w-[300px] sm:max-w-[400px] h-8 sm:h-12 flex justify-center mt-2 mb-2">
-                <div class="w-1 h-full bg-gradient-to-b from-orange-300 to-transparent"></div>
-              </div>
-              <div class="flex flex-wrap justify-center gap-4 sm:gap-12 w-full animate-on-scroll delay-100">
-            `;
-          others.forEach((adv) => {
-            html += `
-                <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-[45%] sm:w-48 text-center group">
-                  <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform relative">
-                    <img src="${adv.pic}" class="w-full h-full object-cover relative z-10" alt="${adv.name}">
-                  </div>
-                  <h3 class="text-xs sm:text-sm font-bold text-red-900">${adv.name}</h3>
-                  <p class="text-[8px] font-semibold uppercase text-gray-500">${adv.designation}</p>
-                </div>`;
-          });
-          html += `</div>`;
-        }
-
-        container.innerHTML = html;
-        // Re-observe injected elements
-        container
-          .querySelectorAll(".animate-on-scroll")
-          .forEach((el) => contentObserver.observe(el));
-      }
-
-      function renderDynamicGallery(mediaItems) {
-        const container = document.getElementById("dynamic-gallery-container");
-        if (!container || mediaItems.length === 0) return;
-
-        indexLightboxItems = mediaItems; // 🎯 navigation এর জন্য save করা হচ্ছে
-
-        // Group by category
-        const grouped = mediaItems.reduce((acc, item) => {
-          if (!acc[item.category]) acc[item.category] = [];
-          acc[item.category].push(item);
-          return acc;
-        }, {});
-
-        let html = "";
-        const colors = ["red", "orange", "pink", "yellow", "purple", "teal"];
-        let colorIdx = 0;
-
-        Object.keys(grouped).forEach((category) => {
-          const theme = colors[colorIdx % colors.length];
-          const safeId =
-            "gallery-" + category.replace(/\s+/g, "-").toLowerCase();
-
-          html += `
-                <div class="mb-12 animate-on-scroll relative group/section">
-                  <div class="flex items-center mb-4">
-                    <div class="h-8 w-1 bg-${theme}-500 rounded-full mr-3"></div>
-                    <h3 class="text-2xl font-bold text-gray-900 font-serif">${category}</h3>
-                  </div>
-                  <div id="${safeId}" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
               `;
 
-          grouped[category].forEach((item) => {
-            const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
-            const safeTitle = (item.title || "").replace(/"/g, "&quot;");
-            const dateLabel = item.event_date
-              ? new Date(item.event_date).toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })
-              : "";
-            const globalIdx = mediaItems.indexOf(item);
-            const mediaTag = isVideo
-              ? `<video src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
-              : `<img src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
-            const playBadge = isVideo
-              ? `<div class="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1.5 z-20"><i data-lucide="play" class="w-3.5 h-3.5"></i></div>`
-              : "";
-            html += `
-        <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-${theme}-100 relative group cursor-pointer">
-          <div class="media-placeholder absolute inset-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-          ${playBadge}
-          ${mediaTag}
-        </div>
-      `;
-          });
+            if (others.length > 0) {
+              html += `
+                  <div class="w-full max-w-[300px] sm:max-w-[400px] h-8 sm:h-12 flex justify-center mt-2 mb-2">
+                    <div class="w-1 h-full bg-gradient-to-b from-orange-300 to-transparent"></div>
+                  </div>
+                  <div class="flex flex-wrap justify-center gap-4 sm:gap-12 w-full animate-on-scroll delay-100">
+                `;
+              others.forEach((adv) => {
+                html += `
+                    <div class="bg-white p-4 rounded-2xl shadow-md border border-orange-100 w-[45%] sm:w-48 text-center group">
+                      <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-orange-50 mx-auto group-hover:scale-105 transition-transform relative">
+                        <img src="${adv.pic}" class="w-full h-full object-cover relative z-10" alt="${adv.name}">
+                      </div>
+                      <h3 class="text-xs sm:text-sm font-bold text-red-900">${adv.name}</h3>
+                      <p class="text-[8px] font-semibold uppercase text-gray-500">${adv.designation}</p>
+                    </div>`;
+              });
+              html += `</div>`;
+            }
 
-          html += `</div></div>`;
-          colorIdx++;
-        });
+            container.innerHTML = html;
+            // Re-observe injected elements
+            container
+              .querySelectorAll(".animate-on-scroll")
+              .forEach((el) => contentObserver.observe(el));
+          }
 
-        container.innerHTML = html;
-        lucide.createIcons();
+          function renderDynamicGallery(mediaItems) {
+            const container = document.getElementById("dynamic-gallery-container");
+            if (!container || mediaItems.length === 0) return;
 
-        // Init Scrollers for new containers
-        Object.keys(grouped).forEach((cat) => {
-          const id = "gallery-" + cat.replace(/\s+/g, "-").toLowerCase();
-          new Scroller(id, Math.random() > 0.5 ? "left" : "right");
-        });
-        container
-          .querySelectorAll(".animate-on-scroll")
-          .forEach((el) => contentObserver.observe(el));
-      }
+            indexLightboxItems = mediaItems; // 🎯 navigation এর জন্য save করা হচ্ছে
 
-      function setupFlagshipModal(announcement) {
-        const imgEl = document.getElementById("dynamic-modal-img");
-        const defaultBanner = document.getElementById("default-modal-banner");
-        const titleEl = document.getElementById("saraswati-modal-title");
-        const dateEl = document.getElementById("saraswati-modal-date");
+            // Group by category
+            const grouped = mediaItems.reduce((acc, item) => {
+              if (!acc[item.category]) acc[item.category] = [];
+              acc[item.category].push(item);
+              return acc;
+            }, {});
 
-        if (imgEl && defaultBanner) {
-          imgEl.src = announcement.media_url;
-          imgEl.classList.remove("hidden");
-          defaultBanner.classList.add("hidden");
-        }
+            let html = "";
+            const colors = ["red", "orange", "pink", "yellow", "purple", "teal"];
+            let colorIdx = 0;
 
-        if (titleEl) titleEl.textContent = "Special Announcement";
-        if (dateEl && announcement.show_until) {
-          const d = new Date(announcement.show_until);
-          dateEl.textContent = "Valid until: " + d.toLocaleDateString();
-        }
+            Object.keys(grouped).forEach((category) => {
+              const theme = colors[colorIdx % colors.length];
+              const safeId =
+                "gallery-" + category.replace(/\s+/g, "-").toLowerCase();
 
-        // Trigger Logic
-        const todayStr = new Date().toDateString();
-        const viewCountKey = "announcement_views_" + todayStr;
-        let viewCount = parseInt(localStorage.getItem(viewCountKey) || "0");
+              html += `
+                    <div class="mb-12 animate-on-scroll relative group/section">
+                      <div class="flex items-center mb-4">
+                        <div class="h-8 w-1 bg-${theme}-500 rounded-full mr-3"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 font-serif">${category}</h3>
+                      </div>
+                      <div id="${safeId}" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
+                  `;
 
-        if (viewCount < 2) {
-          window.pendingSaraswatiModalCallback = () => {
+              grouped[category].forEach((item) => {
+                const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
+                const safeTitle = (item.title || "").replace(/"/g, "&quot;");
+                const dateLabel = item.event_date
+                  ? new Date(item.event_date).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "";
+                const globalIdx = mediaItems.indexOf(item);
+                const mediaTag = isVideo
+                  ? `<video src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" muted playsinline onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
+                  : `<img src="${item.url}" data-idx="${globalIdx}" data-title="${safeTitle}" data-date="${dateLabel}" class="w-full h-full object-cover relative z-10 gallery-img opacity-0 transition-opacity duration-500 group-hover:scale-105" alt="${item.title}" loading="lazy" onload="handleImageLoad(this)" onerror="handleImageError(this)" />`;
+                const playBadge = isVideo
+                  ? `<div class="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1.5 z-20"><i data-lucide="play" class="w-3.5 h-3.5"></i></div>`
+                  : "";
+                html += `
+            <div class="flex-shrink-0 w-72 max-w-[85vw] h-48 rounded-xl overflow-hidden shadow-md border border-${theme}-100 relative group cursor-pointer">
+              <div class="media-placeholder absolute inset-0"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+              ${playBadge}
+              ${mediaTag}
+            </div>
+          `;
+              });
+
+              html += `</div></div>`;
+              colorIdx++;
+            });
+
+            container.innerHTML = html;
+            lucide.createIcons();
+
+            // Init Scrollers for new containers
+            Object.keys(grouped).forEach((cat) => {
+              const id = "gallery-" + cat.replace(/\s+/g, "-").toLowerCase();
+              new Scroller(id, Math.random() > 0.5 ? "left" : "right");
+            });
+            container
+              .querySelectorAll(".animate-on-scroll")
+              .forEach((el) => contentObserver.observe(el));
+          }
+
+          function setupFlagshipModal(announcement) {
+            const imgEl = document.getElementById("dynamic-modal-img");
+            const defaultBanner = document.getElementById("default-modal-banner");
+            const titleEl = document.getElementById("saraswati-modal-title");
+            const dateEl = document.getElementById("saraswati-modal-date");
+
+            if (imgEl && defaultBanner) {
+              imgEl.src = announcement.media_url;
+              imgEl.classList.remove("hidden");
+              defaultBanner.classList.add("hidden");
+            }
+
+            if (titleEl) titleEl.textContent = "Special Announcement";
+            if (dateEl && announcement.show_until) {
+              const d = new Date(announcement.show_until);
+              dateEl.textContent = "Valid until: " + d.toLocaleDateString();
+            }
+
+            // Trigger Logic
+            const todayStr = new Date().toDateString();
+            const viewCountKey = "announcement_views_" + todayStr;
+            let viewCount = parseInt(localStorage.getItem(viewCountKey) || "0");
+
+            if (viewCount < 2) {
+              window.pendingSaraswatiModalCallback = () => {
+                const overlay = document.getElementById("saraswati-modal-overlay");
+                const card = document.getElementById("saraswati-modal-card");
+
+                overlay.classList.remove("hidden");
+                overlay.classList.add("flex");
+
+                setTimeout(() => {
+                  overlay.classList.remove("opacity-0");
+                  card.classList.remove("scale-90", "opacity-0");
+                  card.classList.add("scale-100", "opacity-100");
+                }, 50);
+
+                localStorage.setItem(viewCountKey, (viewCount + 1).toString());
+
+                // Start 10s width reduction animation
+                const progress = document.getElementById(
+                  "saraswati-modal-progress",
+                );
+                if (progress) {
+                  progress.style.transition = "transform 10s linear";
+                  progress.style.transform = "scaleX(0)";
+                }
+
+                if (saraswatiModalTimer) clearTimeout(saraswatiModalTimer);
+                saraswatiModalTimer = setTimeout(
+                  () => window.closeSaraswatiModal(),
+                  10000,
+                );
+              };
+            }
+          }
+
+          window.closeSaraswatiModal = () => {
             const overlay = document.getElementById("saraswati-modal-overlay");
             const card = document.getElementById("saraswati-modal-card");
 
-            overlay.classList.remove("hidden");
-            overlay.classList.add("flex");
-
-            setTimeout(() => {
-              overlay.classList.remove("opacity-0");
-              card.classList.remove("scale-90", "opacity-0");
-              card.classList.add("scale-100", "opacity-100");
-            }, 50);
-
-            localStorage.setItem(viewCountKey, (viewCount + 1).toString());
-
-            // Start 10s width reduction animation
-            const progress = document.getElementById(
-              "saraswati-modal-progress",
-            );
-            if (progress) {
-              progress.style.transition = "transform 10s linear";
-              progress.style.transform = "scaleX(0)";
-            }
-
+            if (saraswatiCountdownInterval)
+              clearInterval(saraswatiCountdownInterval);
             if (saraswatiModalTimer) clearTimeout(saraswatiModalTimer);
-            saraswatiModalTimer = setTimeout(
-              () => window.closeSaraswatiModal(),
-              10000,
-            );
+
+            if (overlay && card) {
+              overlay.classList.add("opacity-0");
+              card.classList.remove("scale-100", "opacity-100");
+              card.classList.add("scale-90", "opacity-0");
+
+              setTimeout(() => {
+                overlay.classList.add("hidden");
+                overlay.classList.remove("flex");
+                document.body.style.overflow = "";
+              }, 500);
+            }
           };
-        }
-      }
 
-      window.closeSaraswatiModal = () => {
-        const overlay = document.getElementById("saraswati-modal-overlay");
-        const card = document.getElementById("saraswati-modal-card");
+          window.closeSaraswatiModalAndScroll = () => {
+            window.closeSaraswatiModal();
+            setTimeout(() => {
+              const target = document.getElementById("festivals");
+              if (target) {
+                const y = target.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: y, behavior: "smooth" });
+              }
+            }, 500);
+          };
 
-        if (saraswatiCountdownInterval)
-          clearInterval(saraswatiCountdownInterval);
-        if (saraswatiModalTimer) clearTimeout(saraswatiModalTimer);
-
-        if (overlay && card) {
-          overlay.classList.add("opacity-0");
-          card.classList.remove("scale-100", "opacity-100");
-          card.classList.add("scale-90", "opacity-0");
-
-          setTimeout(() => {
-            overlay.classList.add("hidden");
-            overlay.classList.remove("flex");
-            document.body.style.overflow = "";
-          }, 500);
-        }
-      };
-
-      window.closeSaraswatiModalAndScroll = () => {
-        window.closeSaraswatiModal();
-        setTimeout(() => {
-          const target = document.getElementById("festivals");
-          if (target) {
-            const y = target.getBoundingClientRect().top + window.scrollY - 80;
-            window.scrollTo({ top: y, behavior: "smooth" });
+          // ==========================================
+          // FETCHING FESTIVALS LOGIC
+          // ==========================================
+          function getDaysDiff(targetDateStr) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(targetDateStr);
+            target.setHours(0, 0, 0, 0);
+            return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
           }
-        }, 500);
-      };
 
-      // ==========================================
-      // FETCHING FESTIVALS LOGIC
-      // ==========================================
-      function getDaysDiff(targetDateStr) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const target = new Date(targetDateStr);
-        target.setHours(0, 0, 0, 0);
-        return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-      }
+          function getUpcomingFestivals() {
+            return systemFestivalData
+              .map((f) => ({ ...f, daysLeft: getDaysDiff(f.date) }))
+              .filter((f) => f.daysLeft >= 0 && f.daysLeft <= 365)
+              .sort((a, b) => a.daysLeft - b.daysLeft);
+          }
 
-      function getUpcomingFestivals() {
-        return systemFestivalData
-          .map((f) => ({ ...f, daysLeft: getDaysDiff(f.date) }))
-          .filter((f) => f.daysLeft >= 0 && f.daysLeft <= 365)
-          .sort((a, b) => a.daysLeft - b.daysLeft);
-      }
+          function initFestivalSystem() {
+            const upcoming = getUpcomingFestivals();
 
-      function initFestivalSystem() {
-        const upcoming = getUpcomingFestivals();
-
-        let upcomingForScroll = [...upcoming];
-        if (upcomingForScroll.length > 0) {
-          pendingFestivalNotification = upcomingForScroll[0];
-          isFlagshipNotif = false;
-        } else {
-          pendingFestivalNotification = null;
-        }
-      }
-
-      window.filterFestivals = (type) => {
-        currentFestFilter = type;
-        const btns = {
-          all: document.getElementById("btn-fest-all"),
-          major: document.getElementById("btn-fest-major"),
-          ekadashi: document.getElementById("btn-fest-ekadashi"),
-        };
-
-        Object.keys(btns).forEach((k) => {
-          if (btns[k]) {
-            if (k === type) {
-              btns[k].className =
-                "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto";
+            let upcomingForScroll = [...upcoming];
+            if (upcomingForScroll.length > 0) {
+              pendingFestivalNotification = upcomingForScroll[0];
+              isFlagshipNotif = false;
             } else {
-              btns[k].className =
-                "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto mt-2 sm:mt-0";
-              if (k === "ekadashi" && type !== "ekadashi")
-                btns[k].classList.replace("w-[45%]", "w-[92%]");
+              pendingFestivalNotification = null;
             }
           }
-        });
 
-        const listEl = document.getElementById("festival-list");
-        const showMoreContainer = document.getElementById(
-          "show-more-festivals-container",
-        );
-        if (!listEl) return;
+          window.filterFestivals = (type) => {
+            currentFestFilter = type;
+            const btns = {
+              all: document.getElementById("btn-fest-all"),
+              major: document.getElementById("btn-fest-major"),
+              ekadashi: document.getElementById("btn-fest-ekadashi"),
+            };
 
-        let upcoming = getUpcomingFestivals();
-        if (currentFestFilter !== "all")
-          upcoming = upcoming.filter((f) => f.type === currentFestFilter);
-
-        if (showMoreContainer) {
-          if (upcoming.length > 3) showMoreContainer.classList.remove("hidden");
-          else showMoreContainer.classList.add("hidden");
-        }
-
-        const slicedUpcoming = upcoming.slice(0, 6);
-
-        if (slicedUpcoming.length === 0) {
-          listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found for this category.</p>`;
-          return;
-        }
-
-        listEl.innerHTML = slicedUpcoming
-          .map((f, i) => {
-            const d = new Date(f.date);
-            const dateStr = d.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
+            Object.keys(btns).forEach((k) => {
+              if (btns[k]) {
+                if (k === type) {
+                  btns[k].className =
+                    "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto";
+                } else {
+                  btns[k].className =
+                    "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto mt-2 sm:mt-0";
+                  if (k === "ekadashi" && type !== "ekadashi")
+                    btns[k].classList.replace("w-[45%]", "w-[92%]");
+                }
+              }
             });
-            const isNearest = i === 0 && currentFestFilter === "all";
-            const highlightClass = isNearest
-              ? "border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200"
-              : "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
-            const mobileHiddenClass = i >= 4 ? "hidden sm:block" : "";
 
-            let timeBadge = "";
-            if (f.daysLeft === 0)
-              timeBadge = `<span class="inline-flex items-center bg-green-100 text-green-700 border border-green-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-extrabold anim-ripple shadow-sm"><span class="live-dot"></span>🎉 Today!</span>`;
-            else if (f.daysLeft === 1)
-              timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm">⚡ Tomorrow!</span>`;
-            else if (f.daysLeft <= 7)
-              timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-300 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-pop shadow-sm">📢 In ${f.daysLeft} days</span>`;
-            else
-              timeBadge = `<span class="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold shadow-sm">🗓️ In ${f.daysLeft} days</span>`;
-
-            const icon =
-              f.type === "ekadashi" ? "🌾" : f.type === "moon" ? "🌕" : "🪔";
-
-            const iconHtml = f.image
-              ? `<img src="${f.image}" class="w-full h-full object-cover rounded-full" alt="${f.name}">`
-              : `<span>${icon}</span>`;
-
-            const featuredClass = f.isFeatured
-              ? "border-2 border-yellow-400 bg-gradient-to-br from-orange-50 via-white to-yellow-50 shadow-[0_8px_30px_rgba(234,179,8,0.25)] ring-2 ring-yellow-200 scale-[1.03] relative"
-              : highlightClass;
-
-            const featuredBadge = f.isFeatured
-              ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>`
-              : "";
-
-            return `
-    <div class="p-6 rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
-        ${featuredBadge}
-        <div class="flex justify-between items-start mb-4">
-            <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100 overflow-hidden">${iconHtml}</div>
-            ${timeBadge}
-        </div>
-                    <h3 class="font-bold text-gray-900 text-xl mb-0.5 font-serif">${f.name}</h3>
-                    <p class="text-sm text-orange-700 font-medium font-serif mb-1.5">${f.bnName}</p>
-                    <p class="text-sm text-gray-500 font-medium flex items-center gap-1">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${dateStr}
-                    </p>
-                </div>`;
-          })
-          .join("");
-        lucide.createIcons();
-      };
-
-      async function fetchYouTube() {
-        const grid = document.getElementById("youtube-video-grid");
-        if (!grid) return;
-
-        const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ`;
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&_=${Date.now()}`;
-
-        try {
-          const res = await fetch(apiUrl);
-          const data = await res.json();
-
-          console.log("YT status:", data.status);
-          console.log(
-            "YT items count:",
-            data.items ? data.items.length : "no items key",
-          );
-          console.log(
-            "YT first item:",
-            data.items && data.items[0] ? data.items[0].title : "none",
-          );
-          console.log(
-            "YT full response (expand me):",
-            JSON.stringify(data).substring(0, 500),
-          );
-
-          if (data.status === "ok" && data.items && data.items.length > 0) {
-            grid.innerHTML = data.items
-              .slice(0, 8)
-              .map((v, idx) => {
-                let videoId = v.link.includes("v=")
-                  ? v.link.split("v=")[1].split("&")[0]
-                  : v.link.split("/").pop();
-                const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-                // 🎯 7ম ও 8ম ভিডিও (idx 6,7) mobile এ hide, শুধু lg+ এ দেখাবে
-                const visibilityClass = idx >= 6 ? "hidden lg:block" : "";
-                return `
-    <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
-        <div class="relative overflow-hidden w-full" style="padding-bottom: 56.25%;">
-            <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-            <img src="${thumbnail}" class="absolute inset-0 w-full h-full object-cover z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)" onerror="this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg'; handleImageLoad(this);">
-            <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
-        </div>
-        <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white font-serif">${v.title}</h3></div>
-    </div>`;
-              })
-              .join("");
-          } else {
-            throw new Error(
-              "rss2json returned no items or bad status: " +
-                JSON.stringify(data),
+            const listEl = document.getElementById("festival-list");
+            const showMoreContainer = document.getElementById(
+              "show-more-festivals-container",
             );
-          }
-        } catch (e) {
-          console.error("YouTube fetch failed:", e); // 🔍 debug — পরে মুছে ফেলা যাবে
-          grid.innerHTML =
-            '<p class="text-red-200 col-span-full text-sm text-center py-4 italic">Subscribe to our YouTube channel for updates.</p>';
-        }
-      }
+            if (!listEl) return;
 
-      async function fetchBlogs() {
-        const grid = document.getElementById("blog-grid");
-        if (!grid) return;
-        try {
-          // Attempting to fetch from your node backend directly
-          const res = await fetch(`${API_BASE}/blogs?limit=3`);
-          if (res.ok) {
-            const blogs = await res.json();
-            if (blogs.length > 0) {
-              grid.innerHTML = blogs
-                .map(
-                  (b) => `
-                    <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog.html'">
-                        <div class="aspect-video w-full relative overflow-hidden bg-gray-100 p-1">
-                            <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-                            <img src="${b.img}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
-                            <p class="text-gray-600 text-sm line-clamp-2">${b.excerpt}</p>
-                        </div>
-                    </article>`,
-                )
-                .join("");
+            let upcoming = getUpcomingFestivals();
+            if (currentFestFilter !== "all")
+              upcoming = upcoming.filter((f) => f.type === currentFestFilter);
+
+            if (showMoreContainer) {
+              if (upcoming.length > 3) showMoreContainer.classList.remove("hidden");
+              else showMoreContainer.classList.add("hidden");
+            }
+
+            const slicedUpcoming = upcoming.slice(0, 6);
+
+            if (slicedUpcoming.length === 0) {
+              listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found for this category.</p>`;
               return;
             }
+
+            listEl.innerHTML = slicedUpcoming
+              .map((f, i) => {
+                const d = new Date(f.date);
+                const dateStr = d.toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                });
+                const isNearest = i === 0 && currentFestFilter === "all";
+                const highlightClass = isNearest
+                  ? "border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200"
+                  : "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
+                const mobileHiddenClass = i >= 4 ? "hidden sm:block" : "";
+
+                let timeBadge = "";
+                if (f.daysLeft === 0)
+                  timeBadge = `<span class="inline-flex items-center bg-green-100 text-green-700 border border-green-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-extrabold anim-ripple shadow-sm"><span class="live-dot"></span>🎉 Today!</span>`;
+                else if (f.daysLeft === 1)
+                  timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm">⚡ Tomorrow!</span>`;
+                else if (f.daysLeft <= 7)
+                  timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-300 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-pop shadow-sm">📢 In ${f.daysLeft} days</span>`;
+                else
+                  timeBadge = `<span class="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold shadow-sm">🗓️ In ${f.daysLeft} days</span>`;
+
+                const icon =
+                  f.type === "ekadashi" ? "🌾" : f.type === "moon" ? "🌕" : "🪔";
+
+                const iconHtml = f.image
+                  ? `<img src="${f.image}" class="w-full h-full object-cover rounded-full" alt="${f.name}">`
+                  : `<span>${icon}</span>`;
+
+                const featuredClass = f.isFeatured
+                  ? "border-2 border-yellow-400 bg-gradient-to-br from-orange-50 via-white to-yellow-50 shadow-[0_8px_30px_rgba(234,179,8,0.25)] ring-2 ring-yellow-200 scale-[1.03] relative"
+                  : highlightClass;
+
+                const featuredBadge = f.isFeatured
+                  ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>`
+                  : "";
+
+                return `
+        <div class="p-6 rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
+            ${featuredBadge}
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100 overflow-hidden">${iconHtml}</div>
+                ${timeBadge}
+            </div>
+                        <h3 class="font-bold text-gray-900 text-xl mb-0.5 font-serif">${f.name}</h3>
+                        <p class="text-sm text-orange-700 font-medium font-serif mb-1.5">${f.bnName}</p>
+                        <p class="text-sm text-gray-500 font-medium flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${dateStr}
+                        </p>
+                    </div>`;
+              })
+              .join("");
+            lucide.createIcons();
+          };
+
+          async function fetchYouTube() {
+            const grid = document.getElementById("youtube-video-grid");
+            if (!grid) return;
+
+            const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=UCM9lmJNjNUAGrLvKoHF9OWQ`;
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&_=${Date.now()}`;
+
+            try {
+              const res = await fetch(apiUrl);
+              const data = await res.json();
+
+              console.log("YT status:", data.status);
+              console.log(
+                "YT items count:",
+                data.items ? data.items.length : "no items key",
+              );
+              console.log(
+                "YT first item:",
+                data.items && data.items[0] ? data.items[0].title : "none",
+              );
+              console.log(
+                "YT full response (expand me):",
+                JSON.stringify(data).substring(0, 500),
+              );
+
+              if (data.status === "ok" && data.items && data.items.length > 0) {
+                grid.innerHTML = data.items
+                  .slice(0, 8)
+                  .map((v, idx) => {
+                    let videoId = v.link.includes("v=")
+                      ? v.link.split("v=")[1].split("&")[0]
+                      : v.link.split("/").pop();
+                    const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+                    // 🎯 7ম ও 8ম ভিডিও (idx 6,7) mobile এ hide, শুধু lg+ এ দেখাবে
+                    const visibilityClass = idx >= 6 ? "hidden lg:block" : "";
+                    return `
+        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
+            <div class="relative overflow-hidden w-full" style="padding-bottom: 56.25%;">
+                <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+                <img src="${thumbnail}" class="absolute inset-0 w-full h-full object-cover z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)" onerror="this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg'; handleImageLoad(this);">
+                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+            </div>
+            <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white font-serif">${v.title}</h3></div>
+        </div>`;
+                  })
+                  .join("");
+                  if (data.status === "ok" && data.items && data.items.length > 0) {
+      grid.innerHTML = data.items
+        .slice(0, 8)
+        .map((v, idx) => {
+          let videoId = v.link.includes("v=")
+            ? v.link.split("v=")[1].split("&")[0]
+            : v.link.split("/").pop();
+          const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+          const visibilityClass = idx >= 6 ? "hidden lg:block" : "";
+          return `
+        <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll is-visible cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
+            <div class="relative overflow-hidden w-full" style="padding-bottom: 56.25%;">
+                <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+                <img src="${thumbnail}" class="absolute inset-0 w-full h-full object-cover z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)" onerror="this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg'; handleImageLoad(this);">
+                <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+            </div>
+            <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white font-serif">${v.title}</h3></div>
+        </div>`;
+        })
+        .join("");
+              } else {
+                throw new Error(
+                  "rss2json returned no items or bad status: " +
+                    JSON.stringify(data),
+                );
+              }
+            } catch (e) {
+              console.error("YouTube fetch failed:", e); // 🔍 debug — পরে মুছে ফেলা যাবে
+              grid.innerHTML =
+                '<p class="text-red-200 col-span-full text-sm text-center py-4 italic">Subscribe to our YouTube channel for updates.</p>';
+            }
           }
-          throw new Error("No DB Blogs");
-        } catch (e) {
-          // Fallback to Substack RSS
-          try {
-            const res = await fetch(
-              `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://uiusvs.substack.com/feed")}&_=${Date.now()}`,
-            );
-            const data = await res.json();
-            if (data.status === "ok" && data.items && data.items.length > 0) {
-              grid.innerHTML = data.items
-                .slice(0, 3)
-                .map((b) => {
-                  let thumb =
-                    b.thumbnail ||
-                    "https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update";
-                  const cleanDesc =
-                    b.description.replace(/<[^>]*>?/gm, "").substring(0, 100) +
-                    "...";
-                  return `
-                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.open('${b.link}', '_blank')">
-                            <div class="aspect-video w-full relative overflow-hidden bg-gray-100">
+
+          async function fetchBlogs() {
+            const grid = document.getElementById("blog-grid");
+            if (!grid) return;
+            try {
+              // Attempting to fetch from your node backend directly
+              const res = await fetch(`${API_BASE}/blogs?limit=3`);
+              if (res.ok) {
+                const blogs = await res.json();
+                if (blogs.length > 0) {
+                  grid.innerHTML = blogs
+                    .map(
+                      (b) => `
+                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog.html'">
+                            <div class="aspect-video w-full relative overflow-hidden bg-gray-100 p-1">
                                 <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-                                <img src="${thumb}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
+                                <img src="${b.img}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
                             </div>
                             <div class="p-5 flex-1 flex flex-col">
                                 <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
-                                <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
+                                <p class="text-gray-600 text-sm line-clamp-2">${b.excerpt}</p>
                             </div>
-                        </article>`;
-                })
-                .join("");
-            }
-          } catch (err) {
-            grid.innerHTML =
-              '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog updates temporarily unavailable.</p>';
-          }
-        }
-      }
-
-      // ==========================================
-      // SANATAN QUIZ LOGIC
-      // ==========================================
-      const sanatanQuizData = [
-        {
-          q: "What is the primary sacred text of Hinduism?",
-          options: ["Quran", "Vedas", "Bible", "Tripitaka"],
-          ans: 1,
-        },
-        {
-          q: "How many Vedas are there?",
-          options: ["2", "3", "4", "5"],
-          ans: 2,
-        },
-        {
-          q: "Who delivered the Bhagavad Gita?",
-          options: ["Rama", "Krishna", "Shiva", "Indra"],
-          ans: 1,
-        },
-        {
-          q: "Goddess Lakshmi is the goddess of?",
-          options: ["Knowledge", "Power", "Wealth", "War"],
-          ans: 2,
-        },
-        {
-          q: "Goddess Saraswati is the goddess of?",
-          options: ["Wealth", "Knowledge", "Power", "Love"],
-          ans: 1,
-        },
-        {
-          q: "Holi is the festival of?",
-          options: ["Lights", "Colors", "Water", "Fruits"],
-          ans: 1,
-        },
-        {
-          q: "Diwali is the festival of?",
-          options: ["Lights", "Water", "Flowers", "Colors"],
-          ans: 0,
-        },
-        {
-          q: "What is Om (ॐ)?",
-          options: ["God", "Sacred sound/mantra", "Book", "Festival"],
-          ans: 1,
-        },
-      ];
-
-      let currentQuizQuestions = [];
-
-      function initSanatanQuiz() {
-        const wrapper = document.getElementById("quiz-questions-wrapper");
-        if (!wrapper) return;
-
-        // Pick 3 random
-        let pool = [...sanatanQuizData].sort(() => 0.5 - Math.random());
-        currentQuizQuestions = pool.slice(0, 3);
-
-        wrapper.innerHTML = currentQuizQuestions
-          .map((q, i) => {
-            const optionsHtml = q.options
-              .map(
-                (opt, optIndex) => `
-                <label class="flex items-start p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors bg-white">
-                    <input type="radio" name="q${i}" value="${optIndex}" class="mr-3 mt-0.5 flex-shrink-0 text-orange-500 focus:ring-orange-500 w-4 h-4">
-                    <span class="text-sm sm:text-base leading-tight">${opt}</span>
-                </label>
-            `,
-              )
-              .join("");
-
-            return `
-                <div class="quiz-question block">
-                    <h3 class="font-bold text-base sm:text-lg text-gray-800 mb-3 leading-tight font-serif">
-                        <span class="text-orange-600 mr-1">${i + 1}.</span> ${q.q}
-                    </h3>
-                    <div class="space-y-2.5 font-medium text-gray-700 text-sm sm:text-base">${optionsHtml}</div>
-                </div>`;
-          })
-          .join('<hr class="my-6 border-orange-100/50">');
-      }
-
-      window.submitQuiz = () => {
-        let score = 0;
-        let allAnswered = true;
-
-        currentQuizQuestions.forEach((q, i) => {
-          const selected = document.querySelector(
-            `input[name="q${i}"]:checked`,
-          );
-          if (selected) {
-            if (parseInt(selected.value) === q.ans) score++;
-          } else {
-            allAnswered = false;
-          }
-        });
-
-        if (!allAnswered) {
-          showErrorToast("Please answer all 3 questions.");
-          return;
-        }
-
-        document.getElementById("quiz-container").classList.add("hidden");
-        document.getElementById("quiz-score").textContent = score;
-
-        const titleEl = document.getElementById("quiz-feedback-title");
-        const textEl = document.getElementById("quiz-feedback-text");
-
-        if (score === 3) {
-          titleEl.textContent = "Congratulations! Perfect Score! 🏆";
-          textEl.textContent =
-            "Your deep understanding of Sanatan Dharma is truly commendable.";
-        } else if (score === 2) {
-          titleEl.textContent = "Great Job!";
-          textEl.textContent =
-            "You know quite a bit. Just a little more reading and you'll be perfect! 🌸";
-        } else {
-          titleEl.textContent = "Good Effort!";
-          textEl.textContent =
-            "Stay with us to learn more about Sanatan Dharma. 🕉️";
-        }
-
-        document.getElementById("quiz-result").classList.remove("hidden");
-      };
-
-      window.resetQuiz = () => {
-        document.getElementById("quiz-result").classList.add("hidden");
-        document.getElementById("quiz-container").classList.remove("hidden");
-        initSanatanQuiz();
-      };
-
-      // ==========================================
-      // UI UTILITIES & EVENT LISTENERS
-      // ==========================================
-
-      const spiritualQuotes = [
-        {
-          text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।",
-          author: "স্বামী বিবেকানন্দ",
-        },
-        { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
-        {
-          text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।",
-          author: "মা সারদা দেবী",
-        },
-        {
-          text: "কর্মই তোমার অধিকার, ফলের প্রতি নয়।",
-          author: "শ্রীমদ্ভগবদ্গীতা",
-        },
-      ];
-
-      function displayRandomQuote() {
-        const quoteTextEl = document.getElementById("daily-quote-text");
-        if (quoteTextEl) {
-          const quote =
-            spiritualQuotes[Math.floor(Math.random() * spiritualQuotes.length)];
-          quoteTextEl.textContent = `"${quote.text}" — ${quote.author}`;
-        }
-      }
-
-      function showErrorToast(msg) {
-        const toast = document.getElementById("error-toast");
-        const toastMsg = document.getElementById("error-toast-msg");
-        if (toast && toastMsg) {
-          toastMsg.textContent = msg;
-          toast.classList.remove(
-            "opacity-0",
-            "pointer-events-none",
-            "translate-y-[-20px]",
-          );
-          toast.classList.add("opacity-100", "translate-y-0");
-          setTimeout(() => {
-            toast.classList.remove("opacity-100", "translate-y-0");
-            toast.classList.add(
-              "opacity-0",
-              "pointer-events-none",
-              "translate-y-[-20px]",
-            );
-          }, 3000);
-        }
-      }
-
-      class Scroller {
-        constructor(id, initialDirection = "right") {
-          this.container = document.getElementById(id);
-          if (!this.container) return;
-          this.direction = initialDirection;
-          this.paused = false;
-          this.speed = 0.15;
-          this.lastTime = null;
-          this.pos = 0;
-          this.initialized = false;
-
-          this.animate = this.animate.bind(this);
-          requestAnimationFrame(this.animate);
-
-          const pause = () => {
-            this.paused = true;
-          };
-          const resume = () => {
-            this.paused = false;
-            this.lastTime = null;
-            this.pos = this.container.scrollLeft;
-          };
-
-          this.container.addEventListener("mouseenter", pause);
-          this.container.addEventListener("mouseleave", resume);
-          this.container.addEventListener("touchstart", pause, {
-            passive: true,
-          });
-          this.container.addEventListener(
-            "touchend",
-            () => setTimeout(resume, 1500),
-            { passive: true },
-          );
-        }
-
-        animate(timestamp) {
-          if (!this.paused && this.container) {
-            if (!this.lastTime) this.lastTime = timestamp;
-            const deltaTime = timestamp - this.lastTime;
-            this.lastTime = timestamp;
-
-            const maxScroll =
-              this.container.scrollWidth - this.container.clientWidth;
-
-            if (maxScroll > 0) {
-              if (!this.initialized) {
-                if (this.direction === "left") {
-                  this.pos = maxScroll;
-                  this.container.scrollLeft = maxScroll;
+                        </article>`,
+                    )
+                    .join("");
+                  return;
                 }
-                this.initialized = true;
               }
-
-              const moveAmount = this.speed * (deltaTime / 16.67);
-
-              if (this.direction === "right") {
-                this.pos += moveAmount;
-                if (this.pos >= maxScroll) {
-                  this.pos = maxScroll;
-                  this.direction = "left";
+              throw new Error("No DB Blogs");
+            } catch (e) {
+              // Fallback to Substack RSS
+              try {
+                const res = await fetch(
+                  `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://uiusvs.substack.com/feed")}&_=${Date.now()}`,
+                );
+                const data = await res.json();
+                if (data.status === "ok" && data.items && data.items.length > 0) {
+                  grid.innerHTML = data.items
+                    .slice(0, 3)
+                    .map((b) => {
+                      let thumb =
+                        b.thumbnail ||
+                        "https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update";
+                      const cleanDesc =
+                        b.description.replace(/<[^>]*>?/gm, "").substring(0, 100) +
+                        "...";
+                      return `
+                            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.open('${b.link}', '_blank')">
+                                <div class="aspect-video w-full relative overflow-hidden bg-gray-100">
+                                    <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+                                    <img src="${thumb}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
+                                </div>
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
+                                    <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
+                                </div>
+                            </article>`;
+                    })
+                    .join("");
                 }
+              } catch (err) {
+                grid.innerHTML =
+                  '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog updates temporarily unavailable.</p>';
+              }
+            }
+          }
+
+          // ==========================================
+          // SANATAN QUIZ LOGIC
+          // ==========================================
+          const sanatanQuizData = [
+            {
+              q: "What is the primary sacred text of Hinduism?",
+              options: ["Quran", "Vedas", "Bible", "Tripitaka"],
+              ans: 1,
+            },
+            {
+              q: "How many Vedas are there?",
+              options: ["2", "3", "4", "5"],
+              ans: 2,
+            },
+            {
+              q: "Who delivered the Bhagavad Gita?",
+              options: ["Rama", "Krishna", "Shiva", "Indra"],
+              ans: 1,
+            },
+            {
+              q: "Goddess Lakshmi is the goddess of?",
+              options: ["Knowledge", "Power", "Wealth", "War"],
+              ans: 2,
+            },
+            {
+              q: "Goddess Saraswati is the goddess of?",
+              options: ["Wealth", "Knowledge", "Power", "Love"],
+              ans: 1,
+            },
+            {
+              q: "Holi is the festival of?",
+              options: ["Lights", "Colors", "Water", "Fruits"],
+              ans: 1,
+            },
+            {
+              q: "Diwali is the festival of?",
+              options: ["Lights", "Water", "Flowers", "Colors"],
+              ans: 0,
+            },
+            {
+              q: "What is Om (ॐ)?",
+              options: ["God", "Sacred sound/mantra", "Book", "Festival"],
+              ans: 1,
+            },
+          ];
+
+          let currentQuizQuestions = [];
+
+          function initSanatanQuiz() {
+            const wrapper = document.getElementById("quiz-questions-wrapper");
+            if (!wrapper) return;
+
+            // Pick 3 random
+            let pool = [...sanatanQuizData].sort(() => 0.5 - Math.random());
+            currentQuizQuestions = pool.slice(0, 3);
+
+            wrapper.innerHTML = currentQuizQuestions
+              .map((q, i) => {
+                const optionsHtml = q.options
+                  .map(
+                    (opt, optIndex) => `
+                    <label class="flex items-start p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors bg-white">
+                        <input type="radio" name="q${i}" value="${optIndex}" class="mr-3 mt-0.5 flex-shrink-0 text-orange-500 focus:ring-orange-500 w-4 h-4">
+                        <span class="text-sm sm:text-base leading-tight">${opt}</span>
+                    </label>
+                `,
+                  )
+                  .join("");
+
+                return `
+                    <div class="quiz-question block">
+                        <h3 class="font-bold text-base sm:text-lg text-gray-800 mb-3 leading-tight font-serif">
+                            <span class="text-orange-600 mr-1">${i + 1}.</span> ${q.q}
+                        </h3>
+                        <div class="space-y-2.5 font-medium text-gray-700 text-sm sm:text-base">${optionsHtml}</div>
+                    </div>`;
+              })
+              .join('<hr class="my-6 border-orange-100/50">');
+          }
+
+          window.submitQuiz = () => {
+            let score = 0;
+            let allAnswered = true;
+
+            currentQuizQuestions.forEach((q, i) => {
+              const selected = document.querySelector(
+                `input[name="q${i}"]:checked`,
+              );
+              if (selected) {
+                if (parseInt(selected.value) === q.ans) score++;
               } else {
-                this.pos -= moveAmount;
-                if (this.pos <= 0) {
-                  this.pos = 0;
-                  this.direction = "right";
-                }
+                allAnswered = false;
               }
-              this.container.scrollLeft = this.pos;
+            });
+
+            if (!allAnswered) {
+              showErrorToast("Please answer all 3 questions.");
+              return;
+            }
+
+            document.getElementById("quiz-container").classList.add("hidden");
+            document.getElementById("quiz-score").textContent = score;
+
+            const titleEl = document.getElementById("quiz-feedback-title");
+            const textEl = document.getElementById("quiz-feedback-text");
+
+            if (score === 3) {
+              titleEl.textContent = "Congratulations! Perfect Score! 🏆";
+              textEl.textContent =
+                "Your deep understanding of Sanatan Dharma is truly commendable.";
+            } else if (score === 2) {
+              titleEl.textContent = "Great Job!";
+              textEl.textContent =
+                "You know quite a bit. Just a little more reading and you'll be perfect! 🌸";
+            } else {
+              titleEl.textContent = "Good Effort!";
+              textEl.textContent =
+                "Stay with us to learn more about Sanatan Dharma. 🕉️";
+            }
+
+            document.getElementById("quiz-result").classList.remove("hidden");
+          };
+
+          window.resetQuiz = () => {
+            document.getElementById("quiz-result").classList.add("hidden");
+            document.getElementById("quiz-container").classList.remove("hidden");
+            initSanatanQuiz();
+          };
+
+          // ==========================================
+          // UI UTILITIES & EVENT LISTENERS
+          // ==========================================
+
+          const spiritualQuotes = [
+            {
+              text: "ওঠো, জাগো এবং লক্ষ্যে না পৌঁছানো পর্যন্ত থামিও না।",
+              author: "স্বামী বিবেকানন্দ",
+            },
+            { text: "যত মত তত পথ।", author: "শ্রীরামকৃষ্ণ পরমহংসদেব" },
+            {
+              text: "যদি শান্তি চাও, মা, তবে কারো দোষ দেখো না। দোষ দেখবে নিজের।",
+              author: "মা সারদা দেবী",
+            },
+            {
+              text: "কর্মই তোমার অধিকার, ফলের প্রতি নয়।",
+              author: "শ্রীমদ্ভগবদ্গীতা",
+            },
+          ];
+
+          function displayRandomQuote() {
+            const quoteTextEl = document.getElementById("daily-quote-text");
+            if (quoteTextEl) {
+              const quote =
+                spiritualQuotes[Math.floor(Math.random() * spiritualQuotes.length)];
+              quoteTextEl.textContent = `"${quote.text}" — ${quote.author}`;
             }
           }
-          requestAnimationFrame(this.animate);
-        }
-      }
 
-      // Preloader and Initialization
-      document.addEventListener("DOMContentLoaded", () => {
-        // 🎯 Fix mobile viewport height (address bar show/hide issue)
-        function setViewportHeight() {
-          const vh = window.innerHeight * 0.01;
-          document.documentElement.style.setProperty("--vh", `${vh}px`);
-        }
-        setViewportHeight();
-        window.addEventListener("resize", setViewportHeight);
-        window.addEventListener("orientationchange", setViewportHeight);
-        document.getElementById("current-year").textContent =
-          new Date().getFullYear();
-        displayRandomQuote();
-
-        // Execute main DB fetch
-        loadAllDatabaseData().then(() => {
-          fetchYouTube();
-          fetchBlogs();
-        });
-
-        let isPageLoaded = false;
-        const hideLoader = () => {
-          if (isPageLoaded) return;
-          isPageLoaded = true;
-          const preloader = document.getElementById("page-preloader");
-          if (preloader) {
-            preloader.style.opacity = "0";
-            setTimeout(() => {
-              preloader.style.display = "none";
-              if (window.pendingSaraswatiModalCallback) {
-                setTimeout(() => window.pendingSaraswatiModalCallback(), 3000);
-              }
-            }, 500);
+          function showErrorToast(msg) {
+            const toast = document.getElementById("error-toast");
+            const toastMsg = document.getElementById("error-toast-msg");
+            if (toast && toastMsg) {
+              toastMsg.textContent = msg;
+              toast.classList.remove(
+                "opacity-0",
+                "pointer-events-none",
+                "translate-y-[-20px]",
+              );
+              toast.classList.add("opacity-100", "translate-y-0");
+              setTimeout(() => {
+                toast.classList.remove("opacity-100", "translate-y-0");
+                toast.classList.add(
+                  "opacity-0",
+                  "pointer-events-none",
+                  "translate-y-[-20px]",
+                );
+              }, 3000);
+            }
           }
-        };
 
-        window.addEventListener("load", hideLoader);
-        setTimeout(() => {
-          if (!isPageLoaded) hideLoader();
-        }, 5000); // 5 sec max wait
+          class Scroller {
+            constructor(id, initialDirection = "right") {
+              this.container = document.getElementById(id);
+              if (!this.container) return;
+              this.direction = initialDirection;
+              this.paused = false;
+              this.speed = 0.15;
+              this.lastTime = null;
+              this.pos = 0;
+              this.initialized = false;
 
-        const menuBtn = document.getElementById("mobile-menu-button");
-        const mobileMenu = document.getElementById("mobile-menu");
-        menuBtn?.addEventListener("click", () =>
-          mobileMenu?.classList.toggle("hidden"),
-        );
+              this.animate = this.animate.bind(this);
+              requestAnimationFrame(this.animate);
 
-        window.closeLightbox = () => {
-          const lightbox = document.getElementById("image-lightbox");
-          const lightboxVideo = document.getElementById("lightbox-video");
-          if (lightboxVideo) lightboxVideo.pause();
-          if (lightbox) {
-            lightbox.classList.add("hidden");
-            lightbox.classList.remove("flex");
-            document.body.style.overflow = "";
-          }
-        };
+              const pause = () => {
+                this.paused = true;
+              };
+              const resume = () => {
+                this.paused = false;
+                this.lastTime = null;
+                this.pos = this.container.scrollLeft;
+              };
 
-        // 🎯 Global Lightbox Actions — Index Page
-        document.addEventListener("click", (e) => {
-          if (e.target.classList.contains("gallery-img")) {
-            const idx = parseInt(e.target.dataset.idx, 10);
-            indexLightboxIndex = isNaN(idx) ? 0 : idx;
-
-            const lightbox = document.getElementById("image-lightbox");
-            if (!lightbox) return;
-
-            lightbox.classList.remove("hidden");
-            lightbox.classList.add("flex");
-            document.body.style.overflow = "hidden";
-
-            renderIndexLightboxMedia();
-          }
-        });
-
-        function renderIndexLightboxMedia() {
-          const item = indexLightboxItems[indexLightboxIndex];
-          if (!item) return;
-
-          const lightboxImg = document.getElementById("lightbox-img");
-          const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
-
-          const captionEl = document.getElementById("lightbox-caption-index");
-          const dateEl = document.getElementById("lightbox-date-index");
-          let dateLabel = "";
-          if (item.event_date) {
-            const d = new Date(item.event_date);
-            if (!isNaN(d.getTime())) {
-              dateLabel = d.toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
+              this.container.addEventListener("mouseenter", pause);
+              this.container.addEventListener("mouseleave", resume);
+              this.container.addEventListener("touchstart", pause, {
+                passive: true,
               });
+              this.container.addEventListener(
+                "touchend",
+                () => setTimeout(resume, 1500),
+                { passive: true },
+              );
             }
-          }
-          if (captionEl) captionEl.textContent = item.title || "";
-          if (dateEl) {
-            dateEl.textContent = dateLabel;
-            dateEl.style.display = dateLabel ? "block" : "none";
-          }
 
-          if (isVideo) {
-            let lightboxVideo = document.getElementById("lightbox-video");
-            if (!lightboxVideo) {
-              lightboxVideo = document.createElement("video");
-              lightboxVideo.id = "lightbox-video";
-              lightboxVideo.controls = true;
-              lightboxVideo.autoplay = true;
-              lightboxVideo.className =
-                "relative max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 z-10";
-              lightboxImg.insertAdjacentElement("afterend", lightboxVideo);
-            }
-            lightboxImg.classList.add("hidden");
-            lightboxVideo.src = item.url;
-            lightboxVideo.classList.remove("hidden");
-          } else {
-            const lightboxVideo = document.getElementById("lightbox-video");
-            if (lightboxVideo) {
-              lightboxVideo.pause();
-              lightboxVideo.classList.add("hidden");
-            }
-            lightboxImg.src = item.url;
-            lightboxImg.classList.remove("opacity-0", "hidden");
-          }
-        }
+            animate(timestamp) {
+              if (!this.paused && this.container) {
+                if (!this.lastTime) this.lastTime = timestamp;
+                const deltaTime = timestamp - this.lastTime;
+                this.lastTime = timestamp;
 
-        window.navigateIndexLightbox = (direction) => {
-          if (!indexLightboxItems.length) return;
-          indexLightboxIndex =
-            (indexLightboxIndex + direction + indexLightboxItems.length) %
-            indexLightboxItems.length;
-          renderIndexLightboxMedia();
-        };
+                const maxScroll =
+                  this.container.scrollWidth - this.container.clientWidth;
 
-        document.addEventListener("keydown", (e) => {
-          const lightbox = document.getElementById("image-lightbox");
-          if (lightbox && !lightbox.classList.contains("hidden")) {
-            if (e.key === "ArrowLeft") navigateIndexLightbox(-1);
-            if (e.key === "ArrowRight") navigateIndexLightbox(1);
-          }
-        });
-
-        // Advanced Scroll Behaviors
-        let isScrolling = false;
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener(
-          "scroll",
-          () => {
-            if (!isScrolling) {
-              window.requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                document
-                  .querySelector(".bottom-quote-bar")
-                  ?.classList.toggle("visible", scrollY > 100);
-
-                const btn = document.getElementById("scroll-to-top");
-                if (btn) {
-                  btn.classList.toggle("opacity-0", scrollY < 400);
-                  btn.classList.toggle("invisible", scrollY < 400);
-                }
-
-                // Festival Notification Logic
-                const scrollPercent =
-                  scrollY /
-                  (document.documentElement.scrollHeight - window.innerHeight);
-                if (pendingFestivalNotification && !window.hasUserClosedNotif) {
-                  const notifBox = document.getElementById(
-                    "festival-notification",
-                  );
-                  const fSec = document.getElementById("festivals");
-                  if (
-                    notifBox &&
-                    fSec &&
-                    scrollPercent >= 0.05 &&
-                    fSec.getBoundingClientRect().top > window.innerHeight * 0.4
-                  ) {
-                    if (notifBox.classList.contains("hidden")) {
-                      document.getElementById("notif-fest-name").textContent =
-                        pendingFestivalNotification.name;
-                      document.getElementById("notif-fest-days").textContent =
-                        pendingFestivalNotification.daysLeft === 0
-                          ? "Happening today! 🙏"
-                          : `${pendingFestivalNotification.daysLeft} days remaining`;
-                      notifBox.classList.remove("hidden");
-                      notifBox.classList.add("flex");
-                      setTimeout(
-                        () =>
-                          notifBox.classList.remove(
-                            "translate-y-32",
-                            "opacity-0",
-                            "pointer-events-none",
-                          ),
-                        50,
-                      );
+                if (maxScroll > 0) {
+                  if (!this.initialized) {
+                    if (this.direction === "left") {
+                      this.pos = maxScroll;
+                      this.container.scrollLeft = maxScroll;
                     }
-                  } else if (
-                    notifBox &&
-                    !notifBox.classList.contains("hidden")
-                  ) {
-                    notifBox.classList.add(
-                      "translate-y-32",
-                      "opacity-0",
-                      "pointer-events-none",
-                    );
-                    setTimeout(() => {
-                      notifBox.classList.add("hidden");
-                      notifBox.classList.remove("flex");
-                    }, 500);
+                    this.initialized = true;
                   }
+
+                  const moveAmount = this.speed * (deltaTime / 16.67);
+
+                  if (this.direction === "right") {
+                    this.pos += moveAmount;
+                    if (this.pos >= maxScroll) {
+                      this.pos = maxScroll;
+                      this.direction = "left";
+                    }
+                  } else {
+                    this.pos -= moveAmount;
+                    if (this.pos <= 0) {
+                      this.pos = 0;
+                      this.direction = "right";
+                    }
+                  }
+                  this.container.scrollLeft = this.pos;
                 }
-
-                lastScrollY = scrollY;
-                isScrolling = false;
-              });
-              isScrolling = true;
+              }
+              requestAnimationFrame(this.animate);
             }
-          },
-          { passive: true },
-        );
+          }
 
-        document
-          .getElementById("scroll-to-top")
-          ?.addEventListener("click", () =>
-            window.scrollTo({ top: 0, behavior: "smooth" }),
-          );
-      });
+          // Preloader and Initialization
+          document.addEventListener("DOMContentLoaded", () => {
+            // 🎯 Fix mobile viewport height (address bar show/hide issue)
+            function setViewportHeight() {
+              const vh = window.innerHeight * 0.01;
+              document.documentElement.style.setProperty("--vh", `${vh}px`);
+            }
+            setViewportHeight();
+            window.addEventListener("resize", setViewportHeight);
+            window.addEventListener("orientationchange", setViewportHeight);
+            document.getElementById("current-year").textContent =
+              new Date().getFullYear();
+            displayRandomQuote();
+
+            // Execute main DB fetch
+            loadAllDatabaseData().then(() => {
+              fetchYouTube();
+              fetchBlogs();
+            });
+
+            let isPageLoaded = false;
+            const hideLoader = () => {
+              if (isPageLoaded) return;
+              isPageLoaded = true;
+              const preloader = document.getElementById("page-preloader");
+              if (preloader) {
+                preloader.style.opacity = "0";
+                setTimeout(() => {
+                  preloader.style.display = "none";
+                  if (window.pendingSaraswatiModalCallback) {
+                    setTimeout(() => window.pendingSaraswatiModalCallback(), 3000);
+                  }
+                }, 500);
+              }
+            };
+
+            window.addEventListener("load", hideLoader);
+            setTimeout(() => {
+              if (!isPageLoaded) hideLoader();
+            }, 5000); // 5 sec max wait
+
+            const menuBtn = document.getElementById("mobile-menu-button");
+            const mobileMenu = document.getElementById("mobile-menu");
+            menuBtn?.addEventListener("click", () =>
+              mobileMenu?.classList.toggle("hidden"),
+            );
+
+            window.closeLightbox = () => {
+              const lightbox = document.getElementById("image-lightbox");
+              const lightboxVideo = document.getElementById("lightbox-video");
+              if (lightboxVideo) lightboxVideo.pause();
+              if (lightbox) {
+                lightbox.classList.add("hidden");
+                lightbox.classList.remove("flex");
+                document.body.style.overflow = "";
+              }
+            };
+
+            // 🎯 Global Lightbox Actions — Index Page
+            document.addEventListener("click", (e) => {
+              if (e.target.classList.contains("gallery-img")) {
+                const idx = parseInt(e.target.dataset.idx, 10);
+                indexLightboxIndex = isNaN(idx) ? 0 : idx;
+
+                const lightbox = document.getElementById("image-lightbox");
+                if (!lightbox) return;
+
+                lightbox.classList.remove("hidden");
+                lightbox.classList.add("flex");
+                document.body.style.overflow = "hidden";
+
+                renderIndexLightboxMedia();
+              }
+            });
+
+            function renderIndexLightboxMedia() {
+              const item = indexLightboxItems[indexLightboxIndex];
+              if (!item) return;
+
+              const lightboxImg = document.getElementById("lightbox-img");
+              const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
+
+              const captionEl = document.getElementById("lightbox-caption-index");
+              const dateEl = document.getElementById("lightbox-date-index");
+              let dateLabel = "";
+              if (item.event_date) {
+                const d = new Date(item.event_date);
+                if (!isNaN(d.getTime())) {
+                  dateLabel = d.toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  });
+                }
+              }
+              if (captionEl) captionEl.textContent = item.title || "";
+              if (dateEl) {
+                dateEl.textContent = dateLabel;
+                dateEl.style.display = dateLabel ? "block" : "none";
+              }
+
+              if (isVideo) {
+                let lightboxVideo = document.getElementById("lightbox-video");
+                if (!lightboxVideo) {
+                  lightboxVideo = document.createElement("video");
+                  lightboxVideo.id = "lightbox-video";
+                  lightboxVideo.controls = true;
+                  lightboxVideo.autoplay = true;
+                  lightboxVideo.className =
+                    "relative max-w-full max-h-[80vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 z-10";
+                  lightboxImg.insertAdjacentElement("afterend", lightboxVideo);
+                }
+                lightboxImg.classList.add("hidden");
+                lightboxVideo.src = item.url;
+                lightboxVideo.classList.remove("hidden");
+              } else {
+                const lightboxVideo = document.getElementById("lightbox-video");
+                if (lightboxVideo) {
+                  lightboxVideo.pause();
+                  lightboxVideo.classList.add("hidden");
+                }
+                lightboxImg.src = item.url;
+                lightboxImg.classList.remove("opacity-0", "hidden");
+              }
+            }
+
+            window.navigateIndexLightbox = (direction) => {
+              if (!indexLightboxItems.length) return;
+              indexLightboxIndex =
+                (indexLightboxIndex + direction + indexLightboxItems.length) %
+                indexLightboxItems.length;
+              renderIndexLightboxMedia();
+            };
+
+            document.addEventListener("keydown", (e) => {
+              const lightbox = document.getElementById("image-lightbox");
+              if (lightbox && !lightbox.classList.contains("hidden")) {
+                if (e.key === "ArrowLeft") navigateIndexLightbox(-1);
+                if (e.key === "ArrowRight") navigateIndexLightbox(1);
+              }
+            });
+
+            // Advanced Scroll Behaviors
+            let isScrolling = false;
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener(
+              "scroll",
+              () => {
+                if (!isScrolling) {
+                  window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    document
+                      .querySelector(".bottom-quote-bar")
+                      ?.classList.toggle("visible", scrollY > 100);
+
+                    const btn = document.getElementById("scroll-to-top");
+                    if (btn) {
+                      btn.classList.toggle("opacity-0", scrollY < 400);
+                      btn.classList.toggle("invisible", scrollY < 400);
+                    }
+
+                    // Festival Notification Logic
+                    const scrollPercent =
+                      scrollY /
+                      (document.documentElement.scrollHeight - window.innerHeight);
+                    if (pendingFestivalNotification && !window.hasUserClosedNotif) {
+                      const notifBox = document.getElementById(
+                        "festival-notification",
+                      );
+                      const fSec = document.getElementById("festivals");
+                      if (
+                        notifBox &&
+                        fSec &&
+                        scrollPercent >= 0.05 &&
+                        fSec.getBoundingClientRect().top > window.innerHeight * 0.4
+                      ) {
+                        if (notifBox.classList.contains("hidden")) {
+                          document.getElementById("notif-fest-name").textContent =
+                            pendingFestivalNotification.name;
+                          document.getElementById("notif-fest-days").textContent =
+                            pendingFestivalNotification.daysLeft === 0
+                              ? "Happening today! 🙏"
+                              : `${pendingFestivalNotification.daysLeft} days remaining`;
+                          notifBox.classList.remove("hidden");
+                          notifBox.classList.add("flex");
+                          setTimeout(
+                            () =>
+                              notifBox.classList.remove(
+                                "translate-y-32",
+                                "opacity-0",
+                                "pointer-events-none",
+                              ),
+                            50,
+                          );
+                        }
+                      } else if (
+                        notifBox &&
+                        !notifBox.classList.contains("hidden")
+                      ) {
+                        notifBox.classList.add(
+                          "translate-y-32",
+                          "opacity-0",
+                          "pointer-events-none",
+                        );
+                        setTimeout(() => {
+                          notifBox.classList.add("hidden");
+                          notifBox.classList.remove("flex");
+                        }, 500);
+                      }
+                    }
+
+                    lastScrollY = scrollY;
+                    isScrolling = false;
+                  });
+                  isScrolling = true;
+                }
+              },
+              { passive: true },
+            );
+
+            document
+              .getElementById("scroll-to-top")
+              ?.addEventListener("click", () =>
+                window.scrollTo({ top: 0, behavior: "smooth" }),
+              );
+          });
     </script>
   </body>
 </html>
