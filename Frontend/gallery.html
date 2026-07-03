@@ -11,6 +11,25 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      window.handleImageLoad = function (el) {
+        if (el && el.classList) {
+          el.classList.remove("opacity-0");
+          if (
+            el.previousElementSibling &&
+            el.previousElementSibling.classList.contains("media-placeholder")
+          ) {
+            el.previousElementSibling.style.display = "none";
+          }
+        }
+      };
+      window.handleImageError = function (el) {
+        if (el && el.previousElementSibling) {
+          el.previousElementSibling.style.display = "flex";
+        }
+      };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
       rel="stylesheet"
@@ -70,19 +89,95 @@
         background-attachment: fixed;
       }
 
+      /* 🎯 True Masonry Layout (CSS columns — no gaps, no uniform row height) */
       .masonry {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        column-count: 2;
+        column-gap: 1rem;
+      }
+      @media (min-width: 640px) {
+        .masonry {
+          column-count: 3;
+        }
       }
       @media (min-width: 1024px) {
         .masonry {
-          grid-template-columns: repeat(5, 1fr);
-          gap: 1.5rem;
+          column-count: 5;
+          column-gap: 1.5rem;
         }
       }
       .masonry-item {
-        margin-bottom: 0;
+        break-inside: avoid;
+        margin-bottom: 1rem;
+        display: inline-block;
+        width: 100%;
+      }
+      @media (min-width: 1024px) {
+        .masonry-item {
+          margin-bottom: 1.5rem;
+        }
+      }
+
+      /* 🎯 UIUSVS Themed Per-Image Loader */
+      @keyframes placeholder-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 0.6;
+        }
+      }
+      .media-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle, #fffaf0 0%, #fff3e0 100%);
+        z-index: 5;
+        overflow: hidden;
+        min-height: 140px;
+      }
+      .media-placeholder::before {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        border: 2px solid rgba(234, 88, 12, 0.1);
+        border-top: 2px solid #ea580c;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .uiusvs-loader-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+      }
+      .uiusvs-loader-wrapper::after {
+        content: "LOADING";
+        font-size: 0.5rem;
+        font-weight: 800;
+        letter-spacing: 0.25em;
+        color: #ea580c;
+        margin-top: 4px;
+        animation: placeholder-pulse 0.8s infinite alternate;
+      }
+      .uiusvs-loader-icon {
+        font-size: 1.1rem;
+        margin-bottom: 2px;
       }
 
       #mobile-drawer {
@@ -471,8 +566,8 @@
       let lightboxIndex = 0;
 
       function getItemsPerPage() {
-        // desktop (>=1024px) e 30 ta, mobile e 20 ta
-        return window.innerWidth >= 1024 ? 30 : 20;
+        // desktop (>=1024px) e 24 ta, mobile e 12 ta — dropbox load fast rakhar jonno
+        return window.innerWidth >= 1024 ? 24 : 12;
       }
 
       function renderGallery() {
@@ -507,11 +602,12 @@
         grid.innerHTML = pageItems
           .map((img, idx) => {
             const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(img.url);
+            const loaderHtml = `<div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>`;
             const mediaTag = isVideo
-              ? `<video src="${img.url}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" muted playsinline></video>`
-              : `<img src="${img.url}" alt="${img.title}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">`;
+              ? `<video src="${img.url}" class="relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" muted playsinline preload="metadata" onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
+              : `<img src="${img.url}" alt="${img.title}" class="relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" loading="lazy" decoding="async" onload="handleImageLoad(this)" onerror="handleImageError(this)">`;
             const playBadge = isVideo
-              ? `<div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 z-10"><i data-lucide="play" class="w-4 h-4"></i></div>`
+              ? `<div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 z-20"><i data-lucide="play" class="w-4 h-4"></i></div>`
               : "";
             const dateLabel = img.event_date
               ? new Date(img.event_date).toLocaleDateString("en-US", {
@@ -521,15 +617,16 @@
                 })
               : "";
             return `
-  <div class="masonry-item group cursor-zoom-in" onclick="openLightboxByIndex(${idx})">
-      <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
-          ${playBadge}
-          ${mediaTag}
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-              <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
-          </div>
+<div class="masonry-item group cursor-zoom-in" onclick="openLightboxByIndex(${idx})">
+  <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
+      ${loaderHtml}
+      ${playBadge}
+      ${mediaTag}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 z-20">
+          <span class="text-white font-serif font-bold text-lg drop-shadow-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${img.title}</span>
       </div>
   </div>
+</div>
 `;
           })
           .join("");
