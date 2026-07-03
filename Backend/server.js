@@ -603,6 +603,7 @@ app.post(
         meta_description,
         author_name,
         is_pinned,
+        post_date,
       } = req.body;
 
       if (!title || !content) {
@@ -631,8 +632,8 @@ app.post(
       const [result] = await pool.query(
         `INSERT INTO blogs
          (title, slug, excerpt, content, category, thumbnail_url, thumbnail_cloudinary_id,
-          meta_description, author_name, is_pinned)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          meta_description, author_name, is_pinned, post_date)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           title,
           slug,
@@ -644,6 +645,7 @@ app.post(
           meta_description || "",
           author_name || "",
           wantsPin,
+          post_date || new Date().toISOString().slice(0, 10),
         ],
       );
 
@@ -672,6 +674,7 @@ app.put(
         meta_description,
         author_name,
         is_pinned,
+        post_date,
       } = req.body;
 
       if (!BLOG_CATEGORIES.includes(category)) {
@@ -704,7 +707,7 @@ app.put(
         await pool.query(
           `UPDATE blogs SET title=?, slug=?, excerpt=?, content=?, category=?,
            thumbnail_url=?, thumbnail_cloudinary_id=?, meta_description=?,
-           author_name=?, is_pinned=? WHERE id=?`,
+           author_name=?, is_pinned=?, post_date=? WHERE id=?`,
           [
             title,
             slug,
@@ -716,6 +719,7 @@ app.put(
             meta_description || "",
             author_name || "",
             wantsPin,
+            post_date || new Date().toISOString().slice(0, 10),
             req.params.id,
           ],
         );
