@@ -531,6 +531,8 @@
       lucide.createIcons();
       const API_BASE = "https://uiusvs.onrender.com/api";
 
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
         const overlay = document.getElementById("drawer-overlay");
