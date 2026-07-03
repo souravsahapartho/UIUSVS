@@ -2829,11 +2829,10 @@
                   ? v.link.split("v=")[1].split("&")[0]
                   : v.link.split("/").pop();
                 const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-                // 🎯 7ম ও 8ম ভিডিও (idx 6,7) mobile এ hide, শুধু lg+ এ দেখাবে
                 const visibilityClass = idx >= 6 ? "hidden lg:block" : "";
                 return `
-<div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll is-visible cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
-    <div class="relative overflow-hidden w-full" style="padding-bottom: 56.25%;">
+<div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll is-visible border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" data-video-id="${videoId}">
+    <div class="relative overflow-hidden w-full yt-thumb-wrapper cursor-pointer" style="padding-bottom: 56.25%;" onclick="playInlineVideo(this, '${videoId}')">
         <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
         <img src="${thumbnail}" class="absolute inset-0 w-full h-full object-cover z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)" onerror="this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg'; handleImageLoad(this);">
         <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
@@ -2854,6 +2853,20 @@
             '<p class="text-red-200 col-span-full text-sm text-center py-4 italic">Subscribe to our YouTube channel for updates.</p>';
         }
       }
+
+      // 🎯 ভিডিও থাম্বনেইলে ক্লিক করলে সরাসরি সেখানেই YouTube iframe দিয়ে প্লে করানো
+      window.playInlineVideo = function (wrapperEl, videoId) {
+        wrapperEl.innerHTML = `
+    <iframe
+      class="absolute inset-0 w-full h-full z-10"
+      src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  `;
+      };
 
       async function fetchBlogs() {
         const grid = document.getElementById("blog-grid");
