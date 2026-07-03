@@ -186,7 +186,6 @@
         text-indent: -10000px !important;
         font-size: 0 !important;
       }
-
       /* 🎯 Avatar Loading Placeholder */
       .avatar-placeholder {
         position: absolute;
@@ -200,8 +199,8 @@
       }
       .avatar-placeholder::before {
         content: "";
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         border: 2px solid rgba(234, 88, 12, 0.15);
         border-top: 2px solid #ea580c;
         border-radius: 50%;
@@ -216,20 +215,61 @@
         }
       }
 
-      /* 🎯 Current Student Card — লাল/কমলা থিম, breathing glow */
-      .member-card-current {
-        background: linear-gradient(145deg, #ffffff 0%, #fff7ed 100%);
-        border: 1px solid #fed7aa;
-        position: relative;
+      @keyframes ringSpin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
-      .member-card-current::before {
-        content: "";
+      @keyframes cardFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes softGlow {
+        0%,
+        100% {
+          box-shadow: 0 4px 14px rgba(234, 88, 12, 0.08);
+        }
+        50% {
+          box-shadow: 0 8px 24px rgba(234, 88, 12, 0.18);
+        }
+      }
+      @keyframes goldGlow {
+        0%,
+        100% {
+          box-shadow: 0 4px 14px rgba(217, 119, 6, 0.1);
+        }
+        50% {
+          box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22);
+        }
+      }
+
+      /* 🎯 Current Student Card — লাল/কমলা থিম */
+      .member-card-current {
+        background: linear-gradient(155deg, #ffffff 0%, #fff3e8 100%);
+        border: 1.5px solid #fdba74;
+        position: relative;
+        animation:
+          cardFadeIn 0.5s ease backwards,
+          softGlow 3.5s ease-in-out infinite;
+      }
+      .member-card-current::after {
+        content: "🕉️";
         position: absolute;
-        inset: 0;
-        border-radius: 1rem;
-        padding: 1px;
-        background: linear-gradient(135deg, #ea580c33, transparent 40%);
+        bottom: -6px;
+        right: -2px;
+        font-size: 2.4rem;
+        opacity: 0.05;
         pointer-events: none;
+        transform: rotate(-8deg);
       }
       .member-card-current .avatar-ring {
         background: conic-gradient(
@@ -241,12 +281,28 @@
         );
         animation: ringSpin 4s linear infinite;
       }
+      .member-card-current .status-pill {
+        background: linear-gradient(90deg, #ea580c, #dc2626);
+      }
 
-      /* 🎯 Alumni Card — সোনালি/অ্যাম্বার থিম, একটু বেশি প্রিমিয়াম লুক */
+      /* 🎯 Alumni Card — সোনালি/অ্যাম্বার থিম */
       .member-card-alumni {
-        background: linear-gradient(145deg, #fffdf5 0%, #fef9e7 100%);
-        border: 1px solid #fde68a;
+        background: linear-gradient(155deg, #fffdf6 0%, #fef3d6 100%);
+        border: 1.5px solid #fbbf24;
         position: relative;
+        animation:
+          cardFadeIn 0.5s ease backwards,
+          goldGlow 3.5s ease-in-out infinite;
+      }
+      .member-card-alumni::after {
+        content: "🪷";
+        position: absolute;
+        bottom: -8px;
+        right: -4px;
+        font-size: 2.4rem;
+        opacity: 0.07;
+        pointer-events: none;
+        transform: rotate(10deg);
       }
       .member-card-alumni .avatar-ring {
         background: conic-gradient(
@@ -258,19 +314,68 @@
         );
         animation: ringSpin 6s linear infinite reverse;
       }
-
-      @keyframes ringSpin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+      .member-card-alumni .status-pill {
+        background: linear-gradient(90deg, #d97706, #b45309);
       }
 
       .member-card-current:hover,
       .member-card-alumni:hover {
-        transform: translateY(-4px);
+        transform: translateY(-5px) scale(1.015);
+      }
+
+      /* 🎯 Members Page Themed Loader */
+      .members-loader-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+      .members-loader-icons {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+      }
+      .members-loader-icons span {
+        display: inline-block;
+        animation: memberBounce 1.2s ease-in-out infinite;
+      }
+      .members-loader-icons span:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .members-loader-icons span:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      @keyframes memberBounce {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.5;
+        }
+        30% {
+          transform: translateY(-10px);
+          opacity: 1;
+        }
+      }
+      .members-loader-text {
+        font-family: "Playfair Display", serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        background: linear-gradient(90deg, #b91c1c, #f59e0b, #b91c1c);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: loaderShine 2s linear infinite;
+        letter-spacing: 0.08em;
+      }
+      @keyframes loaderShine {
+        0% {
+          background-position: -100% 0;
+        }
+        100% {
+          background-position: 100% 0;
+        }
       }
     </style>
   </head>
@@ -520,88 +625,34 @@
         id="members-grid"
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5 lg:gap-6"
       >
-        <div id="member-skeletons" class="contents">
-          <div
-            class="bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-5 lg:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full shimmer mb-1.5 sm:mb-3 md:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
-          </div>
-          <div
-            class="bg-white rounded-2xl p-4 sm:p-6 border border-orange-100 shadow-sm flex flex-col items-center"
-          >
-            <div
-              class="w-16 h-16 sm:w-24 sm:h-24 rounded-full shimmer mb-3 sm:mb-4 border-4 border-white"
-            ></div>
-            <div class="w-3/4 h-4 sm:h-5 shimmer rounded mb-2"></div>
-            <div class="w-1/2 h-3 sm:h-4 shimmer rounded mb-4"></div>
-            <div class="w-full h-6 sm:h-8 shimmer rounded mt-auto"></div>
+        <div
+          id="members-grid"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
+        >
+          <!-- JS দিয়ে ডাইনামিক্যালি ভরা হবে -->
+        </div>
+
+        <!-- 🎯 Themed Loading State (data আসার আগ পর্যন্ত) -->
+        <div
+          id="members-loading"
+          class="flex flex-col items-center justify-center py-16 sm:py-24"
+        >
+          <div class="members-loader-wrapper">
+            <div class="members-loader-icons">
+              <span>🕉️</span><span>🪔</span><span>🪷</span>
+            </div>
+            <p class="members-loader-text">LOADING UIUSVS FAMILY</p>
+            <p class="text-[11px] sm:text-xs text-gray-400 font-medium">
+              Fetching members, please wait...
+            </p>
           </div>
         </div>
+
+        <!-- 🎯 Pagination -->
+        <div
+          id="members-pagination"
+          class="mt-8 sm:mt-10 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap"
+        ></div>
       </div>
     </main>
 
@@ -849,8 +900,16 @@
         }
       }
 
+      let currentPage = 1;
+
+      function getMembersPerPage() {
+        return window.innerWidth < 640 ? 10 : 8;
+      }
+
       function renderMembers() {
         const grid = document.getElementById("members-grid");
+        const loader = document.getElementById("members-loading");
+        const paginationBox = document.getElementById("members-pagination");
 
         const filtered = allMembers.filter((m) => {
           const matchesFilter =
@@ -861,13 +920,23 @@
           return matchesFilter && matchesSearch;
         });
 
+        loader.classList.add("hidden");
+
         if (filtered.length === 0) {
-          grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">No members found in this category.</div>`;
+          grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-14 text-sm font-medium">😔 No members found in this category.</div>`;
+          paginationBox.innerHTML = "";
           return;
         }
 
-        grid.innerHTML = filtered
-          .map((m) => {
+        const perPage = getMembersPerPage();
+        const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIdx = (currentPage - 1) * perPage;
+        const pageItems = filtered.slice(startIdx, startIdx + perPage);
+
+        grid.innerHTML = pageItems
+          .map((m, i) => {
             const finalPic =
               m.avatar_url ||
               `https://api.dicebear.com/7.x/adventurer/svg?seed=${m.id}&backgroundColor=${
@@ -878,14 +947,8 @@
             const cardTheme = isAlumni
               ? "member-card-alumni"
               : "member-card-current";
-
-            // 🎯 Badge এখন শুধু ছোট আইকন বাবল — avatar এর উপরে-ডানে, নামের সাথে ওভারল্যাপ করবে না
-            const badgeClasses = isAlumni
-              ? "bg-gradient-to-br from-amber-400 to-yellow-600"
-              : "bg-gradient-to-br from-red-600 to-orange-500";
             const badgeIcon = isAlumni ? "award" : "sparkles";
 
-            // 🎯 যেখানে আগে Current/Alumni টেক্সট ছিল, সেখানে এখন designation (থাকলে), নাহলে fallback
             const subLine =
               m.designation && m.designation !== "Member"
                 ? m.designation
@@ -895,10 +958,11 @@
 
             return `
             <div onclick='showMemberModal(${JSON.stringify(m).replace(/'/g, "&apos;")})'
-                 class="cursor-pointer ${cardTheme} rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-5 lg:p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group overflow-hidden min-w-0">
-                <div class="relative mb-1.5 sm:mb-3 md:mb-4 mt-1">
+                 style="animation-delay:${i * 0.05}s"
+                 class="cursor-pointer ${cardTheme} rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group overflow-hidden min-w-0">
+                <div class="relative mb-2 sm:mb-3 md:mb-4 mt-1">
                     <div class="avatar-ring absolute -inset-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full border-[3px] border-white overflow-hidden shadow-md bg-white">
+                    <div class="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full border-[3px] border-white overflow-hidden shadow-md bg-white">
                         <div class="avatar-placeholder"></div>
                         <img
                           src="${finalPic}"
@@ -909,19 +973,19 @@
                           onerror="handleAvatarError(this)"
                         >
                     </div>
-                    <div class="absolute -top-0.5 -right-0.5 z-20 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 rounded-full ${badgeClasses} border-2 border-white shadow-md flex items-center justify-center">
-                        <i data-lucide="${badgeIcon}" class="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-3.5 lg:h-3.5 text-white"></i>
+                    <div class="status-pill absolute -top-0.5 -right-0.5 z-20 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-full border-2 border-white shadow-md flex items-center justify-center">
+                        <i data-lucide="${badgeIcon}" class="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 text-white"></i>
                     </div>
                 </div>
 
-                <h3 class="w-full font-serif font-bold text-[11px] sm:text-sm md:text-base lg:text-lg text-brand-900 mb-0.5 sm:mb-1 md:mb-1.5 leading-tight line-clamp-2 px-0.5">${m.name}</h3>
+                <h3 class="w-full font-serif font-bold text-xs sm:text-sm md:text-base lg:text-lg text-brand-900 mb-1 sm:mb-1.5 leading-tight line-clamp-2 px-0.5">${m.name}</h3>
 
-                <p class="w-full text-[9px] sm:text-[11px] md:text-xs font-bold ${m.designation && m.designation !== "Member" ? "text-red-600" : "text-brand-500"} mb-1.5 sm:mb-3 md:mb-4 text-left truncate px-0.5">
+                <p class="w-full text-[10px] sm:text-[11px] md:text-xs font-bold ${m.designation && m.designation !== "Member" ? "text-red-600" : "text-brand-500"} mb-2 sm:mb-3 md:mb-4 text-center truncate px-0.5">
                   ${subLine}
                 </p>
 
-                <div class="w-full mt-auto bg-white/70 py-1 sm:py-1.5 md:py-2 rounded-lg text-[9px] sm:text-[11px] md:text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1 px-1">
-                    <i data-lucide="graduation-cap" class="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 flex-shrink-0"></i>
+                <div class="w-full mt-auto bg-white/70 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-[11px] md:text-xs text-gray-600 font-semibold border border-brand-100 flex items-center justify-center gap-1 px-1">
+                    <i data-lucide="graduation-cap" class="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0"></i>
                     <span class="truncate">${decodeBatch(m.batch)}</span>
                 </div>
             </div>
@@ -929,10 +993,58 @@
           })
           .join("");
         lucide.createIcons();
+
+        renderMembersPagination(totalPages);
       }
+
+      function renderMembersPagination(totalPages) {
+        const box = document.getElementById("members-pagination");
+        if (!box) return;
+
+        if (totalPages <= 1) {
+          box.innerHTML = "";
+          return;
+        }
+
+        let buttons = "";
+        for (let i = 1; i <= totalPages; i++) {
+          buttons += `
+          <button onclick="goToMembersPage(${i})" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold transition-all ${
+            i === currentPage
+              ? "bg-brand-700 text-white shadow-md scale-110"
+              : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+          }">
+            ${i}
+          </button>`;
+        }
+
+        box.innerHTML = `
+        <button onclick="goToMembersPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""} class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-white border border-brand-200 text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-50">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        </button>
+        ${buttons}
+        <button onclick="goToMembersPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""} class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-white border border-brand-200 text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-50">
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>`;
+        lucide.createIcons();
+      }
+
+      window.goToMembersPage = (page) => {
+        currentPage = page;
+        renderMembers();
+        document
+          .getElementById("members-grid")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+
+      window.addEventListener("resize", () => {
+        currentPage = 1;
+        renderMembers();
+      });
 
       window.filterMembers = (type) => {
         currentFilter = type;
+        currentPage = 1;
         document.querySelectorAll(".filter-btn").forEach((btn) => {
           btn.className =
             "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50";
@@ -944,6 +1056,7 @@
 
       window.handleMemberSearch = (query) => {
         searchQuery = query;
+        currentPage = 1;
         renderMembers();
         renderSearchSuggestions(query);
 
@@ -960,6 +1073,7 @@
         const input = document.getElementById("member-search");
         input.value = "";
         searchQuery = "";
+        currentPage = 1;
         renderMembers();
         hideSearchSuggestions();
         document.getElementById("search-clear-btn").classList.add("hidden");
