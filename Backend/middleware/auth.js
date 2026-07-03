@@ -20,19 +20,18 @@ const authPool = mysql.createPool({
   queueLimit: 0,
 });
 
-// Login সফল হলে এটা কল করে cookie বসানো হবে
 function createSession(res, user) {
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role || "member" },
     process.env.JWT_SECRET,
-    { expiresIn: "7d" },
+    { expiresIn: "24h" },
   );
 
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
   });
 }
 

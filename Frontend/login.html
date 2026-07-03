@@ -556,6 +556,30 @@
 
       document.getElementById("current-year").textContent =
         new Date().getFullYear();
+      // 🎯 আগে থেকেই valid session/cookie থাকলে সরাসরি profile/admin এ পাঠিয়ে দাও
+      (async function checkExistingSession() {
+        try {
+          const res = await fetch(`${API_BASE}/auth/me`, {
+            method: "GET",
+            credentials: "include",
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.user) {
+              if (
+                data.user.role === "admin" ||
+                data.user.role === "superadmin"
+              ) {
+                window.location.href = "admin.html";
+              } else {
+                window.location.href = "profile.html";
+              }
+            }
+          }
+        } catch (e) {
+          // cookie নেই বা invalid — কিছু করার দরকার নেই, normal login form দেখানো হবে
+        }
+      })();
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
         const overlay = document.getElementById("drawer-overlay");
