@@ -48,6 +48,87 @@
         backdrop-filter: blur(12px);
         border-bottom: 2px solid #fbbf24;
       }
+      @keyframes wave-scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .animate-wave-front {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C250,100 250,0 500,50 C750,100 750,0 1000,50 L1000,100 L0,100 Z' fill='%2338bdf8' opacity='0.25'/%3E%3C/svg%3E");
+        background-size: 50% 100%;
+        animation: wave-scroll 6s linear infinite;
+      }
+      .animate-wave-back {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C250,0 250,100 500,50 C750,0 750,100 1000,50 L1000,100 L0,100 Z' fill='%230284c7' opacity='0.15'/%3E%3C/svg%3E");
+        background-size: 50% 100%;
+        animation: wave-scroll 10s linear infinite reverse;
+      }
+      @keyframes swan-move {
+        0% {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        5% {
+          transform: translateX(-35px);
+          opacity: 1;
+        }
+        92.5% {
+          transform: translateX(235px);
+          opacity: 1;
+        }
+        97.5% {
+          transform: translateX(250px);
+          opacity: 0;
+        }
+        98.5% {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+      }
+      .animate-swan-move {
+        animation: swan-move 20s linear infinite;
+        will-change: transform, opacity;
+      }
+      @keyframes swan-bob {
+        0%,
+        100% {
+          transform: translateY(3px) rotate(-3deg) scaleX(-1);
+        }
+        50% {
+          transform: translateY(-2px) rotate(2deg) scaleX(-1);
+        }
+      }
+      .animate-swan-bob {
+        animation: swan-bob 3s ease-in-out infinite;
+        display: inline-block;
+        will-change: transform;
+      }
+      @keyframes lotus-bob {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(-3px) rotate(3deg);
+        }
+      }
+      .animate-lotus-bob {
+        animation: lotus-bob 4s ease-in-out infinite;
+      }
+      .text-shadow-white {
+        text-shadow:
+          2px 2px 4px rgba(255, 255, 255, 0.95),
+          -2px -2px 4px rgba(255, 255, 255, 0.95),
+          0 0 15px white,
+          0 0 5px white;
+      }
       ::-webkit-scrollbar {
         width: 8px;
       }
