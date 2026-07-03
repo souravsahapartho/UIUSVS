@@ -350,6 +350,161 @@ app.delete(
 );
 
 // ============================================
+// ADVISORS (Dynamic Tree-Style Panel)
+// ============================================
+app.get("/api/advisors", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT id, name, designation, image_url AS pic
+       FROM advisors ORDER BY rank_order ASC`,
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/advisors/admin", verifySession, verifyAdmin, async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM advisors ORDER BY rank_order ASC",
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post(
+  "/api/advisors",
+  verifySession,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, designation } = req.body;
+      if (!name || !designation) {
+        return res.status(400).json({ error: "Name and designation required" });
+      }
+      const imageUrl = req.file ? req.file.path : null;
+      const cloudinaryId = req.file ? req.file.filename : null;
+
+      const [[{ maxRank }]] = await pool.query(
+        "SELECT COALESCE(MAX(rank_order), -1) AS maxRank FROM advisors",
+      );
+
+      const [result] = await pool.query(
+        `INSERT INTO advisors (name, designation, image_url, cloudinary_id, rank_order)
+         VALUES (?, ?, ?, ?, ?)`,
+        [name, designation, imageUrl, cloudinaryId, maxRank + 1],
+      );
+      res.status(200).json({ message: "Advisor added!", id: result.insertId });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.put(
+  "/api/advisors/:id",
+  verifySession,
+  verifyAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, designation } = req.body;
+
+      if (req.file) {
+        const [rows] = await pool.query(
+          "SELECT cloudinary_id FROM advisors WHERE id=?",
+          [req.params.id],
+        );
+        if (rows.length && rows[0].cloudinary_id) {
+          await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+        }
+        await pool.query(
+          `UPDATE advisors SET name=?, designation=?, image_url=?, cloudinary_id=? WHERE id=?`,
+          [name, designation, req.file.path, req.file.filename, req.params.id],
+        );
+      } else {
+        await pool.query(
+          `UPDATE advisors SET name=?, designation=? WHERE id=?`,
+          [name, designation, req.params.id],
+        );
+      }
+      res.json({ message: "Advisor updated!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.delete(
+  "/api/advisors/:id",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT cloudinary_id FROM advisors WHERE id=?",
+        [req.params.id],
+      );
+      if (rows.length === 0)
+        return res.status(404).json({ error: "Not found" });
+
+      if (rows[0].cloudinary_id) {
+        await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+      }
+      await pool.query("DELETE FROM advisors WHERE id=?", [req.params.id]);
+      res.json({ message: "Advisor removed!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// 🎯 Move advisor up/down in the tree (swap rank_order with neighbor)
+app.put(
+  "/api/advisors/:id/reorder",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const { direction } = req.body; // "up" or "down"
+      const [[current]] = await pool.query(
+        "SELECT id, rank_order FROM advisors WHERE id=?",
+        [req.params.id],
+      );
+      if (!current) return res.status(404).json({ error: "Not found" });
+
+      const [[neighbor]] = await pool.query(
+        direction === "up"
+          ? "SELECT id, rank_order FROM advisors WHERE rank_order < ? ORDER BY rank_order DESC LIMIT 1"
+          : "SELECT id, rank_order FROM advisors WHERE rank_order > ? ORDER BY rank_order ASC LIMIT 1",
+        [current.rank_order],
+      );
+
+      if (!neighbor) {
+        return res.json({ message: "Already at the edge, no move made." });
+      }
+
+      await pool.query("UPDATE advisors SET rank_order=? WHERE id=?", [
+        neighbor.rank_order,
+        current.id,
+      ]);
+      await pool.query("UPDATE advisors SET rank_order=? WHERE id=?", [
+        current.rank_order,
+        neighbor.id,
+      ]);
+
+      res.json({ message: "Order updated!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+// ============================================
 // 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
 // ============================================
 app.get("/api/gallery/public", async (req, res) => {
