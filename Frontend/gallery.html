@@ -22,11 +22,13 @@
             el.previousElementSibling.style.display = "none";
           }
         }
+        if (window.scheduleMasonryLayout) window.scheduleMasonryLayout();
       };
       window.handleImageError = function (el) {
         if (el && el.previousElementSibling) {
           el.previousElementSibling.style.display = "flex";
         }
+        if (window.scheduleMasonryLayout) window.scheduleMasonryLayout();
       };
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -90,20 +92,24 @@
       }
 
       /* 🎯 True Masonry Layout (CSS columns — no gaps, no uniform row height) */
+      /* 🎯 True JS-Powered Masonry (gapless, no shifting, fully responsive) */
       .masonry {
-        column-count: 2;
-        column-gap: 1rem;
+        position: relative;
+        width: 100%;
+        min-height: 200px;
       }
-      @media (min-width: 640px) {
-        .masonry {
-          column-count: 3;
-        }
+      .masonry-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition:
+          top 0.35s ease,
+          left 0.35s ease,
+          opacity 0.4s ease;
       }
-      @media (min-width: 1024px) {
-        .masonry {
-          column-count: 5;
-          column-gap: 1.5rem;
-        }
+      .masonry-item.placed {
+        opacity: 1;
       }
       .masonry-item {
         break-inside: avoid;
@@ -581,19 +587,84 @@
         // desktop (>=1024px) e 24 ta, mobile e 12 ta — dropbox load fast rakhar jonno
         return window.innerWidth >= 1024 ? 24 : 12;
       }
+      // ==========================================
+      // 🎯 JS-POWERED MASONRY LAYOUT (gapless, responsive, no shifting)
+      // ==========================================
+      function getMasonryColumnCount() {
+        const w = window.innerWidth;
+        if (w >= 1024) return 5;
+        if (w >= 640) return 3;
+        return 2;
+      }
+
+      let masonryRafPending = false;
+      window.scheduleMasonryLayout = function () {
+        if (masonryRafPending) return;
+        masonryRafPending = true;
+        requestAnimationFrame(() => {
+          masonryRafPending = false;
+          layoutMasonry();
+        });
+      };
+
+      function layoutMasonry() {
+        const container = document.getElementById("gallery-grid");
+        if (!container) return;
+        const items = Array.from(container.querySelectorAll(".masonry-item"));
+        if (items.length === 0) {
+          container.style.height = "0px";
+          return;
+        }
+
+        const columns = getMasonryColumnCount();
+        const gap = columns >= 5 ? 24 : 16; // lg gap-1.5rem, others gap-1rem
+        const containerWidth = container.clientWidth;
+        const colWidth = (containerWidth - gap * (columns - 1)) / columns;
+        const colHeights = new Array(columns).fill(0);
+
+        items.forEach((item) => {
+          // Shortest column খুঁজে বের করা
+          let minCol = 0;
+          for (let i = 1; i < columns; i++) {
+            if (colHeights[i] < colHeights[minCol]) minCol = i;
+          }
+
+          const x = minCol * (colWidth + gap);
+          const y = colHeights[minCol];
+
+          item.style.width = colWidth + "px";
+          item.style.left = x + "px";
+          item.style.top = y + "px";
+          item.classList.add("placed");
+
+          colHeights[minCol] += item.offsetHeight + gap;
+        });
+
+        const maxHeight = Math.max(...colHeights);
+        container.style.height = maxHeight > 0 ? maxHeight - gap + "px" : "0px";
+      }
+
+      // Resize হলে layout recalculate (debounced)
+      let masonryResizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(masonryResizeTimer);
+        masonryResizeTimer = setTimeout(() => {
+          layoutMasonry();
+        }, 150);
+      });
 
       function renderGallery() {
         const grid = document.getElementById("gallery-grid");
 
-        // 🎯 এখনো data load হয়নি — themed loader দেখাও, "No images" না
         if (!galleryDataLoaded) {
+          grid.style.height = "auto";
           grid.innerHTML = `
-      <div class="w-full text-center py-20 flex flex-col items-center justify-center gap-2" style="column-span: all;">
-        <div class="uiusvs-loader-wrapper">
-          <div class="uiusvs-loader-icon text-3xl">🕉️</div>
-        </div>
-        <p class="text-brand-700 font-bold text-sm mt-2">Loading memories...</p>
-      </div>`;
+    <div class="w-full text-center py-20 flex flex-col items-center justify-center gap-2">
+      <div class="uiusvs-loader-wrapper">
+        <div class="uiusvs-loader-icon text-3xl">🕉️</div>
+      </div>
+      <p class="text-brand-700 font-bold text-sm mt-2">Loading memories...</p>
+    </div>`;
           return;
         }
 
@@ -607,7 +678,8 @@
         });
 
         if (filtered.length === 0) {
-          grid.innerHTML = `<div class="text-center text-gray-500 py-10 w-full font-medium" style="column-span: all;">No images found.</div>`;
+          grid.style.height = "auto";
+          grid.innerHTML = `<div class="text-center text-gray-500 py-10 w-full font-medium">No images found.</div>`;
           document.getElementById("gallery-pagination").innerHTML = "";
           return;
         }
@@ -655,6 +727,13 @@
           })
           .join("");
         lucide.createIcons();
+
+        grid.style.height = "0px";
+        requestAnimationFrame(() => {
+          layoutMasonry();
+          setTimeout(layoutMasonry, 300);
+          setTimeout(layoutMasonry, 800);
+        });
 
         renderPagination(totalPages);
       }
