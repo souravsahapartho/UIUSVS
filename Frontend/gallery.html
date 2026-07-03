@@ -319,11 +319,16 @@
       </div>
 
       <div class="masonry" id="gallery-grid">
-        <div class="text-center text-gray-500 py-10 col-span-full w-full">
-          <i
-            data-lucide="loader-2"
-            class="w-8 h-8 animate-spin mx-auto text-brand-500"
-          ></i>
+        <div
+          class="w-full text-center py-20 flex flex-col items-center justify-center gap-2"
+          style="column-span: all"
+        >
+          <div class="uiusvs-loader-wrapper">
+            <div class="uiusvs-loader-icon text-3xl">🕉️</div>
+          </div>
+          <p class="text-brand-700 font-bold text-sm mt-2">
+            Loading memories...
+          </p>
         </div>
       </div>
       <div id="gallery-pagination" class="mt-10"></div>
@@ -535,6 +540,7 @@
 
       const API_BASE = "https://uiusvs.onrender.com/api";
       let mockGallery = [];
+      let galleryDataLoaded = false; // 🎯 প্রথমবার data আসার আগ পর্যন্ত false থাকবে
 
       async function loadGalleryFromDB(isBackgroundRefresh = false) {
         try {
@@ -545,20 +551,26 @@
           const newDataStr = JSON.stringify(newData);
           const oldDataStr = JSON.stringify(mockGallery);
 
+          galleryDataLoaded = true; // 🎯 fetch সফল হয়েছে, এখন থেকে "No images" দেখানো যাবে
+
           if (newDataStr !== oldDataStr) {
             mockGallery = newData;
+            renderFilters();
+            renderGallery();
+          } else if (!isBackgroundRefresh) {
+            // data same thakleo prothombar render korte hobe (loader theke actual UI te jete)
             renderFilters();
             renderGallery();
           }
         } catch (e) {
           console.warn("Failed to load gallery from DB", e);
+          galleryDataLoaded = true; // fetch ব্যর্থ হলেও loading state শেষ ধরে নেওয়া হচ্ছে
           if (!isBackgroundRefresh) {
             renderFilters();
             renderGallery();
           }
         }
       }
-
       let currentCat = "All";
       let gallerySearchQuery = "";
       let currentPage = 1;
@@ -573,6 +585,18 @@
       function renderGallery() {
         const grid = document.getElementById("gallery-grid");
 
+        // 🎯 এখনো data load হয়নি — themed loader দেখাও, "No images" না
+        if (!galleryDataLoaded) {
+          grid.innerHTML = `
+      <div class="w-full text-center py-20 flex flex-col items-center justify-center gap-2" style="column-span: all;">
+        <div class="uiusvs-loader-wrapper">
+          <div class="uiusvs-loader-icon text-3xl">🕉️</div>
+        </div>
+        <p class="text-brand-700 font-bold text-sm mt-2">Loading memories...</p>
+      </div>`;
+          return;
+        }
+
         // Filter by Category and Search
         const filtered = mockGallery.filter((g) => {
           const matchesCat = currentCat === "All" || g.category === currentCat;
@@ -583,7 +607,7 @@
         });
 
         if (filtered.length === 0) {
-          grid.innerHTML = `<div class="text-center text-gray-500 py-10 col-span-full w-full font-medium">No images found.</div>`;
+          grid.innerHTML = `<div class="text-center text-gray-500 py-10 w-full font-medium" style="column-span: all;">No images found.</div>`;
           document.getElementById("gallery-pagination").innerHTML = "";
           return;
         }
