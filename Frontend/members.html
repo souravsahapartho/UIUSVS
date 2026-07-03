@@ -459,33 +459,36 @@
         ></div>
       </div>
 
-      <!-- Search Bar -->
-      <div class="max-w-xl mx-auto mb-8 relative">
-        <i
-          data-lucide="search"
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-        ></i>
-        <input
-          type="text"
-          id="member-search"
-          oninput="handleMemberSearch(this.value)"
-          class="w-full pl-12 pr-4 py-3.5 rounded-full border border-orange-200 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm text-sm font-medium"
-          placeholder="Search by name, designation, or batch..."
-        />
-      </div>
-      <div class="flex flex-wrap justify-center gap-3 mb-6">
-        <select
-          id="batch-filter"
-          class="px-4 py-2 rounded-full border border-orange-200 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none bg-white"
-        >
-          <option value="">All Batches</option>
-        </select>
-        <select
-          id="department-filter"
-          class="px-4 py-2 rounded-full border border-orange-200 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none bg-white"
-        >
-          <option value="">All Departments</option>
-        </select>
+      <!-- Search Bar with Live Suggestions -->
+      <div class="max-w-xl mx-auto mb-8 sm:mb-10 relative px-2 sm:px-0">
+        <div class="relative">
+          <i
+            data-lucide="search"
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10"
+          ></i>
+          <input
+            type="text"
+            id="member-search"
+            autocomplete="off"
+            oninput="handleMemberSearch(this.value)"
+            onfocus="handleSearchFocus()"
+            class="w-full pl-12 pr-10 py-3 sm:py-3.5 rounded-2xl sm:rounded-full border border-orange-200 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm text-sm font-medium relative z-0"
+            placeholder="Search by name, designation, batch, or department..."
+          />
+          <button
+            id="search-clear-btn"
+            onclick="clearMemberSearch()"
+            class="hidden absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 z-10 p-1"
+          >
+            <i data-lucide="x-circle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </button>
+        </div>
+
+        <!-- 🎯 Dynamic Suggestions Dropdown -->
+        <div
+          id="search-suggestions"
+          class="hidden absolute left-2 right-2 sm:left-0 sm:right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-orange-100 overflow-hidden z-30 max-h-[60vh] sm:max-h-80 overflow-y-auto"
+        ></div>
       </div>
 
       <!-- Filters -->
@@ -811,8 +814,6 @@
       let allMembers = [];
       let currentFilter = "all";
       let searchQuery = "";
-      let batchFilter = "";
-      let deptFilter = "";
 
       // 🎯 Batch code decode: "181" -> Spring 2018, "253" -> Fall 2025
       function decodeBatch(code) {
@@ -834,7 +835,6 @@
           const res = await fetch(`${API_BASE}/members/public`);
           if (!res.ok) throw new Error("Failed to fetch");
           allMembers = await res.json();
-          populateFilterOptions();
           renderMembers();
         } catch (err) {
           console.error(err);
@@ -849,44 +849,16 @@
         }
       }
 
-      function populateFilterOptions() {
-        // raw batch code -> {value, label} unique map
-        const batchMap = new Map();
-        allMembers.forEach((m) => {
-          if (m.batch) batchMap.set(m.batch, decodeBatch(m.batch));
-        });
-        // sort by raw code
-        const batches = [...batchMap.entries()].sort((a, b) =>
-          a[0].localeCompare(b[0]),
-        );
-
-        const depts = [
-          ...new Set(allMembers.map((m) => m.department).filter(Boolean)),
-        ].sort();
-
-        document.getElementById("batch-filter").innerHTML =
-          `<option value="">All Batches</option>` +
-          batches
-            .map(([code, label]) => `<option value="${code}">${label}</option>`)
-            .join("");
-
-        document.getElementById("department-filter").innerHTML =
-          `<option value="">All Departments</option>` +
-          depts.map((d) => `<option value="${d}">${d}</option>`).join("");
-      }
-
       function renderMembers() {
         const grid = document.getElementById("members-grid");
 
         const filtered = allMembers.filter((m) => {
           const matchesFilter =
             currentFilter === "all" || m.type === currentFilter;
-          const matchesBatch = !batchFilter || m.batch === batchFilter;
-          const matchesDept = !deptFilter || m.department === deptFilter;
           const searchStr =
             `${m.name} ${m.designation || ""} ${decodeBatch(m.batch)} ${m.department || ""}`.toLowerCase();
           const matchesSearch = searchStr.includes(searchQuery.toLowerCase());
-          return matchesFilter && matchesBatch && matchesDept && matchesSearch;
+          return matchesFilter && matchesSearch;
         });
 
         if (filtered.length === 0) {
@@ -973,20 +945,115 @@
       window.handleMemberSearch = (query) => {
         searchQuery = query;
         renderMembers();
+        renderSearchSuggestions(query);
+
+        const clearBtn = document.getElementById("search-clear-btn");
+        if (clearBtn) clearBtn.classList.toggle("hidden", !query);
       };
 
-      document
-        .getElementById("batch-filter")
-        .addEventListener("change", (e) => {
-          batchFilter = e.target.value;
-          renderMembers();
-        });
-      document
-        .getElementById("department-filter")
-        .addEventListener("change", (e) => {
-          deptFilter = e.target.value;
-          renderMembers();
-        });
+      window.handleSearchFocus = () => {
+        const query = document.getElementById("member-search").value;
+        if (query) renderSearchSuggestions(query);
+      };
+
+      window.clearMemberSearch = () => {
+        const input = document.getElementById("member-search");
+        input.value = "";
+        searchQuery = "";
+        renderMembers();
+        hideSearchSuggestions();
+        document.getElementById("search-clear-btn").classList.add("hidden");
+        input.focus();
+      };
+
+      function hideSearchSuggestions() {
+        const box = document.getElementById("search-suggestions");
+        box.classList.add("hidden");
+        box.innerHTML = "";
+      }
+
+      // 🎯 Query অনুযায়ী dynamic suggestion বানানো (নাম/designation/batch/department ম্যাচ)
+      function renderSearchSuggestions(query) {
+        const box = document.getElementById("search-suggestions");
+        const q = query.trim().toLowerCase();
+
+        if (!q) {
+          hideSearchSuggestions();
+          return;
+        }
+
+        const matches = allMembers
+          .filter((m) => {
+            const str =
+              `${m.name} ${m.designation || ""} ${decodeBatch(m.batch)} ${m.department || ""}`.toLowerCase();
+            return str.includes(q);
+          })
+          .slice(0, 8);
+
+        if (matches.length === 0) {
+          box.innerHTML = `
+            <div class="p-4 text-center text-xs sm:text-sm text-gray-400 font-medium">
+              কোনো মেম্বার পাওয়া যায়নি।
+            </div>`;
+          box.classList.remove("hidden");
+          return;
+        }
+
+        box.innerHTML = matches
+          .map((m) => {
+            const finalPic =
+              m.avatar_url ||
+              `https://api.dicebear.com/7.x/adventurer/svg?seed=${m.id}&backgroundColor=${
+                m.gender === "Male" ? "ffdfbf" : "ffd1dc"
+              }`;
+            const isAlumni = m.type === "ex";
+            const subLine =
+              m.designation && m.designation !== "Member"
+                ? m.designation
+                : isAlumni
+                  ? "Alumni"
+                  : "Current Student";
+
+            return `
+            <div
+              onclick='selectSearchSuggestion(${JSON.stringify(m).replace(/'/g, "&apos;")})'
+              class="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 hover:bg-orange-50 cursor-pointer border-b border-orange-50 last:border-b-0 transition-colors"
+            >
+              <img src="${finalPic}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white shadow-sm flex-shrink-0">
+              <div class="flex-1 min-w-0 text-left">
+                <p class="text-xs sm:text-sm font-bold text-brand-900 truncate">${m.name}</p>
+                <p class="text-[10px] sm:text-xs text-gray-500 truncate">${subLine} · ${decodeBatch(m.batch)}</p>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 flex-shrink-0"></i>
+            </div>`;
+          })
+          .join("");
+
+        box.classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      window.selectSearchSuggestion = (m) => {
+        hideSearchSuggestions();
+        document.getElementById("member-search").value = m.name;
+        searchQuery = m.name;
+        renderMembers();
+        showMemberModal(m);
+      };
+
+      // বাইরে ক্লিক করলে সাজেশন বক্স বন্ধ হয়ে যাবে
+      document.addEventListener("click", (e) => {
+        const box = document.getElementById("search-suggestions");
+        const input = document.getElementById("member-search");
+        if (
+          box &&
+          !box.contains(e.target) &&
+          e.target !== input &&
+          !box.classList.contains("hidden")
+        ) {
+          hideSearchSuggestions();
+        }
+      });
 
       // 🎯 Member Detail Modal
       window.showMemberModal = (m) => {
