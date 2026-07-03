@@ -2821,7 +2821,19 @@
           const res = await fetch(apiUrl);
           const data = await res.json();
 
-          console.log("YouTube fetch response:", data); // 🔍 debug — পরে মুছে ফেলা যাবে
+          console.log("YT status:", data.status);
+          console.log(
+            "YT items count:",
+            data.items ? data.items.length : "no items key",
+          );
+          console.log(
+            "YT first item:",
+            data.items && data.items[0] ? data.items[0].title : "none",
+          );
+          console.log(
+            "YT full response (expand me):",
+            JSON.stringify(data).substring(0, 500),
+          );
 
           if (data.status === "ok" && data.items && data.items.length > 0) {
             grid.innerHTML = data.items
@@ -2834,14 +2846,14 @@
                 // 🎯 7ম ও 8ম ভিডিও (idx 6,7) mobile এ hide, শুধু lg+ এ দেখাবে
                 const visibilityClass = idx >= 6 ? "hidden lg:block" : "";
                 return `
-              <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
-                  <div class="aspect-video relative overflow-hidden">
-                      <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-                      <img src="${thumbnail}" class="w-full h-full object-cover relative z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)">
-                      <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
-                  </div>
-                  <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white font-serif">${v.title}</h3></div>
-              </div>`;
+    <div class="video-card-group bg-white/5 rounded-xl overflow-hidden animate-on-scroll cursor-pointer border border-white/10 hover:border-red-400 transition-colors ${visibilityClass}" onclick="window.open('${v.link}', '_blank')">
+        <div class="relative overflow-hidden w-full" style="padding-bottom: 56.25%;">
+            <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+            <img src="${thumbnail}" class="absolute inset-0 w-full h-full object-cover z-10 opacity-0 transition-opacity duration-500" alt="" loading="lazy" onload="handleImageLoad(this)" onerror="this.src='https://i.ytimg.com/vi/${videoId}/mqdefault.jpg'; handleImageLoad(this);">
+            <div class="play-overlay absolute inset-0 flex items-center justify-center text-white text-2xl z-20">▶</div>
+        </div>
+        <div class="p-4 text-center"><h3 class="text-xs sm:text-sm font-bold line-clamp-2 text-white font-serif">${v.title}</h3></div>
+    </div>`;
               })
               .join("");
           } else {
