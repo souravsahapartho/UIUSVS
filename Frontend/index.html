@@ -1551,7 +1551,7 @@
             >
           </div>
           <img
-            src="https://uiusvs.netlify.app/logo.jpg"
+            src="https://res.cloudinary.com/yslkb5jl/image/upload/v1782901288/favicon_hsl3pt.png"
             alt="UIUSVS Logo"
             class="h-7 w-7 sm:h-11 sm:w-11 object-contain rounded-full shadow-md border-[2px] border-orange-300 relative z-30 bg-white group-hover:scale-105 transition-transform flex-shrink-0"
             onerror="
@@ -1583,6 +1583,11 @@
             >Home</a
           >
           <a
+            href="#festivals"
+            class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors"
+            >Upcoming Events</a
+          >
+          <a
             href="members.html"
             class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors"
             >UIUSVS Family</a
@@ -1606,46 +1611,96 @@
         <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
           <button
             id="mobile-menu-button"
-            class="md:hidden p-2 text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+            onclick="toggleMobileDrawer()"
+            class="md:hidden p-2.5 text-red-800 hover:bg-red-50 active:scale-90 rounded-xl transition-all duration-200"
             aria-label="Toggle Menu"
           >
             <i data-lucide="menu" class="w-6 h-6"></i>
           </button>
         </div>
       </div>
-      <div
-        id="mobile-menu"
-        class="hidden absolute top-full left-0 w-full bg-[#fff8e1]/95 backdrop-blur-xl border-t border-red-100 shadow-lg md:hidden z-50 max-h-[85vh] overflow-y-auto"
-      >
-        <nav class="flex flex-col p-6 space-y-4 text-center font-sans">
-          <a
-            href="#home"
-            class="block py-3 text-red-900 font-semibold text-lg hover:bg-red-50 rounded-lg"
-            >Home</a
-          >
-          <a
-            href="members.html"
-            class="block py-3 text-gray-800 font-semibold text-lg hover:bg-red-50 rounded-lg"
-            >UIUSVS Family</a
-          >
-          <a
-            href="gallery.html"
-            class="block py-3 text-gray-800 font-semibold text-lg hover:bg-red-50 rounded-lg"
-            >Gallery</a
-          >
-          <a
-            href="blog.html"
-            class="block py-3 text-gray-800 font-semibold text-lg hover:bg-red-50 rounded-lg"
-            >Blog</a
-          >
-          <a
-            href="login.html"
-            class="block py-3 mt-4 bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors"
-            >My Profile</a
-          >
-        </nav>
-      </div>
     </header>
+
+    <!-- 🎯 Mobile Drawer (slide-in from right, gallery.html style) -->
+    <div
+      id="mobile-drawer"
+      class="fixed inset-y-0 right-0 w-72 max-w-[80vw] bg-[#fffaf0] shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col"
+    >
+      <div
+        class="p-4 border-b border-orange-100 flex justify-between items-center bg-brand-50/70"
+      >
+        <div class="flex items-center gap-2">
+          <img
+            src="https://res.cloudinary.com/yslkb5jl/image/upload/v1782901288/favicon_hsl3pt.png"
+            alt="UIUSVS Logo"
+            class="h-8 w-8 object-contain rounded-full border border-orange-200 bg-white"
+          />
+          <span class="font-serif font-bold text-lg text-red-900">Menu</span>
+        </div>
+        <button
+          onclick="toggleMobileDrawer()"
+          class="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full p-1.5 transition-colors"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <nav class="flex flex-col p-5 gap-1.5 font-sans flex-1 overflow-y-auto">
+        <a
+          href="#home"
+          onclick="toggleMobileDrawer()"
+          class="py-2.5 px-3 rounded-xl text-red-900 font-bold hover:bg-red-50 transition-colors"
+          >Home</a
+        >
+        <a
+          href="#festivals"
+          onclick="toggleMobileDrawer()"
+          class="py-2.5 px-3 rounded-xl text-gray-700 font-bold hover:bg-red-50 hover:text-red-900 transition-colors"
+          >Upcoming Events</a
+        >
+        <a
+          href="members.html"
+          class="py-2.5 px-3 rounded-xl text-gray-700 font-bold hover:bg-red-50 hover:text-red-900 transition-colors"
+          >UIUSVS Family</a
+        >
+        <a
+          href="gallery.html"
+          class="py-2.5 px-3 rounded-xl text-gray-700 font-bold hover:bg-red-50 hover:text-red-900 transition-colors"
+          >Gallery</a
+        >
+        <a
+          href="blog.html"
+          class="py-2.5 px-3 rounded-xl text-gray-700 font-bold hover:bg-red-50 hover:text-red-900 transition-colors"
+          >Blog</a
+        >
+        <hr class="border-orange-100 my-2" />
+        <a
+          href="login.html"
+          class="py-3 text-center bg-red-700 text-white font-bold rounded-xl shadow-md hover:bg-red-800 transition-colors"
+          >My Profile</a
+        >
+      </nav>
+
+      <div class="p-4 border-t border-orange-100 text-center bg-brand-50/40">
+        <p class="text-xs font-bold text-red-900 font-serif">UIU SVS</p>
+        <p class="text-[10px] text-gray-400 mt-0.5">
+          Developed by
+          <a
+            href="https://www.sourav.com.bd"
+            target="_blank"
+            class="font-semibold text-red-600 hover:underline"
+            >Sourav Saha</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div
+      id="drawer-overlay"
+      class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden transition-opacity duration-300"
+      onclick="toggleMobileDrawer()"
+    ></div>
 
     <main>
       <button
@@ -3243,11 +3298,18 @@
           if (!isPageLoaded) hideLoader();
         }, 5000); // 5 sec max wait
 
-        const menuBtn = document.getElementById("mobile-menu-button");
-        const mobileMenu = document.getElementById("mobile-menu");
-        menuBtn?.addEventListener("click", () =>
-          mobileMenu?.classList.toggle("hidden"),
-        );
+        window.toggleMobileDrawer = function () {
+          const drawer = document.getElementById("mobile-drawer");
+          const overlay = document.getElementById("drawer-overlay");
+          if (!drawer || !overlay) return;
+          drawer.classList.toggle("translate-x-full");
+          overlay.classList.toggle("hidden");
+          document.body.style.overflow = drawer.classList.contains(
+            "translate-x-full",
+          )
+            ? ""
+            : "hidden";
+        };
 
         window.closeLightbox = () => {
           const lightbox = document.getElementById("image-lightbox");
