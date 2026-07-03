@@ -540,8 +540,8 @@ app.get("/api/blogs/public", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT id, title, slug, excerpt, category, thumbnail_url AS img,
-              author_name AS author, created_at
-       FROM blogs ORDER BY created_at DESC`,
+       author_name AS author, post_date, created_at
+FROM blogs ORDER BY post_date DESC`,
     );
     res.json(rows);
   } catch (error) {
@@ -549,21 +549,19 @@ app.get("/api/blogs/public", async (req, res) => {
   }
 });
 
-// ---- PUBLIC: max 3 pinned blogs, for index.html home page ----
 app.get("/api/blogs/pinned", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT id, title, slug, excerpt, category, thumbnail_url AS img,
-              author_name AS author, created_at
+              author_name AS author, post_date, created_at
        FROM blogs WHERE is_pinned = TRUE
-       ORDER BY updated_at DESC LIMIT ${MAX_PINNED_BLOGS}`,
+       ORDER BY post_date DESC LIMIT ${MAX_PINNED_BLOGS}`,
     );
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 // ---- PUBLIC: single blog by slug, for blog-detail.html ----
 app.get("/api/blogs/slug/:slug", async (req, res) => {
   try {
