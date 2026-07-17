@@ -894,6 +894,73 @@
     class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active"
     oncontextmenu="return false;"
   >
+    <!-- 🚧 TEMPORARY MAINTENANCE BANNER - START (delete this whole block later) -->
+    <div
+      id="maintenance-banner"
+      class="w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white py-2.5 px-4 relative z-[110] shadow-md"
+    >
+      <div
+        class="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center"
+      >
+        <p class="text-xs sm:text-sm font-bold tracking-wide">
+          🚧 Website is under development. We will be back soon!
+        </p>
+        <div
+          id="maintenance-countdown"
+          class="flex items-center gap-1.5 sm:gap-2 font-mono font-extrabold text-xs sm:text-sm bg-white/15 px-3 py-1 rounded-full border border-white/20"
+        >
+          <span><span id="mb-days">00</span>d</span>
+          <span>:</span>
+          <span><span id="mb-hours">00</span>h</span>
+          <span>:</span>
+          <span><span id="mb-mins">00</span>m</span>
+          <span>:</span>
+          <span><span id="mb-secs">00</span>s</span>
+        </div>
+      </div>
+      <button
+        onclick="document.getElementById('maintenance-banner').remove()"
+        class="absolute top-1/2 right-3 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <script>
+      (function () {
+        const targetDate = new Date("2026-09-15T00:00:00").getTime();
+        function updateMaintenanceCountdown() {
+          const banner = document.getElementById("maintenance-banner");
+          if (!banner) return;
+          const diff = targetDate - new Date().getTime();
+          if (diff <= 0) {
+            banner.remove();
+            return;
+          }
+          const days = Math.floor(diff / 86400000);
+          const hours = Math.floor((diff % 86400000) / 3600000);
+          const mins = Math.floor((diff % 3600000) / 60000);
+          const secs = Math.floor((diff % 60000) / 1000);
+          document.getElementById("mb-days").textContent = String(
+            days,
+          ).padStart(2, "0");
+          document.getElementById("mb-hours").textContent = String(
+            hours,
+          ).padStart(2, "0");
+          document.getElementById("mb-mins").textContent = String(
+            mins,
+          ).padStart(2, "0");
+          document.getElementById("mb-secs").textContent = String(
+            secs,
+          ).padStart(2, "0");
+        }
+        updateMaintenanceCountdown();
+        setInterval(updateMaintenanceCountdown, 1000);
+      })();
+    </script>
+    <!-- 🚧 TEMPORARY MAINTENANCE BANNER - END -->
+
     <!-- 🎯 Flagship Central Modal (Website Matched Theme) -->
     <div
       id="saraswati-modal-overlay"
