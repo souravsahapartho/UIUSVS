@@ -897,20 +897,22 @@
     <!-- 🚧 TEMPORARY MAINTENANCE BANNER - START (delete this whole block later) -->
     <div
       id="maintenance-banner"
-      class="fixed top-0 left-0 w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white py-2.5 px-4 z-[200] shadow-md"
+      class="fixed top-0 left-0 w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white z-[200] shadow-md py-2.5 sm:py-3 px-3 sm:px-6"
       style="display: flex"
     >
       <div
-        class="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center"
+        class="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center relative pr-8 sm:pr-10"
       >
-        <p class="text-xs sm:text-sm font-bold tracking-wide">
+        <p
+          class="text-[11px] xs:text-xs sm:text-sm font-bold tracking-wide leading-snug max-w-full sm:max-w-2xl"
+        >
           🚧 We are currently rebuilding and updating our website. You may
           encounter some temporary inconsistencies during this process — we
           apologize for the inconvenience.
         </p>
         <div
           id="maintenance-countdown"
-          class="flex items-center gap-1.5 sm:gap-2 font-mono font-extrabold text-xs sm:text-sm bg-white/15 px-3 py-1 rounded-full border border-white/20"
+          class="flex items-center gap-1 sm:gap-2 font-mono font-extrabold text-[10px] xs:text-xs sm:text-sm bg-white/15 px-2.5 sm:px-3 py-1 rounded-full border border-white/20 flex-shrink-0 whitespace-nowrap"
         >
           <span><span id="mb-days">00</span>d</span>
           <span>:</span>
@@ -921,15 +923,16 @@
           <span><span id="mb-secs">00</span>s</span>
         </div>
       </div>
+
       <button
         onclick="
           document.getElementById('maintenance-banner').style.display = 'none';
           window.adjustForMaintenanceBanner();
         "
-        class="absolute top-1/2 right-3 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
-        aria-label="Close"
+        class="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 hover:bg-white/30 active:scale-90 text-white transition-all duration-200 border border-white/25 flex-shrink-0"
+        aria-label="Close notice"
       >
-        <i data-lucide="x" class="w-4 h-4"></i>
+        <i data-lucide="x" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
       </button>
     </div>
 
@@ -965,7 +968,7 @@
         updateMaintenanceCountdown();
         setInterval(updateMaintenanceCountdown, 1000);
 
-        // 🎯 Push the sticky header down by the banner's height so nothing overlaps
+        // 🎯 Push the sticky header down by the banner's actual (responsive) height
         window.adjustForMaintenanceBanner = function () {
           var banner = document.getElementById("maintenance-banner");
           var header = document.querySelector("header");
@@ -981,6 +984,9 @@
 
         window.addEventListener("load", window.adjustForMaintenanceBanner);
         window.addEventListener("resize", window.adjustForMaintenanceBanner);
+
+        // Lucide icons load async in your existing script — re-render after this block mounts
+        if (window.lucide) window.lucide.createIcons();
       })();
     </script>
     <!-- 🚧 TEMPORARY MAINTENANCE BANNER - END -->
