@@ -897,14 +897,16 @@
     <!-- 🚧 TEMPORARY MAINTENANCE BANNER - START (delete this whole block later) -->
     <div
       id="maintenance-banner"
-      class="w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white py-2.5 px-4 relative z-[110] shadow-md"
+      class="fixed top-0 left-0 w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white py-2.5 px-4 z-[200] shadow-md"
       style="display: flex"
     >
       <div
         class="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center"
       >
         <p class="text-xs sm:text-sm font-bold tracking-wide">
-          🚧 Website is under development. We will be back soon!
+          🚧 We are currently rebuilding and updating our website. You may
+          encounter some temporary inconsistencies during this process — we
+          apologize for the inconvenience.
         </p>
         <div
           id="maintenance-countdown"
@@ -921,7 +923,8 @@
       </div>
       <button
         onclick="
-          document.getElementById('maintenance-banner').style.display = 'none'
+          document.getElementById('maintenance-banner').style.display = 'none';
+          window.adjustForMaintenanceBanner();
         "
         class="absolute top-1/2 right-3 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
         aria-label="Close"
@@ -932,15 +935,15 @@
 
     <script>
       (function () {
-        // ⚠️ এই countdown শুধু সময় দেখানোর জন্য — banner কখনো নিজে থেকে বন্ধ হবে না
+        // ⚠️ Countdown is for display only — the banner never auto-hides on its own
         var maintenanceTargetDate = new Date("2026-09-15T00:00:00").getTime();
 
         function updateMaintenanceCountdown() {
           var daysEl = document.getElementById("mb-days");
-          if (!daysEl) return; // user cross দিয়ে বন্ধ করলে বা element না থাকলে চুপচাপ থেমে যাবে
+          if (!daysEl) return; // stops quietly once the user closes the banner
 
           var diff = maintenanceTargetDate - new Date().getTime();
-          if (diff < 0) diff = 0; // negative হলেও 00:00:00:00 দেখাবে, banner remove হবে না
+          if (diff < 0) diff = 0;
 
           var days = Math.floor(diff / 86400000);
           var hours = Math.floor((diff % 86400000) / 3600000);
@@ -961,6 +964,23 @@
 
         updateMaintenanceCountdown();
         setInterval(updateMaintenanceCountdown, 1000);
+
+        // 🎯 Push the sticky header down by the banner's height so nothing overlaps
+        window.adjustForMaintenanceBanner = function () {
+          var banner = document.getElementById("maintenance-banner");
+          var header = document.querySelector("header");
+          if (!header) return;
+
+          if (banner && banner.style.display !== "none") {
+            var h = banner.offsetHeight;
+            header.style.marginTop = h + "px";
+          } else {
+            header.style.marginTop = "0px";
+          }
+        };
+
+        window.addEventListener("load", window.adjustForMaintenanceBanner);
+        window.addEventListener("resize", window.adjustForMaintenanceBanner);
       })();
     </script>
     <!-- 🚧 TEMPORARY MAINTENANCE BANNER - END -->
