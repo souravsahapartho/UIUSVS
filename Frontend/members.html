@@ -889,7 +889,6 @@
     </div>
 
     <script>
-      // 🎯 Avatar লোড/error হ্যান্ডলার — broken image icon বা alt text flash বন্ধ করার জন্য
       window.handleAvatarLoad = function (img) {
         if (img && img.classList) {
           img.classList.remove("opacity-0");
@@ -931,12 +930,10 @@
       let currentFilter = "all";
       let searchQuery = "";
 
-      // 🎯 Batch code decode: "181" -> Spring 2018, "253" -> Fall 2025
       function decodeBatch(code) {
         if (!code) return "-";
         const str = String(code).trim();
-        if (!/^\d{2,3}$/.test(str)) return str; // already plain text, show as-is
-
+        if (!/^\d{2,3}$/.test(str)) return str;
         const semDigit = str.slice(-1);
         const yearDigits = str.slice(0, -1);
         const year = "20" + yearDigits.padStart(2, "0");
@@ -959,7 +956,6 @@
         } catch (err) {
           console.warn(`Members fetch attempt ${attempt} failed:`, err);
           if (attempt < maxAttempts) {
-            // 🎯 নিঃশব্দে আবার চেষ্টা — loader দেখতেই থাকবে, user কোনো error দেখবে না
             setTimeout(() => loadMembers(attempt + 1), 900 * attempt);
           } else {
             const grid = document.getElementById("members-grid");
@@ -1162,7 +1158,6 @@
         box.innerHTML = "";
       }
 
-      // 🎯 Query অনুযায়ী dynamic suggestion বানানো (নাম/designation/batch/department ম্যাচ)
       function renderSearchSuggestions(query) {
         const box = document.getElementById("search-suggestions");
         const q = query.trim().toLowerCase();
@@ -1231,7 +1226,6 @@
         showMemberModal(m);
       };
 
-      // বাইরে ক্লিক করলে সাজেশন বক্স বন্ধ হয়ে যাবে
       document.addEventListener("click", (e) => {
         const box = document.getElementById("search-suggestions");
         const input = document.getElementById("member-search");
@@ -1245,8 +1239,6 @@
         }
       });
 
-      // 🎯 Member Detail Modal — খোলার সাথে সাথেই সব টেক্সট/ডেটা ইনস্ট্যান্ট বসে যায় (কোনো নেটওয়ার্ক কল লাগে না)
-      // শুধু avatar ছবি lazily লোড হয়, ততক্ষণ ছোট স্পিনার দেখায়
       window.showMemberModal = (m) => {
         const isAlumni = m.type === "ex";
         const finalPic =
@@ -1255,14 +1247,12 @@
             m.gender === "Male" ? "ffdfbf" : "ffd1dc"
           }`;
 
-        // Theme swap (current vs alumni)
         const topbar = document.getElementById("modal-topbar");
         const card = document.getElementById("member-modal-card");
         topbar.className =
           "w-full h-1.5 " +
           (isAlumni ? "modal-topbar-alumni" : "modal-topbar-current");
 
-        // Avatar reset — স্পিনার দেখাও, ছবি লোড হলে ফেড-ইন হবে
         const avatarImg = document.getElementById("modal-avatar");
         const avatarWrap = document.getElementById("modal-avatar-wrap");
         avatarImg.classList.remove("opacity-0");
@@ -1302,9 +1292,8 @@
         modal.classList.remove("hidden");
         modal.classList.add("flex");
 
-        // Animation class ফের চালু করার জন্য reflow trick (একই class দুইবার পরপর দিলেও যেন animation আবার চলে)
         card.classList.remove("modal-anim-current", "modal-anim-alumni");
-        void card.offsetWidth; // reflow force
+        void card.offsetWidth;
         card.classList.add(
           isAlumni ? "modal-anim-alumni" : "modal-anim-current",
         );
