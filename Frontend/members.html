@@ -659,41 +659,36 @@
 
       <div
         id="members-grid"
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5 lg:gap-6"
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5 lg:gap-6"
+      ></div>
+
+      <!-- Loading State -->
+      <div
+        id="members-loading"
+        class="w-full flex flex-col items-center justify-center text-center py-16 sm:py-24"
       >
         <div
-          id="members-grid"
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
-        ></div>
-
-        <!-- 🎯 Themed Loading State (data আসার আগ পর্যন্ত) -->
-        <div
-          id="members-loading"
-          class="w-full flex flex-col items-center justify-center text-center py-16 sm:py-24 mx-auto"
+          class="members-loader-wrapper w-full flex flex-col items-center text-center"
         >
-          <div
-            class="members-loader-wrapper w-full flex flex-col items-center text-center mx-auto"
-          >
-            <div class="members-loader-icons">
-              <span>🕉️</span><span>🪔</span><span>🪷</span>
-            </div>
-            <p class="members-loader-text w-full text-center">
-              LOADING UIUSVS FAMILY
-            </p>
-            <p
-              class="w-full text-center text-[11px] sm:text-xs text-gray-400 font-medium"
-            >
-              Fetching members, please wait...
-            </p>
+          <div class="members-loader-icons">
+            <span>🕉️</span><span>🪔</span><span>🪷</span>
           </div>
+          <p class="members-loader-text w-full text-center">
+            LOADING UIUSVS FAMILY
+          </p>
+          <p
+            class="w-full text-center text-[11px] sm:text-xs text-gray-400 font-medium"
+          >
+            Fetching members, please wait...
+          </p>
         </div>
-
-        <!-- 🎯 Pagination -->
-        <div
-          id="members-pagination"
-          class="mt-8 sm:mt-10 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap"
-        ></div>
       </div>
+
+      <!-- Pagination -->
+      <div
+        id="members-pagination"
+        class="mt-8 sm:mt-10 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap"
+      ></div>
     </main>
 
     <footer
@@ -953,12 +948,12 @@
             const loader = document.getElementById("members-loading");
             loader.classList.add("hidden");
             grid.innerHTML = `
-              <div class="col-span-full text-center text-red-500 py-10 flex flex-col items-center gap-3">
-                <span>মেম্বার লোড করতে সমস্যা হয়েছে। একটু পর আবার চেষ্টা করুন।</span>
-                <button onclick="loadMembers()" class="px-5 py-2 bg-brand-700 text-white text-xs font-bold rounded-full hover:bg-brand-900 transition">
-                  আবার চেষ্টা করুন
-                </button>
-              </div>`;
+  <div class="col-span-full text-center text-red-500 py-10 flex flex-col items-center gap-3">
+    <span>Unable to load members right now. Please try again shortly.</span>
+    <button onclick="loadMembers()" class="px-5 py-2 bg-brand-700 text-white text-xs font-bold rounded-full hover:bg-brand-900 transition">
+      Retry
+    </button>
+  </div>`;
           }
         }
       }
@@ -966,7 +961,7 @@
       let currentPage = 1;
 
       function getMembersPerPage() {
-        return window.innerWidth < 640 ? 10 : 8;
+        return window.innerWidth < 640 ? 30 : 40;
       }
 
       function renderMembers() {
@@ -986,7 +981,7 @@
         loader.classList.add("hidden");
 
         if (filtered.length === 0) {
-          grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-14 text-sm font-medium">😔 No members found in this category.</div>`;
+          grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-14 text-sm font-medium">No members found in this category.</div>`;
           paginationBox.innerHTML = "";
           return;
         }
@@ -1169,9 +1164,9 @@
 
         if (matches.length === 0) {
           box.innerHTML = `
-            <div class="p-4 text-center text-xs sm:text-sm text-gray-400 font-medium">
-              কোনো মেম্বার পাওয়া যায়নি।
-            </div>`;
+  <div class="p-4 text-center text-xs sm:text-sm text-gray-400 font-medium">
+    No matching members found.
+  </div>`;
           box.classList.remove("hidden");
           return;
         }
