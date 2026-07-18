@@ -455,13 +455,27 @@
               Your official UIUSVS Digital Identity Card is generated based on
               this profile data.
             </p>
-            <a
-              id="download-id-btn"
-              href="#"
-              class="text-xs font-bold bg-white text-brand-900 px-4 py-2 rounded-lg shadow hover:bg-brand-50 transition-colors flex items-center gap-2 pointer-events-none opacity-50"
-            >
-              <i data-lucide="download" class="w-4 h-4"></i> Download ID
-            </a>
+            <div class="flex items-center gap-2 flex-wrap">
+              <a
+                id="download-id-btn"
+                href="#"
+                class="text-xs font-bold bg-white text-brand-900 px-4 py-2 rounded-lg shadow hover:bg-brand-50 transition-colors flex items-center gap-2 pointer-events-none opacity-50"
+              >
+                <i data-lucide="download" class="w-4 h-4"></i> Download ID
+              </a>
+              <button
+                id="id-refresh-btn"
+                onclick="checkIdCardStatus(true)"
+                title="Check if your ID card is ready"
+                class="text-xs font-bold bg-white/10 text-white px-3 py-2 rounded-lg hover:bg-white/20 transition-colors flex items-center gap-1.5 border border-white/20"
+              >
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <p
+              id="id-status-note"
+              class="text-[11px] text-brand-100 mt-2 hidden"
+            ></p>
           </div>
         </div>
 
@@ -907,7 +921,68 @@
         });
       }
 
-      // ---- Load Profile Data ----
+      function applyIdCardStatus(u) {
+        const downloadBtn = document.getElementById("download-id-btn");
+        const note = document.getElementById("id-status-note");
+        if (u.id_card_url) {
+          downloadBtn.href = `${API_BASE}/profile/download-id`;
+          downloadBtn.classList.remove("pointer-events-none", "opacity-50");
+          note.classList.add("hidden");
+        } else {
+          downloadBtn.href = "#";
+          downloadBtn.classList.add("pointer-events-none", "opacity-50");
+          if (u.is_approved && !u.needs_admin_review) {
+            note.textContent =
+              "Your ID card is being generated — this usually takes under a minute.";
+          } else {
+            note.textContent =
+              "Your ID card will be available after admin approval.";
+          }
+          note.classList.remove("hidden");
+        }
+      }
+
+      let idCardPollCount = 0;
+      let idCardPollTimer = null;
+
+      async function checkIdCardStatus(manual = false) {
+        const icon = document
+          .getElementById("id-refresh-btn")
+          ?.querySelector("i");
+        icon?.classList.add("animate-spin");
+        try {
+          const res = await fetch(`${API_BASE}/profile`, {
+            credentials: "include",
+          });
+          if (!res.ok) return;
+          const u = await res.json();
+          currentUser = u;
+          applyIdCardStatus(u);
+          if (u.id_card_url) {
+            clearInterval(idCardPollTimer);
+            if (manual) showToast("Your ID card is ready!", "success");
+          } else if (manual) {
+            showToast("Not ready yet — please check again shortly.", "warning");
+          }
+        } catch (err) {
+          // Silent fail — refresh চেক ব্যর্থ হলে ইউজারকে বিরক্ত করার দরকার নেই
+        } finally {
+          icon?.classList.remove("animate-spin");
+        }
+      }
+
+      function startIdCardPolling() {
+        idCardPollCount = 0;
+        clearInterval(idCardPollTimer);
+        idCardPollTimer = setInterval(() => {
+          idCardPollCount++;
+          if (idCardPollCount > 6) {
+            clearInterval(idCardPollTimer);
+            return;
+          }
+          checkIdCardStatus(false);
+        }, 8000);
+      }
       async function loadProfile() {
         try {
           const res = await fetch(`${API_BASE}/profile`, {
@@ -959,14 +1034,9 @@
             .getElementById("profile-form")
             .classList.remove("opacity-40", "pointer-events-none");
 
-          const downloadBtn = document.getElementById("download-id-btn");
-          if (u.id_card_url) {
-            downloadBtn.href = `${API_BASE}/profile/download-id`;
-            downloadBtn.classList.remove("pointer-events-none", "opacity-50");
-          } else {
-            downloadBtn.href = "#";
-            downloadBtn.classList.add("pointer-events-none", "opacity-50");
-            downloadBtn.title = "ID card not generated yet — contact admin";
+          applyIdCardStatus(u);
+          if (u.is_approved && !u.needs_admin_review && !u.id_card_url) {
+            startIdCardPolling();
           }
 
           document.getElementById("prof-name").value = u.name || "";
