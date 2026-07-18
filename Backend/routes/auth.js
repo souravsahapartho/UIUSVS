@@ -35,7 +35,9 @@ module.exports = (pool) => {
         [email],
       );
       if (existing.length)
-        return res.status(400).json({ error: "Email already registered" });
+        return res
+          .status(409)
+          .json({ error: "An account with this email already exists." });
 
       const hashed = await bcrypt.hash(password, 10);
       const otp = generateOtp();
@@ -135,14 +137,19 @@ module.exports = (pool) => {
         [email],
       );
       if (!rows.length)
-        return res.status(400).json({ error: "No pending signup found" });
+        return res.status(404).json({
+          error:
+            "We couldn't find a pending signup for this email. Please register again.",
+        });
 
       const pending = rows[0];
       if (
         pending.otp_code !== otp ||
         new Date(pending.otp_expires_at) < new Date()
       ) {
-        return res.status(400).json({ error: "Invalid or expired OTP" });
+        return res
+          .status(400)
+          .json({ error: "This verification code is invalid or has expired." });
       }
 
       const d =
@@ -183,19 +190,27 @@ module.exports = (pool) => {
       email,
     ]);
     if (!rows.length)
-      return res.status(400).json({ error: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ error: "Incorrect email or password. Please try again." });
 
     const user = rows[0];
     const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ error: "Invalid credentials" });
+    if (!ok)
+      return res
+        .status(401)
+        .json({ error: "Incorrect email or password. Please try again." });
     if (!user.is_approved)
-      return res.status(403).json({ error: "Account pending admin approval" });
+      return res.status(403).json({
+        error:
+          "Your account is currently under review. You'll be notified once an admin approves it.",
+      });
 
     // 🆕 Block check
     if (user.is_blocked) {
       return res.status(403).json({
         error:
-          "আপনার একাউন্ট ব্লক করা হয়েছে। বিস্তারিত জানতে UIUSVS-এর সাথে যোগাযোগ করুন।",
+          "Your account has been suspended. Please contact the UIUSVS admin team for assistance.",
       });
     }
 
@@ -214,7 +229,10 @@ module.exports = (pool) => {
       [email, contact],
     );
     if (!rows.length)
-      return res.status(400).json({ error: "Email/contact mismatch" });
+      return res.status(400).json({
+        error:
+          "We couldn't verify those details. Please check your email and contact number.",
+      });
 
     const user = rows[0];
     const check = checkAndBumpLimit(user, "pwd", { month: 2, year: 10 });
@@ -283,7 +301,10 @@ module.exports = (pool) => {
     const [rows] = await pool.query("SELECT * FROM users WHERE email=?", [
       email,
     ]);
-    if (!rows.length) return res.status(400).json({ error: "User not found" });
+    if (!rows.length)
+      return res
+        .status(404)
+        .json({ error: "We couldn't find an account with that email." });
     const user = rows[0];
 
     if (
@@ -291,7 +312,9 @@ module.exports = (pool) => {
       user.otp_purpose !== "reset_password" ||
       new Date(user.otp_expires_at) < new Date()
     ) {
-      return res.status(400).json({ error: "Invalid or expired OTP" });
+      return res
+        .status(400)
+        .json({ error: "This verification code is invalid or has expired." });
     }
 
     const check = checkAndBumpLimit(user, "pwd", { month: 2, year: 10 });
@@ -323,7 +346,10 @@ module.exports = (pool) => {
     const user = rows[0];
 
     const ok = await bcrypt.compare(currentPassword, user.password);
-    if (!ok) return res.status(400).json({ error: "Current password wrong" });
+    if (!ok)
+      return res
+        .status(400)
+        .json({ error: "Your current password is incorrect." });
 
     const check = checkAndBumpLimit(user, "pwd", { month: 2, year: 10 });
     if (!check.allowed) return res.status(429).json({ error: check.reason });

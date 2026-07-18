@@ -1957,7 +1957,6 @@
       setInterval(updateTime, 1000);
       updateTime();
 
-      // Toast Logic
       function showToast(message, type = "success") {
         const toast = document.getElementById("admin-toast");
         const toastContent = document.getElementById("toast-content");
@@ -1966,16 +1965,20 @@
 
         if (type === "success") {
           toastContent.className =
-            "px-6 py-3.5 rounded-xl shadow-xl font-bold text-sm text-white flex items-center gap-3 bg-green-600 border-l-4 border-green-300";
+            "bg-white border border-gray-100 border-l-4 border-l-green-500 rounded-lg shadow-lg px-4 py-3 flex items-center gap-2.5 min-w-[260px] max-w-sm text-sm font-medium text-gray-800";
           document
             .getElementById("toast-icon")
             .setAttribute("data-lucide", "check-circle");
+          document.getElementById("toast-icon").className =
+            "w-4.5 h-4.5 text-green-600 flex-shrink-0";
         } else {
           toastContent.className =
-            "px-6 py-3.5 rounded-xl shadow-xl font-bold text-sm text-white flex items-center gap-3 bg-red-600 border-l-4 border-red-300";
+            "bg-white border border-gray-100 border-l-4 border-l-red-500 rounded-lg shadow-lg px-4 py-3 flex items-center gap-2.5 min-w-[260px] max-w-sm text-sm font-medium text-gray-800";
           document
             .getElementById("toast-icon")
             .setAttribute("data-lucide", "alert-circle");
+          document.getElementById("toast-icon").className =
+            "w-4.5 h-4.5 text-red-600 flex-shrink-0";
         }
         lucide.createIcons();
 
