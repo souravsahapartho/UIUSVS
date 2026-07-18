@@ -355,12 +355,18 @@ module.exports = (pool) => {
           .json({ error: "Only superadmin can delete an admin" });
 
       // 🆕 Sheet থেকেও remove করার চেষ্টা
+      console.log(
+        `🗑️ Attempting sheet delete for studentId: "${target.student_id}"`,
+      );
       try {
-        await removeMemberFromSheet(target.student_id);
+        const sheetDeleteResult = await removeMemberFromSheet(
+          target.student_id,
+        );
+        console.log("✅ Sheet delete result:", sheetDeleteResult);
       } catch (sheetErr) {
         console.error(
           "⚠️ Sheet delete failed (user still deleted from DB):",
-          sheetErr,
+          sheetErr.message,
         );
       }
 
