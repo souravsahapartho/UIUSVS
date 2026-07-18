@@ -251,7 +251,25 @@
           box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22);
         }
       }
-
+      /* 🎯 Current Student Card — orange/warm theme */
+      .member-card-current {
+        background: linear-gradient(155deg, #ffffff 0%, #fff1e6 100%);
+        border: 1.5px solid #fdba74;
+        position: relative;
+        animation:
+          cardFadeIn 0.5s ease backwards,
+          softGlow 3.5s ease-in-out infinite;
+      }
+      .member-card-current::after {
+        content: "🕉️";
+        position: absolute;
+        bottom: -8px;
+        right: -4px;
+        font-size: 2.4rem;
+        opacity: 0.07;
+        pointer-events: none;
+        transform: rotate(10deg);
+      }
       .member-card-current .avatar-ring {
         background: conic-gradient(
           from 0deg,
