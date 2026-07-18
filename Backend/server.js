@@ -813,7 +813,7 @@ app.get("/api/gallery/featured", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT id, title, caption, category, image_url AS url, event_date
-       FROM gallery ORDER BY is_pinned DESC, created_at DESC LIMIT 12`,
+       FROM gallery ORDER BY is_pinned DESC, created_at DESC LIMIT 60`,
     );
     res.json(rows);
   } catch (error) {
