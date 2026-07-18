@@ -1,5 +1,8 @@
 const express = require("express");
-const { appendApprovedMember } = require("../services/googleSheetsService");
+const {
+  appendApprovedMember,
+  removeMemberFromSheet,
+} = require("../services/googleSheetsService");
 const { verifySession, verifyAdmin } = require("../middleware/auth");
 const { logAdminAction } = require("../services/auditLog");
 
@@ -129,6 +132,10 @@ module.exports = (pool) => {
       const rejectedUser = rows[0];
 
       await pool.query("DELETE FROM users WHERE id=?", [req.params.id]);
+
+      removeMemberFromSheet(rejectedUser.student_id).catch((err) => {
+        console.error("⚠️ Sheet delete on reject failed:", err.message);
+      });
 
       await logAdminAction(pool, {
         adminId: req.user.id,
@@ -331,12 +338,6 @@ module.exports = (pool) => {
       res.status(500).json({ error: error.message });
     }
   });
-
-  // --- Permanently delete a member (from Manage Members table) ---
-  const {
-    appendApprovedMember,
-    removeMemberFromSheet,
-  } = require("../services/googleSheetsService");
 
   router.delete("/:id/delete", verifySession, verifyAdmin, async (req, res) => {
     try {
