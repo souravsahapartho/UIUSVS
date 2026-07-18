@@ -1889,32 +1889,6 @@
           </div>
 
           <div
-            class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 animate-on-scroll"
-          >
-            <button
-              onclick="filterFestivals('all')"
-              id="btn-fest-all"
-              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto"
-            >
-              All Upcoming
-            </button>
-            <button
-              onclick="filterFestivals('major')"
-              id="btn-fest-major"
-              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto"
-            >
-              Major Festivals
-            </button>
-            <button
-              onclick="filterFestivals('ekadashi')"
-              id="btn-fest-ekadashi"
-              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[92%] sm:w-auto mt-2 sm:mt-0"
-            >
-              Only Ekadashi
-            </button>
-          </div>
-
-          <div
             id="festival-list"
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
@@ -2536,7 +2510,6 @@
 
       let indexLightboxItems = [];
       let indexLightboxIndex = 0;
-      let currentFestFilter = "all";
       let activeFlagshipEvent = null;
       let pendingFestivalNotification = null;
       let isFlagshipNotif = false;
@@ -2607,9 +2580,8 @@
           }
 
           initFestivalSystem();
-          filterFestivals("all");
+          renderFestivalList();
 
-          // 5. Fetch Active Modal Announcement
           try {
             const res = await fetch(`${API_BASE}/announcements/active`);
             if (res.ok) {
@@ -2874,47 +2846,24 @@
         }
       }
 
-      window.filterFestivals = (type) => {
-        currentFestFilter = type;
-        const btns = {
-          all: document.getElementById("btn-fest-all"),
-          major: document.getElementById("btn-fest-major"),
-          ekadashi: document.getElementById("btn-fest-ekadashi"),
-        };
-
-        Object.keys(btns).forEach((k) => {
-          if (btns[k]) {
-            if (k === type) {
-              btns[k].className =
-                "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-red-600 text-white shadow-md w-[45%] sm:w-auto";
-            } else {
-              btns[k].className =
-                "px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-white text-red-800 border border-red-200 hover:bg-red-50 w-[45%] sm:w-auto mt-2 sm:mt-0";
-              if (k === "ekadashi" && type !== "ekadashi")
-                btns[k].classList.replace("w-[45%]", "w-[92%]");
-            }
-          }
-        });
-
+      window.renderFestivalList = () => {
         const listEl = document.getElementById("festival-list");
         const showMoreContainer = document.getElementById(
           "show-more-festivals-container",
         );
         if (!listEl) return;
 
-        let upcoming = getUpcomingFestivals();
-        if (currentFestFilter !== "all")
-          upcoming = upcoming.filter((f) => f.type === currentFestFilter);
+        const upcoming = getUpcomingFestivals();
 
         if (showMoreContainer) {
           if (upcoming.length > 3) showMoreContainer.classList.remove("hidden");
           else showMoreContainer.classList.add("hidden");
         }
 
-        const slicedUpcoming = upcoming.slice(0, 6);
+        const slicedUpcoming = upcoming.slice(0, 3);
 
         if (slicedUpcoming.length === 0) {
-          listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found for this category.</p>`;
+          listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found.</p>`;
           return;
         }
 
@@ -2926,11 +2875,12 @@
               month: "short",
               year: "numeric",
             });
-            const isNearest = i === 0 && currentFestFilter === "all";
+            const isNearest = i === 0;
             const highlightClass = isNearest
               ? "border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200"
               : "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
-            const mobileHiddenClass = i >= 4 ? "hidden sm:block" : "";
+            // 3rd item: mobile-e dekhabe, tablet(sm, 2-col)-e hide, desktop(lg, 3-col)-e abar show
+            const mobileHiddenClass = i === 2 ? "sm:hidden lg:block" : "";
 
             let timeBadge = "";
             if (f.daysLeft === 0)
@@ -2974,6 +2924,85 @@
           .join("");
         lucide.createIcons();
       };
+
+      window.openAllFestivalsPopup = function () {
+        const popup = document.getElementById("all-festivals-popup");
+        if (!popup) return;
+        popup.classList.remove("hidden");
+        popup.classList.add("flex");
+        document.body.style.overflow = "hidden";
+        const input = document.getElementById("festival-search-input");
+        if (input) input.value = "";
+        renderAllFestivalsList(getUpcomingFestivals());
+      };
+
+      window.closeAllFestivalsPopup = function () {
+        const popup = document.getElementById("all-festivals-popup");
+        if (!popup) return;
+        popup.classList.add("hidden");
+        popup.classList.remove("flex");
+        document.body.style.overflow = "";
+      };
+
+      window.searchFestivals = function (query) {
+        const q = (query || "").trim().toLowerCase();
+        const upcoming = getUpcomingFestivals();
+        const filtered = !q
+          ? upcoming
+          : upcoming.filter((f) => {
+              const dateStr = new Date(f.date)
+                .toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })
+                .toLowerCase();
+              return (
+                (f.name && f.name.toLowerCase().includes(q)) ||
+                (f.bnName && f.bnName.toLowerCase().includes(q)) ||
+                dateStr.includes(q)
+              );
+            });
+        renderAllFestivalsList(filtered);
+      };
+
+      function renderAllFestivalsList(list) {
+        const container = document.getElementById("all-festivals-list");
+        if (!container) return;
+
+        if (list.length === 0) {
+          container.innerHTML = `<p class="text-center text-gray-500 italic py-8">No festivals found.</p>`;
+          return;
+        }
+
+        container.innerHTML = list
+          .map((f) => {
+            const d = new Date(f.date);
+            const dateStr = d.toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            });
+            const daysLabel =
+              f.daysLeft === 0 ? "Today" : `${f.daysLeft} days left`;
+            return `
+        <div class="bg-white p-4 rounded-xl border border-orange-100 shadow-sm flex justify-between items-center">
+          <div>
+            <h4 class="font-bold text-gray-900 font-serif">${f.name}</h4>
+            <p class="text-xs text-orange-700 font-medium">${f.bnName}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm font-semibold text-gray-700 flex items-center gap-1 justify-end">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${dateStr}
+            </p>
+            <p class="text-xs text-gray-500 mt-0.5">${daysLabel}</p>
+          </div>
+        </div>`;
+          })
+          .join("");
+
+        lucide.createIcons();
+      }
 
       async function fetchYouTube() {
         const grid = document.getElementById("youtube-video-grid");
