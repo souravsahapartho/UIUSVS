@@ -868,11 +868,12 @@
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Login failed");
 
+            const firstName = (data.user.name || "").split(" ")[0];
             if (data.user.role === "admin" || data.user.role === "superadmin") {
-              showToast("Welcome Admin!", "success");
+              showToast(`Welcome back, ${firstName}`, "success");
               setTimeout(() => (window.location.href = "admin.html"), 1000);
             } else {
-              showToast("Login successful!", "success");
+              showToast(`Welcome back, ${firstName}`, "success");
               setTimeout(() => (window.location.href = "profile.html"), 1000);
             }
           } catch (err) {

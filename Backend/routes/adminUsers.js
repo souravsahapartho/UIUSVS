@@ -62,52 +62,57 @@ module.exports = (pool) => {
         [finalName, finalDepartment, finalBatch, finalDesignation, u.id],
       );
 
-      let sheetSynced = true;
-      try {
-        const sheetResult = await appendApprovedMember({
-          id: u.id,
-          name: finalName, // 🆕 নতুন value
-          studentId: u.student_id,
-          email: u.email,
-          contact: u.contact,
-          gender: u.gender,
-          type: u.type,
-          department: finalDepartment, // 🆕 নতুন value
-          batch: finalBatch, // 🆕 নতুন value
-          designation: finalDesignation, // 🆕 নতুন value
-          bloodGroup: u.blood_group,
-          graduationDate: u.graduation_date,
-          sendEmail: isFirstTimeApproval,
-          generateIdCard: needsIdCard,
-        });
+      // 🆕 DB commit হয়ে গেছে — admin কে এখনই response পাঠাও, Sheet/email এর জন্য আর wait না
+      res.json({ message: `${finalName} approved successfully` });
 
-        if (sheetResult && sheetResult.idCardUrl) {
-          await pool.query("UPDATE users SET id_card_url=? WHERE id=?", [
-            sheetResult.idCardUrl,
-            u.id,
-          ]);
+      // 🆕 Sheet sync + email + audit log এখন ব্যাকগ্রাউন্ডে চলবে, response block করবে না
+      (async () => {
+        let sheetSynced = true;
+        try {
+          const sheetResult = await appendApprovedMember({
+            id: u.id,
+            name: finalName,
+            studentId: u.student_id,
+            email: u.email,
+            contact: u.contact,
+            gender: u.gender,
+            type: u.type,
+            department: finalDepartment,
+            batch: finalBatch,
+            designation: finalDesignation,
+            bloodGroup: u.blood_group,
+            graduationDate: u.graduation_date,
+            sendEmail: isFirstTimeApproval,
+            generateIdCard: needsIdCard,
+          });
+
+          if (sheetResult && sheetResult.idCardUrl) {
+            await pool.query("UPDATE users SET id_card_url=? WHERE id=?", [
+              sheetResult.idCardUrl,
+              u.id,
+            ]);
+          }
+        } catch (sheetErr) {
+          console.error(
+            "⚠️ Sheet sync failed (user still approved):",
+            sheetErr,
+          );
+          sheetSynced = false;
         }
-      } catch (sheetErr) {
-        console.error("⚠️ Sheet sync failed (user still approved):", sheetErr);
-        sheetSynced = false;
-      }
 
-      await logAdminAction(pool, {
-        adminId: req.user.id,
-        adminEmail: req.user.email,
-        action: isFirstTimeApproval
-          ? "APPROVE_NEW_MEMBER"
-          : "APPROVE_PROFILE_EDIT",
-        targetUserId: u.id,
-        targetUserName: finalName,
-        details: `Approved ${finalName} (${u.student_id})`,
-      });
-
-      res.json({
-        message: sheetSynced
-          ? "Approved, synced to sheet, and ID card updated"
-          : "Approved (sheet/ID card sync failed — check server logs)",
-      });
+        await logAdminAction(pool, {
+          adminId: req.user.id,
+          adminEmail: req.user.email,
+          action: isFirstTimeApproval
+            ? "APPROVE_NEW_MEMBER"
+            : "APPROVE_PROFILE_EDIT",
+          targetUserId: u.id,
+          targetUserName: finalName,
+          details: sheetSynced
+            ? `Approved ${finalName} (${u.student_id})`
+            : `Approved ${finalName} (${u.student_id}) — sheet sync failed`,
+        });
+      })();
     } catch (error) {
       console.error("❌ Approve user failed:", error);
       res.status(500).json({ error: error.message });

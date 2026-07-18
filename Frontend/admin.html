@@ -1177,8 +1177,10 @@
               <div
                 class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center"
               >
-                <span class="font-bold text-sm text-gray-700"
-                  >Pending Approvals (2)</span
+                <span
+                  class="font-bold text-sm text-gray-700"
+                  id="pending-count-label"
+                  >Pending Approvals</span
                 >
                 <div class="relative">
                   <i
@@ -2856,6 +2858,8 @@
             return;
           }
           const items = await res.json();
+          const label = document.getElementById("pending-count-label");
+          if (label) label.textContent = `Pending Approvals (${items.length})`;
           if (!items.length) {
             container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-gray-400 text-sm">No pending members 🎉</td></tr>`;
             return;
@@ -3340,21 +3344,37 @@
 
       document.addEventListener("DOMContentLoaded", loadAllMembers);
 
+      function updatePendingCountLabel(delta) {
+        const label = document.getElementById("pending-count-label");
+        if (!label) return;
+        const match = label.textContent.match(/\((\d+)\)/);
+        const current = match ? parseInt(match[1]) : 0;
+        label.textContent = `Pending Approvals (${Math.max(0, current + delta)})`;
+      }
+
       async function approveUser(id, btnEl) {
         if (btnEl.disabled) return; // ইতিমধ্যে ক্লিক হয়ে গেছে, আবার করতে দিও না
         btnEl.disabled = true;
         btnEl.classList.add("opacity-50", "cursor-not-allowed");
+
+        // 🆕 Optimistic UI — row কে সাথে সাথে fade out করে দেই, response এর জন্য wait করি না
+        const row = btnEl.closest("tr");
+        row?.classList.add("opacity-0", "transition-opacity", "duration-300");
+
         try {
           const res = await fetch(`${API_BASE}/admin-users/${id}/approve`, {
             method: "PUT",
             credentials: "include",
           });
           if (!res.ok) throw new Error("Approve failed");
-          showToast("Member Approved!");
-          loadPendingUsers();
+
+          showToast("Member approved successfully");
+          setTimeout(() => row?.remove(), 300);
+          updatePendingCountLabel(-1);
           loadAllMembers();
         } catch (err) {
-          showToast("Failed to approve", "error");
+          showToast("Failed to approve. Please try again.", "error");
+          row?.classList.remove("opacity-0");
           btnEl.disabled = false;
           btnEl.classList.remove("opacity-50", "cursor-not-allowed");
         }
@@ -3365,17 +3385,24 @@
         if (!confirm("Reject and remove this signup request?")) return;
         btnEl.disabled = true;
         btnEl.classList.add("opacity-50", "cursor-not-allowed");
+
+        const row = btnEl.closest("tr");
+        row?.classList.add("opacity-0", "transition-opacity", "duration-300");
+
         try {
           const res = await fetch(`${API_BASE}/admin-users/${id}/reject`, {
             method: "DELETE",
             credentials: "include",
           });
           if (!res.ok) throw new Error("Reject failed");
-          showToast("Request Rejected", "error");
-          loadPendingUsers();
+
+          showToast("Request rejected");
+          setTimeout(() => row?.remove(), 300);
+          updatePendingCountLabel(-1);
           loadAllMembers();
         } catch (err) {
-          showToast("Failed to reject", "error");
+          showToast("Failed to reject. Please try again.", "error");
+          row?.classList.remove("opacity-0");
           btnEl.disabled = false;
           btnEl.classList.remove("opacity-50", "cursor-not-allowed");
         }
