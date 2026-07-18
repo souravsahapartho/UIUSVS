@@ -2987,32 +2987,25 @@
         }
       }
 
-      function renderAllMembers(list) {
-        const container = document.getElementById("all-members-list");
-        if (!list.length) {
-          container.innerHTML = `<tr><td colspan="7" class="py-6 px-5 text-center text-gray-400 text-sm">No members found</td></tr>`;
-          return;
-        }
-        container.innerHTML = list
-          .map((u) => {
-            const statusBadge = u.is_blocked
-              ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Blocked</span>`
-              : u.is_approved && !u.needs_admin_review
-                ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Approved</span>`
-                : u.needs_admin_review
-                  ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Pending</span>`
-                  : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Pending</span>`;
+      function renderMemberRow(u) {
+        const statusBadge = u.is_blocked
+          ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Blocked</span>`
+          : u.is_approved && !u.needs_admin_review
+            ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Approved</span>`
+            : u.needs_admin_review
+              ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Pending</span>`
+              : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Pending</span>`;
 
-            const avatar =
-              u.avatar_url ||
-              `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
+        const avatar =
+          u.avatar_url ||
+          `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
 
-            const blockBtn = u.is_blocked
-              ? `<button onclick="unblockMember(${u.id})" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Unblock"><i data-lucide="unlock" class="w-4 h-4"></i></button>`
-              : `<button onclick="blockMember(${u.id})" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-1.5 rounded transition-colors" title="Block"><i data-lucide="ban" class="w-4 h-4"></i></button>`;
+        const blockBtn = u.is_blocked
+          ? `<button onclick="unblockMember(${u.id}, this)" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Unblock"><i data-lucide="unlock" class="w-4 h-4"></i></button>`
+          : `<button onclick="blockMember(${u.id}, this)" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-1.5 rounded transition-colors" title="Block"><i data-lucide="ban" class="w-4 h-4"></i></button>`;
 
-            return `
-    <tr class="hover:bg-brand-50 transition-colors">
+        return `
+    <tr class="hover:bg-brand-50 transition-colors" data-member-id="${u.id}">
       <td class="py-3 px-5"><img src="${avatar}" class="w-9 h-9 rounded-full object-cover border border-orange-200"></td>
       <td class="py-3 px-5">
         <p class="font-bold text-gray-900 text-sm">${u.name}</p>
@@ -3026,14 +3019,20 @@
       <td class="py-3 px-5">${statusBadge}</td>
       <td class="py-3 px-5 text-center space-x-1.5">
         ${blockBtn}
-        <button onclick="deleteMember(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        <button onclick="deleteMember(${u.id}, this)" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
       </td>
     </tr>`;
-          })
-          .join("");
-        lucide.createIcons();
       }
 
+      function renderAllMembers(list) {
+        const container = document.getElementById("all-members-list");
+        if (!list.length) {
+          container.innerHTML = `<tr><td colspan="7" class="py-6 px-5 text-center text-gray-400 text-sm">No members found</td></tr>`;
+          return;
+        }
+        container.innerHTML = list.map(renderMemberRow).join("");
+        lucide.createIcons();
+      }
       function switchEditorMode(mode) {
         const design = document.getElementById("editor-design");
         const code = document.getElementById("editor-code");
@@ -3347,9 +3346,18 @@
         }
       }
 
-      async function blockMember(id) {
-        if (!confirm("এই মেম্বারকে ব্লক করতে চান? সে আর লগইন করতে পারবে না।"))
+      async function blockMember(id, btnEl) {
+        if (
+          !confirm("Block this member? They will no longer be able to log in.")
+        )
           return;
+
+        const row = btnEl?.closest("tr");
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.classList.add("opacity-50", "cursor-not-allowed");
+        }
+
         try {
           const res = await fetch(`${API_BASE}/admin-users/${id}/block`, {
             method: "PUT",
@@ -3357,14 +3365,31 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || "Failed");
+
           showToast(data.message);
-          loadAllMembers();
+
+          // 🆕 Cache update kore শুধু oi row টাই re-render kori, পুরো table na
+          const member = allMembersCache.find((m) => m.id === id);
+          if (member) member.is_blocked = 1;
+          if (row) {
+            row.outerHTML = renderMemberRow(member);
+            lucide.createIcons();
+          }
         } catch (err) {
           showToast(err.message, "error");
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.classList.remove("opacity-50", "cursor-not-allowed");
+          }
         }
       }
+      async function unblockMember(id, btnEl) {
+        const row = btnEl?.closest("tr");
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.classList.add("opacity-50", "cursor-not-allowed");
+        }
 
-      async function unblockMember(id) {
         try {
           const res = await fetch(`${API_BASE}/admin-users/${id}/unblock`, {
             method: "PUT",
@@ -3372,20 +3397,38 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || "Failed");
+
           showToast(data.message);
-          loadAllMembers();
+
+          const member = allMembersCache.find((m) => m.id === id);
+          if (member) member.is_blocked = 0;
+          if (row) {
+            row.outerHTML = renderMemberRow(member);
+            lucide.createIcons();
+          }
         } catch (err) {
           showToast(err.message, "error");
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.classList.remove("opacity-50", "cursor-not-allowed");
+          }
         }
       }
-
-      async function deleteMember(id) {
+      async function deleteMember(id, btnEl) {
         if (
           !confirm(
-            "এই মেম্বারকে স্থায়ীভাবে ডিলিট করতে চান? এটা আর ফিরিয়ে আনা যাবে না।",
+            "Permanently delete this member? This action cannot be undone.",
           )
         )
           return;
+
+        const row = btnEl?.closest("tr");
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.classList.add("opacity-50", "cursor-not-allowed");
+        }
+        row?.classList.add("opacity-0", "transition-opacity", "duration-300");
+
         try {
           const res = await fetch(`${API_BASE}/admin-users/${id}/delete`, {
             method: "DELETE",
@@ -3393,13 +3436,21 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || "Failed");
+
           showToast(data.message);
-          loadAllMembers();
+          setTimeout(() => row?.remove(), 300);
+
+          // 🆕 Cache theke o soriye dilam, jate search/filter e abar na dekhay
+          allMembersCache = allMembersCache.filter((m) => m.id !== id);
         } catch (err) {
           showToast(err.message, "error");
+          row?.classList.remove("opacity-0");
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.classList.remove("opacity-50", "cursor-not-allowed");
+          }
         }
       }
-
       function filterAllMembers() {
         const q = document
           .getElementById("all-members-search")
