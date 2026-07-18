@@ -6,12 +6,11 @@ const { logAdminAction } = require("../services/auditLog");
 module.exports = (pool) => {
   const router = express.Router();
 
-  // --- Pending approvals list (admin.html "Manage Members" tab) ---
   router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
-                department, batch, designation
+                department, batch, designation, created_at
          FROM users WHERE is_approved=0 OR needs_admin_review=1
          ORDER BY id DESC`,
       );

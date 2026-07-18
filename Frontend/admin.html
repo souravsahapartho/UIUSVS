@@ -115,9 +115,9 @@
     </style>
   </head>
   <body class="flex h-screen overflow-hidden antialiased">
-    <!-- Sidebar -->
     <aside
-      class="w-64 bg-white border-r border-orange-200 flex-col hidden md:flex z-20 shadow-sm relative"
+      id="admin-sidebar"
+      class="w-64 bg-white border-r border-orange-200 flex flex-col shadow-sm fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
     >
       <!-- Logo Area -->
       <div
@@ -230,14 +230,26 @@
       </div>
     </aside>
 
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="admin-sidebar-overlay"
+      class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"
+      onclick="toggleAdminSidebar()"
+    ></div>
+
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-screen relative bg-brand-50/30">
+    <main
+      class="flex-1 flex flex-col h-screen relative bg-brand-50/30 w-full md:w-auto"
+    >
       <!-- Header -->
       <header
         class="h-16 bg-white border-b border-orange-200 flex items-center justify-between px-6 shadow-sm z-10"
       >
         <div class="flex items-center">
-          <button class="md:hidden text-gray-500 hover:text-brand-700 mr-4">
+          <button
+            onclick="toggleAdminSidebar()"
+            class="md:hidden text-gray-500 hover:text-brand-700 mr-4"
+          >
             <i data-lucide="menu" class="w-6 h-6"></i>
           </button>
           <span
@@ -246,9 +258,9 @@
           ></span>
         </div>
 
-        <div class="flex items-center space-x-6">
+        <div class="flex items-center gap-2 sm:gap-6">
           <div
-            class="flex items-center bg-brand-50 py-1.5 px-3 rounded-full border border-orange-100"
+            class="hidden sm:flex items-center bg-brand-50 py-1.5 px-3 rounded-full border border-orange-100"
           >
             <div
               class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white font-bold text-sm mr-2 shadow-sm border border-red-300"
@@ -270,16 +282,16 @@
           </div>
           <button
             onclick="handleAdminLogout()"
-            class="flex items-center px-3 py-1.5 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-semibold transition-colors"
+            class="flex items-center px-2.5 sm:px-3 py-1.5 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-semibold transition-colors"
           >
-            <i data-lucide="log-out" class="w-4 h-4 mr-1.5"></i> Logout
+            <i data-lucide="log-out" class="w-4 h-4 sm:mr-1.5"></i>
+            <span class="hidden sm:inline">Logout</span>
           </button>
         </div>
       </header>
 
-      <!-- Container -->
       <div
-        class="flex-1 overflow-y-auto p-6 lg:p-8 relative"
+        class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative"
         id="view-container"
       >
         <!-- VIEW: DASHBOARD -->
@@ -1038,17 +1050,19 @@
             <div
               class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             >
-              <table class="w-full text-left">
-                <thead>
-                  <tr>
-                    <th class="py-3 px-5">Image</th>
-                    <th class="py-3 px-5">Info</th>
-                    <th class="py-3 px-5">Pin</th>
-                    <th class="py-3 px-5 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="gallery-admin-list"></tbody>
-              </table>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Image</th>
+                      <th class="py-3 px-5">Info</th>
+                      <th class="py-3 px-5">Pin</th>
+                      <th class="py-3 px-5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gallery-admin-list"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -1175,14 +1189,23 @@
               class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             >
               <div
-                class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center"
+                class="p-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center"
               >
-                <span
-                  class="font-bold text-sm text-gray-700"
-                  id="pending-count-label"
-                  >Pending Approvals</span
-                >
-                <div class="relative">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="font-bold text-sm text-gray-700"
+                    id="pending-count-label"
+                    >Pending Approvals</span
+                  >
+                  <button
+                    onclick="loadPendingUsers(this)"
+                    title="Refresh"
+                    class="text-gray-400 hover:text-brand-700 hover:bg-brand-50 p-1.5 rounded-lg transition-colors"
+                  >
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                  </button>
+                </div>
+                <div class="relative w-full sm:w-auto">
                   <i
                     data-lucide="search"
                     class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -1190,7 +1213,7 @@
                   <input
                     type="text"
                     placeholder="Search by ID or Name"
-                    class="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                    class="w-full sm:w-auto pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -1201,6 +1224,7 @@
                       <th class="py-3 px-5">Name & ID</th>
                       <th class="py-3 px-5">Department</th>
                       <th class="py-3 px-5">Type</th>
+                      <th class="py-3 px-5">Requested On</th>
                       <th class="py-3 px-5 text-center">Action</th>
                     </tr>
                   </thead>
@@ -2031,6 +2055,27 @@
           targetView.classList.remove("hidden");
           targetView.classList.add("block");
         }
+
+        // 🆕 Mobile e tab select korle sidebar auto-close hobe
+        if (window.innerWidth < 768) closeAdminSidebar();
+      }
+
+      function toggleAdminSidebar() {
+        document
+          .getElementById("admin-sidebar")
+          ?.classList.toggle("-translate-x-full");
+        document
+          .getElementById("admin-sidebar-overlay")
+          ?.classList.toggle("hidden");
+      }
+
+      function closeAdminSidebar() {
+        document
+          .getElementById("admin-sidebar")
+          ?.classList.add("-translate-x-full");
+        document
+          .getElementById("admin-sidebar-overlay")
+          ?.classList.add("hidden");
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
@@ -2848,23 +2893,42 @@
         loadFestivalsAdminTable();
       });
 
-      // ---- Member Verification ----
-      async function loadPendingUsers() {
+      function formatRequestedTime(dateStr) {
+        if (!dateStr) return "-";
+        const d = new Date(dateStr);
+        if (isNaN(d)) return "-";
+        const datePart = d.toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+        const timePart = d.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        return `${datePart} · ${timePart}`;
+      }
+
+      async function loadPendingUsers(refreshBtn) {
         const container = document.getElementById("pending-users-list");
         if (!container) return;
+
+        const icon = refreshBtn?.querySelector("i");
+        icon?.classList.add("animate-spin");
+
         try {
           const res = await fetch(`${API_BASE}/admin-users/pending`, {
             credentials: "include",
           });
           if (!res.ok) {
-            container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-red-500 text-sm">Session error (${res.status}) — please re-login</td></tr>`;
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-red-500 text-sm">Session error (${res.status}) — please re-login</td></tr>`;
             return;
           }
           const items = await res.json();
           const label = document.getElementById("pending-count-label");
           if (label) label.textContent = `Pending Approvals (${items.length})`;
           if (!items.length) {
-            container.innerHTML = `<tr><td colspan="4" class="py-6 px-5 text-center text-gray-400 text-sm">No pending members 🎉</td></tr>`;
+            container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-gray-400 text-sm">No pending members 🎉</td></tr>`;
             return;
           }
 
@@ -2880,6 +2944,7 @@
       <td class="py-3 px-5">
         <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
       </td>
+      <td class="py-3 px-5 text-xs text-gray-500 whitespace-nowrap">${formatRequestedTime(u.created_at)}</td>
 <td class="py-3 px-5 text-center space-x-2">
         <button onclick="approveUser(${u.id}, this)" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Approve">
           <i data-lucide="check" class="w-4 h-4"></i>
@@ -2895,6 +2960,9 @@
           lucide.createIcons();
         } catch (err) {
           console.error(err);
+          container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-red-500 text-sm">Failed to load — check connection</td></tr>`;
+        } finally {
+          icon?.classList.remove("animate-spin");
         }
       }
 
