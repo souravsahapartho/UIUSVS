@@ -2485,7 +2485,7 @@
         {
           id: 4,
           title: "Prayer Gathering",
-          category: "Prayer",
+          category: "Monthly Prayer",
           url: "https://placehold.co/600x400/f59e0b/fff?text=Prayer",
         },
       ];
@@ -2666,11 +2666,20 @@
           return acc;
         }, {});
 
+        // 🎯 Homepage e sudhu ei 4 ta category, ei order e dekhabe
+        const allowedCategories = [
+          "Saraswati Puja",
+          "Kali Puja",
+          "Holi",
+          "Monthly Prayer",
+        ];
+
         let html = "";
         const colors = ["red", "orange", "pink", "yellow", "purple", "teal"];
         let colorIdx = 0;
 
-        Object.keys(grouped).forEach((category) => {
+        allowedCategories.forEach((category) => {
+          if (!grouped[category] || grouped[category].length === 0) return;
           const theme = colors[colorIdx % colors.length];
           const safeId =
             "gallery-" + category.replace(/\s+/g, "-").toLowerCase();
