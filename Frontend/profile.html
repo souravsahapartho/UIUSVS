@@ -371,10 +371,14 @@
             >
               <img
                 id="profile-img"
-                src="https://api.dicebear.com/7.x/adventurer/svg?seed=M1&backgroundColor=ffdfbf"
+                src=""
                 alt="Profile"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover hidden"
               />
+              <div
+                id="profile-img-skeleton"
+                class="w-full h-full bg-gray-200 animate-pulse"
+              ></div>
 
               <!-- Upload Overlay -->
               <label
@@ -394,20 +398,21 @@
             </div>
 
             <h2
-              class="text-xl font-bold text-brand-900 font-serif mb-1"
+              class="text-xl font-bold text-brand-900 font-serif mb-1 h-7 bg-gray-100 rounded animate-pulse mx-auto max-w-[160px]"
               id="display-name"
-            >
-              Joy Das
-            </h2>
+            ></h2>
             <p class="text-sm font-bold text-gray-500 mb-3">
-              ID: <span id="display-id">011243000</span>
+              ID:
+              <span
+                id="display-id"
+                class="inline-block h-4 w-20 bg-gray-100 rounded animate-pulse align-middle"
+              ></span>
             </p>
 
             <div
-              class="inline-block bg-brand-50 text-brand-700 px-3 py-1 rounded text-xs font-extrabold uppercase tracking-widest border border-brand-200"
-            >
-              Current Student
-            </div>
+              id="display-type-badge"
+              class="inline-block bg-brand-50 text-brand-700 px-3 py-1 rounded text-xs font-extrabold uppercase tracking-widest border border-brand-200 min-w-[100px] min-h-[20px]"
+            ></div>
 
             <!-- Profile Pic Warning Note -->
             <div
@@ -482,7 +487,10 @@
               </div>
             </div>
 
-            <form id="profile-form" class="space-y-6">
+            <form
+              id="profile-form"
+              class="space-y-6 opacity-40 pointer-events-none transition-opacity duration-200"
+            >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->
                 <div>
@@ -493,7 +501,7 @@
                   <input
                     type="text"
                     id="prof-name"
-                    value="Joy Das"
+                    value=""
                     required
                     class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   />
@@ -507,7 +515,7 @@
                   <input
                     type="email"
                     id="prof-email"
-                    value="joy@example.com"
+                    value=""
                     required
                     class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   />
@@ -524,7 +532,7 @@
                   <input
                     type="tel"
                     id="prof-phone"
-                    value="01700000000"
+                    value=""
                     required
                     class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   />
@@ -592,7 +600,7 @@
                   <input
                     type="text"
                     id="prof-batch"
-                    value="Spring 2024"
+                    value=""
                     required
                     class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   />
@@ -608,7 +616,7 @@
                 <input
                   type="text"
                   id="prof-designation"
-                  value="Member"
+                  value=""
                   class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                 />
                 <p class="text-[10px] text-gray-500 mt-1">
@@ -626,7 +634,7 @@
                 <input
                   type="text"
                   id="prof-address"
-                  value="Vatara, Dhaka"
+                  value=""
                   class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                 />
               </div>
@@ -912,11 +920,44 @@
           const u = await res.json();
           currentUser = u;
 
-          document.getElementById("display-name").textContent = u.name;
-          document.getElementById("display-id").textContent = u.student_id;
-          document.getElementById("profile-img").src =
+          // 🆕 Skeleton সরিয়ে real content দেখাও
+          const nameEl = document.getElementById("display-name");
+          nameEl.classList.remove(
+            "h-7",
+            "bg-gray-100",
+            "animate-pulse",
+            "mx-auto",
+            "max-w-[160px]",
+          );
+          nameEl.textContent = u.name;
+
+          const idEl = document.getElementById("display-id");
+          idEl.classList.remove(
+            "inline-block",
+            "h-4",
+            "w-20",
+            "bg-gray-100",
+            "animate-pulse",
+            "align-middle",
+          );
+          idEl.textContent = u.student_id;
+
+          const typeBadge = document.getElementById("display-type-badge");
+          typeBadge.textContent =
+            u.type === "ex" ? "Alumni" : "Current Student";
+
+          const img = document.getElementById("profile-img");
+          img.src =
             u.avatar_url ||
             `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
+          img.onload = () => {
+            img.classList.remove("hidden");
+            document.getElementById("profile-img-skeleton")?.remove();
+          };
+
+          document
+            .getElementById("profile-form")
+            .classList.remove("opacity-40", "pointer-events-none");
 
           const downloadBtn = document.getElementById("download-id-btn");
           if (u.id_card_url) {
@@ -973,15 +1014,16 @@
           }
         } catch (err) {
           showToast("Failed to load profile", "error");
+          document
+            .getElementById("profile-form")
+            .classList.remove("opacity-40", "pointer-events-none");
         }
       }
 
-      // ---- Profile Pic Upload — Cloudinary তে upload + DB তে save, দুটোই এখানেই হয়ে যায় ----
       async function handleImageChange(input) {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
 
-        // Local preview সাথে সাথে দেখানোর জন্য
         const reader = new FileReader();
         reader.onload = (e) => {
           document.getElementById("profile-img").src = e.target.result;
