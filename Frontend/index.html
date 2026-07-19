@@ -3076,12 +3076,11 @@
         const grid = document.getElementById("blog-grid");
         if (!grid) return;
 
-        // 1st attempt: your own DB
         try {
           const res = await fetch(`${API_BASE}/blogs/pinned`);
           if (res.ok) {
             const blogs = await res.json();
-            console.log("DB blogs response:", blogs); // 🔍 debug — deploy এর পর console এ চেক করুন
+            console.log("DB blogs response:", blogs);
             if (Array.isArray(blogs) && blogs.length > 0) {
               grid.innerHTML = blogs
                 .map(
@@ -3098,7 +3097,12 @@
               </article>`,
                 )
                 .join("");
-              return; // ✅ DB data দিয়ে render সফল, এখানেই শেষ
+
+              // 🎯 FIX: newly injected card গুলোকে observer এ যোগ করা, নাহলে opacity:0 থেকে যাবে
+              grid
+                .querySelectorAll(".animate-on-scroll")
+                .forEach((el) => contentObserver.observe(el));
+              return;
             }
           } else {
             console.warn(
@@ -3110,7 +3114,6 @@
           console.warn("DB blogs fetch failed:", e);
         }
 
-        // 2nd attempt: Substack RSS fallback
         try {
           const res = await fetch(
             `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://uiusvs.substack.com/feed")}&_=${Date.now()}`,
@@ -3139,19 +3142,20 @@
             </article>`;
               })
               .join("");
-            return; // ✅ RSS fallback দিয়ে render সফল
+
+            // 🎯 এখানেও একই fix
+            grid
+              .querySelectorAll(".animate-on-scroll")
+              .forEach((el) => contentObserver.observe(el));
+            return;
           }
           throw new Error("RSS returned no items");
         } catch (err) {
           console.warn("RSS fallback also failed:", err);
-          // 3rd: চূড়ান্ত fallback — এখন আর কখনো blank থাকবে না
           grid.innerHTML =
             '<p class="col-span-full text-center py-8 text-gray-500 italic">Blog updates coming soon. Check back shortly!</p>';
         }
       }
-      // ==========================================
-      // SANATAN QUIZ LOGIC
-      // ==========================================
       const sanatanQuizData = [
         {
           q: "What is the primary sacred text of Hinduism?",
