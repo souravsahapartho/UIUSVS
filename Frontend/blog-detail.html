@@ -548,6 +548,27 @@
               </div>
 
               <div
+                class="hidden lg:block mt-6 bg-white/90 backdrop-blur rounded-2xl border border-orange-100 shadow-sm p-5 sm:p-6"
+              >
+                <h3
+                  class="font-serif font-bold text-lg text-brand-900 mb-5 flex items-center gap-2"
+                >
+                  <i data-lucide="image" class="w-4 h-4 text-brand-500"></i>
+                  From Our Gallery
+                </h3>
+                <div id="sidebar-gallery" class="grid grid-cols-3 gap-2">
+                  <!-- injected via JS -->
+                </div>
+                <a
+                  href="gallery.html"
+                  class="mt-4 inline-flex items-center justify-center w-full text-xs font-extrabold text-brand-700 hover:text-brand-900 transition-colors"
+                >
+                  View Full Gallery
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+                </a>
+              </div>
+
+              <div
                 class="mt-6 bg-gradient-to-br from-brand-700 to-brand-900 rounded-2xl p-6 text-center shadow-sm"
               >
                 <p class="text-white/90 text-sm font-bold mb-1">
@@ -873,12 +894,20 @@
           const res = await fetch(`${API_BASE}/blogs/public`);
           const all = await res.json();
 
-          let related = all.filter((a) => a.slug !== currentSlug);
+          const remaining = all.filter((a) => a.slug !== currentSlug);
 
-          // Prefer same-category posts first, then fill with the rest
-          const sameCategory = related.filter((a) => a.category === category);
-          const others = related.filter((a) => a.category !== category);
-          related = [...sameCategory, ...others].slice(0, 5);
+          // Random shuffle helper
+          const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+          // একই category-র পোস্ট আগে (random order এ), তারপর বাকিগুলো (random order এ) দিয়ে fill
+          const sameCategory = shuffle(
+            remaining.filter((a) => a.category === category),
+          );
+          const others = shuffle(
+            remaining.filter((a) => a.category !== category),
+          );
+
+          const related = [...sameCategory, ...others].slice(0, 3);
 
           if (!related.length) {
             container.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">No other articles yet.</p>`;
@@ -903,7 +932,40 @@
         }
       }
 
+      // ---------- Sidebar gallery preview (desktop only) ----------
+      async function loadSidebarGallery() {
+        const container = document.getElementById("sidebar-gallery");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/gallery/featured`);
+          const items = await res.json();
+          if (!items.length) {
+            container.innerHTML = `<p class="col-span-3 text-xs text-gray-400 text-center py-4">No photos yet.</p>`;
+            return;
+          }
+          const shuffled = [...items]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 6);
+          container.innerHTML = shuffled
+            .map((item) => {
+              const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url || "");
+              return isVideo
+                ? `<div class="aspect-square rounded-lg overflow-hidden border border-orange-100 bg-black flex items-center justify-center">
+                     <i data-lucide="play" class="w-5 h-5 text-white"></i>
+                   </div>`
+                : `<a href="gallery.html" class="aspect-square rounded-lg overflow-hidden border border-orange-100 block group">
+                     <img src="${item.url}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${item.title || ""}" />
+                   </a>`;
+            })
+            .join("");
+          lucide.createIcons();
+        } catch (e) {
+          container.innerHTML = `<p class="col-span-3 text-xs text-gray-400 text-center py-4">Couldn't load gallery.</p>`;
+        }
+      }
+
       loadArticle();
+      loadSidebarGallery();
     </script>
   </body>
 </html>
