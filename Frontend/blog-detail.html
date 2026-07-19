@@ -506,13 +506,6 @@
               <span id="article-author"></span>
             </div>
 
-            <img
-              id="article-thumbnail"
-              src=""
-              alt=""
-              class="w-full rounded-2xl shadow-sm mb-8 hidden object-cover max-h-[440px]"
-            />
-
             <div
               id="article-content"
               class="text-gray-700 text-[15px] sm:text-base"
@@ -869,22 +862,11 @@
             })
           : "";
 
-        if (b.thumbnail_url) {
-          const img = document.getElementById("article-thumbnail");
-          img.src = b.thumbnail_url;
-          img.alt = b.title;
-          img.classList.remove("hidden");
-        }
-
         document.getElementById("article-content").innerHTML = b.content || "";
-
-        // 🎯 Fix: remove the same image from the body if it duplicates the thumbnail
-        dedupeThumbnailFromContent(b.thumbnail_url);
 
         lucide.createIcons();
       }
 
-      // ---------- Load "More Articles" sidebar ----------
       async function loadRelatedArticles(currentSlug, category) {
         const container = document.getElementById("related-articles");
         try {
