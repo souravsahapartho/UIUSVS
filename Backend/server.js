@@ -598,6 +598,7 @@ app.post(
     try {
       const {
         title,
+        slug: incomingSlug,
         excerpt,
         content,
         category,
@@ -626,7 +627,9 @@ app.post(
         }
       }
 
-      const slug = await generateUniqueBlogSlug(title);
+      const slugSource =
+        incomingSlug && incomingSlug.trim() ? incomingSlug.trim() : title;
+      const slug = await generateUniqueBlogSlug(slugSource);
       const thumbnailUrl = req.file ? req.file.path : null;
       const thumbnailId = req.file ? req.file.filename : null;
 
@@ -674,6 +677,7 @@ app.put(
 
       const {
         title,
+        slug: incomingSlug,
         excerpt,
         content,
         category,
@@ -706,7 +710,9 @@ app.put(
         }
       }
 
-      const slug = await generateUniqueBlogSlug(title, req.params.id);
+      const slugSource =
+        incomingSlug && incomingSlug.trim() ? incomingSlug.trim() : title;
+      const slug = await generateUniqueBlogSlug(slugSource, req.params.id);
       const finalPostDate = post_date || new Date().toISOString().slice(0, 10);
 
       let thumbnailUrl = null;
