@@ -2727,10 +2727,18 @@
         container.innerHTML = html;
         lucide.createIcons();
 
-        // Init Scrollers for new containers
+        // Init Scrollers for new containers — category অনুযায়ী নির্দিষ্ট direction
         Object.keys(grouped).forEach((cat) => {
           const id = "gallery-" + cat.replace(/\s+/g, "-").toLowerCase();
-          new Scroller(id, Math.random() > 0.5 ? "left" : "right");
+
+          let direction;
+          if (cat === "Kali Puja") {
+            direction = "right"; // right → left scroll
+          } else {
+            direction = "left"; // left → right scroll (Saraswati Puja, Holi, Monthly Prayer, ইত্যাদি সব)
+          }
+
+          new Scroller(id, direction);
         });
         container
           .querySelectorAll(".animate-on-scroll")
