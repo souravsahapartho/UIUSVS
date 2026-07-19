@@ -727,7 +727,7 @@ app.put(
       } else {
         await pool.query(
           `UPDATE blogs SET title=?, slug=?, excerpt=?, content=?, category=?,
-           meta_description=?, author_name=?, is_pinned=? WHERE id=?`,
+           meta_description=?, author_name=?, is_pinned=?, post_date=? WHERE id=?`,
           [
             title,
             slug,
@@ -737,6 +737,7 @@ app.put(
             meta_description || "",
             author_name || "",
             wantsPin,
+            post_date || new Date().toISOString().slice(0, 10),
             req.params.id,
           ],
         );
