@@ -3075,69 +3075,80 @@
       async function fetchBlogs() {
         const grid = document.getElementById("blog-grid");
         if (!grid) return;
+
+        // 1st attempt: your own DB
         try {
-          // Attempting to fetch from your node backend directly
           const res = await fetch(`${API_BASE}/blogs/pinned`);
           if (res.ok) {
             const blogs = await res.json();
-            if (blogs.length > 0) {
+            console.log("DB blogs response:", blogs); // 🔍 debug — deploy এর পর console এ চেক করুন
+            if (Array.isArray(blogs) && blogs.length > 0) {
               grid.innerHTML = blogs
                 .map(
                   (b) => `
-                        <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog-detail.html?slug=${b.slug}'">
-                            <div class="aspect-video w-full relative overflow-hidden bg-gray-100 p-1">
-                                <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-                                <img src="${b.img}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
-                            </div>
-                            <div class="p-5 flex-1 flex flex-col">
-                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
-                                <p class="text-gray-600 text-sm line-clamp-2">${b.excerpt}</p>
-                            </div>
-                        </article>`,
+              <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.location.href='blog-detail.html?slug=${b.slug}'">
+                  <div class="aspect-video w-full relative overflow-hidden bg-gray-100 p-1">
+                      <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+                      <img src="${b.img}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)" onerror="handleImageError(this)">
+                  </div>
+                  <div class="p-5 flex-1 flex flex-col">
+                      <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
+                      <p class="text-gray-600 text-sm line-clamp-2">${b.excerpt}</p>
+                  </div>
+              </article>`,
                 )
                 .join("");
-              return;
+              return; // ✅ DB data দিয়ে render সফল, এখানেই শেষ
             }
-          }
-          throw new Error("No DB Blogs");
-        } catch (e) {
-          // Fallback to Substack RSS
-          try {
-            const res = await fetch(
-              `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://uiusvs.substack.com/feed")}&_=${Date.now()}`,
+          } else {
+            console.warn(
+              "DB blogs endpoint returned non-OK status:",
+              res.status,
             );
-            const data = await res.json();
-            if (data.status === "ok" && data.items && data.items.length > 0) {
-              grid.innerHTML = data.items
-                .slice(0, 3)
-                .map((b) => {
-                  let thumb =
-                    b.thumbnail ||
-                    "https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update";
-                  const cleanDesc =
-                    b.description.replace(/<[^>]*>?/gm, "").substring(0, 100) +
-                    "...";
-                  return `
-                            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.open('${b.link}', '_blank')">
-                                <div class="aspect-video w-full relative overflow-hidden bg-gray-100">
-                                    <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
-                                    <img src="${thumb}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)">
-                                </div>
-                                <div class="p-5 flex-1 flex flex-col">
-                                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
-                                    <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
-                                </div>
-                            </article>`;
-                })
-                .join("");
-            }
-          } catch (err) {
-            grid.innerHTML =
-              '<p class="text-gray-500 col-span-full text-xs text-center py-4 italic">Blog updates temporarily unavailable.</p>';
           }
+        } catch (e) {
+          console.warn("DB blogs fetch failed:", e);
+        }
+
+        // 2nd attempt: Substack RSS fallback
+        try {
+          const res = await fetch(
+            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://uiusvs.substack.com/feed")}&_=${Date.now()}`,
+          );
+          const data = await res.json();
+          if (data.status === "ok" && data.items && data.items.length > 0) {
+            grid.innerHTML = data.items
+              .slice(0, 3)
+              .map((b) => {
+                let thumb =
+                  b.thumbnail ||
+                  "https://placehold.co/600x400/fffaf0/4a0404?text=SVS+Update";
+                const cleanDesc =
+                  b.description.replace(/<[^>]*>?/gm, "").substring(0, 100) +
+                  "...";
+                return `
+            <article class="card group cursor-pointer animate-on-scroll hover:border-red-300 h-full flex flex-col items-center text-center p-0 overflow-hidden" onclick="window.open('${b.link}', '_blank')">
+                <div class="aspect-video w-full relative overflow-hidden bg-gray-100">
+                    <div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>
+                    <img src="${thumb}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 relative z-10 opacity-0 rounded-t-xl" alt="" onload="handleImageLoad(this)" onerror="handleImageError(this)">
+                </div>
+                <div class="p-5 flex-1 flex flex-col">
+                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-red-700 transition-colors mb-2 line-clamp-2 font-serif">${b.title}</h3>
+                    <p class="text-gray-600 text-sm line-clamp-2">${cleanDesc}</p>
+                </div>
+            </article>`;
+              })
+              .join("");
+            return; // ✅ RSS fallback দিয়ে render সফল
+          }
+          throw new Error("RSS returned no items");
+        } catch (err) {
+          console.warn("RSS fallback also failed:", err);
+          // 3rd: চূড়ান্ত fallback — এখন আর কখনো blank থাকবে না
+          grid.innerHTML =
+            '<p class="col-span-full text-center py-8 text-gray-500 italic">Blog updates coming soon. Check back shortly!</p>';
         }
       }
-
       // ==========================================
       // SANATAN QUIZ LOGIC
       // ==========================================
