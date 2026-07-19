@@ -933,6 +933,11 @@
       }
 
       // ---------- Sidebar gallery preview (desktop only) ----------
+      // Cloudinary video URL থেকে সেই video-র প্রথম frame-টাকে image হিসেবে বের করা
+      function getVideoThumbnail(url) {
+        return url.replace(/\.(mp4|mov|webm)($|\?.*$)/i, ".jpg$2");
+      }
+
       async function loadSidebarGallery() {
         const container = document.getElementById("sidebar-gallery");
         if (!container) return;
@@ -949,11 +954,16 @@
           container.innerHTML = shuffled
             .map((item) => {
               const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url || "");
-              return isVideo
-                ? `<div class="aspect-square rounded-lg overflow-hidden border border-orange-100 bg-black flex items-center justify-center">
-                     <i data-lucide="play" class="w-5 h-5 text-white"></i>
-                   </div>`
-                : `<a href="gallery.html" class="aspect-square rounded-lg overflow-hidden border border-orange-100 block group">
+              if (isVideo) {
+                const thumbUrl = getVideoThumbnail(item.url);
+                return `<a href="gallery.html" class="relative aspect-square rounded-lg overflow-hidden border border-orange-100 block group bg-gray-100">
+                     <img src="${thumbUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${item.title || ""}" onerror="this.style.display='none'" />
+                     <div class="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/40 transition-colors">
+                       <i data-lucide="play" class="w-5 h-5 text-white drop-shadow-md"></i>
+                     </div>
+                   </a>`;
+              }
+              return `<a href="gallery.html" class="aspect-square rounded-lg overflow-hidden border border-orange-100 block group">
                      <img src="${item.url}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${item.title || ""}" />
                    </a>`;
             })
