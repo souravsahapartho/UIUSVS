@@ -574,8 +574,7 @@
       }
 
       window.openBlogModal = (slug) => {
-        // Full article lives on its own page so the link is shareable: blog-detail.html?slug=...
-        window.location.href = `blog-detail.html?slug=${encodeURIComponent(slug)}`;
+        window.location.href = `/blog/${encodeURIComponent(slug)}`;
       };
 
       async function loadBlogs() {
