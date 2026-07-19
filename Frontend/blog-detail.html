@@ -560,7 +560,7 @@
                   <!-- injected via JS -->
                 </div>
                 <a
-                  href="gallery.html"
+                  href="/gallery.html"
                   class="mt-4 inline-flex items-center justify-center w-full text-xs font-extrabold text-brand-700 hover:text-brand-900 transition-colors"
                 >
                   View Full Gallery
@@ -721,6 +721,39 @@
         </div>
       </div>
     </footer>
+
+    <!-- Image/Video Lightbox -->
+    <div
+      id="blog-lightbox"
+      class="fixed inset-0 bg-black/85 z-[300] hidden items-center justify-center p-4 md:p-8 backdrop-blur-sm cursor-zoom-out"
+      onclick="closeBlogLightbox()"
+    >
+      <button
+        class="absolute top-6 right-6 text-white bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/10 hover:bg-white/20 transition-all z-[310] flex items-center justify-center shadow-lg"
+        onclick="closeBlogLightbox()"
+      >
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+      <div
+        class="relative w-full h-full flex flex-col items-center justify-center"
+      >
+        <img
+          id="blog-lightbox-img"
+          src=""
+          class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl hidden"
+          alt="Preview"
+          onclick="event.stopPropagation()"
+        />
+        <video
+          id="blog-lightbox-video"
+          src=""
+          controls
+          autoplay
+          class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl hidden"
+          onclick="event.stopPropagation()"
+        ></video>
+      </div>
+    </div>
 
     <!-- Custom Toast -->
     <div
@@ -938,6 +971,40 @@
         return url.replace(/\.(mp4|mov|webm)($|\?.*$)/i, ".jpg$2");
       }
 
+      // ---------- Lightbox open/close ----------
+      function openBlogLightbox(url, isVideo) {
+        const overlay = document.getElementById("blog-lightbox");
+        const imgEl = document.getElementById("blog-lightbox-img");
+        const videoEl = document.getElementById("blog-lightbox-video");
+
+        if (isVideo) {
+          videoEl.src = url;
+          videoEl.classList.remove("hidden");
+          imgEl.classList.add("hidden");
+          imgEl.src = "";
+        } else {
+          imgEl.src = url;
+          imgEl.classList.remove("hidden");
+          videoEl.classList.add("hidden");
+          videoEl.pause();
+          videoEl.src = "";
+        }
+
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+        document.body.style.overflow = "hidden";
+        lucide.createIcons();
+      }
+
+      function closeBlogLightbox() {
+        const overlay = document.getElementById("blog-lightbox");
+        const videoEl = document.getElementById("blog-lightbox-video");
+        videoEl.pause();
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        document.body.style.overflow = "";
+      }
+
       async function loadSidebarGallery() {
         const container = document.getElementById("sidebar-gallery");
         if (!container) return;
@@ -954,18 +1021,19 @@
           container.innerHTML = shuffled
             .map((item) => {
               const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url || "");
+              const safeUrl = item.url.replace(/'/g, "\\'");
               if (isVideo) {
                 const thumbUrl = getVideoThumbnail(item.url);
-                return `<a href="gallery.html" class="relative aspect-square rounded-lg overflow-hidden border border-orange-100 block group bg-gray-100">
+                return `<div onclick="openBlogLightbox('${safeUrl}', true)" class="relative aspect-square rounded-lg overflow-hidden border border-orange-100 block group bg-gray-100 cursor-zoom-in">
                      <img src="${thumbUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${item.title || ""}" onerror="this.style.display='none'" />
                      <div class="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/40 transition-colors">
                        <i data-lucide="play" class="w-5 h-5 text-white drop-shadow-md"></i>
                      </div>
-                   </a>`;
+                   </div>`;
               }
-              return `<a href="gallery.html" class="aspect-square rounded-lg overflow-hidden border border-orange-100 block group">
+              return `<div onclick="openBlogLightbox('${safeUrl}', false)" class="aspect-square rounded-lg overflow-hidden border border-orange-100 block group cursor-zoom-in">
                      <img src="${item.url}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${item.title || ""}" />
-                   </a>`;
+                   </div>`;
             })
             .join("");
           lucide.createIcons();
