@@ -508,6 +508,14 @@
       let allBlogsCache = [];
       let activeCategory = "All";
 
+      // ---------- Mobile drawer toggle ----------
+      function toggleDrawer() {
+        document
+          .getElementById("mobile-drawer")
+          ?.classList.toggle("translate-x-full");
+        document.getElementById("drawer-overlay")?.classList.toggle("hidden");
+      }
+
       const CATEGORIES = [
         "All",
         "Announcement",
