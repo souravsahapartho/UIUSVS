@@ -1,0 +1,2 @@
+/blog/*  /blog-detail.html?slug=:splat  200
+/*       /404.html                       404
