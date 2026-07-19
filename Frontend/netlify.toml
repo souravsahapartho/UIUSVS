@@ -2,8 +2,8 @@
   publish = "."
 
 [[redirects]]
-  from = "/blog/:slug"
-  to = "/blog-detail.html?slug=:slug"
+  from = "/blog/*"
+  to = "/blog-detail.html?slug=:splat"
   status = 200
 
 [[redirects]]
