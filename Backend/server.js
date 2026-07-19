@@ -659,7 +659,6 @@ app.post(
   },
 );
 
-// ---- ADMIN: update ----
 app.put(
   "/api/blogs/:id",
   verifySession,
@@ -667,6 +666,12 @@ app.put(
   upload.single("thumbnail"),
   async (req, res) => {
     try {
+      console.log("📝 Blog update request body:", req.body); // 🔍 debug — Render logs এ চেক করুন
+      console.log(
+        "📝 Blog update file:",
+        req.file ? req.file.filename : "no new file",
+      );
+
       const {
         title,
         excerpt,
@@ -678,8 +683,14 @@ app.put(
         post_date,
       } = req.body;
 
+      if (!title || !content) {
+        return res.status(400).json({ error: "Title and content required" });
+      }
+
       if (!BLOG_CATEGORIES.includes(category)) {
-        return res.status(400).json({ error: "Invalid category" });
+        return res
+          .status(400)
+          .json({ error: `Invalid category: "${category}"` });
       }
 
       const wantsPin = is_pinned === "true" || is_pinned === true;
@@ -696,8 +707,13 @@ app.put(
       }
 
       const slug = await generateUniqueBlogSlug(title, req.params.id);
+      const finalPostDate = post_date || new Date().toISOString().slice(0, 10);
+
+      let thumbnailUrl = null;
+      let thumbnailId = null;
 
       if (req.file) {
+        // নতুন thumbnail এসেছে — পুরনোটা Cloudinary থেকে মুছে ফেলা
         const [rows] = await pool.query(
           "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
           [req.params.id],
@@ -705,6 +721,11 @@ app.put(
         if (rows.length && rows[0].thumbnail_cloudinary_id) {
           await cloudinary.uploader.destroy(rows[0].thumbnail_cloudinary_id);
         }
+        thumbnailUrl = req.file.path;
+        thumbnailId = req.file.filename;
+      }
+
+      if (req.file) {
         await pool.query(
           `UPDATE blogs SET title=?, slug=?, excerpt=?, content=?, category=?,
            thumbnail_url=?, thumbnail_cloudinary_id=?, meta_description=?,
@@ -715,12 +736,12 @@ app.put(
             excerpt || "",
             content,
             category,
-            req.file.path,
-            req.file.filename,
+            thumbnailUrl,
+            thumbnailId,
             meta_description || "",
             author_name || "",
             wantsPin,
-            post_date || new Date().toISOString().slice(0, 10),
+            finalPostDate,
             req.params.id,
           ],
         );
@@ -737,20 +758,23 @@ app.put(
             meta_description || "",
             author_name || "",
             wantsPin,
-            post_date || new Date().toISOString().slice(0, 10),
+            finalPostDate,
             req.params.id,
           ],
         );
       }
 
+      console.log(
+        `✅ Blog #${req.params.id} updated successfully. New slug: ${slug}`,
+      );
       res.json({ message: "Blog updated!", slug });
     } catch (error) {
+      console.error("❌ Blog update failed:", error);
       res.status(500).json({ error: error.message });
     }
   },
 );
 
-// ---- ADMIN: quick pin/unpin toggle (used by the pin icon in the table) ----
 app.put("/api/blogs/:id/pin", verifySession, verifyAdmin, async (req, res) => {
   try {
     const { is_pinned } = req.body;
