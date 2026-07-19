@@ -554,15 +554,16 @@ app.get("/api/blogs/pinned", async (req, res) => {
     const [rows] = await pool.query(
       `SELECT id, title, slug, excerpt, category, thumbnail_url AS img,
               author_name AS author, post_date, created_at
-       FROM blogs WHERE is_pinned = TRUE
-       ORDER BY post_date DESC LIMIT ${MAX_PINNED_BLOGS}`,
+       FROM blogs
+       ORDER BY is_pinned DESC, post_date DESC
+       LIMIT ${MAX_PINNED_BLOGS}`,
     );
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-// ---- PUBLIC: single blog by slug, for blog-detail.html ----
+
 app.get("/api/blogs/slug/:slug", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM blogs WHERE slug=?", [
