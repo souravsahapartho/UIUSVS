@@ -32,18 +32,18 @@
       resultLoadingText: "SVS Vani is checking your result...",
       thanks: "Thank you for participating! 🙏",
       resultTitle: "Result",
-      moodTitle: {
-        excellent: "Excellent! 🏆",
-        good: "Great! 🌸",
-        poor: "Nice try! 🕉️",
-      },
+      moodTitle: { excellent: "Excellent! 🏆", good: "Great! 🌸", poor: "Nice try! 🕉️" },
     },
     bn: {
       subtitle: "তোমার সনাতন সহায়ক",
       placeholder: "কিছু জিজ্ঞেস করো...",
       greeting:
         "🙏 জয় শ্রী কৃষ্ণ! আমি SVS Vani। সনাতন ধর্ম, UIUSVS বা ডেভেলপার নিয়ে যেকোনো প্রশ্ন করো, অথবা নিচের একটা অপশন বেছে নাও।",
-      suggestions: ["সনাতন ধর্ম কী?", "আরেকটা কুইজ দাও", "UIUSVS সম্পর্কে বলো"],
+      suggestions: [
+        "সনাতন ধর্ম কী?",
+        "আরেকটা কুইজ দাও",
+        "UIUSVS সম্পর্কে বলো",
+      ],
       error:
         "দুঃখিত, এই মুহূর্তে উত্তর দিতে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করো। 🙏",
       closeAria: "বন্ধ করো",
@@ -57,11 +57,7 @@
       resultLoadingText: "SVS Vani is checking your result...",
       thanks: "Thank you for participating! 🙏",
       resultTitle: "Result",
-      moodTitle: {
-        excellent: "Excellent! 🏆",
-        good: "Great! 🌸",
-        poor: "Nice try! 🕉️",
-      },
+      moodTitle: { excellent: "Excellent! 🏆", good: "Great! 🌸", poor: "Nice try! 🕉️" },
     },
   };
 
@@ -473,6 +469,27 @@
     scrollToBottom();
   }
 
+  const BANGLISH_WORDS = [
+    "ami","tumi","apni","tomar","amar","apnar","kemon","kmon","keno","kivabe","kibhabe",
+    "ki","na","hobe","hocche","hoyeche","korbo","korte","korchi","koro","korlam","ache",
+    "achen","achi","bhalo","valo","kotha","dhormo","dharmo","sanatan","mondir","pujo",
+    "puja","dada","didi","kobe","kothay","kotha","tui","tor","amake","tomake","bolo",
+    "bolen","dhonnobad","dhonyobad","asen","jabo","jacchi","kichu","onek","khub","noy",
+  ];
+
+  function isBanglaOrBanglish(text) {
+    if (!text) return false;
+    if (/[\u0980-\u09FF]/.test(text)) return true;
+    const words = text
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+    if (words.length === 0) return false;
+    const hits = words.filter((w) => BANGLISH_WORDS.includes(w)).length;
+    return hits >= 2 || (words.length <= 3 && hits >= 1);
+  }
+
   async function handleSend() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -481,11 +498,12 @@
 
     appendUserMessage(text);
     const typingEl = appendTypingIndicator();
+    const requestLang = isBanglaOrBanglish(text) ? "bn" : currentLang;
 
     try {
       const data = await apiPost(
         "/api/vani/chat",
-        { message: text, history: chatHistory.slice(0, -1), lang: currentLang },
+        { message: text, history: chatHistory.slice(0, -1), lang: requestLang },
         { timeout: 20000, retries: 1 },
       );
       typingEl.remove();
