@@ -2,7 +2,7 @@
   "use strict";
 
   const VANI_API_BASE = "https://uiusvs-ai.uiusvs2025.workers.dev";
-  const VANI_IMAGE_PATH = "/Frontend/vani.png";
+  const VANI_IMAGE_PATH = "/vani.png";
 
   const USED_QUESTIONS_KEY = "svs_vani_used_questions";
   const CHAT_HISTORY_KEY = "svs_vani_chat_history";
@@ -32,18 +32,18 @@
       resultLoadingText: "SVS Vani is checking your result...",
       thanks: "Thank you for participating! 🙏",
       resultTitle: "Result",
-      moodTitle: { excellent: "Excellent! 🏆", good: "Great! 🌸", poor: "Nice try! 🕉️" },
+      moodTitle: {
+        excellent: "Excellent! 🏆",
+        good: "Great! 🌸",
+        poor: "Nice try! 🕉️",
+      },
     },
     bn: {
       subtitle: "তোমার সনাতন সহায়ক",
       placeholder: "কিছু জিজ্ঞেস করো...",
       greeting:
         "🙏 জয় শ্রী কৃষ্ণ! আমি SVS Vani। সনাতন ধর্ম, UIUSVS বা ডেভেলপার নিয়ে যেকোনো প্রশ্ন করো, অথবা নিচের একটা অপশন বেছে নাও।",
-      suggestions: [
-        "সনাতন ধর্ম কী?",
-        "আরেকটা কুইজ দাও",
-        "UIUSVS সম্পর্কে বলো",
-      ],
+      suggestions: ["সনাতন ধর্ম কী?", "আরেকটা কুইজ দাও", "UIUSVS সম্পর্কে বলো"],
       error:
         "দুঃখিত, এই মুহূর্তে উত্তর দিতে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করো। 🙏",
       closeAria: "বন্ধ করো",
@@ -57,7 +57,11 @@
       resultLoadingText: "SVS Vani is checking your result...",
       thanks: "Thank you for participating! 🙏",
       resultTitle: "Result",
-      moodTitle: { excellent: "Excellent! 🏆", good: "Great! 🌸", poor: "Nice try! 🕉️" },
+      moodTitle: {
+        excellent: "Excellent! 🏆",
+        good: "Great! 🌸",
+        poor: "Nice try! 🕉️",
+      },
     },
   };
 
@@ -470,11 +474,59 @@
   }
 
   const BANGLISH_WORDS = [
-    "ami","tumi","apni","tomar","amar","apnar","kemon","kmon","keno","kivabe","kibhabe",
-    "ki","na","hobe","hocche","hoyeche","korbo","korte","korchi","koro","korlam","ache",
-    "achen","achi","bhalo","valo","kotha","dhormo","dharmo","sanatan","mondir","pujo",
-    "puja","dada","didi","kobe","kothay","kotha","tui","tor","amake","tomake","bolo",
-    "bolen","dhonnobad","dhonyobad","asen","jabo","jacchi","kichu","onek","khub","noy",
+    "ami",
+    "tumi",
+    "apni",
+    "tomar",
+    "amar",
+    "apnar",
+    "kemon",
+    "kmon",
+    "keno",
+    "kivabe",
+    "kibhabe",
+    "ki",
+    "na",
+    "hobe",
+    "hocche",
+    "hoyeche",
+    "korbo",
+    "korte",
+    "korchi",
+    "koro",
+    "korlam",
+    "ache",
+    "achen",
+    "achi",
+    "bhalo",
+    "valo",
+    "kotha",
+    "dhormo",
+    "dharmo",
+    "sanatan",
+    "mondir",
+    "pujo",
+    "puja",
+    "dada",
+    "didi",
+    "kobe",
+    "kothay",
+    "kotha",
+    "tui",
+    "tor",
+    "amake",
+    "tomake",
+    "bolo",
+    "bolen",
+    "dhonnobad",
+    "dhonyobad",
+    "asen",
+    "jabo",
+    "jacchi",
+    "kichu",
+    "onek",
+    "khub",
+    "noy",
   ];
 
   function isBanglaOrBanglish(text) {
