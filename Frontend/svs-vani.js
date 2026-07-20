@@ -1,23 +1,84 @@
-/* ============================================================
-   SVS Vani — Reusable AI Chat + Quiz Widget
-   Every page-e ekbar include korle e kaj korbe:
-
-   <script src="/svs-vani.js"></script>
-
-   Configuration niche VANI_API_BASE e boso.
-   ============================================================ */
-
 (function () {
   "use strict";
 
   const VANI_API_BASE = "https://uiusvs-ai.uiusvs2025.workers.dev";
+  const VANI_IMAGE_PATH = "Frontend/vani.png";
 
   const USED_QUESTIONS_KEY = "svs_vani_used_questions";
   const CHAT_HISTORY_KEY = "svs_vani_chat_history";
+  const LANG_KEY = "svs_vani_lang";
 
-  // ------------------------------------------------------------
-  // Helpers
-  // ------------------------------------------------------------
+  const STR = {
+    en: {
+      subtitle: "Your Sanatan Guide",
+      placeholder: "Ask something...",
+      greeting:
+        "🙏 Jai Shree Krishna! I am SVS Vani. Ask me anything about Sanatan Dharma, UIUSVS, or the developer, or pick an option below.",
+      suggestions: [
+        "What is Sanatan Dharma?",
+        "Give me another quiz",
+        "Tell me about UIUSVS",
+      ],
+      error:
+        "Sorry, I'm having trouble responding right now. Please try again in a moment. 🙏",
+      closeAria: "Close",
+      fabAria: "Open SVS Vani Chat",
+      sendAria: "Send",
+      langBtn: "বাং",
+      loading: "✨ SVS Vani is preparing your questions...",
+      loadError: "Could not load questions. Please try again.",
+      answerAll: "Please answer all 3 questions.",
+      resultLoading: "Getting your result...",
+      resultLoadingText: "SVS Vani is checking your result...",
+      thanks: "Thank you for participating! 🙏",
+      resultTitle: "Result",
+      moodTitle: {
+        excellent: "Excellent! 🏆",
+        good: "Great! 🌸",
+        poor: "Nice try! 🕉️",
+      },
+    },
+    bn: {
+      subtitle: "তোমার সনাতন সহায়ক",
+      placeholder: "কিছু জিজ্ঞেস করো...",
+      greeting:
+        "🙏 জয় শ্রী কৃষ্ণ! আমি SVS Vani। সনাতন ধর্ম, UIUSVS বা ডেভেলপার নিয়ে যেকোনো প্রশ্ন করো, অথবা নিচের একটা অপশন বেছে নাও।",
+      suggestions: ["সনাতন ধর্ম কী?", "আরেকটা কুইজ দাও", "UIUSVS সম্পর্কে বলো"],
+      error:
+        "দুঃখিত, এই মুহূর্তে উত্তর দিতে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করো। 🙏",
+      closeAria: "বন্ধ করো",
+      fabAria: "SVS Vani Chat খুলুন",
+      sendAria: "পাঠাও",
+      langBtn: "EN",
+      loading: "✨ SVS Vani is preparing your questions...",
+      loadError: "Could not load questions. Please try again.",
+      answerAll: "Please answer all 3 questions.",
+      resultLoading: "Getting your result...",
+      resultLoadingText: "SVS Vani is checking your result...",
+      thanks: "Thank you for participating! 🙏",
+      resultTitle: "Result",
+      moodTitle: {
+        excellent: "Excellent! 🏆",
+        good: "Great! 🌸",
+        poor: "Nice try! 🕉️",
+      },
+    },
+  };
+
+  function getLang() {
+    try {
+      return localStorage.getItem(LANG_KEY) === "bn" ? "bn" : "en";
+    } catch (e) {
+      return "en";
+    }
+  }
+
+  function setLang(lang) {
+    try {
+      localStorage.setItem(LANG_KEY, lang);
+    } catch (e) {}
+  }
+
   function getUsedQuestions() {
     try {
       return JSON.parse(localStorage.getItem(USED_QUESTIONS_KEY) || "[]");
@@ -49,14 +110,29 @@
     );
   }
 
-  async function apiPost(path, body) {
-    const res = await fetch(`${VANI_API_BASE}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) throw new Error("SVS Vani API error: " + res.status);
-    return res.json();
+  async function apiPost(path, body, opts) {
+    const timeout = (opts && opts.timeout) || 20000;
+    const retries = (opts && opts.retries) || 1;
+    let lastErr;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeout);
+      try {
+        const res = await fetch(`${VANI_API_BASE}${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+        clearTimeout(timer);
+        if (!res.ok) throw new Error("SVS Vani API error: " + res.status);
+        return await res.json();
+      } catch (e) {
+        clearTimeout(timer);
+        lastErr = e;
+      }
+    }
+    throw lastErr;
   }
 
   function escapeHtml(str) {
@@ -73,9 +149,19 @@
     );
   }
 
-  // ------------------------------------------------------------
-  // Styles (scoped with svs-vani- prefix, self-contained)
-  // ------------------------------------------------------------
+  function linkify(html) {
+    const urlRegex = /(https?:\/\/[^\s<]+)|(www\.[^\s<]+)/g;
+    return html.replace(urlRegex, (match) => {
+      let trail = "";
+      while (match.length && /[.,!?;:|)\]]$/.test(match)) {
+        trail = match.slice(-1) + trail;
+        match = match.slice(0, -1);
+      }
+      const href = match.startsWith("http") ? match : "https://" + match;
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color:#ea580c;text-decoration:underline;font-weight:600;">${match}</a>${trail}`;
+    });
+  }
+
   const styles = `
     .svs-vani-fab {
       position: fixed; bottom: 24px; right: 20px; z-index: 9500;
@@ -85,9 +171,10 @@
       box-shadow: 0 6px 20px rgba(185,28,28,0.4);
       cursor: pointer; border: 2px solid rgba(255,255,255,0.6);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
-      font-size: 26px;
+      font-size: 26px; overflow: hidden;
     }
     .svs-vani-fab:hover { transform: scale(1.08); box-shadow: 0 8px 26px rgba(185,28,28,0.55); }
+    .svs-vani-fab img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 2; }
     .svs-vani-fab .svs-vani-pulse {
       position: absolute; inset: 0; border-radius: 50%;
       border: 2px solid #ea580c; animation: svsVaniPulse 2.2s infinite;
@@ -121,10 +208,18 @@
     .svs-vani-header-icon {
       width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.2);
       display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+      overflow: hidden;
     }
-    .svs-vani-header-text { flex: 1; }
+    .svs-vani-header-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .svs-vani-header-text { flex: 1; min-width: 0; }
     .svs-vani-header-title { font-weight: 800; font-size: 15px; font-family: 'Playfair Display', serif; }
     .svs-vani-header-sub { font-size: 10px; opacity: 0.85; }
+    .svs-vani-lang-btn {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.4); color: #fff;
+      font-size: 11px; font-weight: 700; padding: 5px 9px; border-radius: 999px; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .svs-vani-lang-btn:hover { background: rgba(255,255,255,0.32); }
     .svs-vani-close-btn {
       background: rgba(255,255,255,0.15); border: none; color: #fff; width: 26px; height: 26px;
       border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -208,39 +303,33 @@
     document.head.appendChild(styleEl);
   }
 
-  // ------------------------------------------------------------
-  // Chat Widget
-  // ------------------------------------------------------------
   let chatOpen = false;
   let chatHistory = [];
-  let bodyEl, inputEl, sendBtn;
-
-  const DEFAULT_SUGGESTIONS = [
-    "সনাতন ধর্ম কী?",
-    "আরেকটা কুইজ দাও",
-    "UIUSVS সম্পর্কে বলো",
-  ];
+  let currentLang = getLang();
+  let bodyEl, inputEl, sendBtn, langBtn, subtitleEl, closeBtn, fabEl;
 
   function buildChatWidget() {
     const fab = document.createElement("div");
     fab.className = "svs-vani-fab";
-    fab.innerHTML = `<span class="svs-vani-pulse"></span><span style="position:relative;z-index:2;">🕉️</span>`;
-    fab.setAttribute("aria-label", "SVS Vani Chat খুলুন");
+    fab.innerHTML = `<span class="svs-vani-pulse"></span><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" />`;
+    fab.setAttribute("aria-label", STR[currentLang].fabAria);
+    fabEl = fab;
 
     const win = document.createElement("div");
     win.className = "svs-vani-window";
     win.innerHTML = `
       <div class="svs-vani-header">
-        <div class="svs-vani-header-icon">🕉️</div>
+        <div class="svs-vani-header-icon"><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" /></div>
         <div class="svs-vani-header-text">
           <div class="svs-vani-header-title">SVS Vani</div>
-          <div class="svs-vani-header-sub">তোমার সনাতন সহায়ক</div>
+          <div class="svs-vani-header-sub"></div>
         </div>
+        <button class="svs-vani-lang-btn"></button>
         <button class="svs-vani-close-btn" aria-label="Close">✕</button>
       </div>
       <div class="svs-vani-body"></div>
       <div class="svs-vani-input-row">
-        <input class="svs-vani-input" type="text" placeholder="কিছু জিজ্ঞেস করো..." />
+        <input class="svs-vani-input" type="text" />
         <button class="svs-vani-send-btn" aria-label="Send">➤</button>
       </div>
     `;
@@ -251,7 +340,11 @@
     bodyEl = win.querySelector(".svs-vani-body");
     inputEl = win.querySelector(".svs-vani-input");
     sendBtn = win.querySelector(".svs-vani-send-btn");
-    const closeBtn = win.querySelector(".svs-vani-close-btn");
+    langBtn = win.querySelector(".svs-vani-lang-btn");
+    subtitleEl = win.querySelector(".svs-vani-header-sub");
+    closeBtn = win.querySelector(".svs-vani-close-btn");
+
+    applyLangUI();
 
     fab.addEventListener("click", () => toggleChat(win));
     closeBtn.addEventListener("click", () => toggleChat(win, false));
@@ -259,13 +352,15 @@
     inputEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") handleSend();
     });
+    langBtn.addEventListener("click", () => {
+      currentLang = currentLang === "en" ? "bn" : "en";
+      setLang(currentLang);
+      applyLangUI();
+    });
 
     chatHistory = getChatHistory();
     if (chatHistory.length === 0) {
-      appendBotMessage(
-        "🙏 জয় শ্রী কৃষ্ণ! আমি SVS Vani। সনাতন ধর্ম, উৎসব বা UIUSVS নিয়ে যেকোনো প্রশ্ন করো, অথবা নিচের একটা অপশন বেছে নাও।",
-        DEFAULT_SUGGESTIONS,
-      );
+      appendBotMessage(STR[currentLang].greeting, STR[currentLang].suggestions);
     } else {
       chatHistory.forEach((m) => {
         if (m.role === "user") appendUserMessage(m.content, false);
@@ -273,6 +368,16 @@
       });
       scrollToBottom();
     }
+  }
+
+  function applyLangUI() {
+    const s = STR[currentLang];
+    subtitleEl.textContent = s.subtitle;
+    inputEl.placeholder = s.placeholder;
+    langBtn.textContent = s.langBtn;
+    closeBtn.setAttribute("aria-label", s.closeAria);
+    sendBtn.setAttribute("aria-label", s.sendAria);
+    fabEl.setAttribute("aria-label", s.fabAria);
   }
 
   function toggleChat(win, force) {
@@ -285,7 +390,8 @@
     bodyEl.scrollTop = bodyEl.scrollHeight;
   }
 
-  function appendUserMessage(text, save = true) {
+  function appendUserMessage(text, save) {
+    if (save === undefined) save = true;
     const el = document.createElement("div");
     el.className = "svs-vani-msg svs-vani-msg-user";
     el.textContent = text;
@@ -297,10 +403,12 @@
     }
   }
 
-  function appendBotMessage(text, suggestions = [], save = true) {
+  function appendBotMessage(text, suggestions, save) {
+    if (suggestions === undefined) suggestions = [];
+    if (save === undefined) save = true;
     const el = document.createElement("div");
     el.className = "svs-vani-msg svs-vani-msg-bot";
-    el.innerHTML = escapeHtml(text).replace(/\n/g, "<br>");
+    el.innerHTML = linkify(escapeHtml(text).replace(/\n/g, "<br>"));
     bodyEl.appendChild(el);
 
     if (suggestions && suggestions.length) {
@@ -375,26 +483,22 @@
     const typingEl = appendTypingIndicator();
 
     try {
-      const data = await apiPost("/api/vani/chat", {
-        message: text,
-        history: chatHistory.slice(0, -1),
-      });
+      const data = await apiPost(
+        "/api/vani/chat",
+        { message: text, history: chatHistory.slice(0, -1), lang: currentLang },
+        { timeout: 20000, retries: 1 },
+      );
       typingEl.remove();
       appendBotMessage(data.reply, data.suggestions || []);
       if (data.quiz) appendInlineQuiz(data.quiz);
     } catch (e) {
       typingEl.remove();
-      appendBotMessage(
-        "দুঃখিত, এই মুহূর্তে উত্তর দিতে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করো। 🙏",
-      );
+      appendBotMessage(STR[currentLang].error);
     } finally {
       sendBtn.disabled = false;
     }
   }
 
-  // ------------------------------------------------------------
-  // Quiz Section Mounter — hooks into an existing quiz block
-  // ------------------------------------------------------------
   async function mountQuiz(opts) {
     const {
       wrapperId = "quiz-questions-wrapper",
@@ -404,7 +508,6 @@
       totalId = "quiz-total-score",
       feedbackTitleId = "quiz-feedback-title",
       feedbackTextId = "quiz-feedback-text",
-      submitBtnSelector = "#quiz-container button",
     } = opts || {};
 
     const wrapper = document.getElementById(wrapperId);
@@ -413,21 +516,25 @@
     if (!wrapper || !container || !resultBox) return;
 
     let currentQuestions = [];
+    const s = STR.en;
+    const diffLabel = { easy: "Easy", medium: "Medium", hard: "Hard" };
 
     async function loadQuestions() {
-      wrapper.innerHTML = `<div style="text-align:center;padding:20px;color:#9a3412;font-size:13px;">✨ SVS Vani তোমার জন্য প্রশ্ন সাজাচ্ছে...</div>`;
+      wrapper.innerHTML = `<div style="text-align:center;padding:20px;color:#9a3412;font-size:13px;">${s.loading}</div>`;
       try {
         const exclude = getUsedQuestions();
-        const data = await apiPost("/api/vani/quiz", { exclude });
+        const data = await apiPost(
+          "/api/vani/quiz",
+          { exclude },
+          { timeout: 20000, retries: 1 },
+        );
         currentQuestions = data.questions;
         addUsedQuestions(currentQuestions);
         renderQuestions();
       } catch (e) {
-        wrapper.innerHTML = `<div style="text-align:center;padding:20px;color:#b91c1c;font-size:13px;">প্রশ্ন লোড করা যায়নি। আবার চেষ্টা করো।</div>`;
+        wrapper.innerHTML = `<div style="text-align:center;padding:20px;color:#b91c1c;font-size:13px;">${s.loadError}</div>`;
       }
     }
-
-    const diffLabel = { easy: "সহজ", medium: "মাঝারি", hard: "কঠিন" };
 
     function renderQuestions() {
       wrapper.innerHTML = currentQuestions
@@ -465,7 +572,7 @@
         }
       });
       if (!allAnswered) {
-        alert("দয়া করে ৩টা প্রশ্নেরই উত্তর দাও।");
+        alert(s.answerAll);
         return;
       }
 
@@ -476,26 +583,22 @@
 
       const titleEl = document.getElementById(feedbackTitleId);
       const textEl = document.getElementById(feedbackTextId);
-      if (titleEl) titleEl.textContent = "ফলাফল আসছে...";
-      if (textEl) textEl.textContent = "SVS Vani তোমার ফলাফল দেখছে...";
+      if (titleEl) titleEl.textContent = s.resultLoading;
+      if (textEl) textEl.textContent = s.resultLoadingText;
       resultBox.classList.remove("hidden");
 
       try {
-        const data = await apiPost("/api/vani/feedback", {
-          score,
-          total: currentQuestions.length,
-        });
-        const moodTitle =
-          {
-            excellent: "অসাধারণ! 🏆",
-            good: "চমৎকার! 🌸",
-            poor: "ভালো চেষ্টা! 🕉️",
-          }[data.mood] || "ফলাফল";
+        const data = await apiPost(
+          "/api/vani/feedback",
+          { score, total: currentQuestions.length, lang: "en" },
+          { timeout: 15000, retries: 1 },
+        );
+        const moodTitle = s.moodTitle[data.mood] || s.resultTitle;
         if (titleEl) titleEl.textContent = moodTitle;
         if (textEl) textEl.textContent = data.feedback;
       } catch (e) {
-        if (titleEl) titleEl.textContent = "ফলাফল";
-        if (textEl) textEl.textContent = "তোমার অংশগ্রহণের জন্য ধন্যবাদ! 🙏";
+        if (titleEl) titleEl.textContent = s.resultTitle;
+        if (textEl) textEl.textContent = s.thanks;
       }
     }
 
@@ -505,16 +608,12 @@
       loadQuestions();
     }
 
-    // Wire up existing buttons via delegation (keeps original HTML untouched)
     window.submitQuiz = submit;
     window.resetQuiz = reset;
 
     loadQuestions();
   }
 
-  // ------------------------------------------------------------
-  // Public API
-  // ------------------------------------------------------------
   window.SVSVani = {
     initChat: function () {
       injectStyles();
@@ -523,7 +622,6 @@
     mountQuiz: mountQuiz,
   };
 
-  // Auto-init chat widget on every page that includes this script
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () =>
       window.SVSVani.initChat(),
