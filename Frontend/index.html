@@ -3303,15 +3303,31 @@
         window.addEventListener("orientationchange", setViewportHeight);
         document.querySelectorAll("[data-scroll]").forEach((link) => {
           link.addEventListener("click", (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute("data-scroll");
             const target = document.getElementById(targetId);
+
+            // যদি এই id-র সেকশন এই পেজে না থাকে (মানে অন্য পেজ থেকে ক্লিক হয়েছে)
+            // তাহলে normal navigation হতে দাও (/#home এ চলে যাবে browser নিজেই)
             if (!target) return;
 
+            e.preventDefault();
             const y = target.getBoundingClientRect().top + window.scrollY - 80;
             window.scrollTo({ top: y, behavior: "smooth" });
+            history.replaceState(null, "", window.location.pathname);
           });
         });
+        if (window.location.hash) {
+          const targetId = window.location.hash.slice(1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            setTimeout(() => {
+              const y =
+                target.getBoundingClientRect().top + window.scrollY - 80;
+              window.scrollTo({ top: y, behavior: "smooth" });
+              history.replaceState(null, "", window.location.pathname);
+            }, 300); // page render এর পর একটু delay দিয়ে scroll
+          }
+        }
         document.getElementById("current-year").textContent =
           new Date().getFullYear();
         displayRandomQuote();
