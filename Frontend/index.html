@@ -2516,28 +2516,24 @@
       let saraswatiModalTimer = null;
       let saraswatiCountdownInterval = null;
 
-      // 🎯 Master Loader
       async function loadAllDatabaseData() {
-        try {
-          // 1. Fetch About Us Stats
+        const aboutTask = (async () => {
           try {
             const res = await fetch(`${API_BASE}/about`);
-            if (res.ok) {
-              const data = await res.json();
-              document.getElementById("about-p1").textContent =
-                data.p1 ||
-                "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community...";
-              document.getElementById("about-p2").textContent =
-                data.p2 || "We believe in the power of unity and wisdom.";
-              document.getElementById("stat-years").textContent =
-                (data.years || 6) + "+";
-              document.getElementById("stat-events").textContent =
-                (data.events || 7) + "+";
-              document.getElementById("stat-members").textContent =
-                (data.members || 250) + "+";
-            } else throw new Error();
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            document.getElementById("about-p1").textContent =
+              data.p1 ||
+              "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community...";
+            document.getElementById("about-p2").textContent =
+              data.p2 || "We believe in the power of unity and wisdom.";
+            document.getElementById("stat-years").textContent =
+              (data.years || 6) + "+";
+            document.getElementById("stat-events").textContent =
+              (data.events || 7) + "+";
+            document.getElementById("stat-members").textContent =
+              (data.members || 250) + "+";
           } catch (e) {
-            // Apply Fallbacks silently
             document.getElementById("about-p1").textContent =
               "The UIU Sanatani Vidyarthi Samsad (SVS) is a vibrant community dedicated to preserving and celebrating the rich spiritual and cultural heritage of Sanatana Dharma at United International University.";
             document.getElementById("about-p2").textContent =
@@ -2546,58 +2542,60 @@
             document.getElementById("stat-events").textContent = "7+";
             document.getElementById("stat-members").textContent = "250+";
           }
+        })();
 
-          // 2. Fetch Advisors
+        const advisorsTask = (async () => {
           try {
             const res = await fetch(`${API_BASE}/advisors`);
-            if (res.ok) {
-              const data = await res.json();
-              renderAdvisors(data);
-            } else throw new Error();
+            if (!res.ok) throw new Error();
+            renderAdvisors(await res.json());
           } catch (e) {
             renderAdvisors(fallbackAdvisors);
           }
+        })();
 
-          // 3. Fetch Gallery
+        const galleryTask = (async () => {
           try {
             const res = await fetch(`${API_BASE}/gallery/featured`);
-            if (res.ok) {
-              const data = await res.json();
-              renderDynamicGallery(data);
-            } else throw new Error();
+            if (!res.ok) throw new Error();
+            renderDynamicGallery(await res.json());
           } catch (e) {
             renderDynamicGallery(fallbackGallery);
           }
+        })();
 
-          // 4. Fetch Festivals (replaces huge array)
+        const festivalsTask = (async () => {
           try {
             const res = await fetch(`${API_BASE}/festivals`);
-            if (res.ok) {
-              systemFestivalData = await res.json();
-            }
+            if (res.ok) systemFestivalData = await res.json();
           } catch (e) {
             console.warn("Using offline festival schedule.");
           }
-
           initFestivalSystem();
           renderFestivalList();
+        })();
 
+        const announcementTask = (async () => {
           try {
             const res = await fetch(`${API_BASE}/announcements/active`);
             if (res.ok) {
               const announcement = await res.json();
-              if (announcement && announcement.media_url) {
+              if (announcement && announcement.media_url)
                 setupFlagshipModal(announcement);
-              }
             }
           } catch (e) {
             console.warn("No active announcement overrides found.");
           }
-        } catch (e) {
-          console.error("Global Database Fetch Issue:", e);
-        }
-      }
+        })();
 
+        await Promise.allSettled([
+          aboutTask,
+          advisorsTask,
+          galleryTask,
+          festivalsTask,
+          announcementTask,
+        ]);
+      }
       // ==========================================
       // UI RENDER HELPERS
       // ==========================================
@@ -3430,11 +3428,9 @@
           new Date().getFullYear();
         displayRandomQuote();
 
-        // Execute main DB fetch
-        loadAllDatabaseData().then(() => {
-          fetchYouTube();
-          fetchBlogs();
-        });
+        loadAllDatabaseData();
+        fetchYouTube();
+        fetchBlogs();
 
         let isPageLoaded = false;
         const hideLoader = () => {
