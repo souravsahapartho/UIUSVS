@@ -1890,7 +1890,7 @@
 
           <div
             id="festival-list"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
+            class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 max-w-5xl mx-auto"
           >
             <div class="col-span-full flex justify-center py-8">
               <div
@@ -2900,13 +2900,13 @@
 
             let timeBadge = "";
             if (f.daysLeft === 0)
-              timeBadge = `<span class="inline-flex items-center bg-green-100 text-green-700 border border-green-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-extrabold anim-ripple shadow-sm"><span class="live-dot"></span>🎉 Today!</span>`;
+              timeBadge = `<span class="inline-flex items-center bg-green-100 text-green-700 border border-green-200 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] uppercase tracking-wider font-extrabold anim-ripple shadow-sm whitespace-nowrap"><span class="live-dot !w-1.5 !h-1.5 sm:!w-2 sm:!h-2"></span>🎉 Today</span>`;
             else if (f.daysLeft === 1)
-              timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm">⚡ Tomorrow!</span>`;
+              timeBadge = `<span class="inline-flex items-center bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] uppercase tracking-wider font-bold anim-strobe shadow-sm whitespace-nowrap">⚡ Tomorrow</span>`;
             else if (f.daysLeft <= 7)
-              timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-300 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold anim-pop shadow-sm">📢 In ${f.daysLeft} days</span>`;
+              timeBadge = `<span class="inline-flex items-center bg-orange-50 text-orange-700 border border-orange-300 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] uppercase tracking-wider font-bold anim-pop shadow-sm whitespace-nowrap">📢 ${f.daysLeft}d left</span>`;
             else
-              timeBadge = `<span class="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold shadow-sm">🗓️ In ${f.daysLeft} days</span>`;
+              timeBadge = `<span class="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] uppercase tracking-wider font-bold shadow-sm whitespace-nowrap">🗓️ ${f.daysLeft}d left</span>`;
 
             const icon =
               f.type === "ekadashi" ? "🌾" : f.type === "moon" ? "🌕" : "🪔";
@@ -2920,22 +2920,22 @@
               : highlightClass;
 
             const featuredBadge = f.isFeatured
-              ? `<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> Featured</span>`
+              ? `<span class="absolute -top-2 sm:-top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 sm:px-3 sm:py-1 rounded-full shadow-md flex items-center gap-1 whitespace-nowrap"><i data-lucide="star" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> Featured</span>`
               : "";
 
             return `
-        <div class="p-6 rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
-            ${featuredBadge}
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-2xl shadow-inner border border-orange-100 overflow-hidden">${iconHtml}</div>
-                ${timeBadge}
-            </div>
-                        <h3 class="font-bold text-gray-900 text-xl mb-0.5 font-serif">${f.name}</h3>
-                        <p class="text-sm text-orange-700 font-medium font-serif mb-1.5">${f.bnName}</p>
-                        <p class="text-sm text-gray-500 font-medium flex items-center gap-1">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${dateStr}
-                        </p>
-                    </div>`;
+  <div class="p-3 sm:p-6 rounded-xl sm:rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
+      ${featuredBadge}
+      <div class="flex justify-between items-start mb-2 sm:mb-4 gap-1.5">
+          <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-orange-50 flex items-center justify-center text-base sm:text-2xl shadow-inner border border-orange-100 overflow-hidden flex-shrink-0">${iconHtml}</div>
+          ${timeBadge}
+      </div>
+                  <h3 class="font-bold text-gray-900 text-sm sm:text-xl mb-0.5 font-serif leading-tight line-clamp-1">${f.name}</h3>
+                  <p class="text-[11px] sm:text-sm text-orange-700 font-medium font-serif mb-1 sm:mb-1.5 line-clamp-1">${f.bnName}</p>
+                  <p class="text-[10px] sm:text-sm text-gray-500 font-medium flex items-center gap-1">
+                      <i data-lucide="calendar" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> ${dateStr}
+                  </p>
+              </div>`;
           })
           .join("");
         lucide.createIcons();
