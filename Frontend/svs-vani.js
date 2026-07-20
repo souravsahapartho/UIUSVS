@@ -289,9 +289,39 @@
     }
     .svs-vani-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    .svs-vani-teaser {
+      position: fixed; bottom: 92px; right: 20px; z-index: 9490;
+      max-width: 230px; background: #fff; color: #4a0404;
+      border: 2px solid #fdba74; border-radius: 18px; border-bottom-right-radius: 4px;
+      padding: 10px 30px 10px 14px; font-size: 12.5px; font-weight: 700; line-height: 1.4;
+      box-shadow: 0 10px 30px rgba(185,28,28,0.28);
+      cursor: pointer;
+      transform: translateY(10px) scale(0.92); opacity: 0; pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .svs-vani-teaser.svs-vani-teaser-visible {
+      transform: translateY(0) scale(1); opacity: 1; pointer-events: auto;
+      animation: svsVaniTeaserWiggle 2.4s ease-in-out 0.4s;
+    }
+    @keyframes svsVaniTeaserWiggle {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      20% { transform: translateY(0) scale(1) rotate(-1.5deg); }
+      40% { transform: translateY(0) scale(1) rotate(1.5deg); }
+      60% { transform: translateY(0) scale(1) rotate(-1deg); }
+    }
+    .svs-vani-teaser-icon { margin-right: 4px; }
+    .svs-vani-teaser-close {
+      position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%;
+      background: #fff7ed; border: 1px solid #fdba74; color: #b45309;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; cursor: pointer;
+    }
+    .svs-vani-teaser-close:hover { background: #fed7aa; }
+
     @media (max-width: 480px) {
       .svs-vani-window { right: 12px; bottom: 84px; width: calc(100vw - 24px); }
       .svs-vani-fab { right: 14px; bottom: 16px; }
+      .svs-vani-teaser { right: 14px; bottom: 82px; max-width: calc(100vw - 90px); }
     }
   `;
 
@@ -301,6 +331,87 @@
     styleEl.id = "svs-vani-styles";
     styleEl.textContent = styles;
     document.head.appendChild(styleEl);
+  }
+
+  const TEASER_TEXTS = {
+    en: [
+      "Curious about Sanatan Dharma? Ask me! 🕉️",
+      "Want to test your knowledge? Try a quiz! 🧠",
+      "New here? Let's talk about UIUSVS 🌸",
+      "Got a question about our festivals? 🪔",
+      "Jai Shree Krishna! Need any help? 🙏",
+      "Tap me, I don't bite 😄",
+    ],
+    bn: [
+      "সনাতন ধর্ম নিয়ে কিছু জানতে চাও? 🕉️",
+      "একটা কুইজ খেলে দেখবে নাকি? 🧠",
+      "UIUSVS সম্পর্কে জানতে চাও? 🌸",
+      "উৎসব নিয়ে কোনো প্রশ্ন আছে? 🪔",
+      "জয় শ্রী কৃষ্ণ! কিছু জানতে চাও? 🙏",
+      "একটু ক্লিক করেই দেখো না! 😄",
+    ],
+  };
+
+  let teaserEl = null;
+  let teaserTimeout = null;
+  let teaserInterval = null;
+  let teaserDismissedCount = 0;
+  let lastTeaserIndex = -1;
+
+  function pickTeaserText() {
+    const list = TEASER_TEXTS[currentLang] || TEASER_TEXTS.en;
+    let idx = Math.floor(Math.random() * list.length);
+    if (list.length > 1 && idx === lastTeaserIndex)
+      idx = (idx + 1) % list.length;
+    lastTeaserIndex = idx;
+    return list[idx];
+  }
+
+  function buildTeaser() {
+    const el = document.createElement("div");
+    el.className = "svs-vani-teaser";
+    el.innerHTML = `<span class="svs-vani-teaser-icon">✨</span><span class="svs-vani-teaser-text"></span><button class="svs-vani-teaser-close" aria-label="Close">✕</button>`;
+    document.body.appendChild(el);
+    el.querySelector(".svs-vani-teaser-close").addEventListener(
+      "click",
+      (e) => {
+        e.stopPropagation();
+        hideTeaser();
+        teaserDismissedCount++;
+      },
+    );
+    el.addEventListener("click", () => {
+      hideTeaser();
+      const win = document.querySelector(".svs-vani-window");
+      if (win) toggleChat(win, true);
+    });
+    return el;
+  }
+
+  function showTeaser() {
+    if (chatOpen || teaserDismissedCount >= 3) return;
+    if (!teaserEl) teaserEl = buildTeaser();
+    teaserEl.classList.remove("svs-vani-teaser-visible");
+    void teaserEl.offsetWidth;
+    teaserEl.querySelector(".svs-vani-teaser-text").textContent =
+      pickTeaserText();
+    teaserEl.classList.add("svs-vani-teaser-visible");
+    clearTimeout(teaserTimeout);
+    teaserTimeout = setTimeout(() => hideTeaser(), 7000);
+  }
+
+  function hideTeaser() {
+    if (teaserEl) teaserEl.classList.remove("svs-vani-teaser-visible");
+    clearTimeout(teaserTimeout);
+  }
+
+  function startTeaserCycle() {
+    clearInterval(teaserInterval);
+    teaserInterval = setInterval(
+      () => showTeaser(),
+      20000 + Math.random() * 12000,
+    );
+    setTimeout(() => showTeaser(), 5000);
   }
 
   let chatOpen = false;
@@ -368,6 +479,8 @@
       });
       scrollToBottom();
     }
+
+    startTeaserCycle();
   }
 
   function applyLangUI() {
@@ -383,7 +496,10 @@
   function toggleChat(win, force) {
     chatOpen = typeof force === "boolean" ? force : !chatOpen;
     win.classList.toggle("svs-vani-open", chatOpen);
-    if (chatOpen) setTimeout(() => inputEl.focus(), 300);
+    if (chatOpen) {
+      hideTeaser();
+      setTimeout(() => inputEl.focus(), 300);
+    }
   }
 
   function scrollToBottom() {
