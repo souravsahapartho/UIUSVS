@@ -1675,12 +1675,14 @@
           class="hidden md:flex items-center space-x-6 lg:space-x-8 font-sans"
         >
           <a
-            href="#home"
+            data-scroll="home"
+            href="javascript:void(0)"
             class="text-sm font-semibold text-red-700 border-b-2 border-red-700 transition-colors"
             >Home</a
           >
           <a
-            href="#festivals"
+            data-scroll="festivals"
+            href="javascript:void(0)"
             class="text-sm font-semibold text-gray-800 hover:text-red-700 transition-colors"
             >Upcoming Events</a
           >
@@ -1744,13 +1746,15 @@
 
       <nav class="flex flex-col p-5 gap-1.5 font-sans flex-1 overflow-y-auto">
         <a
-          href="#home"
+          data-scroll="home"
+          href="javascript:void(0)"
           onclick="toggleMobileDrawer()"
           class="py-2.5 px-3 rounded-xl text-red-900 font-bold hover:bg-red-50 transition-colors"
           >Home</a
         >
         <a
-          href="#festivals"
+          data-scroll="festivals"
+          href="javascript:void(0)"
           onclick="toggleMobileDrawer()"
           class="py-2.5 px-3 rounded-xl text-gray-700 font-bold hover:bg-red-50 hover:text-red-900 transition-colors"
           >Upcoming Events</a
@@ -1859,7 +1863,8 @@
               >Become a Member</a
             >
             <a
-              href="#festivals"
+              data-scroll="festivals"
+              href="javascript:void(0)"
               class="btn-base btn-explore w-full sm:w-auto border-2 border-orange-500"
               >Explore Festivals</a
             >
@@ -3296,19 +3301,15 @@
         setViewportHeight();
         window.addEventListener("resize", setViewportHeight);
         window.addEventListener("orientationchange", setViewportHeight);
-        document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        document.querySelectorAll("[data-scroll]").forEach((link) => {
           link.addEventListener("click", (e) => {
-            const targetId = link.getAttribute("href").slice(1);
+            e.preventDefault();
+            const targetId = link.getAttribute("data-scroll");
             const target = document.getElementById(targetId);
             if (!target) return;
 
-            e.preventDefault(); // browser কে #festivals অ্যাড করতে বাধা দিচ্ছে
-
             const y = target.getBoundingClientRect().top + window.scrollY - 80;
             window.scrollTo({ top: y, behavior: "smooth" });
-
-            // URL clean রাখছে, #festivals অ্যাড হবে না
-            history.replaceState(null, "", window.location.pathname);
           });
         });
         document.getElementById("current-year").textContent =
