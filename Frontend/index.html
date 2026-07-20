@@ -3296,6 +3296,21 @@
         setViewportHeight();
         window.addEventListener("resize", setViewportHeight);
         window.addEventListener("orientationchange", setViewportHeight);
+        document.querySelectorAll('a[href^="#"]').forEach((link) => {
+          link.addEventListener("click", (e) => {
+            const targetId = link.getAttribute("href").slice(1);
+            const target = document.getElementById(targetId);
+            if (!target) return;
+
+            e.preventDefault(); // browser কে #festivals অ্যাড করতে বাধা দিচ্ছে
+
+            const y = target.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
+
+            // URL clean রাখছে, #festivals অ্যাড হবে না
+            history.replaceState(null, "", window.location.pathname);
+          });
+        });
         document.getElementById("current-year").textContent =
           new Date().getFullYear();
         displayRandomQuote();
