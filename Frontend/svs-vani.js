@@ -340,7 +340,7 @@
       "New here? Let's talk about UIUSVS 🌸",
       "Got a question about our festivals? 🪔",
       "Jai Shree Krishna! Need any help? 🙏",
-      "Tap me, I don't bite 😄",
+      "What is the story behind Saraswati Puja?",
     ],
     bn: [
       "সনাতন ধর্ম নিয়ে কিছু জানতে চাও? 🕉️",
@@ -348,7 +348,7 @@
       "UIUSVS সম্পর্কে জানতে চাও? 🌸",
       "উৎসব নিয়ে কোনো প্রশ্ন আছে? 🪔",
       "জয় শ্রী কৃষ্ণ! কিছু জানতে চাও? 🙏",
-      "একটু ক্লিক করেই দেখো না! 😄",
+      "সরস্বতী পূজার পেছনের গল্পটা কী?",
     ],
   };
 
@@ -381,9 +381,14 @@
       },
     );
     el.addEventListener("click", () => {
+      const msg = el.querySelector(".svs-vani-teaser-text").textContent;
       hideTeaser();
       const win = document.querySelector(".svs-vani-window");
       if (win) toggleChat(win, true);
+      if (msg && inputEl) {
+        inputEl.value = msg;
+        handleSend();
+      }
     });
     return el;
   }
