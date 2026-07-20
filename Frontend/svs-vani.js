@@ -2,7 +2,7 @@
   "use strict";
 
   const VANI_API_BASE = "https://uiusvs-ai.uiusvs2025.workers.dev";
-  const VANI_IMAGE_PATH = "Frontend/vani.png";
+  const VANI_IMAGE_PATH = "/Frontend/vani.png";
 
   const USED_QUESTIONS_KEY = "svs_vani_used_questions";
   const CHAT_HISTORY_KEY = "svs_vani_chat_history";
@@ -311,7 +311,7 @@
   function buildChatWidget() {
     const fab = document.createElement("div");
     fab.className = "svs-vani-fab";
-    fab.innerHTML = `<span class="svs-vani-pulse"></span><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" />`;
+    fab.innerHTML = `<span class="svs-vani-pulse"></span><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕉️',style:'position:relative;z-index:2;font-size:26px;'}))" />`;
     fab.setAttribute("aria-label", STR[currentLang].fabAria);
     fabEl = fab;
 
@@ -319,7 +319,7 @@
     win.className = "svs-vani-window";
     win.innerHTML = `
       <div class="svs-vani-header">
-        <div class="svs-vani-header-icon"><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" /></div>
+        <div class="svs-vani-header-icon"><img src="${VANI_IMAGE_PATH}" alt="SVS Vani" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕉️'}))" /></div>
         <div class="svs-vani-header-text">
           <div class="svs-vani-header-title">SVS Vani</div>
           <div class="svs-vani-header-sub"></div>
@@ -586,6 +586,7 @@
       if (titleEl) titleEl.textContent = s.resultLoading;
       if (textEl) textEl.textContent = s.resultLoadingText;
       resultBox.classList.remove("hidden");
+      resultBox.scrollIntoView({ behavior: "smooth", block: "center" });
 
       try {
         const data = await apiPost(
