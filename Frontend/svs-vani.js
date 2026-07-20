@@ -582,11 +582,26 @@
         card
           .querySelectorAll(".svs-vani-quiz-opt")
           .forEach((b) => (b.disabled = true));
-        if (idx === quiz.answer) {
+        const isCorrect = idx === quiz.answer;
+        const answerText = btn.textContent.trim();
+        if (isCorrect) {
           btn.classList.add("svs-vani-correct");
         } else {
           btn.classList.add("svs-vani-wrong");
           card.children[quiz.answer + 1]?.classList.add("svs-vani-correct");
+        }
+        sendBtn.disabled = false;
+        const followUp =
+          currentLang === "bn"
+            ? isCorrect
+              ? `আমি "${answerText}" বেছে নিয়েছিলাম, ঠিক উত্তর দিয়েছি! আরেকটা কুইজ দাও।`
+              : `আমি "${answerText}" বেছে নিয়েছিলাম, কিন্তু ভুল হয়েছে। আরেকটা কুইজ দাও।`
+            : isCorrect
+              ? `I answered "${answerText}" and got it right! Give me another quiz.`
+              : `I answered "${answerText}" but got it wrong. Give me another quiz.`;
+        if (inputEl) {
+          inputEl.value = followUp;
+          handleSend();
         }
       });
     });
