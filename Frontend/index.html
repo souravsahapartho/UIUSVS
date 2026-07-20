@@ -3316,6 +3316,23 @@
             history.replaceState(null, "", window.location.pathname);
           });
         });
+        // 🎯 Direct URL (/advisor, /festivals, /quiz) থেকে ঢুকলে সংশ্লিষ্ট সেকশনে স্ক্রল করানো
+        const pathToSection = {
+          "/advisor": "advisors",
+          "/festivals": "festivals",
+          "/quiz": "quiz",
+        };
+        const currentPath = window.location.pathname.replace(/\/$/, ""); // শেষের / বাদ দেওয়া
+        if (pathToSection[currentPath]) {
+          const target = document.getElementById(pathToSection[currentPath]);
+          if (target) {
+            setTimeout(() => {
+              const y =
+                target.getBoundingClientRect().top + window.scrollY - 80;
+              window.scrollTo({ top: y, behavior: "smooth" });
+            }, 300);
+          }
+        }
         if (window.location.hash) {
           const targetId = window.location.hash.slice(1);
           const target = document.getElementById(targetId);
