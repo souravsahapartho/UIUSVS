@@ -3162,135 +3162,7 @@
             '<p class="col-span-full text-center py-8 text-gray-500 italic">Blog updates coming soon. Check back shortly!</p>';
         }
       }
-      const sanatanQuizData = [
-        {
-          q: "What is the primary sacred text of Hinduism?",
-          options: ["Quran", "Vedas", "Bible", "Tripitaka"],
-          ans: 1,
-        },
-        {
-          q: "How many Vedas are there?",
-          options: ["2", "3", "4", "5"],
-          ans: 2,
-        },
-        {
-          q: "Who delivered the Bhagavad Gita?",
-          options: ["Rama", "Krishna", "Shiva", "Indra"],
-          ans: 1,
-        },
-        {
-          q: "Goddess Lakshmi is the goddess of?",
-          options: ["Knowledge", "Power", "Wealth", "War"],
-          ans: 2,
-        },
-        {
-          q: "Goddess Saraswati is the goddess of?",
-          options: ["Wealth", "Knowledge", "Power", "Love"],
-          ans: 1,
-        },
-        {
-          q: "Holi is the festival of?",
-          options: ["Lights", "Colors", "Water", "Fruits"],
-          ans: 1,
-        },
-        {
-          q: "Diwali is the festival of?",
-          options: ["Lights", "Water", "Flowers", "Colors"],
-          ans: 0,
-        },
-        {
-          q: "What is Om (ॐ)?",
-          options: ["God", "Sacred sound/mantra", "Book", "Festival"],
-          ans: 1,
-        },
-      ];
-
-      let currentQuizQuestions = [];
-
-      function initSanatanQuiz() {
-        const wrapper = document.getElementById("quiz-questions-wrapper");
-        if (!wrapper) return;
-
-        // Pick 3 random
-        let pool = [...sanatanQuizData].sort(() => 0.5 - Math.random());
-        currentQuizQuestions = pool.slice(0, 3);
-
-        wrapper.innerHTML = currentQuizQuestions
-          .map((q, i) => {
-            const optionsHtml = q.options
-              .map(
-                (opt, optIndex) => `
-                    <label class="flex items-start p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors bg-white">
-                        <input type="radio" name="q${i}" value="${optIndex}" class="mr-3 mt-0.5 flex-shrink-0 text-orange-500 focus:ring-orange-500 w-4 h-4">
-                        <span class="text-sm sm:text-base leading-tight">${opt}</span>
-                    </label>
-                `,
-              )
-              .join("");
-
-            return `
-                    <div class="quiz-question block">
-                        <h3 class="font-bold text-base sm:text-lg text-gray-800 mb-3 leading-tight font-serif">
-                            <span class="text-orange-600 mr-1">${i + 1}.</span> ${q.q}
-                        </h3>
-                        <div class="space-y-2.5 font-medium text-gray-700 text-sm sm:text-base">${optionsHtml}</div>
-                    </div>`;
-          })
-          .join('<hr class="my-6 border-orange-100/50">');
-      }
-
-      window.submitQuiz = () => {
-        let score = 0;
-        let allAnswered = true;
-
-        currentQuizQuestions.forEach((q, i) => {
-          const selected = document.querySelector(
-            `input[name="q${i}"]:checked`,
-          );
-          if (selected) {
-            if (parseInt(selected.value) === q.ans) score++;
-          } else {
-            allAnswered = false;
-          }
-        });
-
-        if (!allAnswered) {
-          showErrorToast("Please answer all 3 questions.");
-          return;
-        }
-
-        document.getElementById("quiz-container").classList.add("hidden");
-        document.getElementById("quiz-score").textContent = score;
-
-        const titleEl = document.getElementById("quiz-feedback-title");
-        const textEl = document.getElementById("quiz-feedback-text");
-
-        if (score === 3) {
-          titleEl.textContent = "Congratulations! Perfect Score! 🏆";
-          textEl.textContent =
-            "Your deep understanding of Sanatan Dharma is truly commendable.";
-        } else if (score === 2) {
-          titleEl.textContent = "Great Job!";
-          textEl.textContent =
-            "You know quite a bit. Just a little more reading and you'll be perfect! 🌸";
-        } else {
-          titleEl.textContent = "Good Effort!";
-          textEl.textContent =
-            "Stay with us to learn more about Sanatan Dharma. 🕉️";
-        }
-
-        document.getElementById("quiz-result").classList.remove("hidden");
-      };
-
-      window.resetQuiz = () => {
-        document.getElementById("quiz-result").classList.add("hidden");
-        document.getElementById("quiz-container").classList.remove("hidden");
-        initSanatanQuiz();
-      };
-
-      // ==========================================
-      // UI UTILITIES & EVENT LISTENERS
-      // ==========================================
+      window.SVSVani && window.SVSVani.mountQuiz();
 
       const spiritualQuotes = [
         {
@@ -3431,6 +3303,7 @@
         loadAllDatabaseData();
         fetchYouTube();
         fetchBlogs();
+        if (window.SVSVani) window.SVSVani.mountQuiz();
 
         let isPageLoaded = false;
         const hideLoader = () => {
@@ -3647,5 +3520,6 @@
           );
       });
     </script>
+    <script src="/svs-vani.js"></script>
   </body>
 </html>
