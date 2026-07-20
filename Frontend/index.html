@@ -3317,21 +3317,27 @@
           });
         });
         // 🎯 Direct URL (/advisor, /festivals, /quiz) থেকে ঢুকলে সংশ্লিষ্ট সেকশনে স্ক্রল করানো
+        // 🎯 Direct URL (/advisor, /festivals, /quiz) থেকে ঢুকলে সংশ্লিষ্ট সেকশনে স্ক্রল করানো
         const pathToSection = {
           "/advisor": "advisors",
           "/festivals": "festivals",
           "/quiz": "quiz",
         };
-        const currentPath = window.location.pathname.replace(/\/$/, ""); // শেষের / বাদ দেওয়া
-        if (pathToSection[currentPath]) {
-          const target = document.getElementById(pathToSection[currentPath]);
-          if (target) {
-            setTimeout(() => {
-              const y =
-                target.getBoundingClientRect().top + window.scrollY - 80;
-              window.scrollTo({ top: y, behavior: "smooth" });
-            }, 300);
-          }
+        const currentPath = window.location.pathname.replace(/\/$/, "");
+        const directSectionId = pathToSection[currentPath];
+
+        function scrollToDirectSection() {
+          if (!directSectionId) return;
+          const target = document.getElementById(directSectionId);
+          if (!target) return;
+          const y = target.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+
+        if (directSectionId) {
+          setTimeout(scrollToDirectSection, 300); // প্রথমবার
+          setTimeout(scrollToDirectSection, 1500); // ডেটা লোড হয়ে গেলে আবার ঠিক করা
+          setTimeout(scrollToDirectSection, 3500); // ধীর/cold-start API-র জন্য শেষ চেষ্টা
         }
         if (window.location.hash) {
           const targetId = window.location.hash.slice(1);
@@ -3349,7 +3355,7 @@
           new Date().getFullYear();
         displayRandomQuote();
 
-        loadAllDatabaseData();
+        loadAllDatabaseData().then(scrollToDirectSection);
         fetchYouTube();
         fetchBlogs();
         if (window.SVSVani) window.SVSVani.mountQuiz();
