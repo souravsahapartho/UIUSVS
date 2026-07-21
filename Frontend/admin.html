@@ -3159,9 +3159,11 @@
           ["Blood Group", u.blood_group],
           [
             "Graduation Date",
-            u.graduation_date
-              ? new Date(u.graduation_date).toLocaleDateString()
-              : "-",
+            u.pending_graduation_date
+              ? `${u.graduation_date ? new Date(u.graduation_date).toLocaleDateString() : "Not set"} → <span class="text-yellow-600 font-bold">${new Date(u.pending_graduation_date).toLocaleDateString()} (Pending)</span>`
+              : u.graduation_date
+                ? new Date(u.graduation_date).toLocaleDateString()
+                : "-",
           ],
           [
             "Signed Up On",

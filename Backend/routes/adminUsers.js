@@ -13,7 +13,7 @@ module.exports = (pool) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
-                department, batch, designation, created_at
+                department, batch, designation, graduation_date, pending_graduation_date, created_at
          FROM users WHERE is_approved=0 OR needs_admin_review=1
          ORDER BY id DESC`,
       );
@@ -39,18 +39,19 @@ module.exports = (pool) => {
 
       const isFirstTimeApproval = u.is_approved === 0;
 
-      // 🆕 pending_* গুলো merge করে ফাইনাল ভ্যালু হিসেব করে ফেলি — এইটাই DB এবং Sheet দুই জায়গায় যাবে
       const finalName = u.pending_name || u.name;
       const finalDepartment = u.pending_department || u.department;
       const finalBatch = u.pending_batch || u.batch;
       const finalDesignation = u.pending_designation || u.designation;
+      const finalGraduationDate =
+        u.pending_graduation_date || u.graduation_date;
 
-      // 🆕 কোনো info আসলেই বদলেছে কিনা (pending fields ছিল কিনা)
       const infoChanged = !!(
         u.pending_name ||
         u.pending_department ||
         u.pending_batch ||
-        u.pending_designation
+        u.pending_designation ||
+        u.pending_graduation_date
       );
 
       // 🆕 প্রথমবার approve, অথবা আগের ID card নেই, অথবা info বদলেছে — সব ক্ষেত্রেই নতুন ID card বানাতে হবে
@@ -58,16 +59,21 @@ module.exports = (pool) => {
 
       await pool.query(
         `UPDATE users SET is_approved=1,
-       name=?, department=?, batch=?, designation=?,
-       needs_admin_review=0, pending_name=NULL, pending_department=NULL, pending_batch=NULL, pending_designation=NULL
+       name=?, department=?, batch=?, designation=?, graduation_date=?,
+       needs_admin_review=0, pending_name=NULL, pending_department=NULL, pending_batch=NULL, pending_designation=NULL, pending_graduation_date=NULL
        WHERE id=?`,
-        [finalName, finalDepartment, finalBatch, finalDesignation, u.id],
+        [
+          finalName,
+          finalDepartment,
+          finalBatch,
+          finalDesignation,
+          finalGraduationDate,
+          u.id,
+        ],
       );
 
-      // 🆕 DB commit হয়ে গেছে — admin কে এখনই response পাঠাও, Sheet/email এর জন্য আর wait না
       res.json({ message: `${finalName} approved successfully` });
 
-      // 🆕 Sheet sync + email + audit log এখন ব্যাকগ্রাউন্ডে চলবে, response block করবে না
       (async () => {
         let sheetSynced = true;
         try {
@@ -83,7 +89,7 @@ module.exports = (pool) => {
             batch: finalBatch,
             designation: finalDesignation,
             bloodGroup: u.blood_group,
-            graduationDate: u.graduation_date,
+            graduationDate: finalGraduationDate,
             sendEmail: isFirstTimeApproval,
             generateIdCard: needsIdCard,
           });
@@ -269,7 +275,8 @@ module.exports = (pool) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
-              department, batch, designation, blood_group, graduation_date, created_at,
+              department, batch, designation, blood_group, graduation_date,
+              pending_graduation_date, created_at,
               is_approved, needs_admin_review, is_blocked, avatar_url
        FROM users
        ORDER BY is_approved ASC, id DESC`,

@@ -9,6 +9,7 @@ module.exports = (pool) => {
     const [rows] = await pool.query(
       `SELECT id, name, student_id, email, contact, gender, type,
               department, batch, designation, address, blood_group, avatar_url,
+              graduation_date, pending_graduation_date,
               needs_admin_review, id_card_url
        FROM users WHERE id=?`,
       [req.user.id],
@@ -33,11 +34,12 @@ module.exports = (pool) => {
       address,
       bloodGroup,
       contact,
+      graduationDate,
     } = req.body;
 
     await pool.query(
       `UPDATE users SET
-       pending_name=?, pending_department=?, pending_batch=?, pending_designation=?,
+       pending_name=?, pending_department=?, pending_batch=?, pending_designation=?, pending_graduation_date=?,
        address=?, blood_group=?, contact=?, needs_admin_review=1,
        profile_change_month_ref=?, profile_change_count_month=?,
        profile_change_year_ref=?, profile_change_count_year=?
@@ -47,6 +49,7 @@ module.exports = (pool) => {
         department,
         batch,
         designation,
+        graduationDate || null,
         address,
         bloodGroup,
         contact,
