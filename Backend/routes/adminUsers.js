@@ -269,7 +269,8 @@ module.exports = (pool) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
-              department, batch, designation, is_approved, needs_admin_review, is_blocked, avatar_url
+              department, batch, designation, blood_group, graduation_date, created_at,
+              is_approved, needs_admin_review, is_blocked, avatar_url
        FROM users
        ORDER BY is_approved ASC, id DESC`,
       );
@@ -279,7 +280,6 @@ module.exports = (pool) => {
     }
   });
 
-  // --- Block a member (they'll be denied login) ---
   router.put("/:id/block", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(

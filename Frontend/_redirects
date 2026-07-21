@@ -1,5 +1,6 @@
-/blog/*     /blog-detail.html?slug=:splat  200
-/advisor    /index.html                    200
-/festivals  /index.html                    200
-/quiz       /index.html                    200
-/*          /404.html                      404
+/admin        /admin.html    200
+/blog/*       /blog-detail.html?splat  200
+/advisor      /index.html    200
+/festivals    /index.html    200
+/quiz         /index.html    200
+/*            /404.html      404

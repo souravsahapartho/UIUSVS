@@ -937,10 +937,49 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// ============================================
-// AUTO-CONVERT: Graduation date পার হলে current → ex, Sheet sync
-// প্রতিদিন রাত ১২:০৫ এ চলবে
-// ============================================
+app.get(
+  "/api/admin-users/dashboard-stats",
+  verifySession,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const [[{ totalMembers }]] = await pool.query(
+        "SELECT COUNT(*) AS totalMembers FROM users",
+      );
+      const [[{ pendingMembers }]] = await pool.query(
+        "SELECT COUNT(*) AS pendingMembers FROM users WHERE is_approved=FALSE OR needs_admin_review=TRUE",
+      );
+      const [[{ totalGallery }]] = await pool.query(
+        "SELECT COUNT(*) AS totalGallery FROM gallery",
+      );
+      const [[{ galleryCategories }]] = await pool.query(
+        "SELECT COUNT(DISTINCT category) AS galleryCategories FROM gallery",
+      );
+      const [[{ upcomingEvents }]] = await pool.query(
+        "SELECT COUNT(*) AS upcomingEvents FROM festivals WHERE event_date >= CURDATE()",
+      );
+      const [[{ totalBlogs }]] = await pool.query(
+        "SELECT COUNT(*) AS totalBlogs FROM blogs",
+      );
+      const [[{ pinnedBlogs }]] = await pool.query(
+        "SELECT COUNT(*) AS pinnedBlogs FROM blogs WHERE is_pinned=TRUE",
+      );
+
+      res.json({
+        totalMembers,
+        pendingMembers,
+        totalGallery,
+        galleryCategories,
+        upcomingEvents,
+        totalBlogs,
+        pinnedBlogs,
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
 cron.schedule("5 0 * * *", async () => {
   console.log("🎓 Running graduation auto-convert job...");
   try {
