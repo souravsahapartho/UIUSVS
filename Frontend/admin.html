@@ -3098,6 +3098,10 @@
               ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Pending</span>`
               : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Pending</span>`;
 
+        const gradPendingBadge = u.pending_graduation_date
+          ? `<span class="ml-1 bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[9px] font-bold" title="Graduation date change pending">GRAD PENDING</span>`
+          : "";
+
         const avatar =
           u.avatar_url ||
           `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
@@ -3118,7 +3122,7 @@
       <td class="py-3 px-5">
         <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
       </td>
-      <td class="py-3 px-5">${statusBadge}</td>
+<td class="py-3 px-5">${statusBadge}${gradPendingBadge}</td>
 <td class="py-3 px-5 text-center space-x-1.5" onclick="event.stopPropagation()">
         ${blockBtn}
         <button onclick="deleteMember(${u.id}, this)" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
