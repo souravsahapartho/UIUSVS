@@ -44,6 +44,11 @@ function nameSimilarity(a, b) {
   return 1 - dist / maxLen;
 }
 
+// প্রথম অক্ষর না মিললে সেই token/name pair বাদ — typo সাধারণত প্রথম অক্ষর ঠিক রাখে
+function firstLetterMatches(a, b) {
+  return a[0] && b[0] && a[0] === b[0];
+}
+
 const COMMON_NAME_TOKENS = new Set([
   // Very common single-word surnames
   "das",
