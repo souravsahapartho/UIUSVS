@@ -62,6 +62,8 @@ module.exports = (pool) => {
         today.setHours(0, 0, 0, 0);
         if (gradDate >= today) {
           finalType = "current";
+        } else {
+          finalType = "ex";
         }
       }
 
@@ -338,9 +340,6 @@ module.exports = (pool) => {
           .json({ error: "Please fill in all required fields." });
       }
 
-      // 🆕 Graduation date যদি আজকের তারিখের পরে (future) হয়, তাহলে
-      // ইউজার Alumni থাকলেও তাকে আবার Current বানিয়ে দাও —
-      // যতদিন না সেই তারিখ চলে যায়, ততদিন সে "Current" থাকবে
       let finalType = type || target.type;
       if (graduationDate) {
         const gradDate = new Date(graduationDate);
@@ -348,6 +347,8 @@ module.exports = (pool) => {
         today.setHours(0, 0, 0, 0);
         if (gradDate >= today) {
           finalType = "current";
+        } else {
+          finalType = "ex";
         }
       }
 
