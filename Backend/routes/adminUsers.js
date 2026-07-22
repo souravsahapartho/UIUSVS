@@ -287,6 +287,82 @@ module.exports = (pool) => {
     }
   });
 
+  // --- Admin/Superadmin: directly edit any member's details (email cannot be changed) ---
+  router.put("/:id/edit", verifySession, verifyAdmin, async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [
+        req.params.id,
+      ]);
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      const target = rows[0];
+
+      if (target.role === "superadmin" && req.user.role !== "superadmin") {
+        return res
+          .status(403)
+          .json({ error: "Only a superadmin can edit a superadmin" });
+      }
+
+      const {
+        name,
+        contact,
+        gender,
+        type,
+        department,
+        batch,
+        designation,
+        bloodGroup,
+        graduationDate,
+        address,
+      } = req.body;
+
+      if (
+        !name?.trim() ||
+        !department?.trim() ||
+        !batch?.trim() ||
+        !contact?.trim()
+      ) {
+        return res
+          .status(400)
+          .json({ error: "Please fill in all required fields." });
+      }
+
+      await pool.query(
+        `UPDATE users SET
+         name=?, contact=?, gender=?, type=?, department=?, batch=?, designation=?,
+         blood_group=?, graduation_date=?, address=?,
+         pending_name=NULL, pending_department=NULL, pending_batch=NULL,
+         pending_designation=NULL, pending_graduation_date=NULL, needs_admin_review=0
+         WHERE id=?`,
+        [
+          name.trim(),
+          contact.trim(),
+          gender || target.gender,
+          type || target.type,
+          department.trim(),
+          batch.trim(),
+          designation?.trim() || "",
+          bloodGroup || target.blood_group,
+          graduationDate || null,
+          address?.trim() || "",
+          target.id,
+        ],
+      );
+
+      await logAdminAction(pool, {
+        adminId: req.user.id,
+        adminEmail: req.user.email,
+        action: "ADMIN_EDIT_MEMBER",
+        targetUserId: target.id,
+        targetUserName: name.trim(),
+        details: `Directly edited member details for ${name.trim()} (${target.student_id})`,
+      });
+
+      res.json({ message: `${name.trim()} updated successfully` });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   router.put("/:id/block", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(

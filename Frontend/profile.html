@@ -705,6 +705,7 @@
                     <input
                       type="password"
                       id="prof-new-pwd"
+                      autocomplete="new-password"
                       placeholder="Leave blank to keep current"
                       class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                     />
@@ -717,6 +718,7 @@
                     <input
                       type="password"
                       id="prof-conf-pwd"
+                      autocomplete="new-password"
                       placeholder="Confirm new password"
                       class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                     />
@@ -1030,8 +1032,9 @@
           }
           const u = await res.json();
           currentUser = u;
+          document.getElementById("prof-new-pwd").value = "";
+          document.getElementById("prof-conf-pwd").value = "";
 
-          // 🆕 Skeleton সরিয়ে real content দেখাও
           const nameEl = document.getElementById("display-name");
           nameEl.classList.remove(
             "h-7",

@@ -2047,6 +2047,186 @@
             class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
             id="mdm-fields"
           ></div>
+          <div class="flex justify-end pt-5 mt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onclick="editCurrentMember()"
+              class="btn-puja !py-2 !px-5 text-sm flex items-center gap-1.5"
+            >
+              <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Member
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Member Modal (Admin/Superadmin) -->
+    <div
+      id="edit-member-modal-overlay"
+      class="fixed inset-0 bg-black/50 z-[310] hidden items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] shadow-2xl border border-orange-100 flex flex-col overflow-hidden"
+      >
+        <div
+          class="flex justify-between items-center p-5 border-b border-orange-100 bg-brand-50 rounded-t-3xl flex-shrink-0"
+        >
+          <h3 class="font-serif font-bold text-brand-900 text-lg">
+            Edit Member
+          </h3>
+          <button
+            onclick="closeEditMemberModal()"
+            class="text-gray-400 hover:text-red-600 bg-white rounded-full p-1.5 shadow-sm border border-orange-100"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div class="p-6 overflow-y-auto min-h-0 space-y-4">
+          <input type="hidden" id="edit-member-id" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Full Name</label
+              >
+              <input
+                type="text"
+                id="edit-member-name"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Contact Number</label
+              >
+              <input
+                type="text"
+                id="edit-member-contact"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Gender</label
+              >
+              <select
+                id="edit-member-gender"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Type</label
+              >
+              <select
+                id="edit-member-type"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="current">Current</option>
+                <option value="ex">Alumni</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Department</label
+              >
+              <input
+                type="text"
+                id="edit-member-department"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Batch</label
+              >
+              <input
+                type="text"
+                id="edit-member-batch"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Designation</label
+              >
+              <input
+                type="text"
+                id="edit-member-designation"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Blood Group</label
+              >
+              <select
+                id="edit-member-blood"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>O+</option>
+                <option>O-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Graduation Date</label
+              >
+              <input
+                type="date"
+                id="edit-member-graduation"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+            <div class="sm:col-span-2">
+              <label
+                class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >Address</label
+              >
+              <input
+                type="text"
+                id="edit-member-address"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-400">
+            Email address cannot be changed from this panel.
+          </p>
+          <div class="flex justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeEditMemberModal()"
+              class="px-5 py-2.5 rounded-full text-sm font-bold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onclick="saveEditedMember()"
+              class="btn-puja !py-2.5 !px-6 text-sm"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -3041,7 +3221,7 @@
           container.innerHTML = items
             .map(
               (u) => `
-    <tr class="hover:bg-brand-50 transition-colors">
+    <tr class="hover:bg-brand-50 transition-colors cursor-pointer" onclick="openMemberDetailModal(${u.id})">
       <td class="py-3 px-5">
         <p class="font-bold text-gray-900 text-sm">${u.name}</p>
         <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
@@ -3051,7 +3231,7 @@
         <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
       </td>
       <td class="py-3 px-5 text-xs text-gray-500 whitespace-nowrap">${formatRequestedTime(u.created_at)}</td>
-<td class="py-3 px-5 text-center space-x-2">
+      <td class="py-3 px-5 text-center space-x-2" onclick="event.stopPropagation()">
         <button onclick="approveUser(${u.id}, this)" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Approve">
           <i data-lucide="check" class="w-4 h-4"></i>
         </button>
@@ -3063,6 +3243,7 @@
   `,
             )
             .join("");
+
           lucide.createIcons();
         } catch (err) {
           console.error(err);
@@ -3072,8 +3253,8 @@
         }
       }
 
-      // ---- All Members list (Manage Members tab, below pending) ----
       let allMembersCache = [];
+      let currentModalMemberId = null;
 
       async function loadAllMembers() {
         const container = document.getElementById("all-members-list");
@@ -3095,15 +3276,15 @@
 
       function renderMemberRow(u) {
         const statusBadge = u.is_blocked
-          ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Blocked</span>`
+          ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase whitespace-nowrap">Blocked</span>`
           : u.is_approved && !u.needs_admin_review
-            ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Approved</span>`
+            ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold uppercase whitespace-nowrap">Approved</span>`
             : u.needs_admin_review
-              ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Pending</span>`
-              : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Pending</span>`;
+              ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase whitespace-nowrap">Edit Pending</span>`
+              : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase whitespace-nowrap">Pending</span>`;
 
         const gradPendingBadge = u.pending_graduation_date
-          ? `<span class="ml-1 bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[9px] font-bold" title="Graduation date change pending">GRAD PENDING</span>`
+          ? `<span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap" title="Graduation date change pending">GRAD</span>`
           : "";
 
         const avatar =
@@ -3126,7 +3307,7 @@
       <td class="py-3 px-5">
         <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">${u.type}</span>
       </td>
-<td class="py-3 px-5">${statusBadge}${gradPendingBadge}</td>
+<td class="py-3 px-5"><div class="flex flex-wrap items-center gap-1">${statusBadge}${gradPendingBadge}</div></td>
 <td class="py-3 px-5 text-center space-x-1.5" onclick="event.stopPropagation()">
         ${blockBtn}
         <button onclick="deleteMember(${u.id}, this)" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
@@ -3137,6 +3318,7 @@
       function openMemberDetailModal(id) {
         const u = allMembersCache.find((m) => m.id === id);
         if (!u) return;
+        currentModalMemberId = id;
         document.getElementById("mdm-avatar").src =
           u.avatar_url ||
           `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
@@ -3155,23 +3337,31 @@
               ? "bg-green-100 text-green-700"
               : "bg-orange-100 text-orange-700");
 
+        const dateFmt = (v) => new Date(v).toLocaleDateString();
         const fields = [
           ["Student/Member ID", u.student_id],
           ["Email", u.email],
           ["Contact", u.contact],
           ["Gender", u.gender],
-          ["Department", u.department],
-          ["Batch", u.batch],
+          ["Name", formatPendingValue(u.name, u.pending_name)],
+          [
+            "Department",
+            formatPendingValue(u.department, u.pending_department),
+          ],
+          ["Batch", formatPendingValue(u.batch, u.pending_batch)],
           ["Type", u.type],
-          ["Designation", u.designation],
+          [
+            "Designation",
+            formatPendingValue(u.designation, u.pending_designation),
+          ],
           ["Blood Group", u.blood_group],
           [
             "Graduation Date",
-            u.pending_graduation_date
-              ? `${u.graduation_date ? new Date(u.graduation_date).toLocaleDateString() : "Not set"} → <span class="text-yellow-600 font-bold">${new Date(u.pending_graduation_date).toLocaleDateString()} (Pending)</span>`
-              : u.graduation_date
-                ? new Date(u.graduation_date).toLocaleDateString()
-                : "-",
+            formatPendingValue(
+              u.graduation_date,
+              u.pending_graduation_date,
+              dateFmt,
+            ),
           ],
           [
             "Signed Up On",
@@ -3196,6 +3386,87 @@
         const overlay = document.getElementById("member-detail-modal-overlay");
         overlay.classList.add("hidden");
         overlay.classList.remove("flex");
+      }
+      function editCurrentMember() {
+        if (currentModalMemberId) openEditMemberModal(currentModalMemberId);
+      }
+
+      function openEditMemberModal(id) {
+        const u = allMembersCache.find((m) => m.id === id);
+        if (!u) return;
+        document.getElementById("edit-member-id").value = u.id;
+        document.getElementById("edit-member-name").value = u.name || "";
+        document.getElementById("edit-member-contact").value = u.contact || "";
+        document.getElementById("edit-member-gender").value =
+          u.gender || "Male";
+        document.getElementById("edit-member-type").value = u.type || "current";
+        document.getElementById("edit-member-department").value =
+          u.department || "";
+        document.getElementById("edit-member-batch").value = u.batch || "";
+        document.getElementById("edit-member-designation").value =
+          u.designation || "";
+        document.getElementById("edit-member-blood").value =
+          u.blood_group || "O+";
+        document.getElementById("edit-member-graduation").value =
+          u.graduation_date ? u.graduation_date.split("T")[0] : "";
+        document.getElementById("edit-member-address").value = u.address || "";
+
+        closeMemberDetailModal();
+        const overlay = document.getElementById("edit-member-modal-overlay");
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+      }
+
+      function closeEditMemberModal() {
+        const overlay = document.getElementById("edit-member-modal-overlay");
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+      }
+
+      async function saveEditedMember() {
+        const id = document.getElementById("edit-member-id").value;
+        const payload = {
+          name: document.getElementById("edit-member-name").value.trim(),
+          contact: document.getElementById("edit-member-contact").value.trim(),
+          gender: document.getElementById("edit-member-gender").value,
+          type: document.getElementById("edit-member-type").value,
+          department: document
+            .getElementById("edit-member-department")
+            .value.trim(),
+          batch: document.getElementById("edit-member-batch").value.trim(),
+          designation: document
+            .getElementById("edit-member-designation")
+            .value.trim(),
+          bloodGroup: document.getElementById("edit-member-blood").value,
+          graduationDate:
+            document.getElementById("edit-member-graduation").value || null,
+          address: document.getElementById("edit-member-address").value.trim(),
+        };
+        if (
+          !payload.name ||
+          !payload.department ||
+          !payload.batch ||
+          !payload.contact
+        ) {
+          showToast("Please fill in all required fields.", "error");
+          return;
+        }
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/${id}/edit`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to update member");
+          showToast("Member updated successfully!");
+          closeEditMemberModal();
+          loadAllMembers();
+          loadPendingUsers();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
       }
 
       function renderAllMembers(list) {
@@ -3626,62 +3897,6 @@
         }
       }
 
-      function openMemberDetailModal(id) {
-        const u = allMembersCache.find((m) => m.id === id);
-        if (!u) return;
-        document.getElementById("mdm-avatar").src =
-          u.avatar_url ||
-          `https://api.dicebear.com/7.x/adventurer/svg?seed=${u.id}`;
-        document.getElementById("mdm-name").textContent = u.name;
-        const statusEl = document.getElementById("mdm-status");
-        statusEl.textContent = u.is_blocked
-          ? "Blocked"
-          : u.is_approved
-            ? "Approved"
-            : "Pending";
-        statusEl.className =
-          "mt-1 text-[10px] font-bold uppercase px-2 py-1 rounded " +
-          (u.is_blocked
-            ? "bg-red-100 text-red-700"
-            : u.is_approved
-              ? "bg-green-100 text-green-700"
-              : "bg-orange-100 text-orange-700");
-
-        const fields = [
-          ["Student/Member ID", u.student_id],
-          ["Email", u.email],
-          ["Contact", u.contact],
-          ["Gender", u.gender],
-          ["Department", u.department],
-          ["Batch", u.batch],
-          ["Type", u.type],
-          ["Designation", u.designation],
-          ["Blood Group", u.blood_group],
-          [
-            "Graduation Date",
-            u.graduation_date
-              ? new Date(u.graduation_date).toLocaleDateString()
-              : "-",
-          ],
-          [
-            "Signed Up On",
-            u.created_at ? new Date(u.created_at).toLocaleString() : "-",
-          ],
-        ];
-        document.getElementById("mdm-fields").innerHTML = fields
-          .map(
-            ([label, val]) => `
-          <div>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">${label}</p>
-            <p class="font-semibold text-gray-800">${val || "-"}</p>
-          </div>`,
-          )
-          .join("");
-
-        const overlay = document.getElementById("member-detail-modal-overlay");
-        overlay.classList.remove("hidden");
-        overlay.classList.add("flex");
-      }
       function closeMemberDetailModal() {
         const overlay = document.getElementById("member-detail-modal-overlay");
         overlay.classList.add("hidden");
