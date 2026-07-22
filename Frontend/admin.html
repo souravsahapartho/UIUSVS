@@ -3222,8 +3222,7 @@
         const container = document.getElementById("pending-users-list");
         if (!container) return;
 
-        const icon = refreshBtn?.querySelector("i");
-        icon?.classList.add("animate-spin");
+        refreshBtn?.classList.add("animate-spin");
 
         try {
           const res = await fetch(`${API_BASE}/admin-users/pending`, {
@@ -3273,7 +3272,7 @@
           console.error(err);
           container.innerHTML = `<tr><td colspan="5" class="py-6 px-5 text-center text-red-500 text-sm">Failed to load — check connection</td></tr>`;
         } finally {
-          icon?.classList.remove("animate-spin");
+          refreshBtn?.classList.remove("animate-spin");
         }
       }
 
