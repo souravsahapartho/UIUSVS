@@ -147,7 +147,7 @@
           href="#"
           onclick="switchTab('announcement')"
           id="nav-announcement"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="megaphone" class="w-5 h-5 mr-3"></i> Announcement
         </a>
@@ -155,7 +155,7 @@
           href="#"
           onclick="switchTab('about')"
           id="nav-about"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="file-text" class="w-5 h-5 mr-3"></i> About Us Content
         </a>
@@ -163,7 +163,7 @@
           href="#"
           onclick="switchTab('events')"
           id="nav-events"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="calendar" class="w-5 h-5 mr-3"></i> Festivals / Events
         </a>
@@ -171,7 +171,7 @@
           href="#"
           onclick="switchTab('gallery')"
           id="nav-gallery"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="image" class="w-5 h-5 mr-3"></i> Photo Gallery
         </a>
@@ -179,7 +179,7 @@
           href="#"
           onclick="switchTab('advisors')"
           id="nav-advisors"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="users" class="w-5 h-5 mr-3"></i> Advisor Panel
         </a>
@@ -203,7 +203,7 @@
           href="#"
           onclick="switchTab('logs')"
           id="nav-logs"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors superadmin-only hidden"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors superadmin-only hidden"
         >
           <i data-lucide="history" class="w-5 h-5 mr-3"></i> Activity Logs
         </a>
@@ -211,7 +211,7 @@
           href="#"
           onclick="switchTab('blogs')"
           id="nav-blogs"
-          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+          class="nav-item superadmin-only flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
         >
           <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> Blog Posts
         </a>
@@ -1270,7 +1270,7 @@
                 <div class="flex items-center gap-3">
                   <button
                     onclick="exportMembersSheet(this)"
-                    class="flex items-center gap-1.5 bg-brand-50 hover:bg-brand-100 text-brand-800 border border-brand-200 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm"
+                    class="superadmin-only hidden flex items-center gap-1.5 bg-brand-50 hover:bg-brand-100 text-brand-800 border border-brand-200 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm"
                   >
                     <i data-lucide="download" class="w-3.5 h-3.5"></i>
                     Export Members Sheet
@@ -3264,6 +3264,7 @@
 
       let allMembersCache = [];
       let currentModalMemberId = null;
+      let isSuperadmin = false;
 
       function formatPendingValue(current, pending, formatter) {
         const curVal = formatter
@@ -3315,6 +3316,10 @@
           ? `<button onclick="unblockMember(${u.id}, this)" class="bg-green-100 hover:bg-green-200 text-green-700 p-1.5 rounded transition-colors" title="Unblock"><i data-lucide="unlock" class="w-4 h-4"></i></button>`
           : `<button onclick="blockMember(${u.id}, this)" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 p-1.5 rounded transition-colors" title="Block"><i data-lucide="ban" class="w-4 h-4"></i></button>`;
 
+        const deleteBtn = isSuperadmin
+          ? `<button onclick="deleteMember(${u.id}, this)" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`
+          : "";
+
         return `
 <tr class="hover:bg-brand-50 transition-colors cursor-pointer" data-member-id="${u.id}" onclick="openMemberDetailModal(${u.id})">
       <td class="py-3 px-5"><img src="${avatar}" class="w-9 h-9 rounded-full object-cover border border-orange-200"></td>
@@ -3330,7 +3335,7 @@
 <td class="py-3 px-5"><div class="flex flex-wrap items-center gap-1">${statusBadge}${gradPendingBadge}</div></td>
 <td class="py-3 px-5 text-center space-x-1.5" onclick="event.stopPropagation()">
         ${blockBtn}
-        <button onclick="deleteMember(${u.id}, this)" class="bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        ${deleteBtn}
       </td>
     </tr>`;
       }
@@ -4287,10 +4292,17 @@
           document.getElementById("admin-role-display").textContent =
             data.user.role === "superadmin" ? "Superadmin" : "Admin";
 
-          if (data.user.role === "superadmin") {
+          isSuperadmin = data.user.role === "superadmin";
+
+          if (isSuperadmin) {
             document
               .querySelectorAll(".superadmin-only")
               .forEach((el) => el.classList.remove("hidden"));
+          }
+
+          // 🆕 role জানার আগেই যদি member list render হয়ে গিয়ে থাকে, আবার সঠিকভাবে render করো
+          if (allMembersCache.length) {
+            renderAllMembers(allMembersCache);
           }
         } catch (err) {
           console.error("Auth check failed:", err);

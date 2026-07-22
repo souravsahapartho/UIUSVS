@@ -299,13 +299,19 @@ module.exports = (pool) => {
     }
   });
 
-  // --- 🆕 Export all members as versioned Excel sheet ---
   router.get(
     "/export-members",
     verifySession,
     verifyAdmin,
     async (req, res) => {
       try {
+        // 🆕 শুধু Superadmin members sheet export করতে পারবে
+        if (req.user.role !== "superadmin") {
+          return res
+            .status(403)
+            .json({ error: "Only superadmin can export members sheet" });
+        }
+
         const [rows] = await pool.query(
           `SELECT id, name, student_id, email, contact, gender, type,
                   department, batch, designation, blood_group, address,
@@ -513,6 +519,13 @@ module.exports = (pool) => {
 
   router.delete("/:id/delete", verifySession, verifyAdmin, async (req, res) => {
     try {
+      // 🆕 শুধু Superadmin member delete করতে পারবে, regular Admin না
+      if (req.user.role !== "superadmin") {
+        return res
+          .status(403)
+          .json({ error: "Only superadmin can delete members" });
+      }
+
       const [rows] = await pool.query(
         "SELECT id, name, student_id, role FROM users WHERE id=?",
         [req.params.id],
