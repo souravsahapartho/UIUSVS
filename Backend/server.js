@@ -74,6 +74,14 @@ const profileRoutes = require("./routes/profile")(pool);
 const membersRoutes = require("./routes/members")(pool); // 🆕
 const { verifySession, verifyAdmin } = require("./middleware/auth");
 
+// 🆕 শুধু Superadmin-কেই এই ফাংশনের পরের route-এ যেতে দেবে
+function verifySuperadmin(req, res, next) {
+  if (!req.user || req.user.role !== "superadmin") {
+    return res.status(403).json({ error: "Superadmin access only" });
+  }
+  next();
+}
+
 app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
 app.use("/api/profile", profileRoutes);
@@ -98,6 +106,7 @@ app.post(
   "/api/gallery",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("media"),
   async (req, res) => {
     try {
@@ -130,24 +139,28 @@ app.post(
   },
 );
 
-// ============================================
-// 2. READ — Admin panel এর টেবিলের জন্য (সব ছবি)
-// ============================================
-app.get("/api/gallery", verifySession, async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT * FROM gallery ORDER BY is_pinned DESC, created_at DESC",
-    );
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+app.get(
+  "/api/gallery",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM gallery ORDER BY is_pinned DESC, created_at DESC",
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
 app.post(
   "/api/gallery/bulk",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.array("media", 20),
   async (req, res) => {
     try {
@@ -198,6 +211,7 @@ app.get(
   "/api/festivals/admin",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -858,6 +872,7 @@ app.put(
   "/api/gallery/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("media"),
   async (req, res) => {
     try {
@@ -908,23 +923,30 @@ app.put(
   },
 );
 
-app.delete("/api/gallery/:id", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT cloudinary_id FROM gallery WHERE id=?",
-      [req.params.id],
-    );
-    if (rows.length === 0) return res.status(404).json({ error: "Not found" });
+app.delete(
+  "/api/gallery/:id",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT cloudinary_id FROM gallery WHERE id=?",
+        [req.params.id],
+      );
+      if (rows.length === 0)
+        return res.status(404).json({ error: "Not found" });
 
-    if (rows[0].cloudinary_id) {
-      await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+      if (rows[0].cloudinary_id) {
+        await cloudinary.uploader.destroy(rows[0].cloudinary_id);
+      }
+      await pool.query("DELETE FROM gallery WHERE id=?", [req.params.id]);
+      res.json({ message: "Deleted successfully!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    await pool.query("DELETE FROM gallery WHERE id=?", [req.params.id]);
-    res.json({ message: "Deleted successfully!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+  },
+);
 
 app.get("/api/health", async (req, res) => {
   try {
