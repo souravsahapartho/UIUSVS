@@ -6,6 +6,7 @@ const {
 } = require("../services/googleSheetsService");
 const { verifySession, verifyAdmin } = require("../middleware/auth");
 const { logAdminAction } = require("../services/auditLog");
+const { findDuplicateMatches } = require("../services/duplicateCheck");
 
 module.exports = (pool) => {
   const router = express.Router();
@@ -18,6 +19,16 @@ module.exports = (pool) => {
          FROM users WHERE is_approved=0 OR needs_admin_review=1
          ORDER BY id DESC`,
       );
+      // 🆕 approved members এর against duplicate check
+      const [existingUsers] = await pool.query(
+        `SELECT id, name, student_id, contact FROM users WHERE is_approved=1`,
+      );
+
+      const rowsWithDupes = rows.map((u) => ({
+        ...u,
+        duplicateMatches: findDuplicateMatches(u, existingUsers),
+      }));
+
       res.json(rows);
     } catch (error) {
       console.error("❌ Pending users fetch failed:", error);
@@ -45,6 +56,20 @@ module.exports = (pool) => {
       const finalDesignation = u.pending_designation || u.designation;
       const finalGraduationDate =
         u.pending_graduation_date || u.graduation_date;
+
+      const [othersForApproval] = await pool.query(
+        `SELECT id, name, student_id, contact FROM users WHERE id != ?`,
+        [u.id],
+      );
+      const duplicateMatches = findDuplicateMatches(
+        {
+          id: u.id,
+          name: finalName,
+          student_id: u.student_id,
+          contact: u.contact,
+        },
+        othersForApproval,
+      );
 
       const infoChanged = !!(
         u.pending_name ||
@@ -84,7 +109,10 @@ module.exports = (pool) => {
         ],
       );
 
-      res.json({ message: `${finalName} approved successfully` });
+      res.json({
+        message: `${finalName} approved successfully`,
+        duplicateMatches,
+      });
 
       (async () => {
         let sheetSynced = true;
@@ -128,9 +156,12 @@ module.exports = (pool) => {
             : "APPROVE_PROFILE_EDIT",
           targetUserId: u.id,
           targetUserName: finalName,
-          details: sheetSynced
-            ? `Approved ${finalName} (${u.student_id})`
-            : `Approved ${finalName} (${u.student_id}) — sheet sync failed`,
+          details: JSON.stringify({
+            note: sheetSynced
+              ? `Approved ${finalName} (${u.student_id})`
+              : `Approved ${finalName} (${u.student_id}) — sheet sync failed`,
+            duplicateMatches,
+          }),
         });
       })();
     } catch (error) {
@@ -409,6 +440,20 @@ module.exports = (pool) => {
           .json({ error: "Please fill in all required fields." });
       }
 
+      const [others] = await pool.query(
+        `SELECT id, name, student_id, contact FROM users WHERE id != ?`,
+        [target.id],
+      );
+      const duplicateMatches = findDuplicateMatches(
+        {
+          id: target.id,
+          name: name.trim(),
+          student_id: target.student_id,
+          contact: contact.trim(),
+        },
+        others,
+      );
+
       let finalType = type || target.type;
       if (graduationDate) {
         const gradDate = new Date(graduationDate);
@@ -420,6 +465,28 @@ module.exports = (pool) => {
           finalType = "ex";
         }
       }
+
+      const fieldsToTrack = [
+        ["Name", target.name, name.trim()],
+        ["Contact", target.contact, contact.trim()],
+        ["Gender", target.gender, gender || target.gender],
+        ["Type", target.type, finalType],
+        ["Department", target.department, department.trim()],
+        ["Batch", target.batch, batch.trim()],
+        ["Designation", target.designation, designation?.trim() || ""],
+        ["Blood Group", target.blood_group, bloodGroup || target.blood_group],
+        ["Graduation Date", target.graduation_date, graduationDate || null],
+        ["Address", target.address, address?.trim() || ""],
+      ];
+      const changes = fieldsToTrack
+        .filter(
+          ([, oldVal, newVal]) => String(oldVal ?? "") !== String(newVal ?? ""),
+        )
+        .map(([field, oldVal, newVal]) => ({
+          field,
+          old: oldVal ?? "-",
+          new: newVal ?? "-",
+        }));
 
       await pool.query(
         `UPDATE users SET
@@ -449,10 +516,14 @@ module.exports = (pool) => {
         action: "ADMIN_EDIT_MEMBER",
         targetUserId: target.id,
         targetUserName: name.trim(),
-        details: `Directly edited member details for ${name.trim()} (${target.student_id})`,
+        details: JSON.stringify({ changes, duplicateMatches }),
       });
 
-      res.json({ message: `${name.trim()} updated successfully` });
+      res.json({
+        message: `${name.trim()} updated successfully`,
+        changes,
+        duplicateMatches,
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
