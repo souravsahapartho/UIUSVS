@@ -1,6 +1,10 @@
-/admin        /admin.html    200
+/profile      /profile.html   200
+/members      /members.html   200
+/signup       /signup.html    200
+/login        /login.html     200
+/admin        /admin.html     200
 /blog/*       /blog-detail.html?splat  200
-/advisor      /index.html    200
-/festivals    /index.html    200
-/quiz         /index.html    200
-/*            /404.html      404
+/advisor      /index.html     200
+/festivals    /index.html     200
+/quiz         /index.html     200
+/*            /404.html       404
