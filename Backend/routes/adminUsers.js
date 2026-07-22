@@ -54,12 +54,23 @@ module.exports = (pool) => {
         u.pending_graduation_date
       );
 
+      // 🆕 Graduation date future হলে Alumni থাকলেও আবার Current বানিয়ে দাও
+      let finalType = u.type;
+      if (finalGraduationDate) {
+        const gradDate = new Date(finalGraduationDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (gradDate >= today) {
+          finalType = "current";
+        }
+      }
+
       // 🆕 প্রথমবার approve, অথবা আগের ID card নেই, অথবা info বদলেছে — সব ক্ষেত্রেই নতুন ID card বানাতে হবে
       const needsIdCard = isFirstTimeApproval || !u.id_card_url || infoChanged;
 
       await pool.query(
         `UPDATE users SET is_approved=1,
-       name=?, department=?, batch=?, designation=?, graduation_date=?,
+       name=?, department=?, batch=?, designation=?, graduation_date=?, type=?,
        needs_admin_review=0, pending_name=NULL, pending_department=NULL, pending_batch=NULL, pending_designation=NULL, pending_graduation_date=NULL
        WHERE id=?`,
         [
@@ -68,6 +79,7 @@ module.exports = (pool) => {
           finalBatch,
           finalDesignation,
           finalGraduationDate,
+          finalType,
           u.id,
         ],
       );
@@ -326,6 +338,19 @@ module.exports = (pool) => {
           .json({ error: "Please fill in all required fields." });
       }
 
+      // 🆕 Graduation date যদি আজকের তারিখের পরে (future) হয়, তাহলে
+      // ইউজার Alumni থাকলেও তাকে আবার Current বানিয়ে দাও —
+      // যতদিন না সেই তারিখ চলে যায়, ততদিন সে "Current" থাকবে
+      let finalType = type || target.type;
+      if (graduationDate) {
+        const gradDate = new Date(graduationDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (gradDate >= today) {
+          finalType = "current";
+        }
+      }
+
       await pool.query(
         `UPDATE users SET
          name=?, contact=?, gender=?, type=?, department=?, batch=?, designation=?,
@@ -337,7 +362,7 @@ module.exports = (pool) => {
           name.trim(),
           contact.trim(),
           gender || target.gender,
-          type || target.type,
+          finalType,
           department.trim(),
           batch.trim(),
           designation?.trim() || "",

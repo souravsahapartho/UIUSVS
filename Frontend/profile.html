@@ -1195,6 +1195,9 @@
             .getElementById("prof-address")
             .value.trim();
           const bloodVal = document.getElementById("prof-blood").value;
+          const gradDateVal = document.getElementById(
+            "prof-graduation-date",
+          ).value;
           const pwd1 = document.getElementById("prof-new-pwd").value;
           const pwd2 = document.getElementById("prof-conf-pwd").value;
 
@@ -1242,6 +1245,7 @@
                 address: addressVal,
                 bloodGroup: bloodVal,
                 contact: contactVal,
+                graduationDate: gradDateVal,
               }),
             });
             const profileData = await profileRes.json();

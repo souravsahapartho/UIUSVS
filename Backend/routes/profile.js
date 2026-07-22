@@ -31,6 +31,7 @@ module.exports = (pool) => {
       address,
       bloodGroup,
       contact,
+      graduationDate,
     } = req.body;
 
     // Validate required fields before consuming the monthly change limit
@@ -45,7 +46,9 @@ module.exports = (pool) => {
       });
     }
 
-    // Skip the request entirely if nothing has actually changed
+    const existingGradDate = user.graduation_date
+      ? new Date(user.graduation_date).toISOString().split("T")[0]
+      : "";
     const noChanges =
       name.trim() === (user.name || "") &&
       department.trim() === (user.department || "") &&
@@ -53,7 +56,8 @@ module.exports = (pool) => {
       (designation || "").trim() === (user.designation || "") &&
       (address || "").trim() === (user.address || "") &&
       (bloodGroup || "").trim() === (user.blood_group || "") &&
-      contact.trim() === (user.contact || "");
+      contact.trim() === (user.contact || "") &&
+      (graduationDate || "") === existingGradDate;
 
     if (noChanges) {
       return res.status(200).json({ message: "No changes detected." });
@@ -65,6 +69,7 @@ module.exports = (pool) => {
     await pool.query(
       `UPDATE users SET
        pending_name=?, pending_department=?, pending_batch=?, pending_designation=?,
+       pending_graduation_date=?,
        address=?, blood_group=?, contact=?, needs_admin_review=1,
        profile_change_month_ref=?, profile_change_count_month=?,
        profile_change_year_ref=?, profile_change_count_year=?
@@ -74,6 +79,7 @@ module.exports = (pool) => {
         department,
         batch,
         designation,
+        graduationDate || null,
         address,
         bloodGroup,
         contact,
