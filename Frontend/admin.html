@@ -3217,7 +3217,6 @@
           <i data-lucide="alert-triangle" class="w-3 h-3"></i> Possible duplicate (${matches.length})
         </div>`;
       }
-
       async function loadPendingUsers(refreshBtn) {
         const container = document.getElementById("pending-users-list");
         if (!container) return;
@@ -3233,6 +3232,8 @@
             return;
           }
           const items = await res.json();
+          console.log("🔍 Pending users response:", items); // debug — DevTools console এ চেক করুন
+
           const label = document.getElementById("pending-count-label");
           if (label) label.textContent = `Pending Approvals (${items.length})`;
           if (!items.length) {
@@ -3244,7 +3245,7 @@
             .map(
               (u) => `
     <tr class="hover:bg-brand-50 transition-colors cursor-pointer" onclick="openMemberDetailModal(${u.id})">
-<td class="py-3 px-5">
+      <td class="py-3 px-5">
         <p class="font-bold text-gray-900 text-sm">${u.name}</p>
         <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
         ${renderDuplicateBadge(u.duplicateMatches)}

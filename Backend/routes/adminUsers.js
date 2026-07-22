@@ -11,7 +11,7 @@ const { findDuplicateMatches } = require("../services/duplicateCheck");
 module.exports = (pool) => {
   const router = express.Router();
 
-  router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
+router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
@@ -19,16 +19,22 @@ module.exports = (pool) => {
          FROM users WHERE is_approved=0 OR needs_admin_review=1
          ORDER BY id DESC`,
       );
-      const [existingUsers] = await pool.query(
+
+      const [allUsers] = await pool.query(
         `SELECT id, name, student_id, contact, email FROM users`,
       );
 
       const rowsWithDupes = rows.map((u) => ({
         ...u,
-        duplicateMatches: findDuplicateMatches(u, existingUsers),
+        duplicateMatches: findDuplicateMatches(u, allUsers),
       }));
 
-      res.json(rows);
+      console.log(
+        "🔍 Duplicate check sample:",
+        JSON.stringify(rowsWithDupes.map((u) => ({ name: u.name, dup: u.duplicateMatches }))),
+      );
+
+      res.json(rowsWithDupes);
     } catch (error) {
       console.error("❌ Pending users fetch failed:", error);
       res.status(500).json({ error: error.message });
