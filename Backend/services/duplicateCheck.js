@@ -1,6 +1,5 @@
-// services/duplicateCheck.js
 function normalizePhone(phone) {
-  return (phone || "").replace(/\D/g, "").slice(-10); // last 10 digit compare
+  return (phone || "").replace(/\D/g, "").slice(-10);
 }
 
 function normalizeName(name) {
@@ -11,7 +10,6 @@ function normalizeEmail(email) {
   return (email || "").toLowerCase().trim();
 }
 
-// Levenshtein edit distance — কয়টা অক্ষর বদলালে একটা স্ট্রিং আরেকটাতে রূপান্তরিত হবে
 function levenshteinDistance(a, b) {
   const m = a.length;
   const n = b.length;
@@ -26,16 +24,15 @@ function levenshteinDistance(a, b) {
     for (let j = 1; j <= n; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
       dp[i][j] = Math.min(
-        dp[i - 1][j] + 1, // deletion
-        dp[i][j - 1] + 1, // insertion
-        dp[i - 1][j - 1] + cost, // substitution
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + cost,
       );
     }
   }
   return dp[m][n];
 }
 
-// 0 থেকে 1 — 1 মানে একদম identical, spelling variation ধরার জন্য ব্যবহার হবে
 function nameSimilarity(a, b) {
   if (!a || !b) return 0;
   const maxLen = Math.max(a.length, b.length);
@@ -44,13 +41,11 @@ function nameSimilarity(a, b) {
   return 1 - dist / maxLen;
 }
 
-// প্রথম অক্ষর না মিললে সেই token/name pair বাদ — typo সাধারণত প্রথম অক্ষর ঠিক রাখে
 function firstLetterMatches(a, b) {
   return a[0] && b[0] && a[0] === b[0];
 }
 
 const COMMON_NAME_TOKENS = new Set([
-  // Very common single-word surnames
   "das",
   "roy",
   "dey",
@@ -76,20 +71,17 @@ const COMMON_NAME_TOKENS = new Set([
   "seal",
   "shil",
 
-  // Karmakar / Kormokar variations
   "karmakar",
   "kormokar",
   "karmokar",
   "kormakar",
 
-  // Mondol / Mondal variations
   "mondol",
   "mondal",
   "mandal",
   "mandol",
   "manda",
 
-  // Kumar / Devi type generic middle-names
   "kumar",
   "kumari",
   "kumer",
@@ -98,40 +90,33 @@ const COMMON_NAME_TOKENS = new Set([
   "debi",
   "chandra",
 
-  // Sarkar
   "sarkar",
   "sarker",
   "shorkar",
   "shorker",
 
-  // Dutta / Dutt
   "dutta",
   "dutt",
   "dutto",
   "dotto",
 
-  // Ghosh
   "ghosh",
   "ghose",
   "gosh",
 
-  // Nath
   "nath",
   "naath",
 
-  // Halder / Haldar
   "halder",
   "haldar",
   "haldar",
   "holdar",
   "holder",
 
-  // Biswas
   "biswas",
   "bishwas",
   "biswash",
 
-  // Bhattacharjee / Bhattacharya variations
   "bhattacharjee",
   "bhattacharya",
   "bhattacharyya",
@@ -141,116 +126,92 @@ const COMMON_NAME_TOKENS = new Set([
   "chakrabarty",
   "chakrabarti",
 
-  // Saha
   "saha",
   "sana",
 
-  // Banik
   "banik",
   "banick",
   "vanik",
 
-  // Malakar / Malokar
   "malakar",
   "malokar",
   "mallik",
   "malik",
 
-  // Pramanik
   "pramanik",
   "promanik",
   "pramanick",
 
-  // Adhikari
   "adhikari",
   "odhikari",
 
-  // Mazumder / Majumder
   "mazumder",
   "majumder",
   "mozumder",
   "majumdar",
   "mazumdar",
 
-  // Chowdhury variations
   "chowdhury",
   "chaudhury",
   "chaudhuri",
   "choudhury",
   "chowdhuri",
 
-  // Chakma / Barua (ethnic minority surnames, common in CHT)
   "chakma",
   "barua",
   "baruah",
 
-  // Acharya / Acharjee
   "acharya",
   "acharjee",
   "achariya",
   "ashariya",
 
-  // Goswami
   "goswami",
   "gosami",
   "goshami",
 
-  // Gupta
   "gupta",
   "guptas",
 
-  // Singha / Singh
   "singha",
   "singh",
   "singho",
 
-  // Sharma / Verma / Varma (North Indian but seen in mixed communities)
   "sharma",
   "sarma",
   "verma",
   "varma",
 
-  // Talukder
   "talukder",
   "talukdar",
 
-  // Poddar / Podder
   "poddar",
   "podder",
   "poder",
 
-  // Sardar / Sarder
   "sardar",
   "sarder",
 
-  // Bhowmik / Bhoumik
   "bhowmik",
   "bhoumik",
   "bhowmick",
   "bhaumik",
 
-  // Chanda / Chandra
   "chanda",
   "chandra",
 
-  // Debnath
   "debnath",
   "devnath",
 
-  // Modak
   "modak",
   "modok",
-
-  // Kar / Kor
   "kar",
   "kor",
   "kor",
 
-  // Sutradhar
   "sutradhar",
   "sutrodhar",
 
-  // Rani / Rany (common suffix, esp. female names)
   "rani",
   "rany",
   "rannee",
@@ -263,9 +224,9 @@ function bestTokenSimilarity(nameA, nameB) {
 
   let best = 0;
   for (const ta of tokensA) {
-    if (ta.length < 3 || COMMON_NAME_TOKENS.has(ta)) continue; // 🆕 common surname/title বাদ
+    if (ta.length < 3 || COMMON_NAME_TOKENS.has(ta)) continue;
     for (const tb of tokensB) {
-      if (tb.length < 3 || COMMON_NAME_TOKENS.has(tb)) continue; // 🆕 common surname/title বাদ
+      if (tb.length < 3 || COMMON_NAME_TOKENS.has(tb)) continue;
       if (!firstLetterMatches(ta, tb)) continue;
       const sim = nameSimilarity(ta, tb);
       if (sim > best) best = sim;
@@ -303,16 +264,11 @@ function findDuplicateMatches(candidate, existingList) {
         if (candName === exName) {
           reasons.push("Name exactly matches");
         } else {
-          // পুরো নামের প্রথম অক্ষর মিললে তবেই full-string similarity check করবো
           const fullSimilarity = firstLetterMatches(candName, exName)
             ? nameSimilarity(candName, exName)
             : 0;
-          // token-level এ প্রথম অক্ষর match আগে থেকেই বসানো আছে bestTokenSimilarity এর ভেতরে
           const tokenSimilarity = bestTokenSimilarity(candName, exName);
           const bestMatch = Math.max(fullSimilarity, tokenSimilarity);
-
-          // 0.75+ মানে প্রথম অক্ষর মিলে যাওয়া কোনো word/পুরো নাম ৭৫% এর বেশি মিলছে —
-          // spelling variation (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া
           if (bestMatch >= 0.75) {
             reasons.push("Name looks like a spelling variation");
           }
