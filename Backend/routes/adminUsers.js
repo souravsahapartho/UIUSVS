@@ -24,7 +24,6 @@ module.exports = (pool) => {
     }
   });
 
-  // --- Approve a pending member (new signup OR profile-edit re-approval) ---
   router.put("/:id/approve", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [
@@ -54,7 +53,6 @@ module.exports = (pool) => {
         u.pending_graduation_date
       );
 
-      // 🆕 Graduation date future হলে Alumni থাকলেও আবার Current বানিয়ে দাও
       let finalType = u.type;
       if (finalGraduationDate) {
         const gradDate = new Date(finalGraduationDate);
@@ -67,7 +65,6 @@ module.exports = (pool) => {
         }
       }
 
-      // 🆕 প্রথমবার approve, অথবা আগের ID card নেই, অথবা info বদলেছে — সব ক্ষেত্রেই নতুন ID card বানাতে হবে
       const needsIdCard = isFirstTimeApproval || !u.id_card_url || infoChanged;
 
       await pool.query(
