@@ -23,9 +23,6 @@ module.exports = (pool) => {
     ]);
     const user = rows[0];
 
-    const check = checkAndBumpLimit(user, "profile", { month: 1, year: 3 });
-    if (!check.allowed) return res.status(429).json({ error: check.reason });
-
     const {
       name,
       department,
@@ -34,12 +31,40 @@ module.exports = (pool) => {
       address,
       bloodGroup,
       contact,
-      graduationDate,
     } = req.body;
+
+    // Validate required fields before consuming the monthly change limit
+    if (
+      !name?.trim() ||
+      !department?.trim() ||
+      !batch?.trim() ||
+      !contact?.trim()
+    ) {
+      return res.status(400).json({
+        error: "Please fill in all required fields before saving.",
+      });
+    }
+
+    // Skip the request entirely if nothing has actually changed
+    const noChanges =
+      name.trim() === (user.name || "") &&
+      department.trim() === (user.department || "") &&
+      batch.trim() === (user.batch || "") &&
+      (designation || "").trim() === (user.designation || "") &&
+      (address || "").trim() === (user.address || "") &&
+      (bloodGroup || "").trim() === (user.blood_group || "") &&
+      contact.trim() === (user.contact || "");
+
+    if (noChanges) {
+      return res.status(200).json({ message: "No changes detected." });
+    }
+
+    const check = checkAndBumpLimit(user, "profile", { month: 3, year: 3 });
+    if (!check.allowed) return res.status(429).json({ error: check.reason });
 
     await pool.query(
       `UPDATE users SET
-       pending_name=?, pending_department=?, pending_batch=?, pending_designation=?, pending_graduation_date=?,
+       pending_name=?, pending_department=?, pending_batch=?, pending_designation=?,
        address=?, blood_group=?, contact=?, needs_admin_review=1,
        profile_change_month_ref=?, profile_change_count_month=?,
        profile_change_year_ref=?, profile_change_count_year=?
@@ -49,7 +74,6 @@ module.exports = (pool) => {
         department,
         batch,
         designation,
-        graduationDate || null,
         address,
         bloodGroup,
         contact,

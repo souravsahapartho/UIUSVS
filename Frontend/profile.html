@@ -1187,7 +1187,7 @@
         }
       }
 
-      // ---- Save Profile (name/dept/batch/designation/address/blood/contact) ----
+      // ---- Save profile (name, department, batch, designation, address, blood group, contact) ----
       document
         .getElementById("profile-form")
         .addEventListener("submit", async (e) => {
@@ -1195,8 +1195,47 @@
           const btn = document.getElementById("save-btn");
           const originalText = btn.innerHTML;
 
+          const nameVal = document.getElementById("prof-name").value.trim();
+          const deptVal =
+            document.getElementById("prof-dept").value === "Others"
+              ? document.getElementById("prof-dept-other").value.trim()
+              : document.getElementById("prof-dept").value;
+          const batchVal = document.getElementById("prof-batch").value.trim();
+          const contactVal = document.getElementById("prof-phone").value.trim();
+          const designationVal = document
+            .getElementById("prof-designation")
+            .value.trim();
+          const addressVal = document
+            .getElementById("prof-address")
+            .value.trim();
+          const bloodVal = document.getElementById("prof-blood").value;
           const pwd1 = document.getElementById("prof-new-pwd").value;
           const pwd2 = document.getElementById("prof-conf-pwd").value;
+
+          if (!nameVal || !deptVal || !batchVal || !contactVal) {
+            showToast(
+              "Please fill in all required fields before saving.",
+              "error",
+            );
+            return;
+          }
+
+          const noChanges =
+            currentUser &&
+            nameVal === (currentUser.name || "") &&
+            deptVal === (currentUser.department || "") &&
+            batchVal === (currentUser.batch || "") &&
+            designationVal === (currentUser.designation || "") &&
+            addressVal === (currentUser.address || "") &&
+            bloodVal === (currentUser.blood_group || "") &&
+            contactVal === (currentUser.contact || "") &&
+            !pwd1 &&
+            !pwd2;
+
+          if (noChanges) {
+            showToast("No changes to save.", "warning");
+            return;
+          }
 
           btn.innerHTML =
             '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...';
@@ -1204,37 +1243,32 @@
           lucide.createIcons();
 
           try {
-            // 1) Profile info update (rate-limited, needs admin review)
+            // Step 1: Update profile information (requires admin approval)
             const profileRes = await fetch(`${API_BASE}/profile`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
               credentials: "include",
               body: JSON.stringify({
-                name: document.getElementById("prof-name").value,
-                department:
-                  document.getElementById("prof-dept").value === "Others"
-                    ? document.getElementById("prof-dept-other").value.trim()
-                    : document.getElementById("prof-dept").value,
-                batch: document.getElementById("prof-batch").value,
-                designation: document.getElementById("prof-designation").value,
-                address: document.getElementById("prof-address").value,
-                bloodGroup: document.getElementById("prof-blood").value,
-                contact: document.getElementById("prof-phone").value,
-                graduationDate:
-                  document.getElementById("prof-graduation-date").value || null,
+                name: nameVal,
+                department: deptVal,
+                batch: batchVal,
+                designation: designationVal,
+                address: addressVal,
+                bloodGroup: bloodVal,
+                contact: contactVal,
               }),
             });
             const profileData = await profileRes.json();
             if (!profileRes.ok) throw new Error(profileData.error);
 
-            // 2) Password change (separate limit, no admin review)
+            // Step 2: Update password (separate limit, no admin review needed)
             if (pwd1 || pwd2) {
-              if (pwd1 !== pwd2) throw new Error("Passwords do not match!");
+              if (pwd1 !== pwd2) throw new Error("Passwords do not match.");
               if (pwd1.length < 6)
                 throw new Error("Password must be at least 6 characters.");
 
               const currentPwd = prompt(
-                "Security check: enter your CURRENT password to confirm change",
+                "For security, please enter your current password to confirm this change.",
               );
               if (!currentPwd) throw new Error("Password change cancelled.");
 
@@ -1251,11 +1285,12 @@
               if (!pwdRes.ok) throw new Error(pwdData.error);
             }
 
-            document.getElementById("display-name").textContent =
-              document.getElementById("prof-name").value;
+            document.getElementById("display-name").textContent = nameVal;
 
             showToast(
-              "Your changes have been submitted and are awaiting admin approval.",
+              profileData.message === "No changes detected."
+                ? "No changes to save."
+                : "Your changes have been submitted and are awaiting admin approval.",
               "warning",
             );
             document.getElementById("prof-new-pwd").value = "";
