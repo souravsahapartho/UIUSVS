@@ -11,6 +11,39 @@ function normalizeEmail(email) {
   return (email || "").toLowerCase().trim();
 }
 
+// Levenshtein edit distance — কয়টা অক্ষর বদলালে একটা স্ট্রিং আরেকটাতে রূপান্তরিত হবে
+function levenshteinDistance(a, b) {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1, // deletion
+        dp[i][j - 1] + 1, // insertion
+        dp[i - 1][j - 1] + cost, // substitution
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+// 0 থেকে 1 — 1 মানে একদম identical, spelling variation ধরার জন্য ব্যবহার হবে
+function nameSimilarity(a, b) {
+  if (!a || !b) return 0;
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen === 0) return 1;
+  const dist = levenshteinDistance(a, b);
+  return 1 - dist / maxLen;
+}
+
 function findDuplicateMatches(candidate, existingList) {
   const candPhone = normalizePhone(candidate.contact);
   const candName = normalizeName(candidate.name);
@@ -39,13 +72,13 @@ function findDuplicateMatches(candidate, existingList) {
       if (candName && exName) {
         if (candName === exName) {
           reasons.push("Name exactly matches");
-        } else if (candName.includes(exName) || exName.includes(candName)) {
-          reasons.push("Name partially matches");
         } else {
-          const candParts = candName.split(" ").filter((p) => p.length > 2);
-          const exParts = exName.split(" ").filter((p) => p.length > 2);
-          const overlap = candParts.filter((p) => exParts.includes(p));
-          if (overlap.length >= 2) reasons.push("Name partially matches");
+          const similarity = nameSimilarity(candName, exName);
+          // 0.72+ মানে ৭২% এর বেশি অক্ষর মিলছে — spelling variation (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া,
+          // কিন্তু আলাদা আলাদা নাম (যেমন শুধু পদবী মিললে) ধরবে না
+          if (similarity >= 0.72) {
+            reasons.push("Name looks like a spelling variation");
+          }
         }
       }
       if (candEmail && exEmail && candEmail === exEmail) {
@@ -66,4 +99,9 @@ function findDuplicateMatches(candidate, existingList) {
     .filter(Boolean);
 }
 
-module.exports = { findDuplicateMatches, normalizePhone, normalizeName };
+module.exports = {
+  findDuplicateMatches,
+  normalizePhone,
+  normalizeName,
+  nameSimilarity,
+};
