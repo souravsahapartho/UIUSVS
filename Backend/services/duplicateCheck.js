@@ -44,6 +44,24 @@ function nameSimilarity(a, b) {
   return 1 - dist / maxLen;
 }
 
+// পুরো নাম না মিলিয়ে, প্রতিটা word/token আলাদাভাবে মিলায় — "Rahul" vs "Rahol Das" এ যেন
+// শুধু "Rahul" আর "Rahol" compare হয়, "Das" এর জন্য length mismatch না হয়
+function bestTokenSimilarity(nameA, nameB) {
+  const tokensA = nameA.split(" ").filter(Boolean);
+  const tokensB = nameB.split(" ").filter(Boolean);
+  if (!tokensA.length || !tokensB.length) return 0;
+
+  let best = 0;
+  for (const ta of tokensA) {
+    for (const tb of tokensB) {
+      if (ta.length < 3 || tb.length < 3) continue; // খুব ছোট শব্দ (২ অক্ষরের নিচে) বাদ, noise কমাতে
+      const sim = nameSimilarity(ta, tb);
+      if (sim > best) best = sim;
+    }
+  }
+  return best;
+}
+
 function findDuplicateMatches(candidate, existingList) {
   const candPhone = normalizePhone(candidate.contact);
   const candName = normalizeName(candidate.name);
@@ -73,10 +91,13 @@ function findDuplicateMatches(candidate, existingList) {
         if (candName === exName) {
           reasons.push("Name exactly matches");
         } else {
-          const similarity = nameSimilarity(candName, exName);
-          // 0.72+ মানে ৭২% এর বেশি অক্ষর মিলছে — spelling variation (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া,
-          // কিন্তু আলাদা আলাদা নাম (যেমন শুধু পদবী মিললে) ধরবে না
-          if (similarity >= 0.72) {
+          const fullSimilarity = nameSimilarity(candName, exName);
+          const tokenSimilarity = bestTokenSimilarity(candName, exName);
+          const bestMatch = Math.max(fullSimilarity, tokenSimilarity);
+
+          // 0.75+ মানে কোনো একটা word/পুরো নাম ৭৫% এর বেশি মিলছে — spelling variation
+          // (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া, কিন্তু সম্পূর্ণ ভিন্ন নাম ধরবে না
+          if (bestMatch >= 0.75) {
             reasons.push("Name looks like a spelling variation");
           }
         }
