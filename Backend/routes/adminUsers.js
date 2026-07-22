@@ -276,7 +276,7 @@ module.exports = (pool) => {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
               department, batch, designation, blood_group, graduation_date,
-              pending_graduation_date, created_at,
+              pending_graduation_date, created_at, last_login,
               is_approved, needs_admin_review, is_blocked, avatar_url
        FROM users
        ORDER BY is_approved ASC, id DESC`,

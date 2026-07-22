@@ -2309,7 +2309,7 @@
           credentials: "include",
         }).finally(() => {
           showToast("Logging out...");
-          setTimeout(() => (window.location.href = "/login.html"), 800);
+          setTimeout(() => (window.location.href = "/login"), 800);
         });
       }
 
@@ -3378,6 +3378,12 @@
             "Signed Up On",
             u.created_at ? new Date(u.created_at).toLocaleString() : "-",
           ],
+          [
+            "Last Login",
+            u.last_login
+              ? new Date(u.last_login).toLocaleString()
+              : "Never logged in",
+          ],
         ];
         document.getElementById("mdm-fields").innerHTML = fields
           .map(
@@ -4234,7 +4240,7 @@
           }
         } catch (err) {
           console.error("Auth check failed:", err);
-          window.location.href = "login.html";
+          window.location.href = "/login";
         }
       })();
     </script>

@@ -207,6 +207,7 @@ module.exports = (pool) => {
       });
 
     // 🆕 Block check
+    // 🆕 Block check
     if (user.is_blocked) {
       return res.status(403).json({
         error:
@@ -216,12 +217,17 @@ module.exports = (pool) => {
 
     createSession(res, user);
 
+    // 🆕 Last login time update — DB তে save হচ্ছে, response block হচ্ছে না
+    pool
+      .query("UPDATE users SET last_login=NOW() WHERE id=?", [user.id])
+      .catch((err) => console.error("⚠️ last_login update failed:", err));
+
     res.json({
       message: "Login successful",
       user: { id: user.id, name: user.name, role: user.role, type: user.type },
     });
   });
-  // --- FORGOT PASSWORD: request OTP (same limits as change-password) ---
+
   router.post("/forgot-password", async (req, res) => {
     const { email, contact } = req.body;
     const [rows] = await pool.query(
