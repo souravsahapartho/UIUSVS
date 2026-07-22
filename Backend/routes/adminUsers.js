@@ -324,7 +324,14 @@ module.exports = (pool) => {
        FROM users
        ORDER BY is_approved ASC, id DESC`,
       );
-      res.json(rows);
+
+      // 🆕 সবার বিরুদ্ধে সবাইকে check — approved vs approved, pending vs pending, mixed সব cover হবে
+      const rowsWithDupes = rows.map((u) => ({
+        ...u,
+        duplicateMatches: findDuplicateMatches(u, rows),
+      }));
+
+      res.json(rowsWithDupes);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
