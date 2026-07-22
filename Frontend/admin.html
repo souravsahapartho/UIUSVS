@@ -2018,7 +2018,61 @@
         </div>
       </div>
     </div>
-
+    <!-- Duplicate Match Modal -->
+    <div
+      id="duplicate-modal-overlay"
+      class="fixed inset-0 bg-black/50 z-[320] hidden items-center justify-center p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] shadow-2xl border border-orange-100 flex flex-col overflow-hidden"
+      >
+        <div
+          class="flex justify-between items-center p-5 border-b border-orange-100 bg-red-50 rounded-t-3xl flex-shrink-0"
+        >
+          <h3
+            class="font-serif font-bold text-red-800 text-lg flex items-center gap-2"
+          >
+            <i data-lucide="alert-triangle" class="w-5 h-5"></i> Possible
+            Duplicate
+          </h3>
+          <button
+            onclick="closeDuplicateModal()"
+            class="text-gray-400 hover:text-red-600 bg-white rounded-full p-1.5 shadow-sm border border-orange-100"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1 min-h-0">
+          <div class="mb-4 pb-4 border-b border-gray-100">
+            <p
+              class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1"
+            >
+              This member
+            </p>
+            <p
+              id="dup-modal-subject-name"
+              class="font-bold text-gray-900 text-lg"
+            ></p>
+            <p id="dup-modal-subject-id" class="text-sm text-gray-500"></p>
+          </div>
+          <p
+            class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3"
+          >
+            Matches found with
+          </p>
+          <div id="dup-modal-list" class="space-y-3"></div>
+        </div>
+        <div class="p-5 border-t border-gray-100 flex justify-end">
+          <button
+            type="button"
+            onclick="closeDuplicateModal()"
+            class="px-5 py-2.5 rounded-full text-sm font-bold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- Member Detail Modal -->
     <div
       id="member-detail-modal-overlay"
@@ -2371,6 +2425,7 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
+      let duplicateMatchesCache = {}; // 🆕 badge click করলে modal এ দেখানোর জন্য ডেটা রাখা হবে
       let selectedGalleryFiles = [];
       let galleryItemsCache = [];
       let editingGalleryFile = null;
@@ -3204,18 +3259,61 @@
         return `${datePart} · ${timePart}`;
       }
 
-      function renderDuplicateBadge(matches) {
+      function renderDuplicateBadge(matches, subject) {
         if (!matches || !matches.length) return "";
-        const tooltip = matches
-          .map(
-            (m) =>
-              `${m.name} (${m.student_id || "no ID"}) — ${m.reasons.join(", ")}`,
-          )
-          .join(" | ")
-          .replace(/"/g, "&quot;");
-        return `<div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 rounded px-1.5 py-0.5 w-fit" title="${tooltip}">
+        const key = `dup_${subject.id}`;
+        duplicateMatchesCache[key] = { subject, matches };
+        return `<button type="button" onclick="event.stopPropagation(); openDuplicateModal('${key}')"
+          class="mt-1 flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded px-1.5 py-0.5 w-fit transition-colors cursor-pointer">
           <i data-lucide="alert-triangle" class="w-3 h-3"></i> Possible duplicate (${matches.length})
-        </div>`;
+        </button>`;
+      }
+
+      function openDuplicateModal(key) {
+        const entry = duplicateMatchesCache[key];
+        if (!entry) return;
+        const { subject, matches } = entry;
+
+        document.getElementById("dup-modal-subject-name").textContent =
+          subject.name;
+        document.getElementById("dup-modal-subject-id").textContent =
+          subject.student_id || "No ID";
+
+        const listContainer = document.getElementById("dup-modal-list");
+        listContainer.innerHTML = matches
+          .map(
+            (m) => `
+    <div class="border border-red-200 bg-red-50 rounded-xl p-4">
+      <div class="flex justify-between items-start mb-2">
+        <div>
+          <p class="font-bold text-gray-900 text-sm">${m.name}</p>
+          <p class="text-xs text-gray-500">${m.student_id || "No ID"} ${m.contact ? "• " + m.contact : ""}</p>
+          ${m.email ? `<p class="text-xs text-gray-500">${m.email}</p>` : ""}
+        </div>
+        <span class="text-[10px] font-bold text-red-700 bg-red-100 px-2 py-1 rounded uppercase">Match</span>
+      </div>
+      <div class="flex flex-wrap gap-1.5 mt-2">
+        ${m.reasons
+          .map(
+            (r) =>
+              `<span class="text-[10px] font-bold text-yellow-800 bg-yellow-100 border border-yellow-300 px-2 py-1 rounded-full">${r}</span>`,
+          )
+          .join("")}
+      </div>
+    </div>`,
+          )
+          .join("");
+
+        const overlay = document.getElementById("duplicate-modal-overlay");
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+        lucide.createIcons();
+      }
+
+      function closeDuplicateModal() {
+        const overlay = document.getElementById("duplicate-modal-overlay");
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
       }
       async function loadPendingUsers(refreshBtn) {
         const container = document.getElementById("pending-users-list");
@@ -3248,7 +3346,7 @@
       <td class="py-3 px-5">
         <p class="font-bold text-gray-900 text-sm">${u.name}</p>
         <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
-        ${renderDuplicateBadge(u.duplicateMatches)}
+${renderDuplicateBadge(u.duplicateMatches, u)}
       </td>
       <td class="py-3 px-5 text-sm text-gray-700">${u.department || "-"} (${u.batch || "-"})</td>
       <td class="py-3 px-5">
@@ -3310,20 +3408,6 @@
         }
       }
 
-      function renderDuplicateBadge(matches) {
-        if (!matches || !matches.length) return "";
-        const tooltip = matches
-          .map(
-            (m) =>
-              `${m.name} (${m.student_id || "no ID"}) — ${m.reasons.join(", ")}`,
-          )
-          .join(" | ")
-          .replace(/"/g, "&quot;");
-        return `<div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 rounded px-1.5 py-0.5 w-fit" title="${tooltip}">
-          <i data-lucide="alert-triangle" class="w-3 h-3"></i> Possible duplicate (${matches.length})
-        </div>`;
-      }
-
       function renderMemberRow(u) {
         const statusBadge = u.is_blocked
           ? `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase whitespace-nowrap">Blocked</span>`
@@ -3355,7 +3439,7 @@
 <td class="py-3 px-5">
         <p class="font-bold text-gray-900 text-sm">${u.name}</p>
         <p class="text-xs text-gray-500">${u.student_id || "-"}</p>
-        ${renderDuplicateBadge(u.duplicateMatches)}
+${renderDuplicateBadge(u.duplicateMatches, u)}
       </td>
       <td class="py-3 px-5 text-sm text-gray-700">${u.email}</td>
       <td class="py-3 px-5 text-sm text-gray-700">${u.department || "-"} (${u.batch || "-"})</td>
