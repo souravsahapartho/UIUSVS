@@ -44,14 +44,213 @@ function nameSimilarity(a, b) {
   return 1 - dist / maxLen;
 }
 
-// প্রথম অক্ষর না মিললে সেই token pair টা বাদ — typo সাধারণত প্রথম অক্ষর ঠিক রাখে
-// (Rahul→Rahol হয়, কিন্তু Rahul→Sahul সাধারণত হয় না), তাই এটা false-positive কমাবে
-function firstLetterMatches(a, b) {
-  return a[0] && b[0] && a[0] === b[0];
-}
+const COMMON_NAME_TOKENS = new Set([
+  // Very common single-word surnames
+  "das",
+  "roy",
+  "dey",
+  "de",
+  "sen",
+  "pal",
+  "paul",
+  "sil",
+  "shil",
+  "nag",
+  "raha",
+  "mitra",
+  "bose",
+  "basu",
+  "guha",
+  "kar",
+  "dam",
+  "dhar",
+  "shil",
+  "ray",
+  "rai",
+  "law",
+  "seal",
+  "shil",
 
-// পুরো নাম না মিলিয়ে, প্রতিটা word/token আলাদাভাবে মিলায় — "Rahul" vs "Rahol Das" এ যেন
-// শুধু "Rahul" আর "Rahol" compare হয়, "Das" এর জন্য length mismatch না হয়
+  // Karmakar / Kormokar variations
+  "karmakar",
+  "kormokar",
+  "karmokar",
+  "kormakar",
+
+  // Mondol / Mondal variations
+  "mondol",
+  "mondal",
+  "mandal",
+  "mandol",
+  "manda",
+
+  // Kumar / Devi type generic middle-names
+  "kumar",
+  "kumari",
+  "kumer",
+  "puja",
+  "devi",
+  "debi",
+  "chandra",
+
+  // Sarkar
+  "sarkar",
+  "sarker",
+  "shorkar",
+  "shorker",
+
+  // Dutta / Dutt
+  "dutta",
+  "dutt",
+  "dutto",
+  "dotto",
+
+  // Ghosh
+  "ghosh",
+  "ghose",
+  "gosh",
+
+  // Nath
+  "nath",
+  "naath",
+
+  // Halder / Haldar
+  "halder",
+  "haldar",
+  "haldar",
+  "holdar",
+  "holder",
+
+  // Biswas
+  "biswas",
+  "bishwas",
+  "biswash",
+
+  // Bhattacharjee / Bhattacharya variations
+  "bhattacharjee",
+  "bhattacharya",
+  "bhattacharyya",
+  "bhattacharje",
+  "chakraborty",
+  "chakravarty",
+  "chakrabarty",
+  "chakrabarti",
+
+  // Saha
+  "saha",
+  "sana",
+
+  // Banik
+  "banik",
+  "banick",
+  "vanik",
+
+  // Malakar / Malokar
+  "malakar",
+  "malokar",
+  "mallik",
+  "malik",
+
+  // Pramanik
+  "pramanik",
+  "promanik",
+  "pramanick",
+
+  // Adhikari
+  "adhikari",
+  "odhikari",
+
+  // Mazumder / Majumder
+  "mazumder",
+  "majumder",
+  "mozumder",
+  "majumdar",
+  "mazumdar",
+
+  // Chowdhury variations
+  "chowdhury",
+  "chaudhury",
+  "chaudhuri",
+  "choudhury",
+  "chowdhuri",
+
+  // Chakma / Barua (ethnic minority surnames, common in CHT)
+  "chakma",
+  "barua",
+  "baruah",
+
+  // Acharya / Acharjee
+  "acharya",
+  "acharjee",
+  "achariya",
+  "ashariya",
+
+  // Goswami
+  "goswami",
+  "gosami",
+  "goshami",
+
+  // Gupta
+  "gupta",
+  "guptas",
+
+  // Singha / Singh
+  "singha",
+  "singh",
+  "singho",
+
+  // Sharma / Verma / Varma (North Indian but seen in mixed communities)
+  "sharma",
+  "sarma",
+  "verma",
+  "varma",
+
+  // Talukder
+  "talukder",
+  "talukdar",
+
+  // Poddar / Podder
+  "poddar",
+  "podder",
+  "poder",
+
+  // Sardar / Sarder
+  "sardar",
+  "sarder",
+
+  // Bhowmik / Bhoumik
+  "bhowmik",
+  "bhoumik",
+  "bhowmick",
+  "bhaumik",
+
+  // Chanda / Chandra
+  "chanda",
+  "chandra",
+
+  // Debnath
+  "debnath",
+  "devnath",
+
+  // Modak
+  "modak",
+  "modok",
+
+  // Kar / Kor
+  "kar",
+  "kor",
+  "kor",
+
+  // Sutradhar
+  "sutradhar",
+  "sutrodhar",
+
+  // Rani / Rany (common suffix, esp. female names)
+  "rani",
+  "rany",
+  "rannee",
+]);
+
 function bestTokenSimilarity(nameA, nameB) {
   const tokensA = nameA.split(" ").filter(Boolean);
   const tokensB = nameB.split(" ").filter(Boolean);
@@ -59,9 +258,10 @@ function bestTokenSimilarity(nameA, nameB) {
 
   let best = 0;
   for (const ta of tokensA) {
+    if (ta.length < 3 || COMMON_NAME_TOKENS.has(ta)) continue; // 🆕 common surname/title বাদ
     for (const tb of tokensB) {
-      if (ta.length < 3 || tb.length < 3) continue; // খুব ছোট শব্দ বাদ, noise কমাতে
-      if (!firstLetterMatches(ta, tb)) continue; // 🆕 প্রথম অক্ষর না মিললে বাদ
+      if (tb.length < 3 || COMMON_NAME_TOKENS.has(tb)) continue; // 🆕 common surname/title বাদ
+      if (!firstLetterMatches(ta, tb)) continue;
       const sim = nameSimilarity(ta, tb);
       if (sim > best) best = sim;
     }
@@ -94,7 +294,7 @@ function findDuplicateMatches(candidate, existingList) {
       ) {
         reasons.push("Student/Member ID matches");
       }
-if (candName && exName) {
+      if (candName && exName) {
         if (candName === exName) {
           reasons.push("Name exactly matches");
         } else {
