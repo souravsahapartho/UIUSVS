@@ -228,6 +228,7 @@ app.post(
   "/api/festivals",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("image"),
   async (req, res) => {
     try {
@@ -266,6 +267,7 @@ app.put(
   "/api/festivals/:id/feature",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const { is_featured } = req.body;
@@ -284,6 +286,7 @@ app.delete(
   "/api/festivals/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const [rows] = await pool.query(
