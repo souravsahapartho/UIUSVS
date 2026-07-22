@@ -338,7 +338,6 @@
         </div>
 
         <form id="login-form" class="space-y-5">
-          <!-- Email -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >Email Address</label
@@ -358,7 +357,6 @@
             </div>
           </div>
 
-          <!-- Password -->
           <div>
             <div class="flex justify-between items-center mb-1.5">
               <label class="block text-sm font-bold text-brand-900"
@@ -541,7 +539,6 @@
       </div>
     </footer>
 
-    <!-- Custom Toast -->
     <div
       id="toast"
       class="fixed top-20 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-x-4"
@@ -557,7 +554,6 @@
       </div>
     </div>
 
-    <!-- Enhanced Secure Password Reset Modal -->
     <div
       id="reset-modal"
       class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity"
@@ -584,7 +580,6 @@
           both your registered email and mandatory contact number.
         </p>
 
-        <!-- Stage 1: Email + Phone -->
         <div id="reset-stage-request">
           <div class="space-y-4 mb-6">
             <div>
@@ -627,7 +622,6 @@
           </div>
         </div>
 
-        <!-- Stage 2: OTP + New Password -->
         <div id="reset-stage-otp" class="hidden">
           <div class="space-y-4 mb-6">
             <div>
@@ -680,7 +674,6 @@
 
       document.getElementById("current-year").textContent =
         new Date().getFullYear();
-      // 🎯 আগে থেকেই valid session/cookie থাকলে সরাসরি profile/admin এ পাঠিয়ে দাও
       (async function checkExistingSession() {
         try {
           const res = await fetch(`${API_BASE}/auth/me`, {
@@ -701,7 +694,6 @@
             }
           }
         } catch (e) {
-          // cookie নেই বা invalid — কিছু করার দরকার নেই, normal login form দেখানো হবে
         }
       })();
       function toggleDrawer() {
@@ -740,8 +732,7 @@
         }, 4000);
       }
 
-      // ---- Forgot Password Modal ----
-      let fpStage = "request"; // 'request' -> 'otp'
+      let fpStage = "request";
 
       function handleForgotPwd() {
         fpStage = "request";
@@ -844,7 +835,6 @@
         }
       }
 
-      // ---- Login ----
       document
         .getElementById("login-form")
         .addEventListener("submit", async (e) => {

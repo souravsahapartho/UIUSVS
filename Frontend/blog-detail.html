@@ -155,7 +155,6 @@
         transition: transform 0.3s ease-in-out;
       }
 
-      /* ---- Article body content styling (rendered from admin's rich text editor) ---- */
       #article-content {
         line-height: 1.85;
       }
@@ -436,7 +435,6 @@
 
     <main class="container mx-auto px-4 py-10 sm:py-14 flex-1 relative z-10">
       <div class="max-w-6xl mx-auto">
-        <!-- Loading skeleton -->
         <div id="loading-state" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div class="lg:col-span-8">
             <div class="h-4 w-24 skeleton rounded-full mb-6"></div>
@@ -455,7 +453,6 @@
           </div>
         </div>
 
-        <!-- Error state -->
         <div id="error-state" class="hidden text-center py-24">
           <i data-lucide="file-x" class="w-14 h-14 mx-auto text-gray-300"></i>
           <h1 class="text-2xl font-bold text-brand-900 font-serif mt-4">
@@ -473,12 +470,10 @@
           </a>
         </div>
 
-        <!-- Article + Sidebar Grid -->
         <div
           id="page-grid"
           class="hidden grid grid-cols-1 lg:grid-cols-12 gap-10 items-start"
         >
-          <!-- MAIN ARTICLE (left / top) -->
           <article id="article-wrap" class="lg:col-span-8 min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
               <a
@@ -532,7 +527,6 @@
             </div>
           </article>
 
-          <!-- SIDEBAR (right on desktop, below on mobile) -->
           <aside class="lg:col-span-4 min-w-0">
             <div class="sidebar-sticky">
               <div
@@ -545,7 +539,6 @@
                   More Articles
                 </h3>
                 <div id="related-articles" class="space-y-4">
-                  <!-- injected via JS -->
                 </div>
               </div>
 
@@ -559,7 +552,6 @@
                   From Our Gallery
                 </h3>
                 <div id="sidebar-gallery" class="grid grid-cols-3 gap-2">
-                  <!-- injected via JS -->
                 </div>
                 <a
                   href="/gallery.html"
@@ -724,7 +716,6 @@
       </div>
     </footer>
 
-    <!-- Image/Video Lightbox -->
     <div
       id="blog-lightbox"
       class="fixed inset-0 bg-black/85 z-[300] hidden items-center justify-center p-4 md:p-8 backdrop-blur-sm cursor-zoom-out"
@@ -757,7 +748,6 @@
       </div>
     </div>
 
-    <!-- Custom Toast -->
     <div
       id="toast"
       class="fixed bottom-10 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-y-10"
@@ -778,7 +768,6 @@
       document.getElementById("current-year").textContent =
         new Date().getFullYear();
 
-      // ---------- Mobile drawer (same behavior as blog.html) ----------
       function toggleDrawer() {
         document
           .getElementById("mobile-drawer")
@@ -786,11 +775,9 @@
         document.getElementById("drawer-overlay")?.classList.toggle("hidden");
       }
 
-      // ---------- Slug resolution ----------
       function getSlugFromUrl() {
         const params = new URLSearchParams(window.location.search);
         if (params.get("slug")) return params.get("slug");
-        // Fallback for /blog/<slug> without the rewrite query param
         const parts = window.location.pathname.split("/").filter(Boolean);
         if (parts.length >= 2 && parts[0] === "blog")
           return decodeURIComponent(parts[parts.length - 1]);
@@ -824,9 +811,6 @@
         }
       }
 
-      // ---------- Normalize an image URL for comparison ----------
-      // Cloudinary URLs can have different transformation segments even for
-      // the "same" image, so we compare using the public_id / filename tail.
       function normalizeImgSrc(src) {
         if (!src) return "";
         try {
@@ -838,7 +822,6 @@
         }
       }
 
-      // ---------- Remove duplicate thumbnail image from the article body ----------
       function dedupeThumbnailFromContent(thumbnailUrl) {
         if (!thumbnailUrl) return;
         const target = normalizeImgSrc(thumbnailUrl);
@@ -847,7 +830,6 @@
 
         imgs.forEach((img) => {
           if (normalizeImgSrc(img.getAttribute("src")) === target) {
-            // Remove the image; if it was alone inside a <p>, remove the empty <p> too
             const parent = img.parentElement;
             img.remove();
             if (
@@ -862,7 +844,6 @@
         });
       }
 
-      // ---------- Load main article ----------
       async function loadArticle() {
         const slug = getSlugFromUrl();
         if (!slug) {
@@ -931,10 +912,8 @@
 
           const remaining = all.filter((a) => a.slug !== currentSlug);
 
-          // Random shuffle helper
           const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-          // একই category-র পোস্ট আগে (random order এ), তারপর বাকিগুলো (random order এ) দিয়ে fill
           const sameCategory = shuffle(
             remaining.filter((a) => a.category === category),
           );
@@ -967,13 +946,10 @@
         }
       }
 
-      // ---------- Sidebar gallery preview (desktop only) ----------
-      // Cloudinary video URL থেকে সেই video-র প্রথম frame-টাকে image হিসেবে বের করা
       function getVideoThumbnail(url) {
         return url.replace(/\.(mp4|mov|webm)($|\?.*$)/i, ".jpg$2");
       }
 
-      // ---------- Lightbox open/close ----------
       function openBlogLightbox(url, isVideo) {
         const overlay = document.getElementById("blog-lightbox");
         const imgEl = document.getElementById("blog-lightbox-img");

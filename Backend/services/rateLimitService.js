@@ -6,9 +6,6 @@ function currentYearRef() {
   return String(new Date().getFullYear());
 }
 
-// user: DB row থেকে আসা কাউন্টার fields
-// prefix: 'profile' অথবা 'pwd'
-// limits: { month: n, year: n }
 function checkAndBumpLimit(user, prefix, limits) {
   const mRef = currentMonthRef();
   const yRef = currentYearRef();

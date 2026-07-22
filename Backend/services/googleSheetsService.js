@@ -19,7 +19,6 @@ async function appendApprovedMember(member) {
   return result;
 }
 
-// 🆕 Delete-এর সময় sheet থেকেও row remove করার জন্য
 async function removeMemberFromSheet(studentId) {
   const scriptUrl = process.env.GOOGLE_SCRIPT_URL;
   if (!scriptUrl) {

@@ -168,7 +168,6 @@
     </style>
   </head>
   <body class="antialiased min-h-screen flex flex-col mandala-pattern">
-    <!-- Navbar -->
     <header class="glass-nav sticky top-0 z-50 shadow-sm">
       <div
         class="container mx-auto px-4 py-3 flex justify-between items-center"
@@ -278,7 +277,6 @@
       </div>
     </header>
 
-    <!-- Mobile Drawer -->
     <div
       id="mobile-drawer"
       class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl z-[100] transform translate-x-full md:hidden flex flex-col"
@@ -360,9 +358,7 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Left Column: Avatar & Quick Info -->
         <div class="lg:col-span-1 space-y-6">
-          <!-- Avatar Card -->
           <div
             class="glass-card rounded-3xl p-6 text-center border-t-4 border-t-brand-500 relative overflow-hidden"
           >
@@ -380,7 +376,6 @@
                 class="w-full h-full bg-gray-200 animate-pulse"
               ></div>
 
-              <!-- Upload Overlay -->
               <label
                 for="avatar-upload"
                 class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
@@ -414,7 +409,6 @@
               class="inline-block bg-brand-50 text-brand-700 px-3 py-1 rounded text-xs font-extrabold uppercase tracking-widest border border-brand-200 min-w-[100px] min-h-[20px]"
             ></div>
 
-            <!-- Profile Pic Warning Note -->
             <div
               class="mt-6 text-left bg-orange-50 p-3 rounded-xl border border-orange-200 relative"
             >
@@ -441,7 +435,6 @@
             </div>
           </div>
 
-          <!-- Digital ID Card Hint -->
           <div
             class="bg-gradient-to-br from-brand-900 to-brand-700 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden"
           >
@@ -479,7 +472,6 @@
           </div>
         </div>
 
-        <!-- Right Column: Settings Form -->
         <div class="lg:col-span-2">
           <div class="glass-card rounded-3xl p-6 sm:p-8">
             <div
@@ -506,7 +498,6 @@
               class="space-y-6 opacity-40 pointer-events-none transition-opacity duration-200"
             >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Name -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -520,7 +511,6 @@
                     class="w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
                   />
                 </div>
-                <!-- Email -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -537,7 +527,6 @@
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Contact -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -554,7 +543,6 @@
                     Kept private. Not shown in directory.
                   </p>
                 </div>
-                <!-- Blood Group -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -577,7 +565,6 @@
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Department -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -602,7 +589,6 @@
                     class="hidden w-full bg-gray-50 border border-gray-200 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all mt-2"
                   />
                 </div>
-                <!-- Batch/Trimester -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -622,7 +608,6 @@
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Expected Graduation Date -->
                 <div>
                   <label
                     class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -640,7 +625,6 @@
                 </div>
               </div>
 
-              <!-- UIUSVS Designation -->
               <div>
                 <label
                   class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -658,7 +642,6 @@
                 </p>
               </div>
 
-              <!-- Address -->
               <div>
                 <label
                   class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
@@ -674,7 +657,6 @@
 
               <hr class="border-gray-200" />
 
-              <!-- Password Change (Optional) -->
               <div>
                 <h4 class="font-bold text-brand-900 mb-4 font-serif text-lg">
                   Change Password
@@ -857,7 +839,6 @@
       </div>
     </footer>
 
-    <!-- Custom Toast -->
     <div
       id="toast"
       class="fixed bottom-10 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-y-4"
@@ -986,7 +967,6 @@
             showToast("Not ready yet — please check again shortly.", "warning");
           }
         } catch (err) {
-          // Silent fail — refresh চেক ব্যর্থ হলে ইউজারকে বিরক্ত করার দরকার নেই
         } finally {
           icon?.classList.remove("animate-spin");
         }
@@ -1077,7 +1057,6 @@
             document.getElementById("prof-dept").value = userDept || "CSE";
           }
           document.getElementById("prof-batch").value = u.batch || "";
-          // Batch code থেকে readable trimester+year বের করা (e.g. "181" → "Spring 2018")
           function decodeBatch(batchCode) {
             if (!batchCode || batchCode.length < 3) return "";
             const yearPart = batchCode.slice(0, -1);
@@ -1135,7 +1114,6 @@
         showToast("Uploading profile picture...", "success");
 
         try {
-          // ধাপ ১: Cloudinary তে upload
           const formData = new FormData();
           formData.append("media", file);
 
@@ -1147,7 +1125,6 @@
           if (!uploadRes.ok)
             throw new Error(uploadData.error || "Upload failed");
 
-          // ধাপ ২: নতুন URL DB তে save
           const saveRes = await fetch(`${API_BASE}/profile/avatar`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -1162,18 +1139,16 @@
           showToast("Profile picture updated successfully!", "success");
         } catch (err) {
           showToast(err.message, "error");
-          // Fail করলে DB-এর পুরনো ছবি ফিরিয়ে আনো
           if (currentUser) {
             document.getElementById("profile-img").src =
               currentUser.avatar_url ||
               `https://api.dicebear.com/7.x/adventurer/svg?seed=${currentUser.id}`;
           }
         } finally {
-          input.value = ""; // একই file আবার select করলেও onchange fire হবে
+          input.value = "";
         }
       }
 
-      // ---- Save profile (name, department, batch, designation, address, blood group, contact) ----
       document
         .getElementById("profile-form")
         .addEventListener("submit", async (e) => {
@@ -1232,7 +1207,6 @@
           lucide.createIcons();
 
           try {
-            // Step 1: Update profile information (requires admin approval)
             const profileRes = await fetch(`${API_BASE}/profile`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -1251,7 +1225,6 @@
             const profileData = await profileRes.json();
             if (!profileRes.ok) throw new Error(profileData.error);
 
-            // Step 2: Update password (separate limit, no admin review needed)
             if (pwd1 || pwd2) {
               if (pwd1 !== pwd2) throw new Error("Passwords do not match.");
               if (pwd1.length < 6)

@@ -180,13 +180,11 @@
         transition: transform 0.3s ease-in-out;
       }
 
-      /* 🎯 Broken/slow image এর alt text flash (যেমন "Joy Das") পুরোপুরি বন্ধ করা */
       img {
         color: transparent !important;
         text-indent: -10000px !important;
         font-size: 0 !important;
       }
-      /* 🎯 Avatar Loading Placeholder */
       .avatar-placeholder {
         position: absolute;
         inset: 0;
@@ -251,7 +249,6 @@
           box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22);
         }
       }
-      /* 🎯 Current Student Card — orange/warm theme */
       .member-card-current {
         background: linear-gradient(155deg, #ffffff 0%, #fff1e6 100%);
         border: 1.5px solid #fdba74;
@@ -284,7 +281,6 @@
         background: linear-gradient(90deg, #ea580c, #dc2626);
       }
 
-      /* 🎯 Alumni Card — সোনালি/অ্যাম্বার থিম */
       .member-card-alumni {
         background: linear-gradient(155deg, #fffdf6 0%, #fef3d6 100%);
         border: 1.5px solid #fbbf24;
@@ -322,7 +318,6 @@
         transform: translateY(-5px) scale(1.015);
       }
 
-      /* 🎯 Members Page Themed Loader */
       .members-loader-wrapper {
         display: flex;
         flex-direction: column;
@@ -378,7 +373,6 @@
           background-position: 100% 0;
         }
       }
-      /* 🎯 Member Detail Modal — Current vs Alumni আলাদা entrance animation */
       @keyframes modalPopCurrent {
         0% {
           opacity: 0;
@@ -618,7 +612,6 @@
         ></div>
       </div>
 
-      <!-- Search Bar with Live Suggestions -->
       <div class="max-w-xl mx-auto mb-8 sm:mb-10 relative px-2 sm:px-0">
         <div class="relative">
           <i
@@ -643,14 +636,12 @@
           </button>
         </div>
 
-        <!-- 🎯 Dynamic Suggestions Dropdown -->
         <div
           id="search-suggestions"
           class="hidden absolute left-2 right-2 sm:left-0 sm:right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-orange-100 overflow-hidden z-30 max-h-[60vh] sm:max-h-80 overflow-y-auto"
         ></div>
       </div>
 
-      <!-- Filters -->
       <div class="flex flex-wrap justify-center gap-3 mb-12">
         <button
           onclick="filterMembers('all')"
@@ -680,7 +671,6 @@
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5 lg:gap-6"
       ></div>
 
-      <!-- Loading State -->
       <div
         id="members-loading"
         class="w-full flex flex-col items-center justify-center text-center py-16 sm:py-24"
@@ -702,7 +692,6 @@
         </div>
       </div>
 
-      <!-- Pagination -->
       <div
         id="members-pagination"
         class="mt-8 sm:mt-10 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap"
@@ -841,7 +830,6 @@
       </div>
     </footer>
 
-    <!-- Member Detail Modal -->
     <div
       id="member-modal"
       class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity"

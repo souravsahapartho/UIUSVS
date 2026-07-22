@@ -225,7 +225,6 @@
         border-radius: 4px;
       }
 
-      /* Sanatani Animated Background */
       .mandala-pattern {
         background-image:
           radial-gradient(
@@ -249,7 +248,6 @@
         animation: float 6s ease-in-out infinite;
       }
 
-      /* Mobile Drawer transition */
       #mobile-drawer {
         transition: transform 0.3s ease-in-out;
       }
@@ -350,7 +348,6 @@
       </div>
     </header>
 
-    <!-- Mobile Drawer -->
     <div
       id="mobile-drawer"
       class="fixed inset-y-0 right-0 w-72 max-w-[80vw] bg-[#fffaf0] shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col"
@@ -416,7 +413,6 @@
         </p>
       </div>
     </div>
-    <!-- Drawer Overlay -->
     <div
       id="drawer-overlay"
       class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden"
@@ -426,7 +422,6 @@
     <main
       class="flex-1 flex items-center justify-center p-4 relative z-10 my-10"
     >
-      <!-- Floating Elements -->
       <div
         class="absolute -top-10 -left-10 text-6xl opacity-10 animate-float text-orange-500 pointer-events-none"
       >
@@ -442,7 +437,6 @@
       <div
         class="glass-card w-full max-w-2xl rounded-3xl shadow-xl border border-orange-200 p-8 sm:p-10 transform transition-all relative overflow-hidden"
       >
-        <!-- Decorative Top Border -->
         <div
           class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-red-500 to-orange-400"
         ></div>
@@ -460,7 +454,6 @@
 
         <form id="signup-form" class="space-y-5">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <!-- Full Name -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Full Name <span class="text-red-500">*</span></label
@@ -473,7 +466,6 @@
                 placeholder="e.g. Joy Das"
               />
             </div>
-            <!-- Student ID -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >UIU Student ID <span class="text-red-500">*</span></label
@@ -490,7 +482,6 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <!-- Email -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Email Address <span class="text-red-500">*</span></label
@@ -503,7 +494,6 @@
                 placeholder="your.email@example.com"
               />
             </div>
-            <!-- Contact Number -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Contact Number <span class="text-red-500">*</span></label
@@ -523,7 +513,6 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <!-- Gender -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Gender <span class="text-red-500">*</span></label
@@ -538,7 +527,6 @@
                 <option value="Female">Female</option>
               </select>
             </div>
-            <!-- Membership Type -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Membership Status <span class="text-red-500">*</span></label
@@ -556,7 +544,6 @@
             </div>
           </div>
 
-          <!-- Graduation Date (শুধু Current Student দের জন্য) -->
           <div id="grad-date-wrapper" class="hidden">
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >Expected Graduation Date
@@ -573,7 +560,6 @@
             </p>
           </div>
 
-          <!-- Past UIUSVS Role -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >UIUSVS Designation (If any)</label
@@ -589,7 +575,6 @@
             </p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <!-- Department -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Department <span class="text-red-500">*</span></label
@@ -614,7 +599,6 @@
                 class="hidden w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 outline-none transition-all mt-2"
               />
             </div>
-            <!-- Batch -->
             <div>
               <label class="block text-sm font-bold text-brand-900 mb-1.5"
                 >Batch <span class="text-red-500">*</span></label
@@ -632,7 +616,6 @@
             </div>
           </div>
 
-          <!-- Blood Group -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >Blood Group <span class="text-red-500">*</span></label
@@ -654,7 +637,6 @@
             </select>
           </div>
 
-          <!-- Password -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >Password <span class="text-red-500">*</span></label
@@ -668,7 +650,6 @@
               placeholder="Create a secure password (Min. 6 chars)"
             />
           </div>
-          <!-- Profile Picture (optional) -->
           <div>
             <label class="block text-sm font-bold text-brand-900 mb-1.5"
               >Profile Picture (Optional)</label
@@ -691,7 +672,6 @@
             </p>
           </div>
 
-          <!-- Profile Pic Info -->
           <div
             class="bg-brand-50 rounded-xl p-4 border border-brand-100 flex items-start gap-3 mt-4"
           >
@@ -860,7 +840,6 @@
       </div>
     </footer>
 
-    <!-- Custom Toast -->
     <div
       id="toast"
       class="fixed top-20 right-5 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-x-4"
@@ -875,7 +854,6 @@
         >
       </div>
     </div>
-    <!-- OTP Verification Modal -->
     <div
       id="otp-modal"
       class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -995,7 +973,6 @@
         }
       }
 
-      // Graduation date এ শুধু ভবিষ্যতের তারিখ select করা যাবে
       document.addEventListener("DOMContentLoaded", () => {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1003,8 +980,6 @@
         document.getElementById("graduationDate").setAttribute("min", minDate);
       });
 
-      // Profile pic select korle preview
-      // Profile pic select korle preview + Cloudinary te upload
       document
         .getElementById("profilePic")
         .addEventListener("change", async (e) => {
@@ -1043,7 +1018,6 @@
           }
         });
 
-      // Signup Submit → OTP পাঠায়
       document
         .getElementById("signup-form")
         .addEventListener("submit", async (e) => {
@@ -1080,8 +1054,8 @@
             type: document.getElementById("type").value,
             graduationDate:
               document.getElementById("graduationDate").value || null,
-            department: deptValue, // NEW
-            batch: document.getElementById("batch").value, // NEW
+            department: deptValue,
+            batch: document.getElementById("batch").value,
             bloodGroup: document.getElementById("bloodGroup").value,
             designation:
               document.getElementById("designation").value || "Member",

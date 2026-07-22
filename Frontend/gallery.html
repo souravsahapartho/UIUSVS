@@ -171,9 +171,6 @@
           url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ea580c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
         background-attachment: fixed;
       }
-
-      /* 🎯 True Masonry Layout (CSS columns — no gaps, no uniform row height) */
-      /* 🎯 True JS-Powered Masonry (gapless, no shifting, fully responsive) */
       .masonry {
         position: relative;
         width: 100%;
@@ -204,7 +201,6 @@
         }
       }
 
-      /* 🎯 UIUSVS Themed Per-Image Loader */
       @keyframes placeholder-pulse {
         0%,
         100% {
@@ -451,7 +447,6 @@
         </p>
       </div>
 
-      <!-- Search Bar -->
       <div class="max-w-md mx-auto mb-8 relative">
         <i
           data-lucide="search"
@@ -470,7 +465,6 @@
         class="flex flex-wrap justify-center gap-2 mb-10"
         id="category-filters"
       >
-        <!-- Populated dynamically -->
       </div>
 
       <div class="masonry" id="gallery-grid">
@@ -621,7 +615,6 @@
       </div>
     </footer>
 
-    <!-- Lightbox (No Alert) -->
     <div
       id="lightbox"
       class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300 cursor-zoom-out"
@@ -695,31 +688,29 @@
 
       const API_BASE = "https://uiusvs.onrender.com/api";
       let mockGallery = [];
-      let galleryDataLoaded = false; // 🎯 প্রথমবার data আসার আগ পর্যন্ত false থাকবে
+      let galleryDataLoaded = false;
 
       async function loadGalleryFromDB(isBackgroundRefresh = false) {
         try {
           const res = await fetch(`${API_BASE}/gallery/public`);
           const newData = await res.json();
 
-          // Only re-render if data actually changed (avoids unnecessary flicker)
           const newDataStr = JSON.stringify(newData);
           const oldDataStr = JSON.stringify(mockGallery);
 
-          galleryDataLoaded = true; // 🎯 fetch সফল হয়েছে, এখন থেকে "No images" দেখানো যাবে
+          galleryDataLoaded = true;
 
           if (newDataStr !== oldDataStr) {
             mockGallery = newData;
             renderFilters();
             renderGallery();
           } else if (!isBackgroundRefresh) {
-            // data same thakleo prothombar render korte hobe (loader theke actual UI te jete)
             renderFilters();
             renderGallery();
           }
         } catch (e) {
           console.warn("Failed to load gallery from DB", e);
-          galleryDataLoaded = true; // fetch ব্যর্থ হলেও loading state শেষ ধরে নেওয়া হচ্ছে
+          galleryDataLoaded = true;
           if (!isBackgroundRefresh) {
             renderFilters();
             renderGallery();
@@ -733,12 +724,9 @@
       let lightboxIndex = 0;
 
       function getItemsPerPage() {
-        // desktop (>=1024px) e 24 ta, mobile e 12 ta — dropbox load fast rakhar jonno
         return window.innerWidth >= 1024 ? 24 : 12;
       }
-      // ==========================================
-      // 🎯 JS-POWERED MASONRY LAYOUT (gapless, responsive, no shifting)
-      // ==========================================
+
       function getMasonryColumnCount() {
         const w = window.innerWidth;
         if (w >= 1024) return 5;
@@ -766,13 +754,12 @@
         }
 
         const columns = getMasonryColumnCount();
-        const gap = columns >= 5 ? 24 : 16; // lg gap-1.5rem, others gap-1rem
+        const gap = columns >= 5 ? 24 : 16;
         const containerWidth = container.clientWidth;
         const colWidth = (containerWidth - gap * (columns - 1)) / columns;
         const colHeights = new Array(columns).fill(0);
 
         items.forEach((item) => {
-          // Shortest column খুঁজে বের করা
           let minCol = 0;
           for (let i = 1; i < columns; i++) {
             if (colHeights[i] < colHeights[minCol]) minCol = i;
@@ -793,7 +780,6 @@
         container.style.height = maxHeight > 0 ? maxHeight - gap + "px" : "0px";
       }
 
-      // Resize হলে layout recalculate (debounced)
       let masonryResizeTimer;
       window.addEventListener("resize", () => {
         clearTimeout(masonryResizeTimer);
@@ -817,7 +803,6 @@
           return;
         }
 
-        // Filter by Category and Search
         const filtered = mockGallery.filter((g) => {
           const matchesCat = currentCat === "All" || g.category === currentCat;
           const matchesSearch = g.title
@@ -842,7 +827,7 @@
 
         const startIdx = (currentPage - 1) * itemsPerPage;
         const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
-        lightboxItems = pageItems; // 🎯 lightbox navigation এর জন্য save করা হচ্ছে
+        lightboxItems = pageItems;
 
         grid.innerHTML = pageItems
           .map((img, idx) => {
@@ -1046,7 +1031,6 @@
         if (e.key === "ArrowRight") navigateLightbox(1);
       });
 
-      // 🎯 Mobile Swipe Support for Lightbox
       (function () {
         const lightbox = document.getElementById("lightbox");
         if (!lightbox) return;
@@ -1080,21 +1064,19 @@
           const deltaY = touchEndY - touchStartY;
           const minSwipeDistance = 50;
 
-          // Horizontal swipe hote hobe, vertical scroll na (tai deltaX > deltaY check)
           if (
             Math.abs(deltaX) > minSwipeDistance &&
             Math.abs(deltaX) > Math.abs(deltaY)
           ) {
             if (deltaX > 0) {
-              navigateLightbox(-1); // Right swipe -> Previous
+              navigateLightbox(-1); 
             } else {
-              navigateLightbox(1); // Left swipe -> Next
+              navigateLightbox(1);
             }
           }
         }
       })();
 
-      // Desktop <-> mobile breakpoint cross korle items-per-page bodle jabe
       let resizeTimer;
       window.addEventListener("resize", () => {
         clearTimeout(resizeTimer);
@@ -1106,10 +1088,9 @@
 
       loadGalleryFromDB();
 
-      // 🎯 Auto-refresh gallery every 15 seconds to reflect DB changes instantly
       setInterval(() => {
         loadGalleryFromDB();
-      }, 15000); // 15 second cycle — dorkar hole 5000 (5s) o kora jay
+      }, 15000);
     </script>
   </body>
 </html>
