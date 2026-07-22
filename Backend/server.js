@@ -5,20 +5,20 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cors = require("cors");
-const cookieParser = require("cookie-parser"); // NEW
+const cookieParser = require("cookie-parser");
 const mysql = require("mysql2/promise");
 require("dotenv").config();
 
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // NEW: must be exact origin (not "*") so cookies work
-    credentials: true, // NEW: allow cookies cross-origin
-    exposedHeaders: ["Content-Disposition"], // 🆕 filename পড়ার জন্য frontend-কে অনুমতি
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    exposedHeaders: ["Content-Disposition"],
   }),
 );
 app.use(express.json());
-app.use(cookieParser()); // NEW: read/write httpOnly cookies
+app.use(cookieParser());
 
 const pool = mysql.createPool({
   host: process.env.TIDB_HOST,
@@ -34,8 +34,6 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-// ---- Cloudinary Config ----
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -48,7 +46,7 @@ const storage = new CloudinaryStorage({
     const isVideo = file.mimetype.startsWith("video/");
     return {
       folder: "uiusvs_uploads",
-      resource_type: "auto", // 👈 change: fixed value diye Cloudinary nijei detect korbe
+      resource_type: "auto",
       allowed_formats: [
         "jpg",
         "png",
@@ -71,10 +69,9 @@ const upload = multer({ storage: storage });
 const authRoutes = require("./routes/auth")(pool);
 const adminUsersRoutes = require("./routes/adminUsers")(pool);
 const profileRoutes = require("./routes/profile")(pool);
-const membersRoutes = require("./routes/members")(pool); // 🆕
+const membersRoutes = require("./routes/members")(pool);
 const { verifySession, verifyAdmin } = require("./middleware/auth");
 
-// 🆕 শুধু Superadmin-কেই এই ফাংশনের পরের route-এ যেতে দেবে
 function verifySuperadmin(req, res, next) {
   if (!req.user || req.user.role !== "superadmin") {
     return res.status(403).json({ error: "Superadmin access only" });
@@ -85,12 +82,8 @@ function verifySuperadmin(req, res, next) {
 app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/members", membersRoutes); // 🆕
+app.use("/api/members", membersRoutes);
 
-// ============================================
-// AVATAR UPLOAD — signup form থেকে profile picture Cloudinary তে পাঠাতে
-// (login লাগে না, কারণ signup এর সময় user এখনো account-ই নেই)
-// ============================================
 app.post("/api/upload-avatar", upload.single("media"), async (req, res) => {
   try {
     if (!req.file) {
@@ -191,9 +184,6 @@ app.post(
   },
 );
 
-// ============================================
-// FESTIVALS (Actual Timeline)
-// ============================================
 app.get("/api/festivals", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -367,9 +357,6 @@ app.delete(
   },
 );
 
-// ============================================
-// ADVISORS (Dynamic Tree-Style Panel)
-// ============================================
 app.get("/api/advisors", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -497,7 +484,7 @@ app.put(
   verifySuperadmin,
   async (req, res) => {
     try {
-      const { direction } = req.body; // "up" or "down"
+      const { direction } = req.body;
       const [[current]] = await pool.query(
         "SELECT id, rank_order FROM advisors WHERE id=?",
         [req.params.id],
@@ -549,7 +536,6 @@ async function generateUniqueBlogSlug(title, excludeId = null) {
   const base = slugify(title) || "post";
   let slug = base;
   let counter = 2;
-  // keep trying until we find a slug nobody else is using
   while (true) {
     const [rows] = await pool.query(
       excludeId
@@ -562,7 +548,6 @@ async function generateUniqueBlogSlug(title, excludeId = null) {
   }
 }
 
-// ---- PUBLIC: full list for blog.html ----
 app.get("/api/blogs/public", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -702,7 +687,7 @@ app.put(
   upload.single("thumbnail"),
   async (req, res) => {
     try {
-      console.log("📝 Blog update request body:", req.body); // 🔍 debug — Render logs এ চেক করুন
+      console.log("📝 Blog update request body:", req.body);
       console.log(
         "📝 Blog update file:",
         req.file ? req.file.filename : "no new file",
@@ -752,7 +737,6 @@ app.put(
       let thumbnailId = null;
 
       if (req.file) {
-        // নতুন thumbnail এসেছে — পুরনোটা Cloudinary থেকে মুছে ফেলা
         const [rows] = await pool.query(
           "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
           [req.params.id],
@@ -847,7 +831,6 @@ app.put(
   },
 );
 
-// ---- ADMIN: delete ----
 app.delete(
   "/api/blogs/:id",
   verifySession,
@@ -871,9 +854,6 @@ app.delete(
   },
 );
 
-// ============================================
-// 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
-// ============================================
 app.get("/api/gallery/public", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -910,7 +890,6 @@ app.put(
       const pinnedValue = is_pinned === "true" || is_pinned === true;
 
       if (req.file) {
-        // Notun image ashse, tai purono cloudinary image delete kore dao
         const [rows] = await pool.query(
           "SELECT cloudinary_id FROM gallery WHERE id=?",
           [req.params.id],

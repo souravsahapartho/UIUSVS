@@ -9,7 +9,6 @@
       content="7l76MmJiX8leT_37kgLhxnAvzk9Y75qx1aN-bTQY2uk"
     />
 
-    <!-- Google tag (gtag.js) -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-BYJBP6PLKE"
@@ -23,9 +22,6 @@
       gtag("config", "G-BYJBP6PLKE");
     </script>
 
-    <!-- ========================================== -->
-    <!-- HIGHLY OPTIMIZED DEFAULT SEO & META TAGS   -->
-    <!-- ========================================== -->
     <title>UIUSVS | UIU Sanatani Vidyarthi Samsad</title>
     <meta name="title" content="UIUSVS | UIU Sanatani Vidyarthi Samsad" />
     <meta name="application-name" content="UIUSVS" />
@@ -42,16 +38,10 @@
     <meta name="language" content="English" />
     <link rel="canonical" href="https://uiusvs.netlify.app/" />
 
-    <!-- ========================================== -->
-    <!-- STANDARD FAVICON IMPLEMENTATION (For Google)-->
-    <!-- ========================================== -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- ========================================== -->
-    <!-- OPEN GRAPH / FACEBOOK / WHATSAPP           -->
-    <!-- ========================================== -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://uiusvs.netlify.app/" />
     <meta property="og:site_name" content="UIUSVS" />
@@ -73,9 +63,6 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="UIUSVS Official Logo" />
 
-    <!-- ========================================== -->
-    <!-- TWITTER / X CARD                           -->
-    <!-- ========================================== -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:domain" content="uiusvs.netlify.app" />
     <meta name="twitter:url" content="https://uiusvs.netlify.app/" />
@@ -89,11 +76,6 @@
     />
     <meta name="twitter:image" content="https://uiusvs.netlify.app/logo.jpg" />
 
-    <!-- ========================================== -->
-    <!-- STRUCTURED DATA (JSON-LD) FOR GOOGLE       -->
-    <!-- ========================================== -->
-
-    <!-- 1. WebSite Schema -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -104,7 +86,6 @@
       }
     </script>
 
-    <!-- 2. Organization Schema -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -129,7 +110,6 @@
       }
     </script>
 
-    <!-- DYNAMIC JAVASCRIPT TO SWAP META TAGS FOR CLIENT-SIDE ROUTING -->
     <script>
       function updateDynamicMeta(path) {
         try {
@@ -190,7 +170,6 @@
         }
       }
 
-      // Run on initial load
       updateDynamicMeta(
         window.location.pathname +
           window.location.hash +
@@ -198,7 +177,6 @@
       );
     </script>
 
-    <!-- 🎯 Global Image Handlers (Bomb-Proof & Enhanced Loader Update) -->
     <script>
       window.handleImageLoad = function (img) {
         if (img && img.classList) {
@@ -226,7 +204,6 @@
         }
       };
 
-      // Advanced Global Event Delegation
       document.addEventListener(
         "load",
         function (e) {
@@ -274,7 +251,6 @@
       });
     </script>
 
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -410,7 +386,6 @@
         transform: translateZ(0);
       }
 
-      /* 🎯 Saraswati's Pond Custom Animations (Waves, Lotus, Swan) */
       @keyframes wave-scroll {
         0% {
           transform: translateX(0);
@@ -430,7 +405,6 @@
         animation: wave-scroll 10s linear infinite reverse;
       }
 
-      /* 🎯 Realistic Swan Animation (Synced with Water Flow) */
       @keyframes swan-move {
         0% {
           transform: translateX(-50px);
@@ -811,7 +785,6 @@
         animation: spin 1s linear infinite;
       }
 
-      /* 🎯 UIUSVS Themed Loader - Updated Design */
       .uiusvs-loader-wrapper {
         display: flex;
         flex-direction: column;
@@ -846,7 +819,6 @@
         letter-spacing: 0.15em;
       }
 
-      /* Completely Hide Broken Alt Text & Image Icons globally */
       img {
         color: transparent !important;
         text-indent: -10000px !important;
@@ -881,7 +853,7 @@
       ::placeholder {
         @apply text-xs sm:text-sm md:text-base;
       }
-      /* 🎯 Mobile viewport height fix (address bar resize issue) */
+
       :root {
         --vh: 1vh;
       }
@@ -894,7 +866,6 @@
     class="min-h-screen antialiased selection:bg-red-200 selection:text-red-900 mandala-pattern lightbox-active"
     oncontextmenu="return false;"
   >
-    <!-- 🚧 TEMPORARY MAINTENANCE BANNER - START (delete this whole block later) -->
     <div
       id="maintenance-banner"
       class="fixed top-0 left-0 w-full bg-gradient-to-r from-[#b91c1c] to-[#ea580c] text-white z-[200] shadow-md py-2.5 sm:py-3 px-3 sm:px-6"
@@ -938,12 +909,11 @@
 
     <script>
       (function () {
-        // ⚠️ Countdown is for display only — the banner never auto-hides on its own
         var maintenanceTargetDate = new Date("2026-09-15T00:00:00").getTime();
 
         function updateMaintenanceCountdown() {
           var daysEl = document.getElementById("mb-days");
-          if (!daysEl) return; // stops quietly once the user closes the banner
+          if (!daysEl) return;
 
           var diff = maintenanceTargetDate - new Date().getTime();
           if (diff < 0) diff = 0;
@@ -968,7 +938,6 @@
         updateMaintenanceCountdown();
         setInterval(updateMaintenanceCountdown, 1000);
 
-        // 🎯 Push the sticky header down by the banner's actual (responsive) height
         window.adjustForMaintenanceBanner = function () {
           var banner = document.getElementById("maintenance-banner");
           var header = document.querySelector("header");
@@ -985,13 +954,10 @@
         window.addEventListener("load", window.adjustForMaintenanceBanner);
         window.addEventListener("resize", window.adjustForMaintenanceBanner);
 
-        // Lucide icons load async in your existing script — re-render after this block mounts
         if (window.lucide) window.lucide.createIcons();
       })();
     </script>
-    <!-- 🚧 TEMPORARY MAINTENANCE BANNER - END -->
 
-    <!-- 🎯 Flagship Central Modal (Website Matched Theme) -->
     <div
       id="saraswati-modal-overlay"
       class="fixed inset-0 bg-black/10 z-[9999] hidden items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-500 opacity-0"
@@ -1000,7 +966,6 @@
         id="saraswati-modal-card"
         class="bg-[#fffaf0] rounded-2xl w-full max-w-[280px] sm:max-w-xs overflow-hidden shadow-[0_15px_40px_rgba(185,28,28,0.25)] transform scale-90 transition-all duration-500 relative border-[3px] border-double border-orange-300 ring-4 ring-orange-100"
       >
-        <!-- 🌸 Thematic Background Elements -->
         <div
           class="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.06]"
         >
@@ -1063,7 +1028,6 @@
           </svg>
         </button>
 
-        <!-- Dynamic Image Banner -->
         <div
           class="w-full h-32 sm:h-48 relative overflow-hidden flex flex-col items-center justify-center bg-gradient-to-b from-[#991b1b] via-[#b91c1c] to-[#ea580c] z-10 border-b-[3px] border-orange-300 shadow-md"
         >
@@ -1115,7 +1079,6 @@
             </div>
           </div>
 
-          <!-- Flagship Tag -->
           <div
             class="absolute top-2 left-2 z-20 bg-white/95 px-2 py-0.5 rounded text-[8px] font-bold text-red-700 tracking-wider shadow-sm uppercase border border-red-100 flex items-center gap-1"
           >
@@ -1224,7 +1187,6 @@
       </div>
     </div>
 
-    <!-- 🎯 Details Image Modal -->
     <div
       id="details-modal-overlay"
       class="fixed inset-0 bg-black/20 z-[99999] hidden items-center justify-center p-2 sm:p-4 backdrop-blur-sm transition-opacity duration-500 opacity-0"
@@ -1285,7 +1247,6 @@
       </div>
     </div>
 
-    <!-- 🎯 Daily Festival Notification Popup -->
     <div
       id="festival-notification"
       class="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-auto z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 max-w-[calc(100vw-2rem)] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden items-center"
@@ -1326,7 +1287,6 @@
       </div>
     </div>
 
-    <!-- Quiz Suggestion Popup -->
     <div
       id="quiz-suggestion-toast"
       class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 left-auto mx-0 z-[100] bg-white rounded-2xl shadow-2xl border border-orange-200 p-3 sm:p-4 w-fit max-w-[85vw] sm:max-w-xs transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none hidden"
@@ -1365,7 +1325,6 @@
       </div>
     </div>
 
-    <!-- All Festivals Popup Modal -->
     <div
       id="all-festivals-popup"
       class="fixed inset-0 bg-black/60 z-[150] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -1411,12 +1370,10 @@
           id="all-festivals-list"
           class="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3 bg-gray-50/50"
         >
-          <!-- Injected via JS -->
         </div>
       </div>
     </div>
 
-    <!-- Image Lightbox Modal -->
     <div
       id="image-lightbox"
       class="fixed inset-0 h-screen h-[100dvh] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-950/40 via-black to-black z-[200] hidden items-center justify-center p-4 md:p-8 backdrop-blur-xl cursor-zoom-out"
@@ -1495,7 +1452,6 @@
       </div>
     </div>
 
-    <!-- Form Submission Success Overlay -->
     <div
       id="form-success-overlay"
       class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4 backdrop-blur-md"
@@ -1529,7 +1485,6 @@
       </div>
     </div>
 
-    <!-- Error Toast -->
     <div
       id="error-toast"
       class="fixed top-6 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-auto max-w-md bg-red-600 text-white px-6 py-3 rounded-full shadow-2xl z-[9999] opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center gap-3 translate-y-[-20px]"
@@ -1542,7 +1497,6 @@
       >
     </div>
 
-    <!-- Enhanced GPU Accelerated Background Decorations -->
     <div class="bg-decoration-wrapper">
       <svg
         class="puja-decoration animate-float w-24 h-24 top-20 left-10"
@@ -1588,7 +1542,6 @@
       </svg>
     </div>
 
-    <!-- Page Preloader -->
     <div id="page-preloader">
       <div class="spinner mb-4"></div>
       <div
@@ -1720,7 +1673,6 @@
       </div>
     </header>
 
-    <!-- 🎯 Mobile Drawer (slide-in from right, gallery.html style) -->
     <div
       id="mobile-drawer"
       class="fixed inset-y-0 right-0 w-72 max-w-[80vw] bg-[#fffaf0] shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col"
@@ -1796,7 +1748,6 @@
       </div>
     </div>
 
-    <!-- Overlay -->
     <div
       id="drawer-overlay"
       class="fixed inset-0 bg-black/50 z-[90] hidden md:hidden transition-opacity duration-300"
@@ -1811,7 +1762,6 @@
         <i data-lucide="chevron-up" class="w-6 h-6"></i>
       </button>
 
-      <!-- Hero Section -->
       <section
         id="home"
         class="relative pt-16 pb-20 md:pt-32 md:pb-32 text-center overflow-hidden"
@@ -1872,7 +1822,6 @@
         </div>
       </section>
 
-      <!-- Auto Hindu Festival System -->
       <section
         id="festivals"
         class="py-16 bg-orange-50/50 backdrop-blur-sm relative overflow-hidden"
@@ -1918,7 +1867,6 @@
         </div>
       </section>
 
-      <!-- Gallery Section (Dynamically Grouped) -->
       <section id="gallery" class="py-16 bg-white">
         <div class="container mx-auto px-4 sm:px-6">
           <div class="text-center mb-12 animate-on-scroll">
@@ -1936,7 +1884,6 @@
             ></div>
           </div>
 
-          <!-- Dynamic Container for Gallery Categories -->
           <div id="dynamic-gallery-container">
             <div class="text-center py-10">
               <i
@@ -1957,7 +1904,6 @@
         </div>
       </section>
 
-      <!-- About Section (Content pulled from Admin) -->
       <section id="about" class="py-16 md:py-20 bg-orange-50/50">
         <div class="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
           <div class="mb-12 md:mb-16 animate-on-scroll">
@@ -2042,7 +1988,6 @@
         </div>
       </section>
 
-      <!-- Advisor Panel (Dynamic DB Driven) -->
       <section id="advisors" class="py-12 bg-white/80 text-center">
         <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
           <div class="mb-8 animate-on-scroll">
@@ -2075,7 +2020,6 @@
         </div>
       </section>
 
-      <!-- Blogs -->
       <section
         id="blogs"
         class="py-16 bg-orange-50/50 backdrop-blur border-y border-orange-100"
@@ -2113,7 +2057,6 @@
         </div>
       </section>
 
-      <!-- Quick Sanatan Quiz -->
       <section
         id="quiz"
         class="py-16 bg-white backdrop-blur-sm relative overflow-hidden"
@@ -2201,7 +2144,6 @@
         </div>
       </section>
 
-      <!-- YouTube Section -->
       <section
         id="latest-videos"
         class="py-16 bg-gradient-to-b from-[#4a0404] to-[#2b0202] text-white relative text-center border-t-4 border-yellow-500"
@@ -2230,7 +2172,6 @@
         </div>
       </section>
 
-      <!-- Join SVS -->
       <section
         id="join"
         class="py-16 bg-white relative overflow-hidden text-center px-4 sm:px-6"
@@ -2271,7 +2212,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer
       id="contact"
       class="bg-white border-t-4 border-red-700 pt-12 sm:pt-16 pb-10 sm:pb-12 mt-auto"
@@ -2405,12 +2345,8 @@
     <script type="module">
       lucide.createIcons();
 
-      // ==========================================
-      // GLOBAL CONFIGURATION (Connect to Render API)
-      // ==========================================
       const API_BASE = "https://uiusvs.onrender.com/api";
 
-      // Initialize UI Observer for animations
       const contentObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -2423,16 +2359,10 @@
         { threshold: 0.1 },
       );
 
-      // Apply observer to all animatable elements initially
       document
         .querySelectorAll(".animate-on-scroll")
         .forEach((el) => contentObserver.observe(el));
 
-      // ==========================================
-      // 1. DATA FETCHING ARCHITECTURE
-      // ==========================================
-
-      // Fallback Data Arrays (In case Backend is offline/not deployed yet)
       let systemFestivalData = [
         {
           name: "Saraswati Puja",
@@ -2601,9 +2531,6 @@
           announcementTask,
         ]);
       }
-      // ==========================================
-      // UI RENDER HELPERS
-      // ==========================================
 
       function renderAdvisors(advisors) {
         const container = document.getElementById("advisors-container");
@@ -2614,7 +2541,7 @@
           return;
         }
 
-        const chief = advisors[0]; // Assuming 1st is Chief
+        const chief = advisors[0];
         const others = advisors.slice(1);
 
         let html = `
@@ -2650,7 +2577,6 @@
         }
 
         container.innerHTML = html;
-        // Re-observe injected elements
         container
           .querySelectorAll(".animate-on-scroll")
           .forEach((el) => contentObserver.observe(el));
@@ -2660,16 +2586,14 @@
         const container = document.getElementById("dynamic-gallery-container");
         if (!container || mediaItems.length === 0) return;
 
-        indexLightboxItems = mediaItems; // 🎯 navigation এর জন্য save করা হচ্ছে
+        indexLightboxItems = mediaItems;
 
-        // Group by category
         const grouped = mediaItems.reduce((acc, item) => {
           if (!acc[item.category]) acc[item.category] = [];
           acc[item.category].push(item);
           return acc;
         }, {});
 
-        // 🎯 Homepage e sudhu ei 4 ta category, ei order e dekhabe
         const allowedCategories = [
           "Saraswati Puja",
           "Kali Puja",
@@ -2696,7 +2620,7 @@
               <div id="${safeId}" class="flex overflow-x-auto gap-4 p-2 pb-6 scrollbar-hide scroller-container">
           `;
 
-          const categoryItems = grouped[category].slice(0, 10); // প্রতি category-te max 10 ta item
+          const categoryItems = grouped[category].slice(0, 10);
           categoryItems.forEach((item) => {
             const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
             const safeTitle = (item.title || "").replace(/"/g, "&quot;");
@@ -2730,15 +2654,14 @@
         container.innerHTML = html;
         lucide.createIcons();
 
-        // Init Scrollers for new containers — category অনুযায়ী নির্দিষ্ট direction
         Object.keys(grouped).forEach((cat) => {
           const id = "gallery-" + cat.replace(/\s+/g, "-").toLowerCase();
 
           let direction;
           if (cat === "Kali Puja") {
-            direction = "right"; // right → left scroll
+            direction = "right";
           } else {
-            direction = "left"; // left → right scroll (Saraswati Puja, Holi, Monthly Prayer, ইত্যাদি সব)
+            direction = "left";
           }
 
           new Scroller(id, direction);
@@ -2766,7 +2689,6 @@
           dateEl.textContent = "Valid until: " + d.toLocaleDateString();
         }
 
-        // Trigger Logic
         const todayStr = new Date().toDateString();
         const viewCountKey = "announcement_views_" + todayStr;
         let viewCount = parseInt(localStorage.getItem(viewCountKey) || "0");
@@ -2787,7 +2709,6 @@
 
             localStorage.setItem(viewCountKey, (viewCount + 1).toString());
 
-            // Start 10s width reduction animation
             const progress = document.getElementById(
               "saraswati-modal-progress",
             );
@@ -2837,9 +2758,6 @@
         }, 500);
       };
 
-      // ==========================================
-      // FETCHING FESTIVALS LOGIC
-      // ==========================================
       function getDaysDiff(targetDateStr) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -2900,7 +2818,6 @@
             const highlightClass = isNearest
               ? "border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200"
               : "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
-            // 3rd item: mobile-e dekhabe, tablet(sm, 2-col)-e hide, desktop(lg, 3-col)-e abar show
             const mobileHiddenClass = i === 2 ? "sm:hidden lg:block" : "";
 
             let timeBadge = "";
@@ -3069,7 +2986,6 @@
         }
       }
 
-      // 🎯 ভিডিও থাম্বনেইলে ক্লিক করলে সরাসরি সেখানেই YouTube iframe দিয়ে প্লে করানো
       window.playInlineVideo = function (wrapperEl, videoId) {
         wrapperEl.innerHTML = `
     <iframe
@@ -3109,7 +3025,6 @@
                 )
                 .join("");
 
-              // 🎯 FIX: newly injected card গুলোকে observer এ যোগ করা, নাহলে opacity:0 থেকে যাবে
               grid
                 .querySelectorAll(".animate-on-scroll")
                 .forEach((el) => contentObserver.observe(el));
@@ -3154,7 +3069,6 @@
               })
               .join("");
 
-            // 🎯 এখানেও একই fix
             grid
               .querySelectorAll(".animate-on-scroll")
               .forEach((el) => contentObserver.observe(el));
@@ -3291,9 +3205,7 @@
         }
       }
 
-      // Preloader and Initialization
       document.addEventListener("DOMContentLoaded", () => {
-        // 🎯 Fix mobile viewport height (address bar show/hide issue)
         function setViewportHeight() {
           const vh = window.innerHeight * 0.01;
           document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -3306,8 +3218,6 @@
             const targetId = link.getAttribute("data-scroll");
             const target = document.getElementById(targetId);
 
-            // যদি এই id-র সেকশন এই পেজে না থাকে (মানে অন্য পেজ থেকে ক্লিক হয়েছে)
-            // তাহলে normal navigation হতে দাও (/#home এ চলে যাবে browser নিজেই)
             if (!target) return;
 
             e.preventDefault();
@@ -3316,8 +3226,6 @@
             history.replaceState(null, "", window.location.pathname);
           });
         });
-        // 🎯 Direct URL (/advisor, /festivals, /quiz) থেকে ঢুকলে সংশ্লিষ্ট সেকশনে স্ক্রল করানো
-        // 🎯 Direct URL (/advisor, /festivals, /quiz) থেকে ঢুকলে সংশ্লিষ্ট সেকশনে স্ক্রল করানো
         const pathToSection = {
           "/advisor": "advisors",
           "/festivals": "festivals",
@@ -3335,9 +3243,9 @@
         }
 
         if (directSectionId) {
-          setTimeout(scrollToDirectSection, 300); // প্রথমবার
-          setTimeout(scrollToDirectSection, 1500); // ডেটা লোড হয়ে গেলে আবার ঠিক করা
-          setTimeout(scrollToDirectSection, 3500); // ধীর/cold-start API-র জন্য শেষ চেষ্টা
+          setTimeout(scrollToDirectSection, 300);
+          setTimeout(scrollToDirectSection, 1500);
+          setTimeout(scrollToDirectSection, 3500);
         }
         if (window.location.hash) {
           const targetId = window.location.hash.slice(1);
@@ -3348,7 +3256,7 @@
                 target.getBoundingClientRect().top + window.scrollY - 80;
               window.scrollTo({ top: y, behavior: "smooth" });
               history.replaceState(null, "", window.location.pathname);
-            }, 300); // page render এর পর একটু delay দিয়ে scroll
+            }, 300);
           }
         }
         document.getElementById("current-year").textContent =
@@ -3379,7 +3287,7 @@
         window.addEventListener("load", hideLoader);
         setTimeout(() => {
           if (!isPageLoaded) hideLoader();
-        }, 5000); // 5 sec max wait
+        }, 5000);
 
         window.toggleMobileDrawer = function () {
           const drawer = document.getElementById("mobile-drawer");
@@ -3405,7 +3313,6 @@
           }
         };
 
-        // 🎯 Global Lightbox Actions — Index Page
         document.addEventListener("click", (e) => {
           if (e.target.classList.contains("gallery-img")) {
             const idx = parseInt(e.target.dataset.idx, 10);
@@ -3489,7 +3396,6 @@
           }
         });
 
-        // Advanced Scroll Behaviors
         let isScrolling = false;
         let lastScrollY = window.scrollY;
 
@@ -3509,7 +3415,6 @@
                   btn.classList.toggle("invisible", scrollY < 400);
                 }
 
-                // Festival Notification Logic
                 const scrollPercent =
                   scrollY /
                   (document.documentElement.scrollHeight - window.innerHeight);

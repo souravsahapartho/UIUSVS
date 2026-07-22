@@ -176,7 +176,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     }
   });
 
-  // --- Reject a pending member (delete their account) ---
   router.delete("/:id/reject", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -208,7 +207,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     }
   });
 
-  // --- Audit log (Superadmin only) ---
   router.get("/logs", verifySession, verifyAdmin, async (req, res) => {
     if (req.user.role !== "superadmin") {
       return res.status(403).json({ error: "Superadmin access only" });
@@ -223,7 +221,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     }
   });
 
-  // --- Superadmin: promote existing verified user to Admin ---
   router.put(
     "/:id/make-admin",
     verifySession,
@@ -264,7 +261,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     },
   );
 
-  // --- Superadmin: demote admin back to regular member ---
   router.put(
     "/:id/remove-admin",
     verifySession,
@@ -305,7 +301,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     },
   );
 
-  // --- Superadmin: list all approved members (to search & promote) ---
   router.get("/all-approved", verifySession, verifyAdmin, async (req, res) => {
     if (req.user.role !== "superadmin") {
       return res.status(403).json({ error: "Superadmin access only" });
@@ -330,8 +325,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
        FROM users
        ORDER BY is_approved ASC, id DESC`,
       );
-
-      // 🆕 সবার বিরুদ্ধে সবাইকে check — approved vs approved, pending vs pending, mixed সব cover হবে
       const rowsWithDupes = rows.map((u) => ({
         ...u,
         duplicateMatches: findDuplicateMatches(u, rows),
@@ -349,7 +342,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     verifyAdmin,
     async (req, res) => {
       try {
-        // 🆕 শুধু Superadmin members sheet export করতে পারবে
         if (req.user.role !== "superadmin") {
           return res
             .status(403)
@@ -364,14 +356,12 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
            ORDER BY id ASC`,
         );
 
-        // তারিখ ফরম্যাট: 21_July_2026
         const today = new Date();
         const day = today.getDate();
         const month = today.toLocaleString("en-US", { month: "long" });
         const year = today.getFullYear();
         const dateStr = `${day}_${month}_${year}`;
 
-        // 🆕 আজকে এর আগে কতবার export হয়েছে, সেটা admin_logs থেকে গুনে version বের করা
         const [[{ cnt }]] = await pool.query(
           `SELECT COUNT(*) AS cnt FROM admin_logs
            WHERE action='EXPORT_MEMBERS' AND DATE(created_at) = CURDATE()`,
@@ -379,7 +369,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
         const version = cnt + 1;
         const filename = `uiusvs_members_${dateStr}_version_${version}.xlsx`;
 
-        // Excel sheet তৈরি
         const worksheet = XLSX.utils.json_to_sheet(rows);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Members");
@@ -388,7 +377,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
           bookType: "xlsx",
         });
 
-        // Log রাখা, পরের বার version গোনার জন্য দরকার
         await logAdminAction(pool, {
           adminId: req.user.id,
           adminEmail: req.user.email,
@@ -414,7 +402,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     },
   );
 
-  // --- Admin/Superadmin: directly edit any member's details (email cannot be changed) ---
   router.put("/:id/edit", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [
@@ -463,7 +450,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
           name: name.trim(),
           student_id: target.student_id,
           contact: contact.trim(),
-          email: target.email, // 🆕 email admin edit form এ নেই তাই target থেকেই নেওয়া (email পরিবর্তন হয় না)
+          email: target.email,
         },
         others,
       );
@@ -576,7 +563,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     }
   });
 
-  // --- Unblock a member ---
   router.put("/:id/unblock", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT id, name FROM users WHERE id=?", [
@@ -604,7 +590,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
 
   router.delete("/:id/delete", verifySession, verifyAdmin, async (req, res) => {
     try {
-      // 🆕 শুধু Superadmin member delete করতে পারবে, regular Admin না
       if (req.user.role !== "superadmin") {
         return res
           .status(403)
@@ -625,7 +610,6 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
           .status(403)
           .json({ error: "Only superadmin can delete an admin" });
 
-      // 🆕 Sheet থেকেও remove করার চেষ্টা
       console.log(
         `🗑️ Attempting sheet delete for studentId: "${target.student_id}"`,
       );

@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Panel | UIUSVS</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
@@ -42,7 +40,6 @@
         background-color: #fffaf0;
         color: #4a0404;
       }
-      /* Custom Scrollbar */
       ::-webkit-scrollbar {
         width: 6px;
       }
@@ -97,7 +94,6 @@
         border-left: 4px solid transparent;
       }
 
-      /* Table Styles */
       th {
         background-color: #fffaf0;
         color: #991b1b;
@@ -119,7 +115,6 @@
       id="admin-sidebar"
       class="w-64 bg-white border-r border-orange-200 flex flex-col shadow-sm fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
     >
-      <!-- Logo Area -->
       <div
         class="h-16 flex items-center px-6 border-b border-orange-200 bg-brand-50"
       >
@@ -133,7 +128,6 @@
         >
       </div>
 
-      <!-- Nav Links -->
       <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
         <a
           href="#"
@@ -217,7 +211,6 @@
         </a>
       </nav>
 
-      <!-- Bottom Action -->
       <div class="p-4 border-t border-orange-200 bg-brand-50/50">
         <a
           href="/"
@@ -230,18 +223,15 @@
       </div>
     </aside>
 
-    <!-- Mobile Sidebar Overlay -->
     <div
       id="admin-sidebar-overlay"
       class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"
       onclick="toggleAdminSidebar()"
     ></div>
 
-    <!-- Main Content -->
     <main
       class="flex-1 flex flex-col h-screen relative bg-brand-50/30 w-full md:w-auto"
     >
-      <!-- Header -->
       <header
         class="h-16 bg-white border-b border-orange-200 flex items-center justify-between px-6 shadow-sm z-10"
       >
@@ -294,7 +284,6 @@
         class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative"
         id="view-container"
       >
-        <!-- VIEW: DASHBOARD -->
         <div
           id="view-dashboard"
           class="tab-view block animate-[fadeIn_0.3s_ease-out]"
@@ -313,11 +302,9 @@
             </div>
           </div>
 
-          <!-- Stats Grid -->
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
           >
-            <!-- Members Card -->
             <div
               class="glass-card rounded-2xl p-5 border-l-4 border-l-brand-600 hover:-translate-y-1 transition-transform"
             >
@@ -341,7 +328,6 @@
                 <span id="stat-pending-members">0</span> pending verification
               </p>
             </div>
-            <!-- Gallery Card -->
             <div
               class="glass-card rounded-2xl p-5 border-l-4 border-l-yellow-500 hover:-translate-y-1 transition-transform"
             >
@@ -364,7 +350,6 @@
                 Across <span id="stat-gallery-categories">0</span> categories
               </p>
             </div>
-            <!-- Festivals Card -->
             <div
               class="glass-card rounded-2xl p-5 border-l-4 border-l-purple-500 hover:-translate-y-1 transition-transform"
             >
@@ -385,7 +370,6 @@
               </h2>
               <p class="text-xs text-gray-500">On sacred timeline</p>
             </div>
-            <!-- Blogs Card -->
             <div
               class="glass-card rounded-2xl p-5 border-l-4 border-l-green-500 hover:-translate-y-1 transition-transform"
             >
@@ -410,7 +394,6 @@
             </div>
           </div>
 
-          <!-- Quick Actions -->
           <div
             class="bg-white rounded-2xl p-6 border border-orange-100 shadow-sm"
           >
@@ -445,7 +428,6 @@
           </div>
         </div>
 
-        <!-- VIEW: ANNOUNCEMENT -->
         <div
           id="view-announcement"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -464,7 +446,6 @@
               id="announcement-form"
               class="space-y-6 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-orange-100"
             >
-              <!-- Image Upload -->
               <div
                 id="annc-dropzone"
                 tabindex="0"
@@ -510,7 +491,6 @@
                 />
               </div>
 
-              <!-- Settings Grid -->
               <div
                 class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-brand-50/50 p-6 rounded-2xl border border-brand-50"
               >
@@ -537,7 +517,6 @@
                 </div>
               </div>
 
-              <!-- Active Toggle -->
               <div
                 class="border border-green-200 bg-green-50 rounded-2xl p-5 flex items-center justify-between"
               >
@@ -573,7 +552,6 @@
           </div>
         </div>
 
-        <!-- VIEW: ABOUT PAGE -->
         <div
           id="view-about"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -613,7 +591,6 @@
                 ></textarea>
               </div>
 
-              <!-- Statistics Update -->
               <div
                 class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-100 mt-2"
               >
@@ -672,7 +649,6 @@
           </div>
         </div>
 
-        <!-- VIEW: EVENTS / FESTIVALS -->
         <div
           id="view-events"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -694,7 +670,6 @@
               </button>
             </div>
 
-            <!-- Add Event Form -->
             <div
               class="bg-white p-6 rounded-3xl shadow-sm border border-orange-100 mb-8"
             >
@@ -704,7 +679,6 @@
                 Add New Event
               </h3>
 
-              <!-- Quick Suggestions Dropdown -->
               <div
                 class="mb-5 bg-brand-50/60 border border-brand-100 rounded-xl p-4"
               >
@@ -839,7 +813,6 @@
               </div>
             </div>
 
-            <!-- Manage Festival Templates (Suggestion Library) -->
             <div
               class="bg-white p-6 rounded-3xl shadow-sm border border-orange-100 mb-8"
             >
@@ -922,7 +895,6 @@
 
               <div id="template-list" class="mt-5 flex flex-wrap gap-3"></div>
             </div>
-            <!-- Events Table -->
             <div
               class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             >
@@ -952,7 +924,6 @@
           </div>
         </div>
 
-        <!-- VIEW: GALLERY -->
         <div
           id="view-gallery"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -1043,7 +1014,6 @@
                 </div>
               </div>
 
-              <!-- Pin to Top Toggle -->
               <div class="flex items-center gap-3 pl-2">
                 <input
                   type="checkbox"
@@ -1093,7 +1063,6 @@
           </div>
         </div>
 
-        <!-- VIEW: ADVISORS -->
         <div
           id="view-advisors"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -1179,7 +1148,6 @@
               </div>
             </form>
 
-            <!-- Advisor Tree List -->
             <div
               class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             >
@@ -1189,13 +1157,11 @@
                 >
               </div>
               <div id="advisors-admin-list" class="divide-y divide-gray-100">
-                <!-- Injected via JS -->
               </div>
             </div>
           </div>
         </div>
 
-        <!-- VIEW: USERS -->
         <div
           id="view-users"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -1259,7 +1225,6 @@
               </div>
             </div>
 
-            <!-- All Members (approved + pending) with search -->
             <div
               class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mt-8"
             >
@@ -1310,7 +1275,6 @@
           </div>
         </div>
 
-        <!-- VIEW: MANAGE ADMINS (Superadmin only) -->
         <div
           id="view-admins"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -1363,7 +1327,6 @@
           </div>
         </div>
 
-        <!-- VIEW: ACTIVITY LOGS (Superadmin only) -->
         <div
           id="view-logs"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -1421,7 +1384,6 @@
             >
               <input type="hidden" id="blog-editing-id" value="" />
 
-              <!-- Title -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
                   >Title <span class="text-red-500">*</span></label
@@ -1435,7 +1397,6 @@
                 />
               </div>
 
-              <!-- Slug + Category -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-bold text-gray-700 mb-2"
@@ -1473,7 +1434,6 @@
                 </div>
               </div>
 
-              <!-- Post Date -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
                   >Post Date</label
@@ -1488,7 +1448,6 @@
                 </p>
               </div>
 
-              <!-- Thumbnail (separate from body images) -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
                   >Thumbnail Image <span class="text-red-500">*</span></label
@@ -1512,7 +1471,6 @@
                 </p>
               </div>
 
-              <!-- Short excerpt -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"
                   >Short Excerpt (shows on cards)</label
@@ -1526,7 +1484,6 @@
                 ></textarea>
               </div>
 
-              <!-- ===== RICH TEXT EDITOR (Design / Code) ===== -->
               <div>
                 <div class="flex items-center justify-between mb-2">
                   <label class="block text-sm font-bold text-gray-700"
@@ -1555,7 +1512,6 @@
                 </div>
 
                 <div class="border border-gray-300 rounded-xl overflow-hidden">
-                  <!-- Toolbar -->
                   <div
                     id="editor-toolbar"
                     class="flex flex-wrap items-center gap-1 bg-gray-50 border-b border-gray-200 px-2 py-1.5"
@@ -1753,7 +1709,6 @@
                     </button>
                   </div>
 
-                  <!-- Design mode -->
                   <div
                     id="editor-design"
                     contenteditable="true"
@@ -1761,7 +1716,6 @@
                     data-placeholder="Begin typing your intelligence brief..."
                   ></div>
 
-                  <!-- Code mode (raw HTML) -->
                   <textarea
                     id="editor-code"
                     rows="14"
@@ -1771,7 +1725,6 @@
                 </div>
               </div>
 
-              <!-- Meta / Author / Pin -->
               <div
                 class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50/50 p-6 rounded-2xl border border-gray-100"
               >
@@ -1852,7 +1805,6 @@
               </div>
             </div>
 
-            <!-- Blog list table -->
             <div
               class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             >
@@ -1898,7 +1850,6 @@
       </div>
     </main>
 
-    <!-- Edit Gallery Item Modal -->
     <div
       id="edit-gallery-modal-overlay"
       class="fixed inset-0 bg-black/50 z-[300] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -2018,7 +1969,7 @@
         </div>
       </div>
     </div>
-    <!-- Duplicate Match Modal -->
+
     <div
       id="duplicate-modal-overlay"
       class="fixed inset-0 bg-black/50 z-[320] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -2073,7 +2024,7 @@
         </div>
       </div>
     </div>
-    <!-- Member Detail Modal -->
+
     <div
       id="member-detail-modal-overlay"
       class="fixed inset-0 bg-black/50 z-[300] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -2123,7 +2074,6 @@
       </div>
     </div>
 
-    <!-- Edit Member Modal (Admin/Superadmin) -->
     <div
       id="edit-member-modal-overlay"
       class="fixed inset-0 bg-black/50 z-[310] hidden items-center justify-center p-4 backdrop-blur-sm"
@@ -2294,7 +2244,6 @@
       </div>
     </div>
 
-    <!-- Global Toast Notification -->
     <div
       id="admin-toast"
       class="fixed bottom-10 right-10 z-[200] transition-all duration-300 opacity-0 pointer-events-none translate-y-10"
@@ -2309,10 +2258,8 @@
     </div>
 
     <script>
-      // Initialize Icons
       lucide.createIcons();
 
-      // Clock Update
       function updateTime() {
         const now = new Date();
         const timeEl = document.getElementById("current-time");
@@ -2376,9 +2323,7 @@
         });
       }
 
-      // Tab Switching Logic
       function switchTab(tabId) {
-        // Update Sidebar UI
         document.querySelectorAll(".nav-item").forEach((btn) => {
           btn.classList.remove("active", "bg-brand-50", "text-brand-800");
           btn.classList.add("text-gray-600");
@@ -2389,20 +2334,17 @@
           activeBtn.classList.add("active", "bg-brand-50", "text-brand-800");
         }
 
-        // Hide all views
         document.querySelectorAll(".tab-view").forEach((view) => {
           view.classList.add("hidden");
           view.classList.remove("block");
         });
 
-        // Show selected view
         const targetView = document.getElementById(`view-${tabId}`);
         if (targetView) {
           targetView.classList.remove("hidden");
           targetView.classList.add("block");
         }
 
-        // 🆕 Mobile e tab select korle sidebar auto-close hobe
         if (window.innerWidth < 768) closeAdminSidebar();
       }
 
@@ -2425,7 +2367,7 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
-      let duplicateMatchesCache = {}; // 🆕 badge click করলে modal এ দেখানোর জন্য ডেটা রাখা হবে
+      let duplicateMatchesCache = {};
       let selectedGalleryFiles = [];
       let galleryItemsCache = [];
       let editingGalleryFile = null;
@@ -2477,8 +2419,6 @@
         renderGalleryPreviews();
       }
 
-      // 🎯 Paste (Ctrl+V) support for gallery upload
-      // 🎯 Universal image preview for Announcement / Advisor / Blog file inputs
       function previewSelectedImage(input, fileNameSpanId, previewImgId) {
         const previewImg = document.getElementById(previewImgId);
         const nameSpan = fileNameSpanId
@@ -2503,7 +2443,6 @@
         }
       }
 
-      // 🎯 Paste (Ctrl+V) support ONLY for Gallery upload box
       document.addEventListener("DOMContentLoaded", () => {
         const dropzone = document
           .getElementById("gal-file-input")
@@ -2536,7 +2475,6 @@
           }
         });
 
-        // Global paste fallback while Gallery tab is active
         document.addEventListener("paste", (e) => {
           const galleryTab = document.getElementById("view-gallery");
           if (galleryTab && !galleryTab.classList.contains("hidden")) {
@@ -2583,7 +2521,7 @@
         }
 
         const formData = new FormData();
-        selectedGalleryFiles.forEach((file) => formData.append("media", file)); // same key বারবার
+        selectedGalleryFiles.forEach((file) => formData.append("media", file));
         formData.append("title", title.value);
         formData.append("caption", title.value);
         formData.append("category", category.value);
@@ -2665,7 +2603,6 @@
         loadGalleryTable();
       }
 
-      // ---- Quick Pin Toggle ----
       async function togglePinGalleryItem(id) {
         const item = galleryItemsCache.find((g) => g.id === id);
         if (!item) return;
@@ -2691,7 +2628,6 @@
         }
       }
 
-      // ---- Full Edit Modal (image, caption, category, date, pin) ----
       function openEditGalleryModal(id) {
         const item = galleryItemsCache.find((g) => g.id === id);
         if (!item) return;
@@ -2770,9 +2706,6 @@
 
       document.addEventListener("DOMContentLoaded", loadGalleryTable);
 
-      // ==========================================
-      // ADVISOR PANEL MANAGEMENT
-      // ==========================================
       let advisorsCache = [];
       let selectedAdvisorImageFile = null;
 
@@ -3330,7 +3263,7 @@
             return;
           }
           const items = await res.json();
-          console.log("🔍 Pending users response:", items); // debug — DevTools console এ চেক করুন
+          console.log("🔍 Pending users response:", items);
 
           const label = document.getElementById("pending-count-label");
           if (label) label.textContent = `Pending Approvals (${items.length})`;
@@ -3736,10 +3669,9 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         }
       }
 
-      // ---------- Slug auto-fill ----------
       function autoFillBlogSlug() {
         const slugInput = document.getElementById("blog-slug");
-        if (slugInput.dataset.manual === "true") return; // user typed a custom slug
+        if (slugInput.dataset.manual === "true") return;
         const title = document.getElementById("blog-title").value;
         slugInput.value = title
           .toString()
@@ -3753,7 +3685,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         e.target.dataset.manual = "true";
       });
 
-      // ---------- CRUD ----------
       let blogsCache = [];
       let selectedBlogThumbnail = null;
       document
@@ -3973,7 +3904,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
 
           showToast(data.message);
 
-          // 🆕 Cache update kore শুধু oi row টাই re-render kori, পুরো table na
           const member = allMembersCache.find((m) => m.id === id);
           if (member) member.is_blocked = 1;
           if (row) {
@@ -4045,7 +3975,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
           showToast(data.message);
           setTimeout(() => row?.remove(), 300);
 
-          // 🆕 Cache theke o soriye dilam, jate search/filter e abar na dekhay
           allMembersCache = allMembersCache.filter((m) => m.id !== id);
         } catch (err) {
           showToast(err.message, "error");
@@ -4075,7 +4004,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         renderAllMembers(filtered);
       }
 
-      // 🆕 Export Members Sheet — versioned filename সহ Excel ডাউনলোড
       async function exportMembersSheet(btnEl) {
         const originalHTML = btnEl?.innerHTML;
         if (btnEl) {
@@ -4160,11 +4088,10 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
       document.addEventListener("DOMContentLoaded", loadDashboardStats);
 
       async function approveUser(id, btnEl) {
-        if (btnEl.disabled) return; // ইতিমধ্যে ক্লিক হয়ে গেছে, আবার করতে দিও না
+        if (btnEl.disabled) return;
         btnEl.disabled = true;
         btnEl.classList.add("opacity-50", "cursor-not-allowed");
 
-        // 🆕 Optimistic UI — row কে সাথে সাথে fade out করে দেই, response এর জন্য wait করি না
         const row = btnEl.closest("tr");
         row?.classList.add("opacity-0", "transition-opacity", "duration-300");
 
@@ -4246,7 +4173,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
       }
       document.addEventListener("DOMContentLoaded", loadDashboardStats);
 
-      // ---- Manage Admins ----
       let allApprovedMembers = [];
 
       async function loadAdminManageList() {
@@ -4353,7 +4279,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         }
       }
 
-      // ---- Activity Logs ----
       async function loadActivityLogs() {
         const container = document.getElementById("activity-logs-list");
         if (!container) return;
@@ -4395,7 +4320,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
                 if (parsed.note) parts.push(parsed.note);
                 if (parts.length) detailsDisplay = parts.join("<br>");
               } catch (e) {
-                // পুরনো log গুলো plain string ছিল, as-is দেখাবে
               }
 
               return `
@@ -4440,7 +4364,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
           if (data.user.role !== "admin" && data.user.role !== "superadmin")
             throw new Error();
 
-          // 🎯 Dynamic name & role badge
           document.getElementById("admin-name-display").textContent =
             data.user.name;
           document.getElementById("admin-role-display").textContent =
@@ -4454,7 +4377,6 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
               .forEach((el) => el.classList.remove("hidden"));
           }
 
-          // 🆕 role জানার আগেই যদি member list render হয়ে গিয়ে থাকে, আবার সঠিকভাবে render করো
           if (allMembersCache.length) {
             renderAllMembers(allMembersCache);
           }
