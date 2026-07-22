@@ -19,9 +19,8 @@ module.exports = (pool) => {
          FROM users WHERE is_approved=0 OR needs_admin_review=1
          ORDER BY id DESC`,
       );
-      // 🆕 approved members এর against duplicate check
       const [existingUsers] = await pool.query(
-        `SELECT id, name, student_id, contact FROM users WHERE is_approved=1`,
+        `SELECT id, name, student_id, contact, email FROM users`,
       );
 
       const rowsWithDupes = rows.map((u) => ({
@@ -58,7 +57,7 @@ module.exports = (pool) => {
         u.pending_graduation_date || u.graduation_date;
 
       const [othersForApproval] = await pool.query(
-        `SELECT id, name, student_id, contact FROM users WHERE id != ?`,
+        `SELECT id, name, student_id, contact, email FROM users WHERE id != ?`,
         [u.id],
       );
       const duplicateMatches = findDuplicateMatches(
@@ -67,6 +66,7 @@ module.exports = (pool) => {
           name: finalName,
           student_id: u.student_id,
           contact: u.contact,
+          email: u.email,
         },
         othersForApproval,
       );
@@ -441,7 +441,7 @@ module.exports = (pool) => {
       }
 
       const [others] = await pool.query(
-        `SELECT id, name, student_id, contact FROM users WHERE id != ?`,
+        `SELECT id, name, student_id, contact, email FROM users WHERE id != ?`,
         [target.id],
       );
       const duplicateMatches = findDuplicateMatches(
@@ -450,6 +450,7 @@ module.exports = (pool) => {
           name: name.trim(),
           student_id: target.student_id,
           contact: contact.trim(),
+          email: target.email, // 🆕 email admin edit form এ নেই তাই target থেকেই নেওয়া (email পরিবর্তন হয় না)
         },
         others,
       );

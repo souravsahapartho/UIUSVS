@@ -7,10 +7,15 @@ function normalizeName(name) {
   return (name || "").toLowerCase().trim().replace(/\s+/g, " ");
 }
 
+function normalizeEmail(email) {
+  return (email || "").toLowerCase().trim();
+}
+
 function findDuplicateMatches(candidate, existingList) {
   const candPhone = normalizePhone(candidate.contact);
   const candName = normalizeName(candidate.name);
   const candId = (candidate.student_id || "").toLowerCase();
+  const candEmail = normalizeEmail(candidate.email);
 
   return existingList
     .filter((ex) => ex.id !== candidate.id)
@@ -19,6 +24,7 @@ function findDuplicateMatches(candidate, existingList) {
       const exPhone = normalizePhone(ex.contact);
       const exName = normalizeName(ex.name);
       const exId = (ex.student_id || "").toLowerCase();
+      const exEmail = normalizeEmail(ex.email);
 
       if (candPhone && exPhone && candPhone === exPhone) {
         reasons.push("Phone number matches");
@@ -42,6 +48,9 @@ function findDuplicateMatches(candidate, existingList) {
           if (overlap.length >= 2) reasons.push("Name partially matches");
         }
       }
+      if (candEmail && exEmail && candEmail === exEmail) {
+        reasons.push("Email exactly matches");
+      }
 
       return reasons.length
         ? {
@@ -49,6 +58,7 @@ function findDuplicateMatches(candidate, existingList) {
             name: ex.name,
             student_id: ex.student_id,
             contact: ex.contact,
+            email: ex.email,
             reasons,
           }
         : null;
