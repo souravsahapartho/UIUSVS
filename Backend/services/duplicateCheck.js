@@ -44,6 +44,12 @@ function nameSimilarity(a, b) {
   return 1 - dist / maxLen;
 }
 
+// প্রথম অক্ষর না মিললে সেই token pair টা বাদ — typo সাধারণত প্রথম অক্ষর ঠিক রাখে
+// (Rahul→Rahol হয়, কিন্তু Rahul→Sahul সাধারণত হয় না), তাই এটা false-positive কমাবে
+function firstLetterMatches(a, b) {
+  return a[0] && b[0] && a[0] === b[0];
+}
+
 // পুরো নাম না মিলিয়ে, প্রতিটা word/token আলাদাভাবে মিলায় — "Rahul" vs "Rahol Das" এ যেন
 // শুধু "Rahul" আর "Rahol" compare হয়, "Das" এর জন্য length mismatch না হয়
 function bestTokenSimilarity(nameA, nameB) {
@@ -54,7 +60,8 @@ function bestTokenSimilarity(nameA, nameB) {
   let best = 0;
   for (const ta of tokensA) {
     for (const tb of tokensB) {
-      if (ta.length < 3 || tb.length < 3) continue; // খুব ছোট শব্দ (২ অক্ষরের নিচে) বাদ, noise কমাতে
+      if (ta.length < 3 || tb.length < 3) continue; // খুব ছোট শব্দ বাদ, noise কমাতে
+      if (!firstLetterMatches(ta, tb)) continue; // 🆕 প্রথম অক্ষর না মিললে বাদ
       const sim = nameSimilarity(ta, tb);
       if (sim > best) best = sim;
     }
@@ -87,16 +94,20 @@ function findDuplicateMatches(candidate, existingList) {
       ) {
         reasons.push("Student/Member ID matches");
       }
-      if (candName && exName) {
+if (candName && exName) {
         if (candName === exName) {
           reasons.push("Name exactly matches");
         } else {
-          const fullSimilarity = nameSimilarity(candName, exName);
+          // পুরো নামের প্রথম অক্ষর মিললে তবেই full-string similarity check করবো
+          const fullSimilarity = firstLetterMatches(candName, exName)
+            ? nameSimilarity(candName, exName)
+            : 0;
+          // token-level এ প্রথম অক্ষর match আগে থেকেই বসানো আছে bestTokenSimilarity এর ভেতরে
           const tokenSimilarity = bestTokenSimilarity(candName, exName);
           const bestMatch = Math.max(fullSimilarity, tokenSimilarity);
 
-          // 0.75+ মানে কোনো একটা word/পুরো নাম ৭৫% এর বেশি মিলছে — spelling variation
-          // (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া, কিন্তু সম্পূর্ণ ভিন্ন নাম ধরবে না
+          // 0.75+ মানে প্রথম অক্ষর মিলে যাওয়া কোনো word/পুরো নাম ৭৫% এর বেশি মিলছে —
+          // spelling variation (Rahul/Rahol) ধরার জন্য যথেষ্ট কড়া
           if (bestMatch >= 0.75) {
             reasons.push("Name looks like a spelling variation");
           }
