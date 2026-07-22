@@ -14,6 +14,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL, // NEW: must be exact origin (not "*") so cookies work
     credentials: true, // NEW: allow cookies cross-origin
+    exposedHeaders: ["Content-Disposition"], // 🆕 filename পড়ার জন্য frontend-কে অনুমতি
   }),
 );
 app.use(express.json());

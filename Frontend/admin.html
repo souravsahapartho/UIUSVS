@@ -1264,21 +1264,30 @@
               class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mt-8"
             >
               <div
-                class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center"
+                class="p-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center"
               >
                 <span class="font-bold text-sm text-gray-700">All Members</span>
-                <div class="relative">
-                  <i
-                    data-lucide="search"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-                  ></i>
-                  <input
-                    type="text"
-                    id="all-members-search"
-                    placeholder="Search by ID or Name"
-                    oninput="filterAllMembers()"
-                    class="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  />
+                <div class="flex items-center gap-3">
+                  <button
+                    onclick="exportMembersSheet(this)"
+                    class="flex items-center gap-1.5 bg-brand-50 hover:bg-brand-100 text-brand-800 border border-brand-200 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm"
+                  >
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    Export Members Sheet
+                  </button>
+                  <div class="relative">
+                    <i
+                      data-lucide="search"
+                      class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+                    ></i>
+                    <input
+                      type="text"
+                      id="all-members-search"
+                      placeholder="Search by ID or Name"
+                      oninput="filterAllMembers()"
+                      class="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                    />
+                  </div>
                 </div>
               </div>
               <div class="overflow-x-auto">
@@ -3931,6 +3940,53 @@
         );
         renderAllMembers(filtered);
       }
+
+      // 🆕 Export Members Sheet — versioned filename সহ Excel ডাউনলোড
+      async function exportMembersSheet(btnEl) {
+        const originalHTML = btnEl?.innerHTML;
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.innerHTML =
+            '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Exporting...';
+          lucide.createIcons();
+        }
+        try {
+          const res = await fetch(`${API_BASE}/admin-users/export-members`, {
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error("Export failed");
+
+          const blob = await res.blob();
+          const disposition = res.headers.get("Content-Disposition");
+          let filename = "uiusvs_members.xlsx";
+          if (disposition) {
+            const match = disposition.match(/filename="?([^"]+)"?/);
+            if (match) filename = match[1];
+          }
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+
+          showToast(`Downloaded: ${filename}`);
+        } catch (err) {
+          console.error(err);
+          showToast("Failed to export members sheet!", "error");
+        } finally {
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = originalHTML;
+            lucide.createIcons();
+          }
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadAllMembers);
 
       document.addEventListener("DOMContentLoaded", loadAllMembers);
 

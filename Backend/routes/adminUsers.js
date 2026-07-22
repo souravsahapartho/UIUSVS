@@ -1,4 +1,5 @@
 const express = require("express");
+const XLSX = require("xlsx");
 const {
   appendApprovedMember,
   removeMemberFromSheet,
@@ -297,6 +298,71 @@ module.exports = (pool) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // --- 🆕 Export all members as versioned Excel sheet ---
+  router.get(
+    "/export-members",
+    verifySession,
+    verifyAdmin,
+    async (req, res) => {
+      try {
+        const [rows] = await pool.query(
+          `SELECT id, name, student_id, email, contact, gender, type,
+                  department, batch, designation, blood_group, address,
+                  graduation_date, is_approved, is_blocked, last_login, created_at
+           FROM users
+           ORDER BY id ASC`,
+        );
+
+        // তারিখ ফরম্যাট: 21_July_2026
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.toLocaleString("en-US", { month: "long" });
+        const year = today.getFullYear();
+        const dateStr = `${day}_${month}_${year}`;
+
+        // 🆕 আজকে এর আগে কতবার export হয়েছে, সেটা admin_logs থেকে গুনে version বের করা
+        const [[{ cnt }]] = await pool.query(
+          `SELECT COUNT(*) AS cnt FROM admin_logs
+           WHERE action='EXPORT_MEMBERS' AND DATE(created_at) = CURDATE()`,
+        );
+        const version = cnt + 1;
+        const filename = `uiusvs_members_${dateStr}_version_${version}.xlsx`;
+
+        // Excel sheet তৈরি
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Members");
+        const buffer = XLSX.write(workbook, {
+          type: "buffer",
+          bookType: "xlsx",
+        });
+
+        // Log রাখা, পরের বার version গোনার জন্য দরকার
+        await logAdminAction(pool, {
+          adminId: req.user.id,
+          adminEmail: req.user.email,
+          action: "EXPORT_MEMBERS",
+          targetUserId: req.user.id,
+          targetUserName: req.user.name || req.user.email,
+          details: `Exported members sheet: ${filename}`,
+        });
+
+        res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        );
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
+        res.send(buffer);
+      } catch (error) {
+        console.error("❌ Export members failed:", error);
+        res.status(500).json({ error: error.message });
+      }
+    },
+  );
 
   // --- Admin/Superadmin: directly edit any member's details (email cannot be changed) ---
   router.put("/:id/edit", verifySession, verifyAdmin, async (req, res) => {
