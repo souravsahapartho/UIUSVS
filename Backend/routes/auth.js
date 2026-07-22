@@ -11,7 +11,6 @@ const bcrypt = require("bcrypt");
 module.exports = (pool) => {
   const router = express.Router();
 
-  // --- STEP 1: Signup request → send OTP ---
   router.post("/signup", async (req, res) => {
     try {
       const {
@@ -41,7 +40,7 @@ module.exports = (pool) => {
 
       const hashed = await bcrypt.hash(password, 10);
       const otp = generateOtp();
-      const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+      const expires = new Date(Date.now() + 10 * 60 * 1000);
 
       const avatarUrl =
         profilePicUrl ||
@@ -123,12 +122,11 @@ module.exports = (pool) => {
 
       res.json({ message: "OTP sent to email" });
     } catch (error) {
-      console.error("❌ Signup failed:", error);
+      console.error("Signup failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
 
-  // --- STEP 2: Verify OTP → actually create user (pending admin approval) ---
   router.post("/verify-otp", async (req, res) => {
     try {
       const { email, otp } = req.body;
@@ -179,7 +177,7 @@ module.exports = (pool) => {
 
       res.json({ message: "Verified! Waiting for admin approval." });
     } catch (error) {
-      console.error("❌ Verify OTP failed:", error);
+      console.error("Verify OTP failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
@@ -206,8 +204,6 @@ module.exports = (pool) => {
           "Your account is currently under review. You'll be notified once an admin approves it.",
       });
 
-    // 🆕 Block check
-    // 🆕 Block check
     if (user.is_blocked) {
       return res.status(403).json({
         error:
@@ -217,10 +213,9 @@ module.exports = (pool) => {
 
     createSession(res, user);
 
-    // 🆕 Last login time update — DB তে save হচ্ছে, response block হচ্ছে না
     pool
       .query("UPDATE users SET last_login=NOW() WHERE id=?", [user.id])
-      .catch((err) => console.error("⚠️ last_login update failed:", err));
+      .catch((err) => console.error("last_login update failed:", err));
 
     res.json({
       message: "Login successful",
@@ -343,7 +338,6 @@ module.exports = (pool) => {
     );
     res.json({ message: "Password reset successful" });
   });
-  // --- CHANGE PASSWORD (logged in, no admin verification needed) ---
   router.put("/change-password", verifySession, async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [
