@@ -304,13 +304,11 @@ app.delete(
   },
 );
 
-// ============================================
-// FESTIVAL TEMPLATES (Admin's Suggestion Library)
-// ============================================
 app.get(
   "/api/festival-templates",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -327,6 +325,7 @@ app.post(
   "/api/festival-templates",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("image"),
   async (req, res) => {
     try {
@@ -348,6 +347,7 @@ app.delete(
   "/api/festival-templates/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -382,21 +382,28 @@ app.get("/api/advisors", async (req, res) => {
   }
 });
 
-app.get("/api/advisors/admin", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT * FROM advisors ORDER BY rank_order ASC",
-    );
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+app.get(
+  "/api/advisors/admin",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM advisors ORDER BY rank_order ASC",
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
 app.post(
   "/api/advisors",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("image"),
   async (req, res) => {
     try {
@@ -427,6 +434,7 @@ app.put(
   "/api/advisors/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("image"),
   async (req, res) => {
     try {
@@ -461,6 +469,7 @@ app.delete(
   "/api/advisors/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -481,11 +490,11 @@ app.delete(
   },
 );
 
-// 🎯 Move advisor up/down in the tree (swap rank_order with neighbor)
 app.put(
   "/api/advisors/:id/reorder",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   async (req, res) => {
     try {
       const { direction } = req.body; // "up" or "down"
