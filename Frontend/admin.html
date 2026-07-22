@@ -1925,9 +1925,9 @@
               Replace Image
               <input
                 type="file"
+                id="edit-gal-file-input"
                 accept="image/*,video/*"
                 class="hidden"
-                accept="image/*,video/*"
                 onchange="handleEditGalleryFileSelect(this)"
               />
             </label>
@@ -3255,6 +3255,17 @@
 
       let allMembersCache = [];
       let currentModalMemberId = null;
+
+      function formatPendingValue(current, pending, formatter) {
+        const curVal = formatter
+          ? current
+            ? formatter(current)
+            : "-"
+          : current || "-";
+        if (!pending) return curVal;
+        const pendVal = formatter ? formatter(pending) : pending;
+        return `${curVal} → <span class="text-yellow-600 font-bold">${pendVal} (Pending)</span>`;
+      }
 
       async function loadAllMembers() {
         const container = document.getElementById("all-members-list");
