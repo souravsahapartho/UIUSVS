@@ -603,23 +603,28 @@ app.get("/api/blogs/slug/:slug", async (req, res) => {
   }
 });
 
-// ---- ADMIN: full list with all fields ----
-app.get("/api/blogs/admin", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT * FROM blogs ORDER BY created_at DESC",
-    );
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+app.get(
+  "/api/blogs/admin",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM blogs ORDER BY created_at DESC",
+      );
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
-// ---- ADMIN: create ----
 app.post(
   "/api/blogs",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("thumbnail"),
   async (req, res) => {
     try {
@@ -693,6 +698,7 @@ app.put(
   "/api/blogs/:id",
   verifySession,
   verifyAdmin,
+  verifySuperadmin,
   upload.single("thumbnail"),
   async (req, res) => {
     try {
@@ -808,50 +814,62 @@ app.put(
   },
 );
 
-app.put("/api/blogs/:id/pin", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const { is_pinned } = req.body;
-    const wantsPin = is_pinned === true || is_pinned === "true";
+app.put(
+  "/api/blogs/:id/pin",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const { is_pinned } = req.body;
+      const wantsPin = is_pinned === true || is_pinned === "true";
 
-    if (wantsPin) {
-      const [[{ cnt }]] = await pool.query(
-        "SELECT COUNT(*) AS cnt FROM blogs WHERE is_pinned=TRUE AND id!=?",
-        [req.params.id],
-      );
-      if (cnt >= MAX_PINNED_BLOGS) {
-        return res.status(400).json({
-          error: `Only ${MAX_PINNED_BLOGS} blogs can be pinned at once. Unpin one first.`,
-        });
+      if (wantsPin) {
+        const [[{ cnt }]] = await pool.query(
+          "SELECT COUNT(*) AS cnt FROM blogs WHERE is_pinned=TRUE AND id!=?",
+          [req.params.id],
+        );
+        if (cnt >= MAX_PINNED_BLOGS) {
+          return res.status(400).json({
+            error: `Only ${MAX_PINNED_BLOGS} blogs can be pinned at once. Unpin one first.`,
+          });
+        }
       }
-    }
 
-    await pool.query("UPDATE blogs SET is_pinned=? WHERE id=?", [
-      wantsPin,
-      req.params.id,
-    ]);
-    res.json({ message: wantsPin ? "Pinned to homepage!" : "Unpinned!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+      await pool.query("UPDATE blogs SET is_pinned=? WHERE id=?", [
+        wantsPin,
+        req.params.id,
+      ]);
+      res.json({ message: wantsPin ? "Pinned to homepage!" : "Unpinned!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 
 // ---- ADMIN: delete ----
-app.delete("/api/blogs/:id", verifySession, verifyAdmin, async (req, res) => {
-  try {
-    const [rows] = await pool.query(
-      "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
-      [req.params.id],
-    );
-    if (!rows.length) return res.status(404).json({ error: "Not found" });
-    if (rows[0].thumbnail_cloudinary_id) {
-      await cloudinary.uploader.destroy(rows[0].thumbnail_cloudinary_id);
+app.delete(
+  "/api/blogs/:id",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query(
+        "SELECT thumbnail_cloudinary_id FROM blogs WHERE id=?",
+        [req.params.id],
+      );
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      if (rows[0].thumbnail_cloudinary_id) {
+        await cloudinary.uploader.destroy(rows[0].thumbnail_cloudinary_id);
+      }
+      await pool.query("DELETE FROM blogs WHERE id=?", [req.params.id]);
+      res.json({ message: "Blog deleted!" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    await pool.query("DELETE FROM blogs WHERE id=?", [req.params.id]);
-    res.json({ message: "Blog deleted!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+  },
+);
 
 // ============================================
 // 3. READ — gallery.html পাবলিক পেজের জন্য (open, no login)
