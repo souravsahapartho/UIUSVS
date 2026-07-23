@@ -324,10 +324,14 @@ module.exports = (pool) => {
        FROM users
        ORDER BY is_approved ASC, id DESC`,
       );
-      const rowsWithDupes = rows.map((u) => ({
-        ...u,
-        duplicateMatches: findDuplicateMatches(u, rows),
-      }));
+
+      const rowsWithDupes = rows.map((u) => {
+        const needsCheck = !u.is_approved || u.needs_admin_review;
+        return {
+          ...u,
+          duplicateMatches: needsCheck ? findDuplicateMatches(u, rows) : [],
+        };
+      });
 
       res.json(rowsWithDupes);
     } catch (error) {

@@ -978,37 +978,47 @@ app.get(
   verifyAdmin,
   async (req, res) => {
     try {
-      const [[{ totalMembers }]] = await pool.query(
-        "SELECT COUNT(*) AS totalMembers FROM users",
-      );
-      const [[{ pendingMembers }]] = await pool.query(
-        "SELECT COUNT(*) AS pendingMembers FROM users WHERE is_approved=FALSE OR needs_admin_review=TRUE",
-      );
-      const [[{ totalGallery }]] = await pool.query(
-        "SELECT COUNT(*) AS totalGallery FROM gallery",
-      );
-      const [[{ galleryCategories }]] = await pool.query(
-        "SELECT COUNT(DISTINCT category) AS galleryCategories FROM gallery",
-      );
-      const [[{ upcomingEvents }]] = await pool.query(
-        "SELECT COUNT(*) AS upcomingEvents FROM festivals WHERE event_date >= CURDATE()",
-      );
-      const [[{ totalBlogs }]] = await pool.query(
-        "SELECT COUNT(*) AS totalBlogs FROM blogs",
-      );
-      const [[{ pinnedBlogs }]] = await pool.query(
-        "SELECT COUNT(*) AS pinnedBlogs FROM blogs WHERE is_pinned=TRUE",
-      );
+      const isSuper = req.user.role === "superadmin";
 
-      res.json({
-        totalMembers,
-        pendingMembers,
-        totalGallery,
-        galleryCategories,
-        upcomingEvents,
-        totalBlogs,
-        pinnedBlogs,
-      });
+      const queries = [
+        pool.query("SELECT COUNT(*) AS totalMembers FROM users"),
+        pool.query(
+          "SELECT COUNT(*) AS pendingMembers FROM users WHERE is_approved=FALSE OR needs_admin_review=TRUE",
+        ),
+      ];
+
+      if (isSuper) {
+        queries.push(
+          pool.query("SELECT COUNT(*) AS totalGallery FROM gallery"),
+          pool.query(
+            "SELECT COUNT(DISTINCT category) AS galleryCategories FROM gallery",
+          ),
+          pool.query(
+            "SELECT COUNT(*) AS upcomingEvents FROM festivals WHERE event_date >= CURDATE()",
+          ),
+          pool.query("SELECT COUNT(*) AS totalBlogs FROM blogs"),
+          pool.query(
+            "SELECT COUNT(*) AS pinnedBlogs FROM blogs WHERE is_pinned=TRUE",
+          ),
+        );
+      }
+
+      const results = await Promise.all(queries);
+
+      const stats = {
+        totalMembers: results[0][0][0].totalMembers,
+        pendingMembers: results[1][0][0].pendingMembers,
+      };
+
+      if (isSuper) {
+        stats.totalGallery = results[2][0][0].totalGallery;
+        stats.galleryCategories = results[3][0][0].galleryCategories;
+        stats.upcomingEvents = results[4][0][0].upcomingEvents;
+        stats.totalBlogs = results[5][0][0].totalBlogs;
+        stats.pinnedBlogs = results[6][0][0].pinnedBlogs;
+      }
+
+      res.json(stats);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
