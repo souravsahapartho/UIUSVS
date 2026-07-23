@@ -1156,8 +1156,10 @@
                   >Current Advisor Order (top advisor shown as Chief)</span
                 >
               </div>
-              <div id="advisors-admin-list" class="divide-y divide-gray-100">
-              </div>
+              <div
+                id="advisors-admin-list"
+                class="divide-y divide-gray-100"
+              ></div>
             </div>
           </div>
         </div>
@@ -2367,6 +2369,30 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
+      async function apiFetch(
+        url,
+        options = {},
+        retries = 2,
+        timeoutMs = 15000,
+      ) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), timeoutMs);
+          try {
+            const res = await fetch(url, {
+              ...options,
+              signal: controller.signal,
+            });
+            clearTimeout(timer);
+            return res;
+          } catch (err) {
+            clearTimeout(timer);
+            if (attempt === retries) throw err;
+            // backend might be waking up (cold start) — wait and retry
+            await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+          }
+        }
+      }
       let duplicateMatchesCache = {};
       let selectedGalleryFiles = [];
       let galleryItemsCache = [];
@@ -3255,7 +3281,7 @@
         refreshBtn?.classList.add("animate-spin");
 
         try {
-          const res = await fetch(`${API_BASE}/admin-users/pending`, {
+          const res = await apiFetch(`${API_BASE}/admin-users/pending`, {
             credentials: "include",
           });
           if (!res.ok) {
@@ -4319,8 +4345,7 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
                 }
                 if (parsed.note) parts.push(parsed.note);
                 if (parts.length) detailsDisplay = parts.join("<br>");
-              } catch (e) {
-              }
+              } catch (e) {}
 
               return `
     <tr class="hover:bg-brand-50 transition-colors">

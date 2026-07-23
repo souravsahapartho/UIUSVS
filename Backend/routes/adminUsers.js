@@ -11,7 +11,7 @@ const { findDuplicateMatches } = require("../services/duplicateCheck");
 module.exports = (pool) => {
   const router = express.Router();
 
-router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
+  router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
     try {
       const [rows] = await pool.query(
         `SELECT id, name, student_id, email, contact, gender, type,
@@ -30,13 +30,15 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
       }));
 
       console.log(
-        "🔍 Duplicate check sample:",
-        JSON.stringify(rowsWithDupes.map((u) => ({ name: u.name, dup: u.duplicateMatches }))),
+        "Duplicate check sample:",
+        JSON.stringify(
+          rowsWithDupes.map((u) => ({ name: u.name, dup: u.duplicateMatches })),
+        ),
       );
 
       res.json(rowsWithDupes);
     } catch (error) {
-      console.error("❌ Pending users fetch failed:", error);
+      console.error("Pending users fetch failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
@@ -147,10 +149,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
             ]);
           }
         } catch (sheetErr) {
-          console.error(
-            "⚠️ Sheet sync failed (user still approved):",
-            sheetErr,
-          );
+          console.error("Sheet sync failed (user still approved):", sheetErr);
           sheetSynced = false;
         }
 
@@ -171,7 +170,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
         });
       })();
     } catch (error) {
-      console.error("❌ Approve user failed:", error);
+      console.error("Approve user failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
@@ -188,7 +187,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
       await pool.query("DELETE FROM users WHERE id=?", [req.params.id]);
 
       removeMemberFromSheet(rejectedUser.student_id).catch((err) => {
-        console.error("⚠️ Sheet delete on reject failed:", err.message);
+        console.error("Sheet delete on reject failed:", err.message);
       });
 
       await logAdminAction(pool, {
@@ -202,7 +201,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
 
       res.json({ message: "Member rejected and removed" });
     } catch (error) {
-      console.error("❌ Reject user failed:", error);
+      console.error("Reject user failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
@@ -396,7 +395,7 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
         );
         res.send(buffer);
       } catch (error) {
-        console.error("❌ Export members failed:", error);
+        console.error("Export members failed:", error);
         res.status(500).json({ error: error.message });
       }
     },
@@ -611,16 +610,16 @@ router.get("/pending", verifySession, verifyAdmin, async (req, res) => {
           .json({ error: "Only superadmin can delete an admin" });
 
       console.log(
-        `🗑️ Attempting sheet delete for studentId: "${target.student_id}"`,
+        `Attempting sheet delete for studentId: "${target.student_id}"`,
       );
       try {
         const sheetDeleteResult = await removeMemberFromSheet(
           target.student_id,
         );
-        console.log("✅ Sheet delete result:", sheetDeleteResult);
+        console.log("Sheet delete result:", sheetDeleteResult);
       } catch (sheetErr) {
         console.error(
-          "⚠️ Sheet delete failed (user still deleted from DB):",
+          "Sheet delete failed (user still deleted from DB):",
           sheetErr.message,
         );
       }

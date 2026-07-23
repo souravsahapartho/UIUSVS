@@ -70,8 +70,8 @@ module.exports = (pool) => {
      ON DUPLICATE KEY UPDATE payload=VALUES(payload), otp_code=VALUES(otp_code), otp_expires_at=VALUES(otp_expires_at)`,
         [email, JSON.stringify(payload), otp, expires],
       );
-
-      await sendEmail({
+      res.json({ message: "OTP sent to email" });
+      sendEmail({
         to: email,
         subject: "🔐 Your UIUSVS Verification Code",
         htmlContent: `

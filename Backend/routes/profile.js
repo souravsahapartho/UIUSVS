@@ -34,7 +34,6 @@ module.exports = (pool) => {
       graduationDate,
     } = req.body;
 
-    // Validate required fields before consuming the monthly change limit
     if (
       !name?.trim() ||
       !department?.trim() ||
@@ -94,7 +93,6 @@ module.exports = (pool) => {
     res.json({ message: "Submitted for admin approval" });
   });
 
-  // --- Update avatar (immediate, no admin approval needed) ---
   router.put("/avatar", verifySession, async (req, res) => {
     try {
       const { avatarUrl } = req.body;
@@ -112,12 +110,11 @@ module.exports = (pool) => {
         avatar_url: avatarUrl,
       });
     } catch (error) {
-      console.error("❌ Avatar update failed:", error);
+      console.error("Avatar update failed:", error);
       res.status(500).json({ error: error.message });
     }
   });
 
-  // --- Download own Digital ID Card (force download, not open) ---
   router.get("/download-id", verifySession, async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -145,7 +142,7 @@ module.exports = (pool) => {
       );
       res.send(buffer);
     } catch (error) {
-      console.error("❌ ID card download failed:", error);
+      console.error("ID card download failed:", error);
       res.status(500).json({ error: error.message });
     }
   });

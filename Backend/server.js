@@ -33,6 +33,9 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000,
+  connectTimeout: 20000,
 });
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -1048,6 +1051,16 @@ cron.schedule("5 0 * * *", async () => {
     }
   } catch (err) {
     console.error("❌ Graduation auto-convert job failed:", err);
+  }
+});
+
+cron.schedule("*/10 * * * *", async () => {
+  try {
+    const url = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+    await fetch(`${url}/api/health`);
+    console.log("🔁 Self-ping OK");
+  } catch (err) {
+    console.error("Self-ping failed:", err.message);
   }
 });
 
