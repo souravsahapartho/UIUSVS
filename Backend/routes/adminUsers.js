@@ -212,7 +212,8 @@ module.exports = (pool) => {
     }
     try {
       const [rows] = await pool.query(
-        `SELECT * FROM admin_logs ORDER BY created_at DESC LIMIT 200`,
+        `SELECT id, admin_email, action, target_user_name, details, created_at
+         FROM admin_logs ORDER BY created_at DESC LIMIT 100`,
       );
       res.json(rows);
     } catch (error) {

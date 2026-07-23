@@ -2383,6 +2383,13 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
+      function cldThumb(url, size = 100) {
+        if (!url || !url.includes("/upload/")) return url;
+        return url.replace(
+          "/upload/",
+          `/upload/w_${size},h_${size},c_fill,q_auto,f_auto/`,
+        );
+      }
       async function apiFetch(
         url,
         options = {},
@@ -2608,8 +2615,8 @@
               item.image_url || "",
             );
             const mediaTag = isVideo
-              ? `<video src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg" muted></video>`
-              : `<img src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg">`;
+              ? `<video src="${item.image_url}" class="w-14 h-14 object-cover rounded-lg" muted preload="none"></video>`
+              : `<img src="${cldThumb(item.image_url, 120)}" loading="lazy" class="w-14 h-14 object-cover rounded-lg">`;
             return `
     <tr>
       <td class="py-3 px-5">${mediaTag}</td>
@@ -2781,10 +2788,11 @@
             const roleLabel = isFirst
               ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Chief Advisor</span>`
               : `<span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Senior Advisor</span>`;
-            const avatar =
+            const avatar = cldThumb(
               a.image_url ||
-              `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(a.name)}`;
-
+                `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(a.name)}`,
+              80,
+            );
             return `
     <div class="flex items-center gap-4 p-4 hover:bg-brand-50 transition-colors">
       <div class="flex flex-col gap-1">
@@ -2795,7 +2803,7 @@
           <i data-lucide="chevron-down" class="w-4 h-4"></i>
         </button>
       </div>
-      <img src="${avatar}" class="w-12 h-12 rounded-full object-cover border border-orange-200 flex-shrink-0">
+<img src="${avatar}" loading="lazy" class="w-12 h-12 rounded-full object-cover border border-orange-200 flex-shrink-0">
       <div class="flex-1 min-w-0">
         <p class="font-bold text-sm text-gray-900">${a.name}</p>
         <p class="text-xs text-gray-500">${a.designation}</p>
@@ -3155,7 +3163,7 @@
               return `
         <tr class="hover:bg-brand-50 transition-colors">
           <td class="py-3 px-5 flex items-center gap-3">
-            <img src="${f.image_url || "https://placehold.co/40x40/fed7aa/991b1b?text=%F0%9F%AA%94"}" class="w-9 h-9 rounded-full object-cover border border-orange-200">
+<img src="${cldThumb(f.image_url, 80) || "https://placehold.co/80x80/fed7aa/991b1b?text=%F0%9F%AA%94"}" loading="lazy" class="w-9 h-9 rounded-full object-cover border border-orange-200">
             <div>
               <p class="font-bold text-gray-900 text-sm">${f.name}</p>
               <p class="text-xs text-gray-500">${f.bn_name || ""}</p>
@@ -3753,7 +3761,7 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
             .map(
               (b) => `
     <tr class="hover:bg-brand-50 transition-colors">
-      <td class="py-3 px-5"><img src="${b.thumbnail_url || "https://placehold.co/60x60/fed7aa/991b1b?text=Blog"}" class="w-12 h-12 rounded-lg object-cover border border-orange-200"></td>
+      <td class="py-3 px-5"><img src="${cldThumb(b.thumbnail_url, 100) || "https://placehold.co/100x100/fed7aa/991b1b?text=Blog"}" loading="lazy" class="w-12 h-12 rounded-lg object-cover border border-orange-200"></td>
       <td class="py-3 px-5">
         <p class="font-bold text-sm text-gray-900">${b.title}</p>
         <p class="text-xs text-gray-500">/blog/${b.slug}</p>
@@ -3831,9 +3839,23 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         }
       }
 
-      function editBlogPost(id) {
+      async function editBlogPost(id) {
         const b = blogsCache.find((x) => x.id === id);
         if (!b) return;
+
+        showToast("Loading post content...");
+        let fullBlog;
+        try {
+          const res = await fetch(`${API_BASE}/blogs/admin/${id}`, {
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error();
+          fullBlog = await res.json();
+        } catch (e) {
+          showToast("Failed to load post content!", "error");
+          return;
+        }
+
         document.getElementById("blog-editing-id").value = b.id;
         document.getElementById("blog-title").value = b.title;
         document.getElementById("blog-slug").value = b.slug;
@@ -3847,7 +3869,7 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
           ? b.post_date.split("T")[0]
           : "";
         document.getElementById("blog-pin-checkbox").checked = !!b.is_pinned;
-        setEditorHTML(b.content);
+        setEditorHTML(fullBlog.content);
         selectedBlogThumbnail = null;
         document.getElementById("blog-thumbnail-input").value = "";
         const preview = document.getElementById("blog-preview-img");

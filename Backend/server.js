@@ -599,9 +599,30 @@ app.get(
   async (req, res) => {
     try {
       const [rows] = await pool.query(
-        "SELECT * FROM blogs ORDER BY created_at DESC",
+        `SELECT id, title, slug, excerpt, category, thumbnail_url,
+                thumbnail_cloudinary_id, meta_description, author_name,
+                is_pinned, post_date, created_at
+         FROM blogs ORDER BY created_at DESC`,
       );
       res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
+
+app.get(
+  "/api/blogs/admin/:id",
+  verifySession,
+  verifyAdmin,
+  verifySuperadmin,
+  async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT * FROM blogs WHERE id=?", [
+        req.params.id,
+      ]);
+      if (!rows.length) return res.status(404).json({ error: "Not found" });
+      res.json(rows[0]);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -1064,6 +1085,8 @@ cron.schedule("5 0 * * *", async () => {
   }
 });
 
+const PORT = process.env.PORT || 4000;
+
 cron.schedule("*/10 * * * *", async () => {
   try {
     const url = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
@@ -1074,7 +1097,6 @@ cron.schedule("*/10 * * * *", async () => {
   }
 });
 
-const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
