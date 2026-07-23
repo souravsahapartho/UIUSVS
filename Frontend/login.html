@@ -687,14 +687,13 @@
                 data.user.role === "admin" ||
                 data.user.role === "superadmin"
               ) {
-                window.location.href = "admin.html";
+                window.location.href = "/admin";
               } else {
-                window.location.href = "profile.html";
+                window.location.href = "/profile";
               }
             }
           }
-        } catch (e) {
-        }
+        } catch (e) {}
       })();
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
@@ -863,10 +862,10 @@
             const firstName = (data.user.name || "").split(" ")[0];
             if (data.user.role === "admin" || data.user.role === "superadmin") {
               showToast(`Welcome back, ${firstName}`, "success");
-              setTimeout(() => (window.location.href = "admin.html"), 1000);
+              setTimeout(() => (window.location.href = "/admin"), 1000);
             } else {
               showToast(`Welcome back, ${firstName}`, "success");
-              setTimeout(() => (window.location.href = "profile.html"), 1000);
+              setTimeout(() => (window.location.href = "/profile"), 1000);
             }
           } catch (err) {
             showToast(err.message, "error");
