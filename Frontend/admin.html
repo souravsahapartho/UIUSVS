@@ -1250,7 +1250,7 @@
                     <input
                       type="text"
                       id="all-members-search"
-                      placeholder="Search by ID or Name"
+                      placeholder="Search by Name, ID, Email, or Phone"
                       oninput="filterAllMembers()"
                       class="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
                     />
@@ -1289,6 +1289,20 @@
               <p class="text-sm text-gray-600 mt-1">
                 Promote approved members to Admin, or remove admin access.
               </p>
+            </div>
+
+            <div
+              class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6"
+            >
+              <div class="p-4 bg-gray-50 border-b border-gray-200">
+                <span class="font-bold text-sm text-gray-700"
+                  >Current Admins & Superadmins</span
+                >
+              </div>
+              <div
+                id="current-admins-list"
+                class="divide-y divide-gray-100"
+              ></div>
             </div>
 
             <div
@@ -4025,7 +4039,9 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         const filtered = allMembersCache.filter(
           (u) =>
             u.name.toLowerCase().includes(q) ||
-            (u.student_id || "").toLowerCase().includes(q),
+            (u.student_id || "").toLowerCase().includes(q) ||
+            (u.email || "").toLowerCase().includes(q) ||
+            (u.contact || "").toLowerCase().includes(q),
         );
         renderAllMembers(filtered);
       }
@@ -4214,9 +4230,50 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
           }
           allApprovedMembers = await res.json();
           renderAdminManageList(allApprovedMembers);
+          renderCurrentAdminsList(allApprovedMembers);
         } catch (err) {
           console.error(err);
         }
+      }
+
+      function renderCurrentAdminsList(list) {
+        const container = document.getElementById("current-admins-list");
+        if (!container) return;
+
+        const admins = list.filter(
+          (u) => u.role === "admin" || u.role === "superadmin",
+        );
+
+        if (!admins.length) {
+          container.innerHTML = `<p class="p-6 text-center text-gray-400 text-sm">No admins currently assigned.</p>`;
+          return;
+        }
+
+        container.innerHTML = admins
+          .map((u) => {
+            const roleLabel =
+              u.role === "superadmin"
+                ? `<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Superadmin</span>`
+                : `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Admin</span>`;
+
+            const removeBtn =
+              u.role === "admin"
+                ? `<button onclick="demoteAdmin(${u.id})" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded text-xs font-bold transition-colors">Remove Admin</button>`
+                : `<span class="text-xs text-gray-400">—</span>`;
+
+            return `
+    <div class="flex items-center justify-between p-4 hover:bg-brand-50 transition-colors">
+      <div>
+        <p class="font-bold text-gray-900 text-sm">${u.name}</p>
+        <p class="text-xs text-gray-500">${u.student_id || "-"} • ${u.email}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        ${roleLabel}
+        ${removeBtn}
+      </div>
+    </div>`;
+          })
+          .join("");
       }
 
       function renderAdminManageList(list) {
