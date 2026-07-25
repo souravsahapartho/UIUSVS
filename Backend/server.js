@@ -879,6 +879,9 @@ app.delete(
 );
 
 app.get("/api/gallery/public", async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
   try {
     const [rows] = await pool.query(
       `SELECT id, title, caption, category, image_url AS url, event_date, is_pinned

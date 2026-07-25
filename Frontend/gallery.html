@@ -59,10 +59,15 @@
       };
     </script>
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         background-color: #fffaf0;
         color: #4a0404;
         overflow-x: hidden;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
       }
       .glass-nav {
         background: rgba(255, 250, 240, 0.9);
@@ -266,6 +271,37 @@
       #mobile-drawer {
         transition: transform 0.3s ease-in-out;
       }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .gallery-media-protected {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        pointer-events: none;
+      }
+      .lightbox-loader {
+        position: absolute;
+        inset: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+      .lightbox-loader-spinner {
+        width: 44px;
+        height: 44px;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        border-top: 3px solid #f59e0b;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
     </style>
   </head>
   <body class="antialiased min-h-screen flex flex-col mandala-pattern">
@@ -461,10 +497,11 @@
         />
       </div>
 
-      <div
-        class="flex flex-wrap justify-center gap-2 mb-10"
-        id="category-filters"
-      >
+      <div class="mb-10 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div
+          class="flex flex-nowrap items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-1"
+          id="category-filters"
+        ></div>
       </div>
 
       <div class="masonry" id="gallery-grid">
@@ -644,9 +681,16 @@
       >
         <i data-lucide="chevron-right" class="w-6 h-6 sm:w-7 sm:h-7"></i>
       </button>
+
+      <div id="lightbox-loader" class="lightbox-loader hidden">
+        <div class="lightbox-loader-spinner"></div>
+      </div>
       <img
         id="lightbox-img"
         src=""
+        draggable="false"
+        oncontextmenu="return false;"
+        style="user-select: none; -webkit-user-drag: none"
         class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
         onclick="event.stopPropagation()"
       />
@@ -655,6 +699,8 @@
         src=""
         controls
         autoplay
+        controlsList="nodownload"
+        oncontextmenu="return false;"
         class="hidden max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
         onclick="event.stopPropagation()"
       ></video>
@@ -687,13 +733,48 @@
       }
 
       const API_BASE = "https://uiusvs.onrender.com/api";
+      const GALLERY_CACHE_KEY = "uiusvs_gallery_cache";
       let mockGallery = [];
       let galleryDataLoaded = false;
 
       async function loadGalleryFromDB(isBackgroundRefresh = false) {
+        if (!isBackgroundRefresh && !galleryDataLoaded) {
+          try {
+            const cached = sessionStorage.getItem(GALLERY_CACHE_KEY);
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                mockGallery = parsed;
+                galleryDataLoaded = true;
+                renderFilters();
+                renderGallery();
+              }
+            }
+          } catch (e) {
+            console.warn("Gallery cache read failed:", e);
+          }
+        }
+
         try {
-          const res = await fetch(`${API_BASE}/gallery/public`);
+          const res = await fetch(
+            `${API_BASE}/gallery/public?_=${Date.now()}`,
+            {
+              cache: "no-store",
+            },
+          );
           const newData = await res.json();
+
+          if (
+            Array.isArray(newData) &&
+            newData.length === 0 &&
+            mockGallery.length > 0
+          ) {
+            console.warn(
+              "Empty gallery response ignored (possible backend blip)",
+            );
+            galleryDataLoaded = true;
+            return;
+          }
 
           const newDataStr = JSON.stringify(newData);
           const oldDataStr = JSON.stringify(mockGallery);
@@ -702,6 +783,7 @@
 
           if (newDataStr !== oldDataStr) {
             mockGallery = newData;
+            sessionStorage.setItem(GALLERY_CACHE_KEY, newDataStr);
             renderFilters();
             renderGallery();
           } else if (!isBackgroundRefresh) {
@@ -711,17 +793,19 @@
         } catch (e) {
           console.warn("Failed to load gallery from DB", e);
           galleryDataLoaded = true;
-          if (!isBackgroundRefresh) {
+          if (!isBackgroundRefresh && mockGallery.length === 0) {
             renderFilters();
             renderGallery();
           }
         }
       }
+
       let currentCat = "All";
       let gallerySearchQuery = "";
       let currentPage = 1;
       let lightboxItems = [];
       let lightboxIndex = 0;
+      let lastRenderedGalleryHash = "";
 
       function getItemsPerPage() {
         return window.innerWidth >= 1024 ? 24 : 12;
@@ -829,13 +913,26 @@
         const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
         lightboxItems = pageItems;
 
+        const renderHash = JSON.stringify({
+          ids: pageItems.map((g) => g.id),
+          cat: currentCat,
+          query: gallerySearchQuery,
+          page: currentPage,
+        });
+        if (renderHash === lastRenderedGalleryHash) {
+          renderPagination(totalPages);
+          return;
+        }
+        lastRenderedGalleryHash = renderHash;
+
         grid.innerHTML = pageItems
           .map((img, idx) => {
             const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(img.url);
             const loaderHtml = `<div class="media-placeholder"><div class="uiusvs-loader-wrapper"><div class="uiusvs-loader-icon">🕉️</div></div></div>`;
+
             const mediaTag = isVideo
-              ? `<video src="${img.url}" class="relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" muted playsinline preload="metadata" onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
-              : `<img src="${img.url}" alt="${img.title}" class="relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" loading="lazy" decoding="async" onload="handleImageLoad(this)" onerror="handleImageError(this)">`;
+              ? `<video src="${img.url}" class="gallery-media-protected relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" muted playsinline preload="metadata" controlsList="nodownload" oncontextmenu="return false;" onloadeddata="handleImageLoad(this)" onerror="handleImageError(this)"></video>`
+              : `<img src="${img.url}" alt="${img.title}" class="gallery-media-protected relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500 group-hover:scale-105" style="transition: opacity 0.5s, transform 0.7s;" loading="lazy" decoding="async" draggable="false" oncontextmenu="return false;" onload="handleImageLoad(this)" onerror="handleImageError(this)">`;
             const playBadge = isVideo
               ? `<div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 z-20"><i data-lucide="play" class="w-4 h-4"></i></div>`
               : "";
@@ -921,10 +1018,10 @@
         container.innerHTML = cats
           .map(
             (c) => `
-                <button onclick="setFilter('${c}')" class="filter-btn px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm ${c === currentCat ? "bg-brand-700 text-white scale-105" : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50 hover:scale-105"}">
-                    ${c}
-                </button>
-            `,
+              <button onclick="setFilter('${c}')" class="filter-btn flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm ${c === currentCat ? "bg-brand-700 text-white scale-105" : "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50 hover:scale-105"}">
+                  ${c}
+              </button>
+          `,
           )
           .join("");
       }
@@ -961,7 +1058,10 @@
 
         const img = document.getElementById("lightbox-img");
         const video = document.getElementById("lightbox-video");
+        const loader = document.getElementById("lightbox-loader");
         const isVideo = /\.(mp4|mov|webm)($|\?)/i.test(item.url);
+
+        if (loader) loader.classList.remove("hidden");
 
         document.getElementById("lightbox-caption").textContent = item.title;
         const dateLabel = item.event_date
@@ -997,7 +1097,16 @@
           setTimeout(() => img.classList.add("scale-100"), 10);
         }
       }
-
+      document.getElementById("lightbox-img").addEventListener("load", () => {
+        const loader = document.getElementById("lightbox-loader");
+        if (loader) loader.classList.add("hidden");
+      });
+      document
+        .getElementById("lightbox-video")
+        .addEventListener("loadeddata", () => {
+          const loader = document.getElementById("lightbox-loader");
+          if (loader) loader.classList.add("hidden");
+        });
       window.navigateLightbox = (direction) => {
         if (!lightboxItems.length) return;
         lightboxIndex =
@@ -1069,7 +1178,7 @@
             Math.abs(deltaX) > Math.abs(deltaY)
           ) {
             if (deltaX > 0) {
-              navigateLightbox(-1); 
+              navigateLightbox(-1);
             } else {
               navigateLightbox(1);
             }
