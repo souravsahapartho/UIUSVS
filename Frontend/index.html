@@ -3061,7 +3061,7 @@
         const upcoming = getUpcomingFestivals();
 
         if (showMoreContainer) {
-          if (upcoming.length > 4) showMoreContainer.classList.remove("hidden");
+          if (upcoming.length > 3) showMoreContainer.classList.remove("hidden");
           else showMoreContainer.classList.add("hidden");
         }
 
@@ -3083,7 +3083,7 @@
             const isNearest = i === 0;
             const highlightClass =
               "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
-            const mobileHiddenClass = i === 2 ? "sm:hidden lg:block" : "";
+            const mobileHiddenClass = i === 3 ? "sm:hidden" : "";
 
             let timeBadge = "";
             if (f.daysLeft === 0)
