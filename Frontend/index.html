@@ -578,34 +578,44 @@
         animation: card-glow-pulse 1.8s ease-in-out infinite;
         transform: translateY(-3px);
       }
-      .rangoli-wrap {
+      .gallery-header-glow {
         position: relative;
-        width: 90px;
-        height: 90px;
-        margin: 0 auto 1rem;
+        display: inline-block;
       }
-      .rangoli-ring {
+      .gallery-header-glow::before {
+        content: "";
         position: absolute;
-        inset: 0;
-        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        width: 340px;
+        height: 340px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+          circle,
+          rgba(234, 88, 12, 0.08) 0%,
+          transparent 70%
+        );
+        z-index: -1;
+        animation: gallery-glow-pulse 4s ease-in-out infinite;
+        pointer-events: none;
       }
-      .rangoli-ring.r1 {
-        border: 2px dotted #ea580c;
-        animation: mandala-spin 12s linear infinite;
+      @keyframes gallery-glow-pulse {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.1);
+        }
       }
-      .rangoli-ring.r2 {
-        inset: 12px;
-        border: 2px dashed #b91c1c;
-        animation: mandala-spin 8s linear infinite reverse;
-      }
-      .rangoli-center {
+      .gallery-header-glow .header-lotus-corner {
         position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        animation: diya-flicker 2s ease-in-out infinite;
+        font-size: 1.4rem;
+        opacity: 0.5;
+        animation: lotus-bob 4s ease-in-out infinite;
+        pointer-events: none;
       }
       .about-om-bg {
         position: absolute;
@@ -2139,12 +2149,15 @@
 
       <section id="gallery" class="py-16 bg-white">
         <div class="container mx-auto px-4 sm:px-6">
-          <div class="rangoli-wrap">
-            <div class="rangoli-ring r1"></div>
-            <div class="rangoli-ring r2"></div>
-            <div class="rangoli-center">🪷</div>
-          </div>
-          <div class="text-center mb-12 animate-on-scroll">
+          <div class="text-center mb-12 animate-on-scroll gallery-header-glow">
+            <span class="header-lotus-corner" style="top: -10px; left: 15%"
+              >🪷</span
+            >
+            <span
+              class="header-lotus-corner"
+              style="top: -10px; right: 15%; animation-delay: -2s"
+              >🪷</span
+            >
             <span
               class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100"
               >Gallery</span
