@@ -805,6 +805,8 @@
       let currentPage = 1;
       let lightboxItems = [];
       let lightboxIndex = 0;
+      let currentFilteredItems = [];
+      let isLightboxOpen = false;
       let lastRenderedGalleryHash = "";
 
       function getItemsPerPage() {
@@ -894,6 +896,7 @@
             .includes(gallerySearchQuery.toLowerCase());
           return matchesCat && matchesSearch;
         });
+        currentFilteredItems = filtered;
 
         if (filtered.length === 0) {
           grid.style.height = "auto";
@@ -911,7 +914,7 @@
 
         const startIdx = (currentPage - 1) * itemsPerPage;
         const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
-        lightboxItems = pageItems;
+        lightboxItems = filtered;
 
         const renderHash = JSON.stringify({
           ids: pageItems.map((g) => g.id),
@@ -944,7 +947,7 @@
                 })
               : "";
             return `
-<div class="masonry-item group cursor-zoom-in" onclick="openLightboxByIndex(${idx})">
+<div class="masonry-item group cursor-zoom-in" onclick="openLightboxByIndex(${startIdx + idx})">
   <div class="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-2xl transition-all border-4 border-white bg-white">
       ${loaderHtml}
       ${playBadge}
@@ -1040,6 +1043,7 @@
       };
 
       window.openLightboxByIndex = (idx) => {
+        isLightboxOpen = true;
         lightboxIndex = idx;
         renderLightboxMedia();
 
@@ -1131,6 +1135,7 @@
           lb.classList.remove("flex");
           video.pause();
           document.body.style.overflow = "";
+          isLightboxOpen = false;
         }, 300);
       };
 
@@ -1186,11 +1191,12 @@
         }
       })();
 
+      // NEW
       let resizeTimer;
       window.addEventListener("resize", () => {
+        if (isLightboxOpen) return;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-          currentPage = 1;
           renderGallery();
         }, 300);
       });
