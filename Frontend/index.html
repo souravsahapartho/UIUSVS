@@ -604,6 +604,70 @@
         font-size: 2rem;
         animation: diya-flicker 2s ease-in-out infinite;
       }
+      .about-om-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 28rem;
+        color: #b91c1c;
+        opacity: 0.04;
+        z-index: 0;
+        pointer-events: none;
+        animation: mandala-spin 90s linear infinite;
+        font-family: serif;
+        line-height: 1;
+      }
+
+      .stat-card-sacred {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+      .stat-card-sacred:hover {
+        box-shadow: 0 8px 25px rgba(185, 28, 28, 0.15);
+        border-color: #f59e0b;
+      }
+      .stat-diya-icon {
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 0.25rem;
+        animation: diya-flicker 2.4s ease-in-out infinite;
+      }
+      @keyframes shankha-glow {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1) rotate(-8deg);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.08) rotate(-8deg);
+        }
+      }
+      .quiz-shankha {
+        position: absolute;
+        font-size: 3rem;
+        opacity: 0.5;
+        animation: shankha-glow 3s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes btn-diya-glow {
+        0%,
+        100% {
+          box-shadow:
+            0 4px 15px rgba(185, 28, 28, 0.3),
+            0 0 0px rgba(251, 191, 36, 0);
+        }
+        50% {
+          box-shadow:
+            0 4px 15px rgba(185, 28, 28, 0.3),
+            0 0 18px rgba(251, 191, 36, 0.6);
+        }
+      }
+      .btn-puja {
+        animation: btn-diya-glow 2.5s ease-in-out infinite;
+      }
 
       .text-shadow-white {
         text-shadow:
@@ -2024,37 +2088,37 @@
           </div>
         </div>
       </section>
-      <div class="section-divider" style="background: #fffaf0">
+      <div class="section-divider">
         <svg
           viewBox="0 0 1200 60"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M0,30 C150,60 350,0 600,30 C850,60 1050,0 1200,30 L1200,60 L0,60 Z"
-            fill="#fed7aa"
-            opacity="0.5"
+            d="M0,35 C300,10 600,55 900,30 C1050,18 1150,25 1200,20 L1200,60 L0,60 Z"
+            fill="#fef3e2"
+            opacity="0.6"
           />
           <path
-            d="M0,40 C200,10 400,50 600,25 C800,0 1000,45 1200,20 L1200,60 L0,60 Z"
-            fill="#fdba74"
-            opacity="0.4"
+            d="M0,45 C300,25 600,50 900,35 C1050,28 1150,32 1200,30 L1200,60 L0,60 Z"
+            fill="#fde7c8"
+            opacity="0.5"
           />
         </svg>
         <svg
-          viewBox="0 0 1200 60"
+          viewBox="0 0 60 60"
           class="divider-lotus"
           style="
             position: absolute;
             left: 50%;
-            bottom: 10px;
-            width: 36px;
-            height: 36px;
+            bottom: 6px;
+            width: 32px;
+            height: 32px;
             transform: translateX(-50%);
           "
           xmlns="http://www.w3.org/2000/svg"
         >
-          <text x="0" y="45" font-size="40">🪷</text>
+          <text x="10" y="45" font-size="36">🪷</text>
         </svg>
       </div>
       <section
@@ -2210,7 +2274,11 @@
         </svg>
       </div>
 
-      <section id="about" class="py-16 md:py-20 bg-orange-50/50">
+      <section
+        id="about"
+        class="py-16 md:py-20 bg-orange-50/50 relative overflow-hidden"
+      >
+        <span class="about-om-bg">ॐ</span>
         <div class="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
           <div class="mb-12 md:mb-16 animate-on-scroll">
             <span
@@ -2412,6 +2480,12 @@
             />
           </svg>
         </div>
+        <span class="quiz-shankha" style="top: 8%; left: 4%">🐚</span>
+        <span
+          class="quiz-shankha"
+          style="bottom: 8%; right: 4%; animation-delay: -1.5s"
+          >🐚</span
+        >
         <div class="container mx-auto px-4 sm:px-6 max-w-3xl relative z-10">
           <div class="text-center mb-10 animate-on-scroll">
             <span
