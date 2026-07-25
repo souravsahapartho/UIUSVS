@@ -544,39 +544,13 @@
       }
       .festival-card-sacred {
         position: relative;
-      }
-      .festival-card-sacred::before {
-        content: "";
-        position: absolute;
-        inset: -3px;
-        border-radius: inherit;
-        padding: 3px;
-        background: conic-gradient(
-          from 0deg,
-          #fde68a,
-          #f59e0b,
-          #ea580c,
-          #b91c1c,
-          #f59e0b,
-          #fde68a
-        );
-        -webkit-mask:
-          linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        animation: mandala-spin 3s linear infinite;
-        pointer-events: none;
-        z-index: 1;
-      }
-      .festival-card-sacred:hover::before {
-        opacity: 1;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
       }
       .festival-card-sacred:hover {
-        animation: card-glow-pulse 1.8s ease-in-out infinite;
         transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(234, 88, 12, 0.15);
       }
       .gallery-header-glow {
         position: relative;
@@ -2034,12 +2008,7 @@
             </g>
           </svg>
         </div>
-        <span class="hero-diya" style="top: 15%; left: 8%">🪔</span>
-        <span
-          class="hero-diya"
-          style="top: 20%; right: 10%; animation-delay: -0.9s"
-          >🪔</span
-        >
+
         <div class="w-full max-w-none px-4 sm:px-4 flex flex-col items-center">
           <div class="mb-6 animate-on-scroll is-visible">
             <div
@@ -3112,9 +3081,8 @@
               year: "numeric",
             });
             const isNearest = i === 0;
-            const highlightClass = isNearest
-              ? "border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.15)] transform scale-[1.02] bg-white ring-1 ring-orange-200"
-              : "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
+            const highlightClass =
+              "border-orange-100 bg-white/80 hover:-translate-y-1 hover:shadow-md";
             const mobileHiddenClass = i === 2 ? "sm:hidden lg:block" : "";
 
             let timeBadge = "";
@@ -3142,9 +3110,15 @@
               ? `<span class="absolute -top-2 sm:-top-3 z-20 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 sm:px-3 sm:py-1 rounded-full shadow-md flex items-center gap-1 whitespace-nowrap"><i data-lucide="star" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> Featured</span>`
               : "";
 
+            const nearestBadge =
+              isNearest && !f.isFeatured
+                ? `<span class="absolute -top-2 sm:-top-3 z-20 left-1/2 -translate-x-1/2 bg-white text-orange-600 text-[8px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 sm:px-3 sm:py-1 rounded-full shadow-sm border border-orange-200 flex items-center gap-1 whitespace-nowrap"><i data-lucide="sparkles" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> Major Festival</span>`
+                : "";
+
             return `
 <div class="festival-card-sacred p-3 sm:p-6 rounded-xl sm:rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
       ${featuredBadge}
+      ${nearestBadge}
       <div class="flex justify-between items-start mb-2 sm:mb-4 gap-1.5">
           <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-orange-50 flex items-center justify-center text-base sm:text-2xl shadow-inner border border-orange-100 overflow-hidden flex-shrink-0">${iconHtml}</div>
           ${timeBadge}
