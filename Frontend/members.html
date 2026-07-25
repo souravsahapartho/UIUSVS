@@ -958,6 +958,7 @@
           }
         }
 
+        // NEW
         try {
           const res = await fetch(
             `${API_BASE}/members/public?_=${Date.now()}`,
@@ -968,6 +969,11 @@
           if (!res.ok) throw new Error("Failed to fetch");
           const data = await res.json();
           if (!Array.isArray(data)) throw new Error("Invalid response");
+
+          if (data.length === 0 && attempt < maxAttempts) {
+            throw new Error("Empty response, retrying");
+          }
+
           allMembers = data;
           sessionStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
           renderMembers();
@@ -999,6 +1005,10 @@
         const grid = document.getElementById("members-grid");
         const loader = document.getElementById("members-loading");
         const paginationBox = document.getElementById("members-pagination");
+
+        if (allMembers.length === 0) {
+          return;
+        }
 
         const filtered = allMembers.filter((m) => {
           const matchesFilter =
