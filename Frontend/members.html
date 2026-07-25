@@ -38,10 +38,15 @@
       };
     </script>
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         background-color: #fffaf0;
         color: #4a0404;
         overflow-x: hidden;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
       }
       .glass-nav {
         background: rgba(255, 250, 240, 0.9);
@@ -149,6 +154,14 @@
           ),
           url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b91c1c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
         background-attachment: fixed;
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
 
       .shimmer {
@@ -645,28 +658,33 @@
         ></div>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-3 mb-12">
-        <button
-          onclick="filterMembers('all')"
-          id="btn-all"
-          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md"
+      <div class="mb-12 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div
+          id="filter-scroll"
+          class="flex flex-nowrap items-center justify-start sm:justify-center gap-3 overflow-x-auto no-scrollbar pb-1"
         >
-          All Community
-        </button>
-        <button
-          onclick="filterMembers('current')"
-          id="btn-current"
-          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
-        >
-          Current Students
-        </button>
-        <button
-          onclick="filterMembers('ex')"
-          id="btn-ex"
-          class="filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
-        >
-          Alumni
-        </button>
+          <button
+            onclick="filterMembers('all')"
+            id="btn-all"
+            class="filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md"
+          >
+            All Community
+          </button>
+          <button
+            onclick="filterMembers('current')"
+            id="btn-current"
+            class="filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+          >
+            Current Students
+          </button>
+          <button
+            onclick="filterMembers('ex')"
+            id="btn-ex"
+            class="filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50"
+          >
+            Alumni
+          </button>
+        </div>
       </div>
 
       <div
@@ -924,6 +942,7 @@
 
       let allMembers = [];
       let currentFilter = "all";
+      let lastRenderedHash = "";
       let searchQuery = "";
 
       function decodeBatch(code) {
@@ -1033,6 +1052,18 @@
 
         const startIdx = (currentPage - 1) * perPage;
         const pageItems = filtered.slice(startIdx, startIdx + perPage);
+
+        const renderHash = JSON.stringify({
+          ids: pageItems.map((m) => m.id),
+          filter: currentFilter,
+          query: searchQuery,
+          page: currentPage,
+        });
+        if (renderHash === lastRenderedHash) {
+          renderMembersPagination(totalPages);
+          return;
+        }
+        lastRenderedHash = renderHash;
 
         grid.innerHTML = pageItems
           .map((m, i) => {
@@ -1146,10 +1177,10 @@
         currentPage = 1;
         document.querySelectorAll(".filter-btn").forEach((btn) => {
           btn.className =
-            "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50";
+            "filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-brand-700 border border-brand-200 hover:bg-brand-50";
         });
         document.getElementById(`btn-${type}`).className =
-          "filter-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md";
+          "filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md";
         renderMembers();
       };
 
