@@ -3061,11 +3061,11 @@
         const upcoming = getUpcomingFestivals();
 
         if (showMoreContainer) {
-          if (upcoming.length > 3) showMoreContainer.classList.remove("hidden");
+          if (upcoming.length > 4) showMoreContainer.classList.remove("hidden");
           else showMoreContainer.classList.add("hidden");
         }
 
-        const slicedUpcoming = upcoming.slice(0, 3);
+        const slicedUpcoming = upcoming.slice(0, 4);
 
         if (slicedUpcoming.length === 0) {
           listEl.innerHTML = `<p class="text-gray-500 italic col-span-full text-center">No upcoming festivals found.</p>`;
