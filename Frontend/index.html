@@ -463,6 +463,147 @@
       .animate-lotus-bob {
         animation: lotus-bob 4s ease-in-out infinite;
       }
+      @keyframes mandala-spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+      .hero-mandala {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 600px;
+        transform: translate(-50%, -50%);
+        animation: mandala-spin 60s linear infinite;
+        opacity: 0.06;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes diya-flicker {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(0.92);
+        }
+      }
+      .hero-diya {
+        position: absolute;
+        font-size: 2rem;
+        animation: diya-flicker 1.8s ease-in-out infinite;
+        filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.6));
+      }
+
+      .section-divider {
+        position: relative;
+        width: 100%;
+        height: 60px;
+        overflow: hidden;
+        line-height: 0;
+        z-index: 5;
+      }
+      .section-divider svg {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .section-divider.flip svg {
+        transform: rotate(180deg);
+      }
+
+      @keyframes lotus-glow-pulse {
+        0%,
+        100% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .divider-lotus {
+        animation: lotus-glow-pulse 3s ease-in-out infinite;
+        transform-origin: center;
+      }
+      @keyframes card-glow-pulse {
+        0%,
+        100% {
+          box-shadow: 0 4px 20px rgba(234, 88, 12, 0.1);
+        }
+        50% {
+          box-shadow: 0 4px 30px rgba(234, 88, 12, 0.35);
+        }
+      }
+      .festival-card-sacred {
+        position: relative;
+        overflow: hidden;
+      }
+      .festival-card-sacred::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        padding: 2px;
+        background: conic-gradient(
+          from 0deg,
+          #fbbf24,
+          #ea580c,
+          #b91c1c,
+          #fbbf24
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        animation: mandala-spin 4s linear infinite;
+        pointer-events: none;
+      }
+      .festival-card-sacred:hover::before {
+        opacity: 1;
+      }
+      .festival-card-sacred:hover {
+        animation: card-glow-pulse 1.6s ease-in-out infinite;
+      }
+      .rangoli-wrap {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 1rem;
+      }
+      .rangoli-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+      }
+      .rangoli-ring.r1 {
+        border: 2px dotted #ea580c;
+        animation: mandala-spin 12s linear infinite;
+      }
+      .rangoli-ring.r2 {
+        inset: 12px;
+        border: 2px dashed #b91c1c;
+        animation: mandala-spin 8s linear infinite reverse;
+      }
+      .rangoli-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        animation: diya-flicker 2s ease-in-out infinite;
+      }
 
       .text-shadow-white {
         text-shadow:
@@ -1369,8 +1510,7 @@
         <div
           id="all-festivals-list"
           class="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3 bg-gray-50/50"
-        >
-        </div>
+        ></div>
       </div>
     </div>
 
@@ -1766,6 +1906,63 @@
         id="home"
         class="relative pt-16 pb-20 md:pt-32 md:pb-32 text-center overflow-hidden"
       >
+        <div class="hero-mandala">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="100"
+              cy="100"
+              r="95"
+              fill="none"
+              stroke="#b91c1c"
+              stroke-width="1"
+            />
+            <circle
+              cx="100"
+              cy="100"
+              r="70"
+              fill="none"
+              stroke="#ea580c"
+              stroke-width="1"
+            />
+            <g fill="#b91c1c">
+              <path d="M100,5 L108,25 L100,45 L92,25 Z" />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(45 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(90 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(135 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(180 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(225 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(270 100 100)"
+              />
+              <path
+                d="M100,5 L108,25 L100,45 L92,25 Z"
+                transform="rotate(315 100 100)"
+              />
+            </g>
+          </svg>
+        </div>
+        <span class="hero-diya" style="top: 15%; left: 8%">🪔</span>
+        <span
+          class="hero-diya"
+          style="top: 20%; right: 10%; animation-delay: -0.9s"
+          >🪔</span
+        >
         <div class="w-full max-w-none px-4 sm:px-4 flex flex-col items-center">
           <div class="mb-6 animate-on-scroll is-visible">
             <div
@@ -1799,6 +1996,12 @@
               id="hero-subtitle"
               class="text-[4.5vw] sm:text-[3.2vw] md:text-[2.2vw] lg:text-[1.8vw] xl:text-[1.5vw] 2xl:text-[1.2vw] text-red-800/90 w-full mx-auto mb-10 sm:mb-12 font-medium font-serif tracking-wide leading-snug"
             >
+              <p
+                class="quote-font text-red-800/70 text-sm sm:text-base italic mb-6 tracking-wide"
+              >
+                "ওঁ সরস্বতী মহাভাগে বিদ্যে কমললোচনে। বিশ্বরূপে বিশালাক্ষী
+                বিদ্যাং দেহি নমোহস্তুতে॥"
+              </p>
               UIUSVS is the official Sanatani student community of United
               International University.
             </h2>
@@ -1821,7 +2024,39 @@
           </div>
         </div>
       </section>
-
+      <div class="section-divider" style="background: #fffaf0">
+        <svg
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0,30 C150,60 350,0 600,30 C850,60 1050,0 1200,30 L1200,60 L0,60 Z"
+            fill="#fed7aa"
+            opacity="0.5"
+          />
+          <path
+            d="M0,40 C200,10 400,50 600,25 C800,0 1000,45 1200,20 L1200,60 L0,60 Z"
+            fill="#fdba74"
+            opacity="0.4"
+          />
+        </svg>
+        <svg
+          viewBox="0 0 1200 60"
+          class="divider-lotus"
+          style="
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            width: 36px;
+            height: 36px;
+            transform: translateX(-50%);
+          "
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text x="0" y="45" font-size="40">🪷</text>
+        </svg>
+      </div>
       <section
         id="festivals"
         class="py-16 bg-orange-50/50 backdrop-blur-sm relative overflow-hidden"
@@ -1866,9 +2101,47 @@
           </div>
         </div>
       </section>
+      <div class="section-divider" style="background: #fffaf0">
+        <svg
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0,30 C150,60 350,0 600,30 C850,60 1050,0 1200,30 L1200,60 L0,60 Z"
+            fill="#fed7aa"
+            opacity="0.5"
+          />
+          <path
+            d="M0,40 C200,10 400,50 600,25 C800,0 1000,45 1200,20 L1200,60 L0,60 Z"
+            fill="#fdba74"
+            opacity="0.4"
+          />
+        </svg>
+        <svg
+          viewBox="0 0 1200 60"
+          class="divider-lotus"
+          style="
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            width: 36px;
+            height: 36px;
+            transform: translateX(-50%);
+          "
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text x="0" y="45" font-size="40">🪷</text>
+        </svg>
+      </div>
 
       <section id="gallery" class="py-16 bg-white">
         <div class="container mx-auto px-4 sm:px-6">
+          <div class="rangoli-wrap">
+            <div class="rangoli-ring r1"></div>
+            <div class="rangoli-ring r2"></div>
+            <div class="rangoli-center">🪷</div>
+          </div>
           <div class="text-center mb-12 animate-on-scroll">
             <span
               class="text-red-600 font-bold uppercase tracking-widest text-[10px] bg-red-50 px-3 py-1 rounded-full border border-red-100"
@@ -1903,6 +2176,39 @@
           </div>
         </div>
       </section>
+      <div class="section-divider" style="background: #fffaf0">
+        <svg
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0,30 C150,60 350,0 600,30 C850,60 1050,0 1200,30 L1200,60 L0,60 Z"
+            fill="#fed7aa"
+            opacity="0.5"
+          />
+          <path
+            d="M0,40 C200,10 400,50 600,25 C800,0 1000,45 1200,20 L1200,60 L0,60 Z"
+            fill="#fdba74"
+            opacity="0.4"
+          />
+        </svg>
+        <svg
+          viewBox="0 0 1200 60"
+          class="divider-lotus"
+          style="
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            width: 36px;
+            height: 36px;
+            transform: translateX(-50%);
+          "
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text x="0" y="45" font-size="40">🪷</text>
+        </svg>
+      </div>
 
       <section id="about" class="py-16 md:py-20 bg-orange-50/50">
         <div class="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
@@ -2019,7 +2325,39 @@
           </div>
         </div>
       </section>
-
+      <div class="section-divider" style="background: #fffaf0">
+        <svg
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0,30 C150,60 350,0 600,30 C850,60 1050,0 1200,30 L1200,60 L0,60 Z"
+            fill="#fed7aa"
+            opacity="0.5"
+          />
+          <path
+            d="M0,40 C200,10 400,50 600,25 C800,0 1000,45 1200,20 L1200,60 L0,60 Z"
+            fill="#fdba74"
+            opacity="0.4"
+          />
+        </svg>
+        <svg
+          viewBox="0 0 1200 60"
+          class="divider-lotus"
+          style="
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            width: 36px;
+            height: 36px;
+            transform: translateX(-50%);
+          "
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text x="0" y="45" font-size="40">🪷</text>
+        </svg>
+      </div>
       <section
         id="blogs"
         class="py-16 bg-orange-50/50 backdrop-blur border-y border-orange-100"
@@ -2846,7 +3184,7 @@
               : "";
 
             return `
-  <div class="p-3 sm:p-6 rounded-xl sm:rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
+<div class="festival-card-sacred p-3 sm:p-6 rounded-xl sm:rounded-2xl border transition-all duration-300 ${featuredClass} ${mobileHiddenClass}">
       ${featuredBadge}
       <div class="flex justify-between items-start mb-2 sm:mb-4 gap-1.5">
           <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-orange-50 flex items-center justify-center text-base sm:text-2xl shadow-inner border border-orange-100 overflow-hidden flex-shrink-0">${iconHtml}</div>
