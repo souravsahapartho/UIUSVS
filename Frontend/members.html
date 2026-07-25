@@ -425,6 +425,9 @@
       .modal-icon-alumni {
         background: linear-gradient(135deg, #fffbeb, #fde68a);
       }
+      body.tab-hidden * {
+        animation-play-state: paused !important;
+      }
     </style>
   </head>
   <body class="antialiased min-h-screen flex flex-col mandala-pattern">
@@ -905,6 +908,11 @@
       lucide.createIcons();
       document.getElementById("current-year").textContent =
         new Date().getFullYear();
+
+      document.addEventListener("visibilitychange", () => {
+        document.body.classList.toggle("tab-hidden", document.hidden);
+      });
+
       function toggleDrawer() {
         const drawer = document.getElementById("mobile-drawer");
         const overlay = document.getElementById("drawer-overlay");
@@ -930,22 +938,44 @@
 
         return sem ? `${sem} ${year}` : str;
       }
+      const MEMBERS_CACHE_KEY = "uiusvs_members_cache";
+
       async function loadMembers(attempt = 1) {
         const maxAttempts = 4;
+
+        if (attempt === 1 && allMembers.length === 0) {
+          try {
+            const cached = sessionStorage.getItem(MEMBERS_CACHE_KEY);
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                allMembers = parsed;
+                renderMembers();
+              }
+            }
+          } catch (e) {
+            console.warn("Cache read failed:", e);
+          }
+        }
+
         try {
-          const res = await fetch(`${API_BASE}/members/public`, {
-            cache: "no-store",
-          });
+          const res = await fetch(
+            `${API_BASE}/members/public?_=${Date.now()}`,
+            {
+              cache: "no-store",
+            },
+          );
           if (!res.ok) throw new Error("Failed to fetch");
           const data = await res.json();
           if (!Array.isArray(data)) throw new Error("Invalid response");
           allMembers = data;
+          sessionStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
           renderMembers();
         } catch (err) {
           console.warn(`Members fetch attempt ${attempt} failed:`, err);
           if (attempt < maxAttempts) {
             setTimeout(() => loadMembers(attempt + 1), 900 * attempt);
-          } else {
+          } else if (allMembers.length === 0) {
             const grid = document.getElementById("members-grid");
             const loader = document.getElementById("members-loading");
             loader.classList.add("hidden");
@@ -959,7 +989,6 @@
           }
         }
       }
-
       let currentPage = 1;
 
       function getMembersPerPage() {
