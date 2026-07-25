@@ -448,6 +448,46 @@
       body.tab-hidden * {
         animation-play-state: paused !important;
       }
+      .modal-loader-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 40;
+        background: linear-gradient(155deg, #ffffff 0%, #fff8f0 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: opacity 0.3s ease;
+      }
+      .modal-loader-spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(234, 88, 12, 0.15);
+        border-top: 3px solid #ea580c;
+        border-radius: 50%;
+        animation: avatarSpin 0.8s linear infinite;
+      }
+      .modal-loader-text {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #b91c1c;
+        max-width: 220px;
+        line-height: 1.4;
+      }
+      @media (min-width: 640px) {
+        .modal-loader-spinner {
+          width: 44px;
+          height: 44px;
+        }
+        .modal-loader-text {
+          font-size: 0.95rem;
+          max-width: 260px;
+        }
+      }
     </style>
   </head>
   <body class="antialiased min-h-screen flex flex-col mandala-pattern">
@@ -675,7 +715,7 @@
             id="btn-all"
             class="filter-btn flex-shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-brand-700 text-white shadow-md"
           >
-            All Community
+            All
           </button>
           <button
             onclick="filterMembers('current')"
@@ -901,10 +941,23 @@
 
           <div class="space-y-3 text-sm" id="modal-details"></div>
         </div>
+        <div id="modal-loader" class="modal-loader-overlay hidden">
+          <div class="modal-loader-spinner"></div>
+          <p class="modal-loader-text">
+            Loading <span id="modal-loader-name">profile</span>'s details...
+          </p>
+        </div>
       </div>
     </div>
 
     <script>
+      function hideModalLoader() {
+        const loader = document.getElementById("modal-loader");
+        if (!loader) return;
+        loader.style.opacity = "0";
+        setTimeout(() => loader.classList.add("hidden"), 300);
+      }
+
       window.handleAvatarLoad = function (img) {
         if (img && img.classList) {
           img.classList.remove("opacity-0");
@@ -915,6 +968,7 @@
           ) {
             placeholder.style.display = "none";
           }
+          if (img.id === "modal-avatar") hideModalLoader();
         }
       };
       window.handleAvatarError = function (img) {
@@ -927,6 +981,7 @@
             placeholder.style.display = "none";
           }
           img.classList.remove("opacity-0");
+          if (img.id === "modal-avatar") hideModalLoader();
         }
       };
 
@@ -1094,8 +1149,8 @@
                   : "Current Student";
 
             return `
-            <div onclick='showMemberModal(${JSON.stringify(m).replace(/'/g, "&apos;")})'
-                 style="animation-delay:${i * 0.05}s"
+<div onclick="showMemberModalById('${m.id}')"
+     style="animation-delay:${i * 0.05}s"
                  class="cursor-pointer ${cardTheme} rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group overflow-hidden min-w-0">
                 <div class="relative mb-2 sm:mb-3 md:mb-4 mt-1">
                     <div class="avatar-ring absolute -inset-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity"></div>
@@ -1266,7 +1321,7 @@
 
             return `
             <div
-              onclick='selectSearchSuggestion(${JSON.stringify(m).replace(/'/g, "&apos;")})'
+onclick="selectSearchSuggestionById('${m.id}')"
               class="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 hover:bg-orange-50 cursor-pointer border-b border-orange-50 last:border-b-0 transition-colors"
             >
               <img src="${finalPic}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white shadow-sm flex-shrink-0">
@@ -1305,6 +1360,14 @@
       });
 
       window.showMemberModal = (m) => {
+        const loader = document.getElementById("modal-loader");
+        const loaderName = document.getElementById("modal-loader-name");
+        if (loader) {
+          loader.classList.remove("hidden");
+          loader.style.opacity = "1";
+        }
+        if (loaderName) loaderName.textContent = m.name;
+
         const isAlumni = m.type === "ex";
         const finalPic =
           m.avatar_url ||
@@ -1365,6 +1428,16 @@
 
         modal.classList.remove("opacity-0");
         lucide.createIcons();
+      };
+
+      window.showMemberModalById = (id) => {
+        const m = allMembers.find((x) => String(x.id) === String(id));
+        if (m) showMemberModal(m);
+      };
+
+      window.selectSearchSuggestionById = (id) => {
+        const m = allMembers.find((x) => String(x.id) === String(id));
+        if (m) selectSearchSuggestion(m);
       };
 
       window.closeMemberModal = () => {
