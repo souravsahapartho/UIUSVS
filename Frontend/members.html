@@ -1001,6 +1001,7 @@
 
       let allMembers = [];
       let currentFilter = "all";
+      let lastRenderedKey = "";
       let lastRenderedHash = "";
       let searchQuery = "";
 
@@ -1100,6 +1101,8 @@
         loader.classList.add("hidden");
 
         if (filtered.length === 0) {
+          lastRenderedKey = `${currentFilter}|${searchQuery}|empty`;
+          lastRenderedHash = "";
           grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-14 text-sm font-medium">No members found in this category.</div>`;
           paginationBox.innerHTML = "";
           return;
@@ -1111,17 +1114,14 @@
 
         const startIdx = (currentPage - 1) * perPage;
         const pageItems = filtered.slice(startIdx, startIdx + perPage);
+        const currentKey = `${currentFilter}|${searchQuery}|${currentPage}`;
+        const renderHash = JSON.stringify(pageItems.map((m) => m.id));
 
-        const renderHash = JSON.stringify({
-          ids: pageItems.map((m) => m.id),
-          filter: currentFilter,
-          query: searchQuery,
-          page: currentPage,
-        });
-        if (renderHash === lastRenderedHash) {
+        if (currentKey === lastRenderedKey && renderHash === lastRenderedHash) {
           renderMembersPagination(totalPages);
           return;
         }
+        lastRenderedKey = currentKey;
         lastRenderedHash = renderHash;
 
         grid.innerHTML = pageItems
