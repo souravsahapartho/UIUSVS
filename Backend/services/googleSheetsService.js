@@ -71,7 +71,7 @@ async function appendDonationRecord({
     transactionName,
     addedByAdminEmail,
     date,
-    sendEmail: true,
+    sendEmail,
     emailSubject: `আপনার ${campaignTitle} অনুদানের জন্য ধন্যবাদ | UIU SVS`,
     emailReason: transactionName,
   };
