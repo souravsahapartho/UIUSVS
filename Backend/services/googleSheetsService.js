@@ -54,6 +54,7 @@ async function appendDonationRecord({
   transactionName,
   addedByAdminEmail,
   date,
+  sendEmail = true,
 }) {
   // Reuses the same Apps Script webhook pattern as appendApprovedMember,
   // just posting to a different "sheet" / "type" so the Apps Script can

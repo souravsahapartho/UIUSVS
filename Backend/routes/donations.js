@@ -160,6 +160,7 @@ module.exports = (pool) => {
             transactionName: transaction_name,
             addedByAdminEmail: req.user.email,
             date: new Date().toISOString(),
+            sendEmail: Number(amount) > 0,
           });
         } catch (sheetErr) {
           console.error("⚠️ Donation sheet/email log failed:", sheetErr);
