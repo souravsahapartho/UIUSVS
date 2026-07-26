@@ -1493,6 +1493,7 @@
 
               <button
                 type="button"
+                id="donation-submit-btn"
                 onclick="submitDonation()"
                 class="btn-puja !py-2.5 !px-6 text-sm"
               >
@@ -4799,63 +4800,88 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
       }
 
       async function submitDonation() {
-        const user_id = document.getElementById(
-          "donation-selected-user-id",
-        ).value;
-        const amount = document.getElementById("donation-amount").value;
-        const transaction_name = document
-          .getElementById("donation-txn-name")
-          .value.trim();
+        const btn = document.getElementById("donation-submit-btn");
+        if (btn.disabled) return; // extra safety against double-click
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.classList.add("opacity-50", "cursor-not-allowed");
+        btn.textContent = "Recording...";
 
-        if (!currentDonationCampaignId)
-          return showToast("Select a campaign first!", "error");
-        if (!amount || !transaction_name)
-          return showToast("Amount and transaction name required!", "error");
-
-        const payload = {
-          campaign_id: currentDonationCampaignId,
-          amount,
-          transaction_name,
-        };
-
-        if (user_id) {
-          payload.user_id = user_id;
-        } else {
-          payload.donor_name = document
-            .getElementById("donation-manual-name")
-            .value.trim();
-          payload.donor_email = document
-            .getElementById("donation-manual-email")
-            .value.trim();
-          payload.donor_department = document.getElementById(
-            "donation-manual-department",
+        try {
+          const user_id = document.getElementById(
+            "donation-selected-user-id",
           ).value;
-          if (!payload.donor_name)
-            return showToast("Select a member OR enter donor name!", "error");
+          const amount = document.getElementById("donation-amount").value;
+          const transaction_name = document
+            .getElementById("donation-txn-name")
+            .value.trim();
+
+          if (!currentDonationCampaignId) {
+            showToast("Select a campaign first!", "error");
+            return;
+          }
+          if (!amount || !transaction_name) {
+            showToast("Amount and transaction name required!", "error");
+            return;
+          }
+
+          const payload = {
+            campaign_id: currentDonationCampaignId,
+            amount,
+            transaction_name,
+          };
+
+          if (user_id) {
+            payload.user_id = user_id;
+          } else {
+            payload.donor_name = document
+              .getElementById("donation-manual-name")
+              .value.trim();
+            payload.donor_email = document
+              .getElementById("donation-manual-email")
+              .value.trim();
+            payload.donor_department = document.getElementById(
+              "donation-manual-department",
+            ).value;
+            if (!payload.donor_name) {
+              showToast("Select a member OR enter donor name!", "error");
+              return;
+            }
+          }
+
+          const res = await fetch(`${API_BASE}/donations`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            showToast(data.error || "Failed", "error");
+            return;
+          }
+
+          btn.textContent = "✓ Added!";
+          showToast(`Recorded! Running total: ৳${data.runningTotal}`);
+          document.getElementById("donation-amount").value = "";
+          document.getElementById("donation-txn-name").value = "";
+          document.getElementById("donation-selected-user-id").value = "";
+          document.getElementById("donation-member-search").value = "";
+          document
+            .getElementById("donation-selected-user-label")
+            .classList.add("hidden");
+          document.getElementById("donation-manual-name").value = "";
+          document.getElementById("donation-manual-email").value = "";
+          document.getElementById("donation-manual-department").value = "";
+          loadCampaignDonors();
+          if (isSuperadmin) loadDonationAdminLog();
+        } finally {
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.classList.remove("opacity-50", "cursor-not-allowed");
+            btn.textContent = originalText;
+          }, 1500);
         }
-
-        const res = await fetch(`${API_BASE}/donations`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(payload),
-        });
-        const data = await res.json();
-        if (!res.ok) return showToast(data.error || "Failed", "error");
-
-        showToast(`Recorded! Running total: ৳${data.runningTotal}`);
-        document.getElementById("donation-amount").value = "";
-        document.getElementById("donation-txn-name").value = "";
-        document.getElementById("donation-selected-user-id").value = "";
-        document.getElementById("donation-member-search").value = "";
-        document
-          .getElementById("donation-selected-user-label")
-          .classList.add("hidden");
-        document.getElementById("donation-manual-name").value = "";
-        document.getElementById("donation-manual-email").value = "";
-        document.getElementById("donation-manual-department").value = "";
-        loadCampaignDonors();
-        if (isSuperadmin) loadDonationAdminLog();
       }
 
       async function loadCampaignDonors() {
