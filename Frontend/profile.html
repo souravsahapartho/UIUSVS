@@ -471,7 +471,14 @@
             ></p>
           </div>
         </div>
-
+        <div class="glass-card rounded-3xl p-6 border-t-4 border-t-orange-500">
+          <h3 class="font-bold text-brand-900 font-serif text-lg mb-4">
+            🪔 Puja Anudan
+          </h3>
+          <div id="donation-status-list" class="space-y-4">
+            <p class="text-sm text-gray-400">Loading...</p>
+          </div>
+        </div>
         <div class="lg:col-span-2">
           <div class="glass-card rounded-3xl p-6 sm:p-8">
             <div
@@ -1268,6 +1275,65 @@
         });
 
       loadProfile();
+      async function loadMyDonations() {
+        const container = document.getElementById("donation-status-list");
+        if (!container) return;
+        try {
+          const res = await fetch(`${API_BASE}/donations/mine`, {
+            credentials: "include",
+          });
+          const campaigns = await res.json();
+          if (!campaigns.length) {
+            container.innerHTML = `<p class="text-sm text-gray-400 italic">No contributions yet.</p>`;
+            return;
+          }
+          const badge = {
+            green: "bg-green-100 text-green-700",
+            yellow: "bg-yellow-100 text-yellow-700",
+            red: "bg-red-100 text-red-700",
+          };
+          const badgeLabel = {
+            green: "Goal Reached",
+            yellow: "In Progress",
+            red: "Not Started",
+          };
+
+          container.innerHTML = campaigns
+            .map(
+              (c) => `
+      <div class="border border-orange-100 rounded-2xl p-4">
+        <div class="flex justify-between items-start mb-2">
+          <p class="font-bold text-sm text-brand-900">${c.title}</p>
+          <span class="text-[10px] font-bold uppercase px-2 py-1 rounded-full ${badge[c.status]}">${badgeLabel[c.status]}</span>
+        </div>
+        <p class="text-xs text-gray-500 mb-2">Total given: <b>৳${c.total.toLocaleString()}</b> / min ৳${c.min_amount}</p>
+        <div class="space-y-1.5">
+          ${c.transactions
+            .map(
+              (t) => `
+            <div class="flex justify-between items-center text-xs bg-orange-50/60 rounded-lg px-3 py-2">
+              <div>
+                <p class="font-bold text-gray-800">${t.transaction_name}</p>
+                <p class="text-gray-400">${new Date(t.created_at).toLocaleDateString()}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold ${t.amount < 0 ? "text-red-600" : "text-green-700"}">${t.amount < 0 ? "-" : "+"}৳${Math.abs(t.amount)}</span>
+                <a href="${API_BASE}/donations/${t.id}/receipt" title="Download PDF Receipt"
+                   class="text-brand-600 hover:text-brand-800"><i data-lucide="file-down" class="w-4 h-4"></i></a>
+              </div>
+            </div>`,
+            )
+            .join("")}
+        </div>
+      </div>`,
+            )
+            .join("");
+          lucide.createIcons();
+        } catch (e) {
+          container.innerHTML = `<p class="text-sm text-red-500">Failed to load donations.</p>`;
+        }
+      }
+      loadMyDonations();
     </script>
   </body>
 </html>

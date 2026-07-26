@@ -209,6 +209,15 @@
         >
           <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> Blog Posts
         </a>
+        <a
+          href="javascript:void(0)"
+          onclick="switchTab('donations')"
+          id="nav-donations"
+          class="nav-item flex items-center px-4 py-2.5 rounded-r-lg text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition-colors"
+        >
+          <i data-lucide="hand-coins" class="w-5 h-5 mr-3"></i> Anudan /
+          Donations
+        </a>
       </nav>
 
       <div class="p-4 border-t border-orange-200 bg-brand-50/50">
@@ -1342,7 +1351,115 @@
             </div>
           </div>
         </div>
+<div
+          id="view-donations"
+          class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
+        >
+          <div class="max-w-6xl">
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-brand-900 font-serif">
+                🪔 Puja Anudan (Donations)
+              </h1>
+              <p class="text-sm text-gray-600 mt-1">
+                Add or adjust donations for any campaign. Members get an
+                automatic professional email when a transaction is recorded.
+              </p>
+            </div>
 
+            <div id="donation-campaign-form-wrap" class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-6">
+              <p class="font-bold text-sm text-gray-700 mb-3">Create New Campaign</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <input type="text" id="camp-title" placeholder="e.g. Saraswati Puja 2027 Anudan"
+                  class="sm:col-span-2 w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                <input type="number" id="camp-min-amount" placeholder="Minimum amount (৳)"
+                  class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+              <button type="button" onclick="createDonationCampaign()" class="btn-puja !py-2.5 !px-6 text-sm mt-4">Create Campaign</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-6">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Select Campaign</label>
+              <select id="donation-campaign-select" onchange="onCampaignChange()"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></select>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-6">
+              <p class="font-bold text-sm text-gray-700 mb-3">Add / Adjust Transaction</p>
+
+              <div class="relative mb-4">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Search Member (leave empty for non-member donor)</label>
+                <input type="text" id="donation-member-search" oninput="searchDonationMember(this.value)"
+                  placeholder="Search by name or student ID"
+                  class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                <input type="hidden" id="donation-selected-user-id" value="" />
+                <div id="donation-member-results" class="hidden absolute z-10 bg-white border border-gray-200 rounded-xl shadow-lg w-full mt-1 max-h-48 overflow-y-auto"></div>
+                <p id="donation-selected-user-label" class="hidden text-xs font-bold text-green-600 mt-1.5"></p>
+              </div>
+
+              <div id="donation-manual-fields" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <input type="text" id="donation-manual-name" placeholder="Donor name (if not a member)"
+                  class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                <input type="email" id="donation-manual-email" placeholder="Donor email"
+                  class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                <input type="text" id="donation-manual-department" placeholder="Department"
+                  class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Amount (৳) — negative number দিলে deduct হবে</label>
+                  <input type="number" id="donation-amount" placeholder="e.g. 500 or -100"
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Transaction Name / Reason</label>
+                  <input type="text" id="donation-txn-name" placeholder="e.g. bKash Send Money, Cash, Correction"
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                </div>
+              </div>
+
+              <button type="button" onclick="submitDonation()" class="btn-puja !py-2.5 !px-6 text-sm">Record Transaction</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+              <div class="p-4 bg-gray-50 border-b border-gray-200">
+                <span class="font-bold text-sm text-gray-700">Donors for this Campaign</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Name</th>
+                      <th class="py-3 px-5">Department</th>
+                      <th class="py-3 px-5">Total Donated</th>
+                      <th class="py-3 px-5">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="donation-donors-list"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="donation-admin-log-wrap" class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div class="p-4 bg-gray-50 border-b border-gray-200">
+                <span class="font-bold text-sm text-gray-700">Admin Log — Who Added How Much</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-3 px-5">Admin</th>
+                      <th class="py-3 px-5">Campaign</th>
+                      <th class="py-3 px-5">Total Added</th>
+                      <th class="py-3 px-5">Transactions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="donation-admin-log-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           id="view-logs"
           class="tab-view hidden animate-[fadeIn_0.3s_ease-out]"
@@ -4495,6 +4612,223 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
           window.location.href = "/login";
         }
       })();
+    </script>
+    <script>
+      let donationCampaigns = [];
+      let currentDonationCampaignId = null;
+      let allMembersForDonationSearch = [];
+
+      async function loadDonationCampaigns() {
+        const res = await fetch(`${API_BASE}/donations/campaigns`, {
+          credentials: "include",
+        });
+        donationCampaigns = await res.json();
+        const select = document.getElementById("donation-campaign-select");
+        select.innerHTML = donationCampaigns
+          .map(
+            (c) =>
+              `<option value="${c.id}">${c.title} (min ৳${c.min_amount})</option>`,
+          )
+          .join("");
+        if (donationCampaigns.length) {
+          currentDonationCampaignId = donationCampaigns[0].id;
+          select.value = currentDonationCampaignId;
+          loadCampaignDonors();
+        }
+      }
+
+      function onCampaignChange() {
+        currentDonationCampaignId = document.getElementById(
+          "donation-campaign-select",
+        ).value;
+        loadCampaignDonors();
+      }
+
+      async function createDonationCampaign() {
+        const title = document.getElementById("camp-title").value.trim();
+        const min_amount = document.getElementById("camp-min-amount").value;
+        if (!title || !min_amount)
+          return showToast("Title and minimum amount required!", "error");
+        const res = await fetch(`${API_BASE}/donations/campaigns`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ title, min_amount }),
+        });
+        if (!res.ok) return showToast("Failed to create campaign", "error");
+        showToast("Campaign created!");
+        document.getElementById("camp-title").value = "";
+        document.getElementById("camp-min-amount").value = "";
+        loadDonationCampaigns();
+      }
+
+      async function searchDonationMember(query) {
+        const box = document.getElementById("donation-member-results");
+        if (!query.trim()) {
+          box.classList.add("hidden");
+          return;
+        }
+        if (!allMembersForDonationSearch.length) {
+          const res = await fetch(`${API_BASE}/admin-users/all-members`, {
+            credentials: "include",
+          });
+          allMembersForDonationSearch = await res.json();
+        }
+        const q = query.toLowerCase();
+        const matches = allMembersForDonationSearch
+          .filter(
+            (m) =>
+              m.name.toLowerCase().includes(q) ||
+              (m.student_id || "").toLowerCase().includes(q),
+          )
+          .slice(0, 8);
+        box.innerHTML = matches
+          .map(
+            (
+              m,
+            ) => `<div onclick="selectDonationMember(${m.id}, '${m.name.replace(/'/g, "\\'")}')"
+        class="px-3 py-2 text-sm hover:bg-brand-50 cursor-pointer border-b border-gray-100">
+        <b>${m.name}</b> — ${m.student_id || "no ID"}</div>`,
+          )
+          .join("");
+        box.classList.toggle("hidden", matches.length === 0);
+      }
+
+      function selectDonationMember(id, name) {
+        document.getElementById("donation-selected-user-id").value = id;
+        document.getElementById("donation-member-search").value = name;
+        document
+          .getElementById("donation-member-results")
+          .classList.add("hidden");
+        const label = document.getElementById("donation-selected-user-label");
+        label.textContent = `Selected: ${name}`;
+        label.classList.remove("hidden");
+      }
+
+      async function submitDonation() {
+        const user_id = document.getElementById(
+          "donation-selected-user-id",
+        ).value;
+        const amount = document.getElementById("donation-amount").value;
+        const transaction_name = document
+          .getElementById("donation-txn-name")
+          .value.trim();
+
+        if (!currentDonationCampaignId)
+          return showToast("Select a campaign first!", "error");
+        if (!amount || !transaction_name)
+          return showToast("Amount and transaction name required!", "error");
+
+        const payload = {
+          campaign_id: currentDonationCampaignId,
+          amount,
+          transaction_name,
+        };
+
+        if (user_id) {
+          payload.user_id = user_id;
+        } else {
+          payload.donor_name = document
+            .getElementById("donation-manual-name")
+            .value.trim();
+          payload.donor_email = document
+            .getElementById("donation-manual-email")
+            .value.trim();
+          payload.donor_department = document.getElementById(
+            "donation-manual-department",
+          ).value;
+          if (!payload.donor_name)
+            return showToast("Select a member OR enter donor name!", "error");
+        }
+
+        const res = await fetch(`${API_BASE}/donations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.error || "Failed", "error");
+
+        showToast(`Recorded! Running total: ৳${data.runningTotal}`);
+        document.getElementById("donation-amount").value = "";
+        document.getElementById("donation-txn-name").value = "";
+        document.getElementById("donation-selected-user-id").value = "";
+        document.getElementById("donation-member-search").value = "";
+        document
+          .getElementById("donation-selected-user-label")
+          .classList.add("hidden");
+        document.getElementById("donation-manual-name").value = "";
+        document.getElementById("donation-manual-email").value = "";
+        document.getElementById("donation-manual-department").value = "";
+        loadCampaignDonors();
+      }
+
+      async function loadCampaignDonors() {
+        if (!currentDonationCampaignId) return;
+        const res = await fetch(
+          `${API_BASE}/donations/campaign/${currentDonationCampaignId}/donors`,
+          { credentials: "include" },
+        );
+        const data = await res.json();
+        const statusStyle = {
+          green: "bg-green-100 text-green-700 border-green-300",
+          yellow: "bg-yellow-100 text-yellow-700 border-yellow-300",
+          red: "bg-red-100 text-red-700 border-red-300",
+        };
+        document.getElementById("donation-donors-list").innerHTML =
+          data.donors
+            .map(
+              (d) => `
+      <tr>
+        <td class="py-3 px-5 font-bold text-sm">${d.name}</td>
+        <td class="py-3 px-5 text-sm text-gray-600">${d.department || "-"}</td>
+        <td class="py-3 px-5 text-sm font-bold">৳${Number(d.total).toLocaleString()}</td>
+        <td class="py-3 px-5"><span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase border ${statusStyle[d.status]}">${d.status}</span></td>
+      </tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">No donors yet</td></tr>`;
+      }
+
+      async function loadDonationAdminLog() {
+        if (!isSuperadmin) return;
+        const res = await fetch(`${API_BASE}/donations/admin-summary`, {
+          credentials: "include",
+        });
+        const rows = await res.json();
+        document.getElementById("donation-admin-log-list").innerHTML =
+          rows
+            .map(
+              (r) => `
+      <tr>
+        <td class="py-3 px-5 text-sm font-bold">${r.admin_name} <span class="text-gray-400 font-normal">(${r.admin_email})</span></td>
+        <td class="py-3 px-5 text-sm">${r.campaign_title}</td>
+        <td class="py-3 px-5 text-sm font-bold">৳${Number(r.total_added).toLocaleString()}</td>
+        <td class="py-3 px-5 text-sm">${r.transaction_count}</td>
+      </tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">No data yet</td></tr>`;
+      }
+
+      // hook into your existing switchTab override
+      const _prevSwitchTab2 = switchTab;
+      switchTab = function (tabId) {
+        _prevSwitchTab2(tabId);
+        if (tabId === "donations") {
+          loadDonationCampaigns();
+          if (isSuperadmin) {
+            document
+              .getElementById("donation-campaign-form-wrap")
+              .classList.remove("hidden");
+            document
+              .getElementById("donation-admin-log-wrap")
+              .classList.remove("hidden");
+            loadDonationAdminLog();
+          }
+        }
+      };
     </script>
   </body>
 </html>

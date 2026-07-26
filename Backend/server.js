@@ -74,6 +74,7 @@ const adminUsersRoutes = require("./routes/adminUsers")(pool);
 const profileRoutes = require("./routes/profile")(pool);
 const membersRoutes = require("./routes/members")(pool);
 const { verifySession, verifyAdmin } = require("./middleware/auth");
+const donationsRoutes = require("./routes/donations")(pool);
 
 function verifySuperadmin(req, res, next) {
   if (!req.user || req.user.role !== "superadmin") {
@@ -86,6 +87,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin-users", adminUsersRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/members", membersRoutes);
+app.use("/api/donations", donationsRoutes);
 
 app.post("/api/upload-avatar", upload.single("media"), async (req, res) => {
   try {
@@ -879,7 +881,10 @@ app.delete(
 );
 
 app.get("/api/gallery/public", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
+  );
   res.set("Pragma", "no-cache");
   res.set("Expires", "0");
   try {
