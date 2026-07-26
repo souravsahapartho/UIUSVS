@@ -86,8 +86,7 @@ async function appendDonationRecord({
 }
 
 module.exports = {
-  appendApprovedMember, // keep your existing export
+  appendApprovedMember,
+  removeMemberFromSheet,
   appendDonationRecord,
 };
-
-module.exports = { appendApprovedMember, removeMemberFromSheet };

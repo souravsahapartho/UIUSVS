@@ -4855,6 +4855,7 @@ ${renderDuplicateBadge(u.duplicateMatches, u)}
         document.getElementById("donation-manual-email").value = "";
         document.getElementById("donation-manual-department").value = "";
         loadCampaignDonors();
+        if (isSuperadmin) loadDonationAdminLog();
       }
 
       async function loadCampaignDonors() {
